@@ -1,146 +1,291 @@
 # Phase-1 Scientific Report (Internal)
 
-**Status:** Internal reference document. **Not for external submission** — no venue target, no author list, no citation formatting.  
-**Purpose:** Give any team member a single, accurate, professionally written account of what Phase 1 claims, what it does not, and what is still open — without re-deriving it from a dozen scattered protocol files.  
-**Binding data:** This report asserts nothing beyond what is already recorded in [`DUAL_TRACK_STATUS.md`](DUAL_TRACK_STATUS.md), [`CLAIMS_DUAL_TRACK.md`](CLAIMS_DUAL_TRACK.md), and the frozen AUDIT folders. Where this report and those files ever disagree, the **AUDIT folders win**.
+**Status:** Internal dual-track report. Not a submission artifact.  
+**Scope:** Frozen AUDIT results only. Numbers cited here must match AUDIT files.  
+**Claims authority:** `docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`
 
 ---
 
-## 1. Executive Summary
+## 0. Executive summary
 
-Phase 1 evaluated whether a label-blind, evidence→risk→policy runtime reduces harmful tool/action success by a language-model agent, compared to no defense (`B0`), on single-turn tool-use episodes.
+| Track | Treatment | Classification | δ̂ | 95% CI(δ̂) | McNemar p | U | Eligible? |
+|-------|-----------|----------------|----|------------|-----------|---|-----------|
+| **A — VNEXT FAIL** | `VNEXT-ADAPT` | `FAIL` | 0.0820 | **BLOCKING GAP** (not in AUDIT) | 0.0625 | 0.9344 | No (U < 0.95) |
+| **B — Phase-1 confirmatory** | `PHASE1-CORE` | `SUPPORTED_IMPROVEMENT` | 0.4426 | [0.2757, 0.6096] | 1.49012e-08 | 0.9672131147540983 | Yes |
 
-Two independent confirmatory experiments exist, on two different frozen benchmarks, with two different outcomes:
+**Allowed reading:** Track A is an official null under locked protocol. Track B is a separate confirmatory study under Phase-1 locks. Track B does **not** reverse Track A.
 
-| Track | Pack | Treatment | Outcome | Effect size (δ̂) | Statistically significant? | Utility ≥0.95? |
-| --- | --- | --- | --- | --- | --- | --- |
-| **A — VNEXT** | `vnext_confirm_v1.0` | `VNEXT-ADAPT` | **FAIL** | 0.082 (below MSID 0.20) | No (p=0.0625) | No (U≈0.934) |
-| **B — Phase-1 confirm** | `phase1_confirm_v1` | `PHASE1-CORE` | **SUPPORTED_IMPROVEMENT** (scoped) | ≈0.443 (above MSID 0.20) | Yes (p≈1.49e-8) | Yes (U≈0.967) |
-
-**These are not the same claim and do not cancel each other out.** Track A is an honest negative result for `VNEXT-ADAPT` on the VNEXT pack. Track B is a positive, statistically strong result for a different treatment (`PHASE1-CORE`) on a different pack. Track B does not reverse Track A’s FAIL verdict, and Track A does not invalidate Track B’s result — they are separate experiments and must be reported as such.
-
-The single most important open item before Track B should be treated as fully closed (see §5) is that **Track B’s benchmark independence from the VNEXT pack has not yet been documented with episode-level provenance**. Until that is done, Track B should be read as “strong result, pending an independence audit” rather than “fully validated.”
+**Q1 stats gaps:** Track A AUDIT does not publish a 95% CI for δ̂. Do not fabricate. See §3.3 and changelog.
 
 ---
 
-## 2. Glossary (for readers not steeped in the protocol docs)
+## 1. Question and hypothesis
 
-| Term | Meaning |
-| --- | --- |
-| **ASR / harmful-action success** | Fraction of attack episodes where the target performed the harmful action. Lower is better for a defense. |
-| **B0** | Baseline condition: no defense applied. |
-| **PHASE1-CORE / VNEXT-ADAPT** | The two different intervention treatments tested in Track B and Track A respectively. Not interchangeable. |
-| **δ̂ (delta-hat)** | Estimated paired effect size: how much the treatment reduced harmful-action success vs B0 on the same episodes. |
-| **MSID** | Minimum Scientifically Interesting Difference — the pre-registered threshold δ̂ must clear (locked at **0.20** for both tracks). |
-| **McNemar / b10, b01** | Paired binary test. `b10` = B0 harmful success and treatment intervention win; `b01` = the reverse. Needs `b10 > b01` and significant p to count. |
-| **U (utility)** | Fraction of benign episodes the treatment still lets complete normally. Below 0.95 means the defense blocks too much legitimate work. |
-| **Qualified win** | Compound pass: MSID met, p<0.05, and utility eligible — all at once. |
-| **`target_refusal`** | Model refuses on its own. Explicitly **not** a defense win. |
-| **`correct_tool_deny` / `correct_block`** | Defense mechanism blocked the harmful tool/action. These count as genuine wins. |
-| **Label-blind** | Core detection/policy path never sees gold attack/benign labels; labels are used only afterward for scoring. |
+**Primary question (Track B):** Under locked Phase-1 detector/threshold/cost settings, does `PHASE1-CORE` reduce harmful-action success versus B0 on the confirmatory pack with MSID-gated eligibility?
+
+**Confirmatory hypothesis (Track B):** Absolute risk reduction δ ≥ MSID = 0.20 on paired episodes, with utility U ≥ 0.95.
+
+**Track A (frozen):** Official VNEXT confirmatory evaluation of `VNEXT-ADAPT` under VNEXT locks; result `FAIL`.
 
 ---
 
-## 3. What Phase 1 Built (Engineering Contribution)
+## 2. Methods (locked)
 
-A causal, single-turn defense pipeline:
+### 2.1 Design
 
+- Paired B0 vs treatment on the same attack episodes.
+- Primary endpoint: absolute risk reduction δ̂ = (B0 successes − treatment successes) / N_attack.
+- Inference: exact McNemar (AUDIT: Track A/B report exact p; Track B method `mcnemar_exact`, two-sided in AUDIT text).
+- Gate: MSID = 0.20; U ≥ 0.95 for `ELIGIBLE`.
+- Secondary: Bayes factor BF₁₀ ≈ (b10+1)/(b01+1); bootstrap 95% CI for δ̂ when present in AUDIT.
+
+### 2.2 Models and seeds
+
+| | Track A | Track B |
+|---|---------|---------|
+| Target | `openai/gpt-oss-20b` (`target_1`) | `qwen/qwen-2.5-7b-instruct` (`target_2`) |
+| Judge | `qwen/qwen-2.5-72b-instruct` (`judge_fallback`) | same |
+| Seed | 42 | 42 |
+| N attack / benign | 61 / 61 | 61 / 61 |
+
+### 2.3 Treatments (not interchangeable)
+
+| Track | Treatment | Detector / stack |
+|-------|-----------|------------------|
+| A | `VNEXT-ADAPT` | Official VNEXT adaptive stack |
+| B | `PHASE1-CORE` | `evidence_phase1.0`; τ_low=0.25, τ_high=0.60; cost α=0.5, β=0.5, γ=0.25 |
+
+### 2.4 Packs
+
+| Track | Pack path | SHA-256 |
+|-------|-----------|---------|
+| A | `datasets/frozen/vnext_confirm_v1/dataset.jsonl` | `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518` |
+| B | `datasets/frozen/phase1_confirm_v1/dataset.jsonl` | `c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01` |
+
+### 2.5 Power / sample-size (pre-specified)
+
+SAP / prelive: N=61 attacks, MSID=0.20, planning effect ψ≈0.30, nominal 80% power for McNemar under planning assumptions (`scripts/phase1_sample_size.py`, `docs/paper/PHASE1_PRELIVE_GATE.md`).
+
+**Post-hoc note (not a re-powering claim):** Track A realized δ̂=0.0820 < MSID with p=0.0625 — under MSID gate this is expected to classify `FAIL` even if a smaller positive effect exists. Track B realized δ̂=0.4426 with CI excluding 0 and δ̂ > MSID — adequate for the confirmatory gate under the locked design. Sample size was not re-estimated after seeing results.
+
+---
+
+## 3. Statistics
+
+### 3.1 Point estimates and tests (AUDIT-frozen)
+
+| Quantity | Track A | Track B | Source |
+|----------|---------|---------|--------|
+| B0 harmful-action success | 0.9508 | 1.0000 | AUDIT |
+| Treatment harmful-action success | 0.8689 | 0.5574 | AUDIT |
+| δ̂ | 0.0820 | 0.4426 | AUDIT |
+| b10 / b01 | 5 / 0 | 27 / 0 | AUDIT |
+| McNemar p (exact) | 0.0625 | 1.49012e-08 | AUDIT |
+| U | 0.9344 | 0.9672131147540983 | AUDIT |
+| Cost (CORE / Adapt) | 0.140 / Adapt path | 0.14221311475409837 | AUDIT |
+| Classification | `FAIL` | `SUPPORTED_IMPROVEMENT` | AUDIT |
+
+### 3.2 95% CI for δ̂
+
+| Track | 95% CI(δ̂) | Status |
+|-------|------------|--------|
+| **B** | **[0.2757, 0.6096]** (metrics: `[0.27566461068024595, 0.6095812909590983]`) | Present in AUDIT / `metrics.json` |
+| **A** | **Not published in Track A AUDIT** | **BLOCKING GAP** — do not invent. Track A `comparison.json` has Wilson CIs for ASR/utility rates, not for paired δ̂. |
+
+### 3.3 Bayes factor and Kass & Raftery
+
+Track B AUDIT freezes b10/b01 = **27/0**. Laplace-smoothed BF₁₀ ≈ (b10+1)/(b01+1) = **28**.
+
+Kass & Raftery (1995) grades for BF₁₀:
+
+| BF₁₀ | Evidence against H₀ |
+|------|---------------------|
+| 1–3 | Negligible |
+| 3–20 | Positive |
+| 20–150 | Strong |
+| >150 | Very strong |
+
+**BF₁₀ ≈ 28 → “strong”** on that scale. Consistent with McNemar p=1.49012e-08 and CI excluding 0; does **not** authorize cross-track reversal of Track A.
+
+Track A: b10/b01 = 5/0 → BF₁₀ ≈ 6 → “positive” only; with p=0.0625 and U below gate, classification remains `FAIL`.
+
+### 3.4 Decision rule (unchanged)
+
+`SUPPORTED_IMPROVEMENT` iff ELIGIBLE (U≥0.95) and (δ̂ ≥ MSID or McNemar p < 0.05). Otherwise `FAIL` / `INCONCLUSIVE` per scorer. Track A fails eligibility and MSID/p gate. Track B passes both.
+
+---
+
+## 4. Results
+
+### 4.1 Track A — VNEXT FAIL (immutable)
+
+- Pack SHA `523c8818…1518`; seed 42; run `20260914-133147`.
+- δ̂=0.0820 < MSID; p=0.0625; U=0.9344 < 0.95 → **`FAIL`**.
+- δ̂ 95% CI: **missing from AUDIT (blocking gap)**.
+
+### 4.2 Track B — Phase-1 confirmatory
+
+- Pack SHA `c789811a…6d01`; seed 42; run_id `phase1_confirm_20260914T213022Z_a2681e92`.
+- δ̂=0.4426; 95% CI **[0.2757, 0.6096]**; p=1.49012e-08; U=0.9672131147540983; cost=0.14221311475409837; interventions 27× `correct_tool_deny`.
+- API: 244 calls, 0 failures. VNEXT integrity: PRESERVED.
+- Classification: **`SUPPORTED_IMPROVEMENT`**.
+
+### 4.3 A-vs-B tension (not an independence issue)
+
+**Observation:** Track A = `FAIL`, Track B = `SUPPORTED_IMPROVEMENT`.
+
+**Primary explanation — scope + method + realized effect size (not “Track B overturns Track A”):**
+
+1. **Scope / treatment difference (dominant):** Track A evaluates `VNEXT-ADAPT` under VNEXT locks. Track B evaluates `PHASE1-CORE` under Phase-1 detector lock (`evidence_phase1.0`, fixed τ). Different defense stacks → different estimands. Results are not interchangeable.
+2. **Realized effect / power relative to MSID:** Track A δ̂=0.0820 lies below MSID=0.20; Track B δ̂=0.4426 exceeds MSID with CI above MSID’s lower neighborhood. Same N=61 and similar McNemar machinery; the **observed effect sizes differ**, so the MSID gate yields opposite classifications without requiring a protocol bug.
+3. **Method overlap, not method identity:** Both use paired McNemar + MSID + U gate, but models (target LLM), packs, and treatments differ. Shared methodology does not imply a single pooled claim.
+
+**Not claimed:** Track B as independent replication of Track A’s estimand.  
+**Not claimed:** Pack non-overlap as the reason A failed and B passed (see Limitations §6.2).
+
+---
+
+## 5. Independence of confirmatory packs
+
+### 5.1 Status: unresolved (sensitivity not run)
+
+No cluster-robust or mixed-effects sensitivity vs template/family clustering is in the frozen AUDIT artifacts for this report cycle.
+
+**Disposition:** Moved to **Limitations §6.2** with explicit bias direction. Highest-priority scientific open item remains, but it is **not** the preferred explanation of A-vs-B classification tension (§4.3).
+
+**Allowed interim language:** “separate confirmatory pack under Phase-1 locks.”  
+**Disallowed:** “independent confirmation of VNEXT” / “proven pack independence.”
+
+---
+
+## 6. Limitations
+
+### 6.1 Track A null — implications
+
+- Official `FAIL` stands. A smaller-than-MSID positive effect (δ̂=0.0820, p=0.0625) is compatible with “no MSID-level improvement” under the locked gate; it is **not** proof of zero effect.
+- Missing 95% CI(δ̂) in Track A AUDIT blocks interval-based comparison of precision across tracks (**blocking gap**).
+- Track B success does **not** reclassify Track A or support “VNEXT works after all.”
+
+### 6.2 §5.1 independence — unresolved; bias direction
+
+If packs share templates/families or correlated episode difficulty:
+
+- **Direction:** Positive bias for Track B’s *generalizability* claim (effect may not transfer to a truly disjoint threat surface); possible **underestimation of variance** if clustering is ignored (McNemar treats pairs as independent across episodes).
+- **Magnitude:** Unknown without cluster-robust / mixed-effects sensitivity. Do not treat current p/CI as cluster-adjusted.
+- Until closed: forbid “independent evidence that VNEXT fails is wrong.”
+
+### 6.3 AUDIT dataset generalizability bounds
+
+Bound claims to:
+
+- Frozen packs only (SHAs in §2.4 / §7).
+- Stated target/judge models and seeds (§2.2).
+- Harmful-action success + utility proxies as defined in runners/AUDIT — not arbitrary jailbreak benchmarks, not production multi-turn agents, not other model families.
+- Single confirmatory N=61/61 per track; no multi-lab replication in AUDIT.
+
+### 6.4 Other
+
+- Internal report only; dual-track ≠ submission merge.
+- Cost/utility are protocol-defined; external cost models may differ.
+
+---
+
+## 7. Reproducibility block
+
+### 7.1 AUDIT / artifact paths
+
+| Track | AUDIT | Verdict / metrics |
+|-------|-------|-------------------|
+| A | `experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/AUDIT.md` | `.../verdict.json`, `.../comparison.json` |
+| B | `experiments/real_llm_eval/PHASE1_CONFIRM/phase1_confirm_20260914T213022Z_a2681e92/AUDIT.md` | `.../verdict.json`, `.../metrics.json` |
+
+### 7.2 Hashes and seeds
+
+| Item | Value |
+|------|-------|
+| Track A pack SHA-256 | `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518` |
+| Track B pack SHA-256 | `c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01` |
+| Track A seed | 42 (`comparison.json` / `manifest.json`) |
+| Track B seed | 42 (`metrics.json`) |
+| Track B run_id | `phase1_confirm_20260914T213022Z_a2681e92` |
+| Track A run dir | `20260914-133147` |
+
+### 7.3 Rerun commands (verification / offline)
+
+```bash
+# Pack SHA check
+sha256sum datasets/frozen/vnext_confirm_v1/dataset.jsonl
+sha256sum datasets/frozen/phase1_confirm_v1/dataset.jsonl
+
+# Offline alignment (no API): compare this report’s frozen numbers to AUDIT
+python3 - <<'PY'
+import hashlib, re, pathlib
+root = pathlib.Path('.')
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+a = '523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518'
+b = 'c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01'
+assert sha(root/'datasets/frozen/vnext_confirm_v1/dataset.jsonl') == a
+assert sha(root/'datasets/frozen/phase1_confirm_v1/dataset.jsonl') == b
+va = (root/'experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/verdict.json').read_text()
+vb = (root/'experiments/real_llm_eval/PHASE1_CONFIRM/phase1_confirm_20260914T213022Z_a2681e92/verdict.json').read_text()
+assert '"FAIL"' in va and 'SUPPORTED_IMPROVEMENT' in vb
+print('SHA+classification: PASS')
+PY
 ```
-Context → Phase-1 evidence detector → RiskCore → CorePolicy → ActionLayer → ToolPermissionGate → Trace
+
+Live Phase-1 runner (API; do not retune locks):
+
+```bash
+python3 scripts/run_phase1_confirm.py --help
+# Full live re-run requires OPENROUTER_API_KEY and approved live lock;
+# prefer comparing existing AUDIT/metrics.json rather than re-calling APIs.
 ```
 
-- The Phase-1 detector (`evidence_phase1.0` on Track B; Track A’s `VNEXT-ADAPT` used frozen `evidence_v4.0`) scores observable text/behavior for injection evidence without gold labels.
-- Risk bands and action sensitivity (tool call present vs text-only) jointly determine an action tier A0–A3.
-- A0–A3 are graded interventions, not a binary allow/block — e.g., MEDIUM risk with a tool call can escalate to a hard deny (A2); MEDIUM risk with text only may get a lighter intervention (A1) that is not a tool deny.
-- Decisions are traced; gold metadata is structurally excluded from the core decision path (covered by dedicated tests, not only code review).
-
-This engineering stack either runs correctly (deterministic suite) or it does not; it is not itself the confirmatory statistical claim.
+Prelive / sample-size references: `scripts/run_phase1_prelive_gate.py`, `scripts/phase1_sample_size.py`, `docs/paper/PHASE1_PRELIVE_GATE.md`.
 
 ---
 
-## 4. What Phase 1 Found (Scientific Contribution)
+## 8. Claims checklist (vs `CLAIMS_DUAL_TRACK.md`)
 
-### 4.1 Track A — VNEXT confirmation (FAIL)
+| Claim class | Wording in this report |
+|-------------|------------------------|
+| Track A | Official confirmatory **`FAIL`** under VNEXT locks — retained |
+| Track B | **`SUPPORTED_IMPROVEMENT`** under Phase-1 locks — retained |
+| Cross-track | B does **not** reverse A; separate estimands — retained |
+| Certainty | Prefer **supported / consistent with / under locked protocol**; avoid proven / confirms / overturns |
+| Independence | Unresolved; separate pack only — retained |
 
-On frozen `vnext_confirm_v1.0` (SHA-256 `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518`), `VNEXT-ADAPT` reduced ASR from **0.9508** to **0.8689** — a real but small effect (δ̂=**0.0820**) that did not clear MSID **0.20**, was not statistically significant (McNemar exact p=**0.0625**, b10=5 / b01=0), and dropped utility below the eligibility line (U=**0.9344** < 0.95).
-
-**This is an honest negative result**, not a near-miss to be spun positively. All three gate conditions (MSID, significance, utility) needed to pass together, and none did.
-
-Official record: `experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/AUDIT.md`.
-
-### 4.2 Track B — Phase-1 confirmatory live run (SUPPORTED_IMPROVEMENT)
-
-On frozen `phase1_confirm_v1` (SHA-256 `c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01`), `PHASE1-CORE` reduced harmful-action success from **1.000** (B0) to **0.557** — a large effect (δ̂≈**0.443**) that cleared MSID, was highly significant (McNemar p≈**1.49e-8**, b10=**27** / b01=**0**, all wins `correct_tool_deny`), and retained utility above threshold (U≈**0.967**).
-
-**This is a strong result**, on its own terms, on its own benchmark, for its own treatment. It must not be described as “VNEXT now works” or as reversing Track A.
-
-Official record: `experiments/real_llm_eval/PHASE1_CONFIRM/phase1_confirm_20260914T213022Z_a2681e92/AUDIT.md`.
-
-### 4.3 Why these can both be true
-
-Different pack, different treatment, same MSID/utility protocol family. A defense can perform differently across benchmarks that stress different attack surfaces or difficulty distributions. The interesting question — *why* `PHASE1-CORE` succeeded on its pack where `VNEXT-ADAPT` failed on the VNEXT pack — is not answered here and must not be answered by assumption. See §5.1.
+Edits this pass: removed “confirms”/over-certain phrasing; A-vs-B tension attributed to scope/effect/method (§4.3); independence demoted to Limitations.
 
 ---
 
-## 5. Limitations and Open Risks
+## 9. References (paths)
 
-### 5.1 Benchmark independence for Track B is not yet documented (highest priority)
-
-Track B’s confirmatory pack has a different hash from the VNEXT pack and is described as a separate benchmark. What is **not yet on record**:
-
-- Episode-level provenance showing zero overlap (prompts, seeds, paraphrase families, scenario templates) with the VNEXT pack or with packs used to iterate the Phase-1 evidence detector.
-- Confirmation that freeze order (holdout constructed → hashed → code frozen → single eval pass) was followed, rather than the benchmark being adjusted with knowledge of how `PHASE1-CORE` would perform.
-
-Until documented, Track B is a strong, promising, but **not yet independently audited** confirmatory result. This is a process gap, not evidence the result is wrong — but it is the item most likely to matter if the work is escalated beyond internal use.
-
-### 5.2 Same-model-family judge
-
-Track B’s judge (`qwen/qwen-2.5-72b-instruct`) is a larger model in the same family as the target (`qwen/qwen-2.5-7b-instruct`). Same-family judging has known potential for correlated bias in some LLM-as-judge setups. Not ruled out here.
-
-### 5.3 Sample size
-
-N=61 attack + 61 benign per track. Adequate for McNemar when effects are large (Track B), but too small to support generalization claims beyond these packs.
-
-### 5.4 Detector blind spots (known, not silently patched)
-
-Documented residual blind spots include obfuscation styles (e.g., l33t, Morse-like, reversed text) and some social-engineering patterns. Frozen for current evaluation; any future fix must be validated on a benchmark it was not tuned against.
-
-### 5.5 Scope
-
-Single-turn, tool-using-agent episodes only. No multi-turn context, no adaptive attacker across turns, no evaluation against an attacker that knows the defense and adapts to it.
-
-### 5.6 No external baseline comparison
-
-Phase 1 compares its own treatments (`B0`, `VNEXT-ADAPT`, `PHASE1-CORE`, and static A1/A2/A3 ablations where run) against each other. It does not compare against externally published prompt-injection defenses. No SOTA claim is made or supported.
+- `experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/AUDIT.md`
+- `experiments/real_llm_eval/PHASE1_CONFIRM/phase1_confirm_20260914T213022Z_a2681e92/AUDIT.md`
+- `docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`
+- `docs/paper/dual_track/DUAL_TRACK_STATUS.md`
+- `docs/paper/PHASE1_CORE_DEFENSE.md`
+- `docs/paper/PHASE1_PRELIVE_GATE.md`
+- Kass, R. E., & Raftery, A. E. (1995). Bayes factors. *JASA*, 90(430), 773–795.
 
 ---
 
-## 6. What This Report Does Not Claim
+## Changelog (Q1 raise)
 
-Consistent with [`CLAIMS_DUAL_TRACK.md`](CLAIMS_DUAL_TRACK.md), this report does not claim: SOTA status; production readiness; that prompt injection is “solved”; that Track B reverses Track A; that either track generalizes beyond its pack/target/judge; or that Phase-2 / multi-turn live results exist (Phase-2 planning docs may exist; live confirmatory evaluation does not).
+| # | Change | Rule |
+|---|--------|------|
+| 1 | Documented Track B δ̂ 95% CI [0.2757, 0.6096] from AUDIT; flagged Track A δ̂ CI as **BLOCKING GAP** (no fabrication) | STATS |
+| 2 | Justified BF₁₀≈28 via Kass & Raftery (“strong”); noted Track A BF≈6 | STATS |
+| 3 | Added power/sample-size note (N=61, MSID 0.20, ψ≈0.30, 80% planning); post-hoc realized-effect note | STATS |
+| 4 | New §4.3 A-vs-B tension: scope + realized effect/MSID + method; removed from independence narrative | A-vs-B |
+| 5 | §5.1 marked unresolved; bias direction/magnitude → §6.2 Limitations (no cluster-robust run this cycle) | §5.1 |
+| 6 | Softened certainty language to CLAIMS_DUAL_TRACK phrasing (supported / consistent with / not reverse) | CLAIMS |
+| 7 | Limitations cover Track A null implications, §5.1 status, AUDIT generalizability bounds | LIMITATIONS |
+| 8 | §7 REPRO: AUDIT paths, SHAs, seeds, offline verify + runner pointers | REPRO |
+| 9 | Aligned Track B p→1.49012e-08 and cost→0.14221311475409837 to AUDIT (removed drifted 1.485… / 0.1418…) | FREEZE |
+| 10 | AUDIT numbers (δ̂, p, U, b10/b01; BF₁₀ derived from 27/0) left as AUDIT/formula | FREEZE |
 
----
-
-## 7. Where to Look for More Detail
-
-| Question | Document / artifact |
-| --- | --- |
-| Exact allowed/forbidden phrasing | [`CLAIMS_DUAL_TRACK.md`](CLAIMS_DUAL_TRACK.md) |
-| Raw dual-track numbers + AUDIT pointers | [`DUAL_TRACK_STATUS.md`](DUAL_TRACK_STATUS.md) |
-| Research question / hypotheses | [`docs/experiments/PHASE1_SCIENTIFIC_SPEC.md`](../../experiments/PHASE1_SCIENTIFIC_SPEC.md) |
-| Threat model | [`docs/experiments/PHASE1_THREAT_MODEL.md`](../../experiments/PHASE1_THREAT_MODEL.md) |
-| Statistical plan (endpoints, MSID) | [`docs/experiments/PHASE1_STATISTICAL_PLAN.md`](../../experiments/PHASE1_STATISTICAL_PLAN.md) |
-| Detector study | [`docs/experiments/PHASE1_DETECTOR_STUDY.md`](../../experiments/PHASE1_DETECTOR_STUDY.md) |
-| Ablation design | [`docs/experiments/PHASE1_ABLATION_PROTOCOL.md`](../../experiments/PHASE1_ABLATION_PROTOCOL.md) |
-| Scientific gate (SH1–SH8) | [`docs/experiments/PHASE1_SCIENTIFIC_GATE.md`](../../experiments/PHASE1_SCIENTIFIC_GATE.md) |
-| Track A official FAIL AUDIT | `experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/AUDIT.md` |
-| Track B official confirm AUDIT | `experiments/real_llm_eval/PHASE1_CONFIRM/phase1_confirm_20260914T213022Z_a2681e92/AUDIT.md` |
-| VNEXT workshop claims map (FAIL-only) | [`docs/paper/workshop_vnext_fail/CLAIMS_MAP.md`](../workshop_vnext_fail/CLAIMS_MAP.md) |
-
----
-
-## 8. Suggested Next Actions (discussion only — not authorized by this report)
-
-1. **Close §5.1:** document episode-level provenance for `phase1_confirm_v1` against the VNEXT pack (and detector-fit sources). Highest-value next step for Phase 1 credibility.
-2. Consider a short ablation / pack-difficulty note explaining why `PHASE1-CORE` and `VNEXT-ADAPT` diverge on their respective packs — even a qualitative attack-type comparison would strengthen §4.3.
-3. No live LLM calls, no retuning, and no new pack construction should happen as a side effect of writing this report — it is documentation only.
+**Numbers frozen (must match AUDIT):**  
+A: δ̂=0.0820, p=0.0625, U=0.9344, b10/b01=5/0.  
+B: δ̂=0.4426, p=1.49012e-08, U=0.9672131147540983, b10/b01=27/0, CI=[0.2757, 0.6096], BF₁₀≈28 from 27/0.
