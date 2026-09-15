@@ -1,11 +1,11 @@
 {
   "dynamics_counts": {
-    "tool_output_injection": 5,
+    "tool_chaining": 6,
+    "delayed_activation": 4,
     "adaptive_scripted": 2,
     "durable_memory": 2,
-    "persistence": 7,
-    "tool_chaining": 6,
-    "delayed_activation": 4
+    "tool_output_injection": 5,
+    "persistence": 7
   },
   "dynamics_requirements": {
     "persistence": 3,
@@ -17,7 +17,6 @@
   },
   "dynamics_ok": true,
   "unique_mechanisms": [
-    "B1-via-tool",
     "B4-error",
     "B4-live",
     "C1",
@@ -38,16 +37,15 @@
     "C3-miss": 1,
     "D1": 1,
     "D2": 1,
-    "B4-live": 2,
+    "B4-live": 3,
     "B4-error": 1,
-    "B1-via-tool": 1,
     "E3": 1,
     "C4-paraphrase": 1,
     "C4-channel-shift": 1,
     "F3": 1
   },
   "turns": {
-    "mean": 3.875,
+    "mean": 3.9375,
     "min": 2,
     "max": 6,
     "per_attack": {
@@ -57,7 +55,7 @@
       "p2a_atk_004": 5,
       "p2a_atk_005": 4,
       "p2a_atk_006": 5,
-      "p2a_atk_007": 3,
+      "p2a_atk_007": 4,
       "p2a_atk_008": 4,
       "p2a_atk_009": 3,
       "p2a_atk_010": 4,
@@ -93,7 +91,6 @@
     }
   },
   "p2_new_mechanisms": [
-    "B1-via-tool",
     "B4-error",
     "B4-live",
     "C3-miss",
