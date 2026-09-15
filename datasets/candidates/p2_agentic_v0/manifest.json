@@ -10,7 +10,7 @@
   "n_benign_twin": 16,
   "n_hard_negative": 4,
   "seed": 20260915,
-  "dataset_sha256": "d92583d650e40fc2fee61e80fed66a9d26bdbf909ffe6a61db0f86a3d240e703",
+  "dataset_sha256": "bd59c9bf82c8ebe573d54c338c6215fb34531eeb244a008840821c3f87d1fc95",
   "harness_compatible": "p2.2.0-offline",
   "tools": [
     {
@@ -51,15 +51,14 @@
     "DATASET_CARD.md"
   ],
   "dynamics_coverage": {
-    "tool_output_injection": 5,
+    "tool_chaining": 6,
+    "delayed_activation": 4,
     "adaptive_scripted": 2,
     "durable_memory": 2,
-    "persistence": 7,
-    "tool_chaining": 6,
-    "delayed_activation": 4
+    "tool_output_injection": 5,
+    "persistence": 7
   },
   "unique_mechanisms": [
-    "B1-via-tool",
     "B4-error",
     "B4-live",
     "C1",
@@ -74,7 +73,6 @@
     "F3"
   ],
   "p2_new_mechanisms": [
-    "B1-via-tool",
     "B4-error",
     "B4-live",
     "C3-miss",
