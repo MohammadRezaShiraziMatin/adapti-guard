@@ -1,0 +1,101 @@
+{
+  "pack_id": "p2_agentic_v0-candidate",
+  "version": "p2_agentic_v0-candidate",
+  "status": "CANDIDATE",
+  "live_evaluated": false,
+  "scientific_evidence": false,
+  "frozen": false,
+  "n_rows": 36,
+  "n_attack": 16,
+  "n_benign_twin": 16,
+  "n_hard_negative": 4,
+  "seed": 20260915,
+  "dataset_sha256": "d92583d650e40fc2fee61e80fed66a9d26bdbf909ffe6a61db0f86a3d240e703",
+  "harness_compatible": "p2.2.0-offline",
+  "tools": [
+    {
+      "name": "search",
+      "arguments_schema": [
+        "query"
+      ]
+    },
+    {
+      "name": "retrieve_document",
+      "arguments_schema": [
+        "doc_id"
+      ]
+    },
+    {
+      "name": "send_email",
+      "arguments_schema": [
+        "to",
+        "body"
+      ]
+    },
+    {
+      "name": "create_record",
+      "arguments_schema": [
+        "kind",
+        "payload"
+      ]
+    }
+  ],
+  "path": "datasets/candidates/p2_agentic_v0/dataset.jsonl",
+  "files": [
+    "dataset.jsonl",
+    "manifest.json",
+    "schema.json",
+    "coverage.json",
+    "hashes.sha256",
+    "README.md",
+    "DATASET_CARD.md"
+  ],
+  "dynamics_coverage": {
+    "tool_output_injection": 5,
+    "adaptive_scripted": 2,
+    "durable_memory": 2,
+    "persistence": 7,
+    "tool_chaining": 6,
+    "delayed_activation": 4
+  },
+  "unique_mechanisms": [
+    "B1-via-tool",
+    "B4-error",
+    "B4-live",
+    "C1",
+    "C2",
+    "C3",
+    "C3-miss",
+    "C4-channel-shift",
+    "C4-paraphrase",
+    "D1",
+    "D2",
+    "E3",
+    "F3"
+  ],
+  "p2_new_mechanisms": [
+    "B1-via-tool",
+    "B4-error",
+    "B4-live",
+    "C3-miss",
+    "C4-channel-shift",
+    "C4-paraphrase"
+  ],
+  "known_limitations": [
+    "pilot-scale n=16 attacks",
+    "not statistically powered",
+    "not publication-ready",
+    "scripted adaptive attacker only (no LLM attacker)",
+    "mock tools only",
+    "benign twins match structure but wording differs where needed for benignity"
+  ],
+  "estimands": [
+    "tool_hasr_after_offline_or_gated_live",
+    "utility_fpr_via_benign_twins"
+  ],
+  "non_estimands": [
+    "live_asr_without_gate",
+    "unrestricted_adaptive_attacker_asr"
+  ],
+  "frozen_packs_untouched": true
+}

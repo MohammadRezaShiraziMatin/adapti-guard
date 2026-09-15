@@ -1,0 +1,253 @@
+{
+  "dynamics_counts": {
+    "tool_output_injection": 5,
+    "adaptive_scripted": 2,
+    "durable_memory": 2,
+    "persistence": 7,
+    "tool_chaining": 6,
+    "delayed_activation": 4
+  },
+  "dynamics_requirements": {
+    "persistence": 3,
+    "delayed_activation": 2,
+    "tool_output_injection": 3,
+    "tool_chaining": 2,
+    "durable_memory": 2,
+    "adaptive_scripted": 2
+  },
+  "dynamics_ok": true,
+  "unique_mechanisms": [
+    "B1-via-tool",
+    "B4-error",
+    "B4-live",
+    "C1",
+    "C2",
+    "C3",
+    "C3-miss",
+    "C4-channel-shift",
+    "C4-paraphrase",
+    "D1",
+    "D2",
+    "E3",
+    "F3"
+  ],
+  "attacks_per_mechanism": {
+    "C1": 2,
+    "C2": 2,
+    "C3": 1,
+    "C3-miss": 1,
+    "D1": 1,
+    "D2": 1,
+    "B4-live": 2,
+    "B4-error": 1,
+    "B1-via-tool": 1,
+    "E3": 1,
+    "C4-paraphrase": 1,
+    "C4-channel-shift": 1,
+    "F3": 1
+  },
+  "turns": {
+    "mean": 3.875,
+    "min": 2,
+    "max": 6,
+    "per_attack": {
+      "p2a_atk_001": 3,
+      "p2a_atk_002": 4,
+      "p2a_atk_003": 4,
+      "p2a_atk_004": 5,
+      "p2a_atk_005": 4,
+      "p2a_atk_006": 5,
+      "p2a_atk_007": 3,
+      "p2a_atk_008": 4,
+      "p2a_atk_009": 3,
+      "p2a_atk_010": 4,
+      "p2a_atk_011": 3,
+      "p2a_atk_012": 4,
+      "p2a_atk_013": 2,
+      "p2a_atk_014": 4,
+      "p2a_atk_015": 4,
+      "p2a_atk_016": 6
+    }
+  },
+  "tool_calls_per_trajectory": {
+    "mean": 2.3125,
+    "min": 1,
+    "max": 4,
+    "per_attack": {
+      "p2a_atk_001": 1,
+      "p2a_atk_002": 1,
+      "p2a_atk_003": 1,
+      "p2a_atk_004": 3,
+      "p2a_atk_005": 3,
+      "p2a_atk_006": 3,
+      "p2a_atk_007": 3,
+      "p2a_atk_008": 3,
+      "p2a_atk_009": 2,
+      "p2a_atk_010": 3,
+      "p2a_atk_011": 2,
+      "p2a_atk_012": 2,
+      "p2a_atk_013": 2,
+      "p2a_atk_014": 3,
+      "p2a_atk_015": 1,
+      "p2a_atk_016": 4
+    }
+  },
+  "p2_new_mechanisms": [
+    "B1-via-tool",
+    "B4-error",
+    "B4-live",
+    "C3-miss",
+    "C4-channel-shift",
+    "C4-paraphrase"
+  ],
+  "attack_twin_alignment": [
+    {
+      "attack": "p2a_atk_001",
+      "twin": "p2a_ben_001",
+      "same_n_turns": true,
+      "attack_tool_calls": 1,
+      "twin_tool_calls": 1
+    },
+    {
+      "attack": "p2a_atk_002",
+      "twin": "p2a_ben_002",
+      "same_n_turns": true,
+      "attack_tool_calls": 1,
+      "twin_tool_calls": 1
+    },
+    {
+      "attack": "p2a_atk_003",
+      "twin": "p2a_ben_003",
+      "same_n_turns": true,
+      "attack_tool_calls": 1,
+      "twin_tool_calls": 1
+    },
+    {
+      "attack": "p2a_atk_004",
+      "twin": "p2a_ben_004",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_005",
+      "twin": "p2a_ben_005",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_006",
+      "twin": "p2a_ben_006",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_007",
+      "twin": "p2a_ben_007",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_008",
+      "twin": "p2a_ben_008",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_009",
+      "twin": "p2a_ben_009",
+      "same_n_turns": true,
+      "attack_tool_calls": 2,
+      "twin_tool_calls": 2
+    },
+    {
+      "attack": "p2a_atk_010",
+      "twin": "p2a_ben_010",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_011",
+      "twin": "p2a_ben_011",
+      "same_n_turns": true,
+      "attack_tool_calls": 2,
+      "twin_tool_calls": 2
+    },
+    {
+      "attack": "p2a_atk_012",
+      "twin": "p2a_ben_012",
+      "same_n_turns": true,
+      "attack_tool_calls": 2,
+      "twin_tool_calls": 2
+    },
+    {
+      "attack": "p2a_atk_013",
+      "twin": "p2a_ben_013",
+      "same_n_turns": true,
+      "attack_tool_calls": 2,
+      "twin_tool_calls": 2
+    },
+    {
+      "attack": "p2a_atk_014",
+      "twin": "p2a_ben_014",
+      "same_n_turns": true,
+      "attack_tool_calls": 3,
+      "twin_tool_calls": 3
+    },
+    {
+      "attack": "p2a_atk_015",
+      "twin": "p2a_ben_015",
+      "same_n_turns": true,
+      "attack_tool_calls": 1,
+      "twin_tool_calls": 1
+    },
+    {
+      "attack": "p2a_atk_016",
+      "twin": "p2a_ben_016",
+      "same_n_turns": true,
+      "attack_tool_calls": 4,
+      "twin_tool_calls": 4
+    }
+  ],
+  "hard_negative_ids": [
+    "p2a_hn_001",
+    "p2a_hn_002",
+    "p2a_hn_003",
+    "p2a_hn_004"
+  ],
+  "hard_negative_characteristics": [
+    {
+      "id": "p2a_hn_001",
+      "family": "F2",
+      "n_turns": 3,
+      "has_harmful_action": false,
+      "utility_tool": "search"
+    },
+    {
+      "id": "p2a_hn_002",
+      "family": "B4",
+      "n_turns": 3,
+      "has_harmful_action": false,
+      "utility_tool": "retrieve_document"
+    },
+    {
+      "id": "p2a_hn_003",
+      "family": "A1",
+      "n_turns": 4,
+      "has_harmful_action": false,
+      "utility_tool": "create_record"
+    },
+    {
+      "id": "p2a_hn_004",
+      "family": "F1",
+      "n_turns": 4,
+      "has_harmful_action": false,
+      "utility_tool": "search"
+    }
+  ]
+}
