@@ -2,7 +2,7 @@
 
 **Status:** CANDIDATE · NOT FROZEN · NOT scientific evidence  
 **Pack ID:** `p2_agentic_v0-candidate`  
-**SHA-256 (dataset.jsonl):** `bd59c9bf82c8ebe573d54c338c6215fb34531eeb244a008840821c3f87d1fc95`  
+**SHA-256 (dataset.jsonl):** `32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd`  
 **Size:** 16 attack + 16 benign twins + 4 hard negatives = 36 trajectories  
 
 ## Purpose

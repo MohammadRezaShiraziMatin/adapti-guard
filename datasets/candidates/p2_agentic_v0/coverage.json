@@ -1,11 +1,11 @@
 {
   "dynamics_counts": {
-    "tool_chaining": 6,
-    "delayed_activation": 4,
-    "adaptive_scripted": 2,
-    "durable_memory": 2,
     "tool_output_injection": 5,
-    "persistence": 7
+    "adaptive_scripted": 2,
+    "delayed_activation": 4,
+    "durable_memory": 2,
+    "persistence": 7,
+    "tool_chaining": 6
   },
   "dynamics_requirements": {
     "persistence": 3,

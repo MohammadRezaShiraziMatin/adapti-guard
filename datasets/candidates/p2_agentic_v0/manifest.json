@@ -10,7 +10,7 @@
   "n_benign_twin": 16,
   "n_hard_negative": 4,
   "seed": 20260915,
-  "dataset_sha256": "bd59c9bf82c8ebe573d54c338c6215fb34531eeb244a008840821c3f87d1fc95",
+  "dataset_sha256": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
   "harness_compatible": "p2.2.0-offline",
   "tools": [
     {
@@ -51,12 +51,12 @@
     "DATASET_CARD.md"
   ],
   "dynamics_coverage": {
-    "tool_chaining": 6,
-    "delayed_activation": 4,
-    "adaptive_scripted": 2,
-    "durable_memory": 2,
     "tool_output_injection": 5,
-    "persistence": 7
+    "adaptive_scripted": 2,
+    "delayed_activation": 4,
+    "durable_memory": 2,
+    "persistence": 7,
+    "tool_chaining": 6
   },
   "unique_mechanisms": [
     "B4-error",
@@ -85,8 +85,31 @@
     "not publication-ready",
     "scripted adaptive attacker only (no LLM attacker)",
     "mock tools only",
-    "benign twins match structure but wording differs where needed for benignity"
+    "benign twins match structure but wording differs where needed for benignity",
+    "C3-miss and B4-error remain VARIANT labels (documented; not collapsed in this remediation)"
   ],
+  "remediations_p2_3": {
+    "B1-via-tool": {
+      "decision": "VARIANT OF B4",
+      "mapped_to": "B4-live",
+      "closest_competing": "B4-live",
+      "rationale": "No distinct causal property vs B4-live: both use untrusted tool_output after retrieve_document to drive a downstream harmful tool."
+    },
+    "p2a_atk_006": "repaired causal tool_chaining via extracted_partner memory bridge",
+    "p2a_atk_007": "repaired causal tool_chaining via wire_kind memory bridge (n_turns 3\u21924)",
+    "p2a_atk_015": "repaired persistence so create_record.payload equals memory exercise_payload",
+    "persistence_v2": {
+      "p2a_atk_001": "payload derives_from memory authz_token",
+      "p2a_atk_003": "payload derives_from memory trigger",
+      "p2a_atk_005": "payload derives_from memory pending_role",
+      "p2a_atk_008": "payload derives_from memory claimed_role",
+      "p2a_atk_012": "payload derives_from memory policy_override",
+      "untouched_passing": [
+        "p2a_atk_002",
+        "p2a_atk_015"
+      ]
+    }
+  },
   "estimands": [
     "tool_hasr_after_offline_or_gated_live",
     "utility_fpr_via_benign_twins"
