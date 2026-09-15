@@ -152,14 +152,18 @@ def inspect_judge_blindness(gates: list[AuditGate]) -> None:
 
     cfg = ROOT / "configs/models.yaml"
     text = cfg.read_text(encoding="utf-8")
-    has_primary = "judge_primary" in text and "claude-sonnet-4" in text
-    has_fallback = "judge_fallback" in text and "gpt-4o" in text
+    # Canonical confirm/L1 judge is judge_fallback (OpenRouter qwen-2.5-72b).
+    # judge_primary remains an alternate Groq slot — not required to match Claude.
+    has_canonical = (
+        "judge_fallback" in text and "qwen/qwen-2.5-72b-instruct" in text
+    )
+    has_target = "target_2" in text and "qwen/qwen-2.5-7b-instruct" in text
     _gate(gates, AuditGate(
         id="JUDGE-002",
         category="judge",
         name="Judge model config",
-        status="PASS" if has_primary and has_fallback else "FAIL",
-        detail="primary=Claude Sonnet 4, fallback=GPT-4o",
+        status="PASS" if has_canonical and has_target else "FAIL",
+        detail="canonical L1/confirm: target_2 + judge_fallback (Qwen OpenRouter)",
         blocking=True,
     ))
 
@@ -170,9 +174,10 @@ def inspect_target_models(gates: list[AuditGate]) -> None:
     cfg = yaml.safe_load((ROOT / "configs/models.yaml").read_text(encoding="utf-8"))
     models = cfg.get("models", {})
     required = {
-        "model_a": "gpt-4o-mini",
+        "model_a": "gemini-2.5-flash-mini",
         "model_b": "qwen3-30b-a3b",
         "model_c": "deepseek",
+        "target_2": "qwen-2.5-7b-instruct",
     }
     for key, fragment in required.items():
         spec = models.get(key, {})

@@ -33,12 +33,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="ADAPTI-GUARD Real LLM Evaluation (target + judge)"
     )
-    parser.add_argument("--target", default="target_2", help="Target model config key")
-    parser.add_argument("--judge", default="judge", help="Judge model config key")
+    parser.add_argument(
+        "--target",
+        default="target_2",
+        help="Target model config key (canonical L1: target_2)",
+    )
+    parser.add_argument(
+        "--judge",
+        default="judge_fallback",
+        help="Judge model config key (canonical L1: judge_fallback)",
+    )
     parser.add_argument(
         "--backend",
         choices=["auto", "openrouter", "ollama", "groq", "gemini"],
-        default="auto",
+        default="openrouter",
+        help="Provider backend (canonical L1: openrouter; avoid auto)",
     )
     parser.add_argument("--split", default="test")
     parser.add_argument("--n-samples", type=int, default=None, help="Cap samples (attack-only smoke; first N lines)")

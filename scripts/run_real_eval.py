@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Convenience entry point for real LLM evaluation."""
+"""Legacy/generic convenience entry for real LLM evaluation.
+
+Delegates to experiments/REAL_LLM_EVAL/run.py.
+
+Not the locked Track A/B confirm runner and not a dedicated P1 L1 AUDIT runner.
+Canonical L1 keys (when a gated L1 runner exists): target_2 + judge_fallback
++ OpenRouter + policies B0/STATIC-A1/PHASE1-CORE on frozen p1_mechanism_v1.0.0.
+See docs/research/L1_CANONICAL_CONFIG.md.
+"""
 
 from __future__ import annotations
 
