@@ -17,7 +17,9 @@ Workshop / negative-result packet (Track A FAIL manuscript, not a venue upload):
 
 **P1 mechanism benchmark (FROZEN):** `datasets/frozen/p1_mechanism_v1.0.0/` · SHA `1a0b0053…6818` · [`P1_MECHANISM_V1_0_0_FREEZE.md`](research/P1_MECHANISM_V1_0_0_FREEZE.md) · [`P1_FREEZE_READINESS_AUDIT.md`](research/P1_FREEZE_READINESS_AUDIT.md). Candidate provenance: `datasets/candidates/p1_mechanism_v1/`. `live_evaluated=false`.
 
-**Next scientific gate (design only; API=0):** [`LIVE_EVALUATION_GATE.md`](research/LIVE_EVALUATION_GATE.md) · [`LIVE_EVALUATION_PROTOCOL.md`](research/LIVE_EVALUATION_PROTOCOL.md) · canonical L1 keys [`L1_CANONICAL_CONFIG.md`](research/L1_CANONICAL_CONFIG.md). No automatic live run. No P2 start from this gate.
+**L1 (completed smoke + full on frozen P1; evidence under `experiments/real_llm_eval/P1_MECHANISM_L1/`):** canonical keys [`L1_CANONICAL_CONFIG.md`](research/L1_CANONICAL_CONFIG.md) · protocol [`LIVE_EVALUATION_PROTOCOL.md`](research/LIVE_EVALUATION_PROTOCOL.md) · gate [`LIVE_EVALUATION_GATE.md`](research/LIVE_EVALUATION_GATE.md).
+
+**P2 / Track L2 (DESIGN ONLY; API=0; not implemented):** [`P2_RESEARCH_SPEC.md`](research/P2_RESEARCH_SPEC.md) · [`P2_THREAT_MODEL.md`](research/P2_THREAT_MODEL.md) · [`P2_ATTACK_TAXONOMY.md`](research/P2_ATTACK_TAXONOMY.md) · [`P2_EVALUATION_PROTOCOL.md`](research/P2_EVALUATION_PROTOCOL.md). Focused on L1 weaknesses (detector miss, judge↔tool disagreement, live multi-turn / tool-output / bounded adaptive). Do **not** modify frozen P1 or L1 results. Do **not** confuse with historical [`PHASE2_PROTOCOL.md`](experiments/protocols/PHASE2_PROTOCOL.md).
 
 Full keep-vs-historical map: [`docs/paper/DOCS_INDEX.md`](paper/DOCS_INDEX.md).
 
