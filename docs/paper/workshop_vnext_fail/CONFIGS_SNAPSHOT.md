@@ -13,7 +13,9 @@ sha256sum configs/models.yaml configs/datasets.yaml configs/models_local.yaml \
 
 ## Binding eval-contract keys (`configs/models.yaml`)
 
-SHA-256 `3e7b33d8b1001f0f86abf74b4d8c1558751275835c10a69152f1f7b386cc58b4`
+SHA-256 `9fb2bcc603485ead28d8f10c8ed96915ed040716bae51d3f0ab30de35071fe46`
+
+Binding Target/Judge **model IDs and providers are unchanged** from the VNEXT FAIL contract (`target_2` / `judge_fallback`). Hash rotated only because in-file descriptions/section labels were corrected for L1 hygiene (no ASR/utility retune).
 
 | Key | Required value | Observed on this tree |
 | --- | --- | --- |

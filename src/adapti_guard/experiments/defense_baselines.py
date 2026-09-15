@@ -391,6 +391,7 @@ BASELINE_FACTORIES: dict[str, Callable[[], DefenseFn]] = {
     "L3": make_l3_fixed_block,
     "STATIC-A3": make_l3_fixed_block,
     # Diagnostics only — not deployable.
+    # Diagnostic only (label-using). Never include in primary L1 / confirm AUDIT arms.
     "ORACLE_RISK": lambda: make_oracle_risk_policy(defense_level=3),
     "ORACLE_BLOCK": make_oracle_block_attacks,
 }

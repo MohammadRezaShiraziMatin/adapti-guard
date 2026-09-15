@@ -75,7 +75,8 @@ class PipelineConfig:
     experiment_id: str = "REAL-LLM-EVAL"
     output_dir: Path = Path("experiments/REAL_LLM_EVAL")
     target_config_key: str = "target_2"
-    judge_config_key: str = "judge_primary"
+    # Canonical L1 / confirm judge key (OpenRouter qwen-2.5-72b). Not groq judge_primary.
+    judge_config_key: str = "judge_fallback"
     models_config: str = "configs/models.yaml"
     backend: EvaluationBackend = EvaluationBackend.AUTO
     baselines: list[str] = field(default_factory=lambda: list(DEFAULT_BASELINES))

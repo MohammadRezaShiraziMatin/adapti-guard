@@ -1,93 +1,98 @@
-# Model configuration for Q1 experiments.
-# API keys MUST come from OPENROUTER_API_KEY in .env — never store secrets here.
+# Model configuration for ADAPTI-GUARD evaluation.
+# API keys MUST come from environment (.env) — never store secrets here.
 #
-# Primary evaluation metric: independent LLM judge (real_llm_judge mode).
-# Legacy simulation metrics are labeled LEGACY_SIMULATION_ONLY.
+# Canonical Track L1 (human-gated; see docs/research/L1_CANONICAL_CONFIG.md):
+#   target_2 + judge_fallback + OpenRouter backend
+#   policies: B0 / STATIC-A1 / PHASE1-CORE
+#   pack: datasets/frozen/p1_mechanism_v1.0.0/
+# Do NOT use AUTO/groq/gemini backends or ORACLE_* for primary L1 results.
 
 models:
-  # --- Q1 Target Models (EXP-004) ---
-
-  model_a:
-    provider: openrouter
-    model: gemini-2.5-flash-mini
-    temperature: 0.0
-    max_tokens: 512
-    description: "Model A — GPT-4o-mini (OpenRouter)"
-
-  model_b:
-    provider: openrouter
-    model: qwen/qwen3-30b-a3b
-    temperature: 0.0
-    max_tokens: 512
-    description: "Model B — Qwen3 30B A3B (OpenRouter)"
-
-  model_c:
-    provider: openrouter
-    model: deepseek/deepseek-chat-v3-0324
-    temperature: 0.0
-    max_tokens: 512
-    description: "Model C — DeepSeek V3 (OpenRouter)"
-
-  model_d:
-    provider: openrouter
-    model: anthropic/claude-sonnet-4
-    temperature: 0.0
-    max_tokens: 512
-    description: "Model D — Claude Sonnet 4 (optional, budget permitting)"
-    optional: true
-
-  # --- Independent Judge (blind — no defense metadata) ---
-
-  judge_primary:
-    provider: groq
-    model: openai/gpt-oss-120b
-    temperature: 0.0
-    max_tokens: 512
-    description: "Primary judge — Claude Sonnet 4 (independent, stronger)"
-
-  judge_fallback:
-    provider: openrouter
-    model: qwen/qwen-2.5-72b-instruct
-    temperature: 0.0
-    max_tokens: 512
-    description: "Fallback judge — GPT-4o"
-
-  # --- Legacy keys (backward compatibility) ---
-
-  target_1:
-    provider: openrouter
-    model: meta-llama/llama-3.1-8b-instruct
-    temperature: 0.0
-    max_tokens: 512
-    description: "Legacy — Llama-3.1-8B"
+  # --- Canonical Track L1 (and locked Phase-1 / VNEXT confirm keys) ---
 
   target_2:
     provider: openrouter
     model: qwen/qwen-2.5-7b-instruct
     temperature: 0.0
     max_tokens: 512
-    description: "Legacy — Qwen2.5-7B"
+    description: "Canonical L1 / confirm target — qwen/qwen-2.5-7b-instruct (OpenRouter)"
 
-  target_3:
+  judge_fallback:
+    provider: openrouter
+    model: qwen/qwen-2.5-72b-instruct
+    temperature: 0.0
+    max_tokens: 512
+    description: "Canonical L1 / confirm judge — qwen/qwen-2.5-72b-instruct (OpenRouter)"
+
+  # --- Exploratory multi-model targets (EXP-004 / Stage C; not primary L1) ---
+
+  model_a:
     provider: openrouter
     model: gemini-2.5-flash-mini
     temperature: 0.0
     max_tokens: 512
-    description: "Legacy — alias for model_a"
+    description: "Exploratory target — gemini-2.5-flash-mini (OpenRouter)"
+
+  model_b:
+    provider: openrouter
+    model: qwen/qwen3-30b-a3b
+    temperature: 0.0
+    max_tokens: 512
+    description: "Exploratory target — qwen/qwen3-30b-a3b (OpenRouter)"
+
+  model_c:
+    provider: openrouter
+    model: deepseek/deepseek-chat-v3-0324
+    temperature: 0.0
+    max_tokens: 512
+    description: "Exploratory target — deepseek/deepseek-chat-v3-0324 (OpenRouter)"
+
+  model_d:
+    provider: openrouter
+    model: anthropic/claude-sonnet-4
+    temperature: 0.0
+    max_tokens: 512
+    description: "Optional exploratory target — anthropic/claude-sonnet-4 (OpenRouter)"
+    optional: true
+
+  # --- Alternate / provider-specific judges (not canonical L1) ---
+
+  judge_primary:
+    provider: groq
+    model: openai/gpt-oss-120b
+    temperature: 0.0
+    max_tokens: 512
+    description: "Alternate judge — openai/gpt-oss-120b (Groq); not canonical L1"
 
   judge:
     provider: openrouter
     model: anthropic/claude-sonnet-4
     temperature: 0.0
     max_tokens: 512
-    description: "Legacy judge key — maps to judge_primary"
+    description: "Alternate judge key — anthropic/claude-sonnet-4 (OpenRouter); not canonical L1"
+
+  # --- Other retained keys (tests / historical scripts depend on these) ---
+
+  target_1:
+    provider: openrouter
+    model: meta-llama/llama-3.1-8b-instruct
+    temperature: 0.0
+    max_tokens: 512
+    description: "Historical/smoke target — meta-llama/llama-3.1-8b-instruct (OpenRouter)"
+
+  target_3:
+    provider: openrouter
+    model: gemini-2.5-flash-mini
+    temperature: 0.0
+    max_tokens: 512
+    description: "Alias of model_a — gemini-2.5-flash-mini (OpenRouter)"
 
   ollama_target:
     provider: ollama
     model: llama3.2:3b
     temperature: 0.0
     max_tokens: 512
-    description: "Local Ollama target (development only)"
+    description: "Local Ollama target — llama3.2:3b (development only)"
 
   gemini_target:
     provider: google
@@ -96,7 +101,7 @@ models:
     temperature: 0.0
     max_tokens: 512
     seed: 42
-    description: "Google Gemini 3.6 Flash (Interactions API) — real target"
+    description: "Google Gemini target — gemini-3.6-flash (Interactions API)"
 
   gemini_judge:
     provider: google
@@ -105,7 +110,7 @@ models:
     temperature: 0.0
     max_tokens: 512
     seed: 42
-    description: "Gemini 3.6 Flash used as blind judge when OpenRouter is unavailable"
+    description: "Google Gemini judge — gemini-3.6-flash (Interactions API); not canonical L1"
 
   groq_target:
     provider: groq
@@ -113,7 +118,7 @@ models:
     temperature: 0.0
     max_tokens: 512
     reasoning_effort: low
-    description: "Groq — GPT-OSS-120B"
+    description: "Groq target — openai/gpt-oss-120b; not canonical L1"
 
   groq_judge:
     provider: groq
@@ -121,18 +126,19 @@ models:
     temperature: 0.0
     max_tokens: 512
     reasoning_effort: low
-    description: "Groq judge slot (prefer a distinct model from target when available)"
+    description: "Groq judge — openai/gpt-oss-120b; not canonical L1"
 
   cerebras_judge:
     provider: cerebras
     model: qwen-3.8-27b
     temperature: 0.0
     max_tokens: 512
-    description: "Independent judge — Cerebras Qwen-3.8-27B"
+    description: "Cerebras judge — qwen-3.8-27b; not canonical L1"
 
-# Default target set for multi-model evaluation
-# With --backend openrouter, CLI --judge does NOT select the judge.
-# OpenRouter path uses multi_model.judge via build_judge().
+# Default target set for multi-model evaluation (exploratory).
+# Canonical L1 ignores this block and uses target_2 + judge_fallback only.
+# With --backend openrouter, CLI --judge does NOT select the judge on some paths;
+# OpenRouter multi_model path uses multi_model.judge via build_judge().
 multi_model:
   targets: [model_a, model_b, model_c]
   optional_targets: [model_d]

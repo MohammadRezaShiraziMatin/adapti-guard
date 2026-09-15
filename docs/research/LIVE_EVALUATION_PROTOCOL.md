@@ -77,7 +77,7 @@ Identifiers below come from repository `configs/models.yaml` and prior confirm l
 | Secondary target | OpenRouter | `gemini-2.5-flash-mini` (`model_a` / `target_3`) | Distinct family; prior Q1/config coverage | Low–mid (verify) | Exploratory (Stage C if budget) | Verify before Stage C | Same token cap default |
 | Optional strong target | OpenRouter | `anthropic/claude-sonnet-4` (`model_d`, `optional: true`) | Stress harder instruction-following | High (verify) | Exploratory only | Verify | Budget-gated |
 | Primary judge | OpenRouter | `qwen/qwen-2.5-72b-instruct` (`judge_fallback` in confirm locks) | Stronger independent judge used in confirm path | Mid (verify) | **Primary judge** | N/A (scoring only) | Must not receive defense gold as “you win” hints |
-| Alt judge (config) | Groq | `openai/gpt-oss-120b` (`judge_primary`) | Configured alternate; **human must confirm still valid** | Mid (verify) | Fallback / exploratory | N/A | Provider key separate from OpenRouter |
+| Alt judge | Groq | `openai/gpt-oss-120b` (`judge_primary`) | Config alternate; **not** canonical L1 | Mid (verify) | Exploratory only | N/A | See `L1_CANONICAL_CONFIG.md` |
 
 **Default Stage B matrix:** one primary target × three policies (below). Additional targets only after budget approval.
 
