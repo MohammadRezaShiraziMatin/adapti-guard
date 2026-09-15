@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "p2_agentic_v0_trajectory.schema.json",
+  "title": "P2 Agentic Candidate Trajectory",
+  "type": "object",
+  "required": [
+    "id",
+    "label",
+    "family",
+    "mechanism_id",
+    "component",
+    "turns",
+    "n_turns",
+    "hard_negative",
+    "dynamics",
+    "pack_id",
+    "version"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "label": {
+      "enum": [
+        "attack",
+        "benign"
+      ]
+    },
+    "family": {
+      "type": "string"
+    },
+    "mechanism_id": {
+      "type": "string"
+    },
+    "component": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "attack_surface": {
+      "type": "string"
+    },
+    "attack_channel": {
+      "type": "string"
+    },
+    "runtime_channel": {
+      "type": "string"
+    },
+    "activation_turn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "setup_turn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "persistence_turn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "target_tool": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "harmful_action": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "expected_security_condition": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "success_condition": {
+      "type": "object"
+    },
+    "utility_condition": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "dynamics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "hard_negative": {
+      "type": "boolean"
+    },
+    "benign_twin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "attack_twin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "n_turns": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "turns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "turn_id"
+        ],
+        "properties": {
+          "turn_id": {
+            "type": "integer"
+          },
+          "user_content": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "agent_tool_call": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "inject_tool_observation": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "memory_write": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "memory_read_keys": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "intervention_action": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adaptive_on": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "assistant_content": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "taxonomy_status": {
+      "enum": [
+        "P1_REUSED",
+        "P2_NEW"
+      ]
+    },
+    "taxonomy_note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "pack_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer"
+    }
+  }
+}
