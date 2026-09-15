@@ -63,7 +63,9 @@ Track L2 requires a **different** harness and pack(s). It must not reuse L1 metr
 | Memory/state manipulation | Context “memory” plants | Durable memory store under attack |
 | Adaptive attackers | C4 = 0 | Attacker that observes defense outputs and rewrites |
 
-**Rule:** Do not execute Track L2 under this protocol. Do not mix L2 estimands into L1 AUDIT tables.
+**Post-L1 design packet (API=0, not executed):** [`P2_RESEARCH_SPEC.md`](P2_RESEARCH_SPEC.md), [`P2_THREAT_MODEL.md`](P2_THREAT_MODEL.md), [`P2_ATTACK_TAXONOMY.md`](P2_ATTACK_TAXONOMY.md), [`P2_EVALUATION_PROTOCOL.md`](P2_EVALUATION_PROTOCOL.md). P2 is scoped to L1 residual weaknesses (detector misses; judge↔tool disagreement; live C1/C2/C3/B4; bounded C4-mini) and introduces Tool-HASR vs Judge-ASR without rewriting L1 artifacts.
+
+**Rule:** Do not execute Track L2 under this L1 protocol. Do not mix L2 estimands into L1 AUDIT tables. Do not confuse with historical `docs/experiments/protocols/PHASE2_PROTOCOL.md`.
 
 ---
 
