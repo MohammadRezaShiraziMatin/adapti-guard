@@ -325,22 +325,24 @@ def test_cache_off_enforced_in_preflight_and_manifest():
     assert man["cache_enabled"] is False
 
 
-def test_fail_closed_unsupported_tool():
+def test_unsupported_tool_is_recorded_not_abort():
     rows = {r["id"]: r for r in load_p2_pack()}
     bad = json.loads(json.dumps(rows["p2a_atk_001"]))
-    # Corrupt a tool name on activation turn
     for t in bad["turns"]:
         if t.get("agent_tool_call"):
             t["agent_tool_call"]["name"] = "not_a_real_tool"
             break
-    with pytest.raises(P2LiveGateError) as exc:
-        evaluate_trajectory_live(
-            bad,
-            "B0",
-            tool_mode="scripted_only",
-            call_judge=False,
-        )
-    assert exc.value.status == "STOP_UNSUPPORTED_TOOL"
+    stats = LiveRunStats()
+    out = evaluate_trajectory_live(
+        bad,
+        "B0",
+        tool_mode="scripted_only",
+        call_judge=False,
+        stats=stats,
+    )
+    assert stats.n_unsupported_tool_stops >= 1
+    assert any(e.get("reason") == "unsupported_tool" for e in out["security_events"])
+    assert out.get("tool_hasr_success") is not True
 
 
 def test_score_bundle_separates_tool_hasr_and_judge_asr():
