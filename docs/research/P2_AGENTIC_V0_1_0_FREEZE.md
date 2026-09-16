@@ -63,7 +63,7 @@ Verdict: **`FREEZE-READY`**
 | Source SHA-256 | `32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd` |
 | Frozen SHA-256 | `32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd` |
 | Freeze base commit | `1f572ce5145d968736e88cae2c45e58595bc619e` |
-| Freeze commit | *(stamped after freeze commit)* |
+| Freeze commit | `35a21f1c29dbbccb6e9eb48da7be283e4cdb832a` |
 | Candidate retained | yes (byte-identical `dataset.jsonl`) |
 
 `dataset.jsonl` bytes were **copied without modification**. Manifest/card/README for the frozen path are freeze metadata only.
