@@ -96,6 +96,10 @@ class SecurityEvent:
     observation: str | None = None
     reason: str | None = None
     evidence_class: str = "OBSERVED"  # OBSERVED|DERIVED|UNKNOWN
+    # P2.4 measurement fields (optional for historical artifact compat).
+    primary_execution_state: str | None = None
+    event_id: str | None = None
+    adapted_arguments: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -395,6 +399,13 @@ class P2AgenticHarness:
                 tool_executed = bool(loop.executed)
                 observation = loop.observation
                 reason = str((loop.log or {}).get("reason") or "")
+                primary_state = str((loop.log or {}).get("primary_execution_state") or "")
+                adapted_arguments = (loop.log or {}).get("adapted_arguments")
+                if isinstance(adapted_arguments, Mapping):
+                    adapted_arguments = dict(adapted_arguments)
+                else:
+                    adapted_arguments = None
+                event_id = f"{spec.id}::t{turn_id}::{req.name}::{reason or primary_state}"
 
                 # DERIVED harmful flags vs success_condition
                 tmp_event = SecurityEvent(
@@ -410,6 +421,9 @@ class P2AgenticHarness:
                     observation=observation,
                     reason=reason,
                     evidence_class="OBSERVED",
+                    primary_execution_state=primary_state or None,
+                    event_id=event_id,
+                    adapted_arguments=adapted_arguments,
                 )
                 harmful = match_harmful_execution(
                     success_condition=spec.success_condition,
@@ -452,6 +466,9 @@ class P2AgenticHarness:
                     observation=observation,
                     reason=reason,
                     evidence_class=evidence,
+                    primary_execution_state=primary_state or None,
+                    event_id=event_id,
+                    adapted_arguments=adapted_arguments,
                 )
                 security_events.append(event)
                 tool_trace = event.to_dict()
@@ -491,6 +508,8 @@ class P2AgenticHarness:
                     observation="",
                     reason="turn_blocked",
                     evidence_class="DERIVED",
+                    primary_execution_state="POLICY_DENIED",
+                    event_id=f"{spec.id}::t{turn_id}::{req.name}::turn_blocked",
                 )
                 security_events.append(event)
                 tool_trace = event.to_dict()

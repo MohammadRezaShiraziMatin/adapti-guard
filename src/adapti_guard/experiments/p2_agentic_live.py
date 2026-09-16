@@ -900,38 +900,34 @@ def evaluate_trajectory_live(
         )
 
         if requested is not None and not blocked:
-            if requested.name not in SUPPORTED_TOOLS:
-                run_stats.n_unsupported_tool_stops += 1
-                loop = _unsupported_tool_loop(requested, action=action)
-                run_stats.notes.append(
-                    f"unsupported_tool:{spec.id}:t{turn_id}:{requested.name}"
-                )
-            else:
-                try:
-                    loop = run_tool_turn(
-                        requested=requested, action=action, registry=registry
-                    )
-                except TypeError as exc:
-                    # Live models may emit unexpected kwargs; do not crash the episode.
-                    loop = ToolLoopTurn(
-                        requested=requested,
-                        defense_action=str(action),
-                        permission_allowed=True,
-                        executed=False,
-                        observation=f"invalid_tool_arguments:{exc}",
-                        log={
-                            "reason": "invalid_tool_arguments",
-                            "error": str(exc),
-                            "tool": requested.name,
-                        },
-                    )
-                    run_stats.notes.append(
-                        f"invalid_tool_arguments:{spec.id}:t{turn_id}:{requested.name}"
-                    )
+            # P2.4: schema adaptation + primary execution state live inside run_tool_turn.
+            loop = run_tool_turn(
+                requested=requested, action=action, registry=registry
+            )
             permission_allowed = bool(loop.permission_allowed)
             tool_executed = bool(loop.executed)
             observation = loop.observation
             reason = str((loop.log or {}).get("reason") or "")
+            primary_state = str(
+                (loop.log or {}).get("primary_execution_state") or ""
+            )
+            adapted_arguments = (loop.log or {}).get("adapted_arguments")
+            if isinstance(adapted_arguments, Mapping):
+                adapted_arguments = dict(adapted_arguments)
+            else:
+                adapted_arguments = None
+            event_id = f"{spec.id}::t{turn_id}::{requested.name}::{reason or primary_state}"
+
+            if primary_state == "UNSUPPORTED_TOOL" or reason == "unsupported_tool":
+                run_stats.n_unsupported_tool_stops += 1
+                run_stats.notes.append(
+                    f"unsupported_tool:{spec.id}:t{turn_id}:{requested.name}"
+                )
+            if reason == "invalid_tool_arguments" or primary_state == "INVALID_TOOL_ARGS":
+                # Episode-scoped note only (traj id embedded); never a substitute event.
+                run_stats.notes.append(
+                    f"invalid_tool_arguments:{spec.id}:t{turn_id}:{requested.name}"
+                )
             if tool_executed:
                 run_stats.n_tool_executions += 1
             if requested is not None and permission_allowed is False:
@@ -950,6 +946,9 @@ def evaluate_trajectory_live(
                 observation=observation,
                 reason=reason,
                 evidence_class="OBSERVED",
+                primary_execution_state=primary_state or None,
+                event_id=event_id,
+                adapted_arguments=adapted_arguments,
             )
             harmful = match_harmful_execution(
                 success_condition=spec.success_condition,
@@ -993,6 +992,9 @@ def evaluate_trajectory_live(
                 observation=observation,
                 reason=reason,
                 evidence_class=evidence,
+                primary_execution_state=primary_state or None,
+                event_id=event_id,
+                adapted_arguments=adapted_arguments,
             )
             security_events.append(event)
             tool_trace = event.to_dict()
@@ -1019,6 +1021,7 @@ def evaluate_trajectory_live(
                 run_stats.notes.append(
                     f"unsupported_tool:{spec.id}:t{turn_id}:{requested.name}"
                 )
+            event_id = f"{spec.id}::t{turn_id}::{requested.name}::turn_blocked"
             event = SecurityEvent(
                 tool_name=requested.name,
                 tool_arguments=dict(requested.arguments),
@@ -1032,6 +1035,8 @@ def evaluate_trajectory_live(
                 observation="",
                 reason="turn_blocked",
                 evidence_class="DERIVED",
+                primary_execution_state="POLICY_DENIED",
+                event_id=event_id,
             )
             security_events.append(event)
             tool_trace = event.to_dict()
@@ -1255,7 +1260,19 @@ def evaluate_trajectory_live(
             "judge_asr_unknown": judge_asr_success is None,
         },
         "metadata": redact_mapping(dict(spec.metadata)),
-        "stats_snapshot": run_stats.to_dict(),
+        # P2.4: snapshot counters globally, but notes are filtered to this trajectory
+        # so cumulative run notes cannot be mistaken for episode events.
+        "stats_snapshot": {
+            **run_stats.to_dict(),
+            "notes": [
+                n
+                for n in run_stats.notes
+                if f":{spec.id}:" in str(n) or str(n).endswith(f":{spec.id}")
+                or str(n).startswith(f"invalid_tool_arguments:{spec.id}:")
+                or str(n).startswith(f"unsupported_tool:{spec.id}:")
+            ],
+            "notes_scope": "episode_trajectory_filtered",
+        },
     }
     return redact_mapping(result)
 
