@@ -1,0 +1,66 @@
+{
+  "benchmark_id": "p2_agentic_v0",
+  "pack_id": "p2_agentic_v0.1.0",
+  "version": "p2_agentic_v0.1.0",
+  "status": "FROZEN",
+  "live_evaluated": false,
+  "scientific_evidence": false,
+  "created_from": "datasets/candidates/p2_agentic_v0/",
+  "created_from_pack_id": "p2_agentic_v0-candidate",
+  "source_candidate": "datasets/candidates/p2_agentic_v0/",
+  "source_sha256": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+  "dataset_sha256": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+  "attack_count": 16,
+  "benign_twin_count": 16,
+  "hard_negative_count": 4,
+  "n_rows": 36,
+  "harness_compatible": "p2.2.0-offline",
+  "freeze_date_utc": "2026-09-16",
+  "freeze_datetime_utc": "2026-09-16T14:16:45Z",
+  "freeze_base_commit": "1f572ce5145d968736e88cae2c45e58595bc619e",
+  "freeze_commit": "PENDING_STAMP",
+  "freeze_decision": "FREEZE-READY per Freeze Audit v3 (/opt/cursor/artifacts/p2_freeze_audit_v3_report.md); human freeze gate executed; no live evaluation",
+  "audit_v3_verdict": "FREEZE-READY",
+  "audit_v3_report_md": "/opt/cursor/artifacts/p2_freeze_audit_v3_report.md",
+  "audit_v3_report_json": "/opt/cursor/artifacts/p2_freeze_audit_v3_report.json",
+  "validation_tests": {
+    "freeze_audit_v3": "FREEZE-READY",
+    "blocking_issues": "NONE"
+  },
+  "path": "datasets/frozen/p2_agentic_v0.1.0/dataset.jsonl",
+  "candidate_provenance_path": "datasets/candidates/p2_agentic_v0/dataset.jsonl",
+  "seed": 20260915,
+  "dynamics_coverage": {
+    "persistence": 7,
+    "durable_memory": 2,
+    "delayed_activation": 4,
+    "tool_output_injection": 5,
+    "tool_chaining": 6,
+    "adaptive_scripted": 2
+  },
+  "known_limitations": [
+    "pilot-scale n=16 attacks; not statistically powered",
+    "not publication-ready",
+    "mock tools only",
+    "scripted adaptive attacker only (no LLM attacker)",
+    "C3-miss and B4-error remain VARIANT mechanism_id labels",
+    "provenance is metadata-level (metadata.persistence_provenance); TurnSpec unchanged",
+    "p2a_atk_002 and p2a_atk_015 lack persistence_provenance objects despite observable turn-level causal chains",
+    "benign twins may rename memory keys for benignity while preserving structure"
+  ],
+  "estimands": [
+    "tool_hasr_after_offline_or_gated_live",
+    "utility_fpr_via_benign_twins"
+  ],
+  "non_estimands": [
+    "live_asr_without_gate",
+    "unrestricted_adaptive_attacker_asr"
+  ],
+  "files": [
+    "dataset.jsonl",
+    "manifest.json",
+    "hashes.sha256",
+    "DATASET_CARD.md",
+    "README.md"
+  ]
+}

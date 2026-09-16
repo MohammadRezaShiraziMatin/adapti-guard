@@ -19,7 +19,9 @@ Workshop / negative-result packet (Track A FAIL manuscript, not a venue upload):
 
 **L1 (completed smoke + full on frozen P1; evidence under `experiments/real_llm_eval/P1_MECHANISM_L1/`):** canonical keys [`L1_CANONICAL_CONFIG.md`](research/L1_CANONICAL_CONFIG.md) · protocol [`LIVE_EVALUATION_PROTOCOL.md`](research/LIVE_EVALUATION_PROTOCOL.md) · gate [`LIVE_EVALUATION_GATE.md`](research/LIVE_EVALUATION_GATE.md).
 
-**P2 / Track L2 (DESIGN ONLY; API=0; not implemented):** [`P2_RESEARCH_SPEC.md`](research/P2_RESEARCH_SPEC.md) · [`P2_THREAT_MODEL.md`](research/P2_THREAT_MODEL.md) · [`P2_ATTACK_TAXONOMY.md`](research/P2_ATTACK_TAXONOMY.md) · [`P2_EVALUATION_PROTOCOL.md`](research/P2_EVALUATION_PROTOCOL.md). Focused on L1 weaknesses (detector miss, judge↔tool disagreement, live multi-turn / tool-output / bounded adaptive). Do **not** modify frozen P1 or L1 results. Do **not** confuse with historical [`PHASE2_PROTOCOL.md`](experiments/protocols/PHASE2_PROTOCOL.md).
+**P2 agentic benchmark (FROZEN):** `datasets/frozen/p2_agentic_v0.1.0/` · SHA `32b40e3b…8d64dd` · [`P2_AGENTIC_V0_1_0_FREEZE.md`](research/P2_AGENTIC_V0_1_0_FREEZE.md) · Audit v3 `FREEZE-READY`. Candidate provenance: `datasets/candidates/p2_agentic_v0/`. `live_evaluated=false`. Do **not** start Stage A/B without human budget gate.
+
+**P2 design docs:** [`P2_RESEARCH_SPEC.md`](research/P2_RESEARCH_SPEC.md) · [`P2_THREAT_MODEL.md`](research/P2_THREAT_MODEL.md) · [`P2_ATTACK_TAXONOMY.md`](research/P2_ATTACK_TAXONOMY.md) · [`P2_EVALUATION_PROTOCOL.md`](research/P2_EVALUATION_PROTOCOL.md). Do **not** modify frozen P1, frozen P2, or L1 results. Do **not** confuse with historical [`PHASE2_PROTOCOL.md`](experiments/protocols/PHASE2_PROTOCOL.md).
 
 Full keep-vs-historical map: [`docs/paper/DOCS_INDEX.md`](paper/DOCS_INDEX.md).
 
