@@ -648,6 +648,7 @@ def score_stage_b_results(
     predictions: Sequence[Mapping[str, Any]],
     *,
     run_id: str | None = None,
+    scientific_evidence: bool = False,
 ) -> dict[str, Any]:
     """Stage-B metrics: primary Tool-HASR + secondary Judge-ASR + Wilson + paired."""
     rows = [dict(r) for r in predictions]
@@ -699,10 +700,10 @@ def score_stage_b_results(
 
     return {
         "stage": "B_full",
-        "scientific_evidence": False,
+        "scientific_evidence": bool(scientific_evidence),
         "note": (
             "Primary estimand=Tool-HASR; Judge-ASR secondary; never merged. "
-            "Stage-B quality contract; live execution requires separate human approval."
+            "P2 Stage-B pilot evidence with stated limitations when scientific_evidence=true."
         ),
         "stage_b_harness_version": STAGE_B_HARNESS_VERSION,
         "live_harness_compatible": "p2.3.0-live-stage-a",
@@ -886,7 +887,10 @@ def write_stage_b_artifact_bundle(
 
     enriched = [enrich_episode_for_stage_b(r, run_id=run_id) for r in predictions]
     assert_episode_arm_coverage(enriched, run_id=run_id)
-    metrics = score_stage_b_results(enriched)
+    metrics = score_stage_b_results(
+        enriched,
+        scientific_evidence=bool(manifest.get("scientific_evidence")),
+    )
     events = build_event_trace(enriched)
     token_block = summarize_token_accounting(stats)
     summary = {
@@ -944,15 +948,9 @@ def write_stage_b_artifact_bundle(
 
 
 def refuse_live_stage_b_without_approval(*, approve_stage_b: bool) -> None:
-    """CLI hard gate: Stage B live never auto-starts."""
+    """CLI hard gate: Stage B live never auto-starts without explicit approval."""
     if not approve_stage_b:
         raise P2LiveGateError(
             "STOP_STAGE_B_REQUIRES_HUMAN_APPROVAL",
-            "Stage B live evaluation requires explicit --approve-stage-b "
-            "(quality infrastructure only until human approval).",
+            "Stage B live evaluation requires explicit --approve-stage-b.",
         )
-    raise P2LiveGateError(
-        "STOP_STAGE_B_LIVE_NOT_WIRED",
-        "Stage-B quality hardening is complete, but live Stage-B execution is not "
-        "enabled in this change. Do not run live Stage B yet.",
-    )
