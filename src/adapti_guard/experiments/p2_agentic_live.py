@@ -27,6 +27,7 @@ from typing import Any, Mapping, Sequence
 from adapti_guard.defense.tool_loop import (
     MockToolRegistry,
     ToolCall,
+    ToolLoopTurn,
     extract_tool_request,
     run_tool_turn,
 )
@@ -881,7 +882,27 @@ def evaluate_trajectory_live(
 
         if requested is not None and not blocked:
             _ensure_supported_tool(requested, stats=run_stats)
-            loop = run_tool_turn(requested=requested, action=action, registry=registry)
+            try:
+                loop = run_tool_turn(
+                    requested=requested, action=action, registry=registry
+                )
+            except TypeError as exc:
+                # Live models may emit unexpected kwargs; do not crash the episode.
+                loop = ToolLoopTurn(
+                    requested=requested,
+                    defense_action=str(action),
+                    permission_allowed=True,
+                    executed=False,
+                    observation=f"invalid_tool_arguments:{exc}",
+                    log={
+                        "reason": "invalid_tool_arguments",
+                        "error": str(exc),
+                        "tool": requested.name,
+                    },
+                )
+                run_stats.notes.append(
+                    f"invalid_tool_arguments:{spec.id}:t{turn_id}:{requested.name}"
+                )
             permission_allowed = bool(loop.permission_allowed)
             tool_executed = bool(loop.executed)
             observation = loop.observation
