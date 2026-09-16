@@ -506,24 +506,13 @@ def test_cli_stage_b_gates():
     assert proc.returncode == 2
     assert "STATUS=STOP_STAGE_B_REQUIRES_HUMAN_APPROVAL" in proc.stdout
 
-    proc2 = subprocess.run(
-        [sys.executable, str(SCRIPT), "--stage-b", "--approve-stage-b"],
-        cwd=str(ROOT),
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert proc2.returncode == 2
-    assert "STATUS=STOP_STAGE_B_LIVE_NOT_WIRED" in proc2.stdout
-
 
 def test_refuse_helper():
     with pytest.raises(P2LiveGateError) as exc:
         refuse_live_stage_b_without_approval(approve_stage_b=False)
     assert exc.value.status == "STOP_STAGE_B_REQUIRES_HUMAN_APPROVAL"
-    with pytest.raises(P2LiveGateError) as exc2:
-        refuse_live_stage_b_without_approval(approve_stage_b=True)
-    assert exc2.value.status == "STOP_STAGE_B_LIVE_NOT_WIRED"
+    # Approval alone must not raise — live path proceeds in CLI
+    refuse_live_stage_b_without_approval(approve_stage_b=True)
 
 
 def test_full_pack_score_primary_counts():
