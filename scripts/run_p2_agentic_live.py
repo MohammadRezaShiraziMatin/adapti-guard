@@ -2,13 +2,15 @@
 """P2 live Stage-A runner CLI (frozen agentic pack).
 
 Hard gates (fail closed — never auto-spend):
-  --stage-b                       → STATUS=STOP_STAGE_B_NOT_IMPLEMENTED (exit 2)
+  --stage-b                       → STATUS=STOP_STAGE_B_REQUIRES_HUMAN_APPROVAL
+                                    (or STOP_STAGE_B_LIVE_NOT_WIRED with --approve-stage-b)
   --stage-a without --smoke       → STATUS=STOP_SMOKE_REQUIRED (exit 2)
   --smoke without --stage-a       → STATUS=STOP_STAGE_A_REQUIRED (exit 2)
   default / --preflight-only      → Stage-0 preflight only; STATUS=NO_LIVE_EXECUTION
 
 Live path requires BOTH --stage-a and --smoke. Stage A is instrumentation smoke
-only — not paper evidence. API keys are never printed or written to artifacts.
+only — not paper evidence. Stage B live is quality-hardened but not auto-started.
+API keys are never printed or written to artifacts.
 
 Scientific contract (locked):
   Pack:   datasets/frozen/p2_agentic_v0.1.0/  (SHA 32b40e3b…8d64dd)
@@ -63,6 +65,7 @@ from adapti_guard.experiments.p2_agentic_live import (
     stage_a_arm_schedule,
     write_json,
 )
+from adapti_guard.experiments.p2_stage_b import refuse_live_stage_b_without_approval
 from adapti_guard.experiments.real_llm_pipeline import (
     BaselineRunContext,
     EvaluationBackend,
@@ -248,7 +251,12 @@ def main() -> int:
     parser.add_argument(
         "--stage-b",
         action="store_true",
-        help="Stage B full live (not implemented)",
+        help="Stage B full live (requires --approve-stage-b; live not auto-started)",
+    )
+    parser.add_argument(
+        "--approve-stage-b",
+        action="store_true",
+        help="Human approval token for Stage B (still refuses live until wired)",
     )
     parser.add_argument(
         "--require-key",
@@ -265,12 +273,12 @@ def main() -> int:
 
     # --- Hard gates (before any live spend) ---
     if args.stage_b:
-        print("STATUS=STOP_STAGE_B_NOT_IMPLEMENTED", flush=True)
-        print(
-            "P2 Stage B is not implemented. Do not pass --stage-b.",
-            file=sys.stderr,
-        )
-        return 2
+        try:
+            refuse_live_stage_b_without_approval(approve_stage_b=bool(args.approve_stage_b))
+        except P2LiveGateError as exc:
+            print(f"STATUS={exc.status}", flush=True)
+            print(exc.message, file=sys.stderr)
+            return 2
 
     if args.stage_a and not args.smoke:
         print("STATUS=STOP_SMOKE_REQUIRED", flush=True)
