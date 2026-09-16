@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""P3-C Stage-A live smoke runner (fail-closed).
+"""P3-C live runner (fail-closed Stage-A smoke / Stage-B full pack).
 
 Authorization:
-  default / --preflight-only     → NO_LIVE_EXECUTION
-  --stage-a --smoke --approve-stage-a → Stage-A live smoke (60 arms)
+  default / --preflight-only              → NO_LIVE_EXECUTION
+  --stage-a --smoke --approve-stage-a     → Stage-A live smoke (60 arms)
+  --stage-b without --approve-stage-b     → STOP_STAGE_B_REQUIRES_HUMAN_APPROVAL
+  --stage-b --approve-stage-b             → Stage-B full live (432 arms)
 
-Never starts Stage-B. scientific_evidence=false.
+scientific_evidence=false. No detector ranking. D3 deferred.
 """
 
 from __future__ import annotations
@@ -27,7 +29,6 @@ from adapti_guard.experiments.env_loader import load_project_env
 load_project_env()
 
 from adapti_guard.evaluation.experiment_logging import git_commit
-from adapti_guard.evaluation.prediction_provenance import PROVENANCE_SCHEMA_VERSION
 from adapti_guard.experiments.p2_agentic_live import (
     LOCKED_JUDGE,
     LOCKED_JUDGE_KEY,
@@ -44,18 +45,26 @@ from adapti_guard.experiments.p2_agentic_live import (
 from adapti_guard.experiments.p3_agentic_live import (
     ARTIFACT_ROOT,
     EXPECTED_N_ARMS,
+    EXPECTED_N_ARMS_STAGE_B,
     LIVE_HARNESS_VERSION,
     OPERATIONAL_DETECTORS,
     P3LiveGateError,
     P3_SMOKE_TRAJECTORY_IDS,
     PRIMARY_POLICIES,
+    STAGE_B_HARNESS_VERSION,
+    assert_p2_pack_composition,
     build_p3_manifest,
+    build_p3_stage_b_manifest,
     evaluate_p3_arm,
     preflight_p3,
+    preflight_p3_stage_b,
     p3_smoke_subset,
+    refuse_live_stage_b_without_approval,
     score_p3_stage_a,
     stage_a_cartesian_schedule,
+    stage_b_cartesian_schedule,
     verify_frozen_integrity,
+    write_p3_stage_b_artifact_bundle,
 )
 from adapti_guard.experiments.p2_agentic_live import load_p2_pack
 from adapti_guard.experiments.real_llm_pipeline import (
@@ -63,7 +72,7 @@ from adapti_guard.experiments.real_llm_pipeline import (
     PipelineConfig,
     build_models,
 )
-from adapti_guard.detectors.base import assert_unique_output_dir, P1_SHA256, P2_SHA256
+from adapti_guard.detectors.base import assert_unique_output_dir
 from adapti_guard.detectors.verifier import P3ArtifactVerificationError
 
 
@@ -75,12 +84,60 @@ def make_run_id(commit: str) -> str:
     return f"p3_stage_a_smoke_{utc_stamp()}_{commit[:8]}"
 
 
+def make_stage_b_run_id(commit: str) -> str:
+    return f"p3_stage_b_{utc_stamp()}_{commit[:8]}"
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
+        "".join(json.dumps(r, ensure_ascii=False, default=str) + "\n" for r in rows),
         encoding="utf-8",
     )
+
+
+def _stamp_row(row: dict[str, Any], *, commit: str) -> dict[str, Any]:
+    row = dict(row)
+    row["cache_enabled"] = False
+    row["temperature"] = LOCKED_TEMPERATURE
+    row["backend"] = LOCKED_BACKEND
+    row["target_model"] = LOCKED_TARGET
+    row["judge_model"] = LOCKED_JUDGE
+    row["git_commit"] = commit
+    row["dataset_hash"] = PACK_SHA256
+    return row
+
+
+def _failed_arm_row(
+    *,
+    tid: str,
+    did: str,
+    pid: str,
+    record: dict[str, Any],
+    run_id: str,
+    stage: str,
+    exc: BaseException,
+) -> dict[str, Any]:
+    return {
+        "id": tid,
+        "trajectory_id": tid,
+        "label": record.get("label"),
+        "hard_negative": bool(record.get("hard_negative")),
+        "detector_id": did,
+        "policy_key": pid,
+        "policy_id": pid,
+        "evaluation_id": f"{run_id}::{tid}::{did}::{pid}",
+        "run_id": run_id,
+        "stage": stage,
+        "scientific_evidence": False,
+        "failure_state": getattr(exc, "code", "RUNTIME_ERROR"),
+        "error": str(exc),
+        "tool_hasr_success": None,
+        "judge_asr_success": None,
+        "final_action": "A0",
+        "target_errors": [str(exc)],
+        "security_events": [],
+    }
 
 
 def run_stage_a_smoke(*, run_dir: Path, run_id: str, commit: str) -> dict[str, Any]:
@@ -134,36 +191,20 @@ def run_stage_a_smoke(*, run_dir: Path, run_id: str, commit: str) -> dict[str, A
                 target=target,
                 judge=judge,
                 stats=stats,
+                stage="A",
             )
         except P2LiveGateError as exc:
-            # Preserve failed arm explicitly — do not drop.
-            row = {
-                "id": tid,
-                "trajectory_id": tid,
-                "label": record.get("label"),
-                "hard_negative": bool(record.get("hard_negative")),
-                "detector_id": did,
-                "policy_key": pid,
-                "policy_id": pid,
-                "evaluation_id": f"{run_id}::{tid}::{did}::{pid}",
-                "run_id": run_id,
-                "stage": "A",
-                "scientific_evidence": False,
-                "failure_state": getattr(exc, "code", "RUNTIME_ERROR"),
-                "error": str(exc),
-                "tool_hasr_success": None,
-                "judge_asr_success": None,
-                "final_action": "A0",
-                "target_errors": [str(exc)],
-            }
+            row = _failed_arm_row(
+                tid=tid,
+                did=did,
+                pid=pid,
+                record=record,
+                run_id=run_id,
+                stage="A",
+                exc=exc,
+            )
             print(f"  FAIL {exc}", flush=True)
-        row["cache_enabled"] = False
-        row["temperature"] = LOCKED_TEMPERATURE
-        row["backend"] = LOCKED_BACKEND
-        row["target_model"] = LOCKED_TARGET
-        row["judge_model"] = LOCKED_JUDGE
-        row["git_commit"] = commit
-        row["dataset_hash"] = PACK_SHA256
+        row = _stamp_row(row, commit=commit)
         results.append(row)
         write_jsonl(pred_dir / f"{did}__{pid}__{tid}.jsonl", [row])
 
@@ -195,7 +236,6 @@ def run_stage_a_smoke(*, run_dir: Path, run_id: str, commit: str) -> dict[str, A
     write_json(run_dir / "live_stats.json", live_stats)
     write_json(run_dir / "elapsed.json", {"elapsed_sec": elapsed})
 
-    # Lightweight artifact checks (live-authorized manifest)
     eval_ids = [str(r["evaluation_id"]) for r in results]
     if len(eval_ids) != len(set(eval_ids)):
         raise P3LiveGateError("STOP_DUPLICATE_EVAL_IDS", "duplicate evaluation_id")
@@ -215,15 +255,147 @@ def run_stage_a_smoke(*, run_dir: Path, run_id: str, commit: str) -> dict[str, A
     }
 
 
+def run_stage_b_full(*, run_dir: Path, run_id: str, commit: str) -> dict[str, Any]:
+    """Execute Stage-B: 36 traj × 4 detectors × 3 policies = 432 arms."""
+    info = preflight_p3_stage_b(require_key=True)
+    write_json(run_dir / "preflight.json", info)
+    print("STATUS=PREFLIGHT_OK", flush=True)
+
+    pack_rows = load_p2_pack()
+    inv = assert_p2_pack_composition(pack_rows)
+    by_id = {str(r["id"]): r for r in pack_rows}
+    schedule = stage_b_cartesian_schedule(pack_rows)
+    write_json(
+        run_dir / "integrity.json",
+        {
+            "status": "INTEGRITY_OK",
+            "pack_composition": inv,
+            "n_schedule_arms": len(schedule),
+            "expected_n_arms": EXPECTED_N_ARMS_STAGE_B,
+            "detectors": list(OPERATIONAL_DETECTORS),
+            "policies": list(PRIMARY_POLICIES),
+            "p2_sha256": PACK_SHA256,
+        },
+    )
+    print("STATUS=INTEGRITY_OK", flush=True)
+
+    manifest = build_p3_stage_b_manifest(
+        run_id=run_id,
+        git_commit_value=commit,
+        trajectory_ids=inv["trajectory_ids"],
+    )
+    write_json(run_dir / "manifest.json", manifest)
+
+    config = PipelineConfig(
+        experiment_id=run_id,
+        output_dir=run_dir,
+        target_config_key=LOCKED_TARGET_KEY,
+        judge_config_key=LOCKED_JUDGE_KEY,
+        backend=EvaluationBackend.OPENROUTER,
+        baselines=list(PRIMARY_POLICIES),
+        split="p3_stage_b",
+        seed=LOCKED_SEED,
+    )
+    target, judge = build_models(
+        config, EvaluationBackend.OPENROUTER, cache_enabled=False
+    )
+    judge.use_fallback = False
+
+    stats = LiveRunStats()
+    results: list[dict[str, Any]] = []
+    t_start = time.perf_counter()
+    pred_dir = run_dir / "predictions"
+    pred_dir.mkdir(parents=True, exist_ok=True)
+
+    print(
+        f"P3 Stage-B: n_arms={len(schedule)} "
+        f"detectors={list(OPERATIONAL_DETECTORS)} policies={list(PRIMARY_POLICIES)} "
+        f"harness={STAGE_B_HARNESS_VERSION}",
+        flush=True,
+    )
+
+    for i, (tid, did, pid) in enumerate(schedule, start=1):
+        record = by_id[tid]
+        print(f"[{i}/{len(schedule)}] {tid} × {did} × {pid}", flush=True)
+        try:
+            row = evaluate_p3_arm(
+                record,
+                detector_id=did,
+                policy_key=pid,
+                run_id=run_id,
+                target=target,
+                judge=judge,
+                stats=stats,
+                stage="B",
+            )
+        except (P2LiveGateError, P3LiveGateError) as exc:
+            row = _failed_arm_row(
+                tid=tid,
+                did=did,
+                pid=pid,
+                record=record,
+                run_id=run_id,
+                stage="B",
+                exc=exc,
+            )
+            print(f"  FAIL {exc}", flush=True)
+        row = _stamp_row(row, commit=commit)
+        results.append(row)
+        write_jsonl(pred_dir / f"{did}__{pid}__{tid}.jsonl", [row])
+        # Crash-safety checkpoint every 12 arms (~1 traj×det×policy batch)
+        if i % 12 == 0 or i == len(schedule):
+            write_jsonl(run_dir / "predictions.partial.jsonl", results)
+
+    elapsed = time.perf_counter() - t_start
+    live_stats = stats.to_dict() if hasattr(stats, "to_dict") else dict(stats.__dict__)
+    paths = write_p3_stage_b_artifact_bundle(
+        run_dir,
+        run_id=run_id,
+        predictions=results,
+        manifest=manifest,
+        stats=live_stats,
+        elapsed_sec=elapsed,
+    )
+    summary = json.loads(Path(paths["summary"]).read_text(encoding="utf-8"))
+    summary["dir"] = str(run_dir)
+    summary["output_paths"] = paths
+    summary["harness_version"] = STAGE_B_HARNESS_VERSION
+    write_json(run_dir / "summary.json", summary)
+    write_json(run_dir / "run_summary.json", summary)
+
+    return {
+        "run_dir": str(run_dir),
+        "summary": summary,
+        "metrics": json.loads(Path(paths["metrics"]).read_text(encoding="utf-8")),
+        "manifest": manifest,
+        "live_stats": live_stats,
+        "results": results,
+        "preflight": info,
+        "paths": paths,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="P3-C Stage-A live smoke (fail-closed)")
+    parser = argparse.ArgumentParser(
+        description="P3-C live Stage-A/B runner (fail-closed)"
+    )
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--stage-a", action="store_true")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument(
         "--approve-stage-a",
         action="store_true",
-        help="Explicit human/authorization flag required for live spend",
+        help="Explicit authorization for Stage-A live spend",
+    )
+    parser.add_argument(
+        "--stage-b",
+        action="store_true",
+        help="Stage B full live (requires --approve-stage-b)",
+    )
+    parser.add_argument(
+        "--approve-stage-b",
+        action="store_true",
+        help="Human approval token for Stage B live execution",
     )
     parser.add_argument("--output-dir", type=str, default="")
     args = parser.parse_args(argv)
@@ -235,11 +407,61 @@ def main(argv: list[str] | None = None) -> int:
         integrity = verify_frozen_integrity()
         print(f"integrity={integrity}", flush=True)
 
-        if args.preflight_only or not (args.stage_a or args.smoke or args.approve_stage_a):
+        if args.stage_a and args.stage_b:
+            print("STOP_MUTUAL_EXCLUSION: pass Stage A or Stage B, not both", flush=True)
+            return 2
+
+        # Stage-B path (explicit approval required)
+        if args.stage_b:
+            try:
+                refuse_live_stage_b_without_approval(
+                    approve_stage_b=bool(args.approve_stage_b)
+                )
+            except P3LiveGateError as exc:
+                print(f"STATUS={exc.code}", flush=True)
+                print(str(exc), flush=True)
+                return 2
+
+            run_id = make_stage_b_run_id(commit)
+            run_dir = (
+                Path(args.output_dir) if args.output_dir else ARTIFACT_ROOT / run_id
+            )
+            assert_unique_output_dir(run_dir)
+            run_dir.mkdir(parents=True, exist_ok=True)
+            print(f"STATUS=LIVE_STAGE_B_START run_dir={run_dir}", flush=True)
+            out = run_stage_b_full(run_dir=run_dir, run_id=run_id, commit=commit)
+            print(f"STATUS={out['summary']['status']}", flush=True)
+            print(f"run_id={run_id}", flush=True)
+            print(f"n_arms={out['summary']['n_arms']}", flush=True)
+            print(
+                "SCIENTIFIC BOUNDARY: scientific_evidence=false; "
+                "no detector ranking; Stage C not started.",
+                flush=True,
+            )
+            return 0
+
+        # Default / preflight — no live
+        if args.preflight_only or not (
+            args.stage_a or args.smoke or args.approve_stage_a
+        ):
             info = preflight_p3(require_key=False)
-            print(json.dumps({k: info.get(k) for k in (
-                "ok", "p3_harness_version", "expected_n_arms", "p3_smoke_ids"
-            ) if k in info or True}, indent=2, default=str)[:2000], flush=True)
+            print(
+                json.dumps(
+                    {
+                        k: info.get(k)
+                        for k in (
+                            "ok",
+                            "p3_harness_version",
+                            "expected_n_arms",
+                            "p3_smoke_ids",
+                            "stage",
+                        )
+                    },
+                    indent=2,
+                    default=str,
+                )[:2000],
+                flush=True,
+            )
             print("STATUS=NO_LIVE_EXECUTION", flush=True)
             return 0
 
@@ -271,7 +493,8 @@ def main(argv: list[str] | None = None) -> int:
         print("STOP_UNRECOGNIZED_FLAGS", flush=True)
         return 2
     except (P3LiveGateError, P2LiveGateError, FileExistsError, P3ArtifactVerificationError) as exc:
-        print(f"STATUS=P3_STAGE_A_BLOCKED error={exc}", flush=True)
+        code = getattr(exc, "code", None) or "P3_LIVE_BLOCKED"
+        print(f"STATUS={code} error={exc}", flush=True)
         return 3
 
 
