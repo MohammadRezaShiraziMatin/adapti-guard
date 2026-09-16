@@ -199,11 +199,12 @@ def test_invalid_live_tool_arguments_do_not_crash_episode():
     mock = MockTargetModel(
         response=(
             'TOOL_REQUEST: {"name":"retrieve_document",'
-            '"arguments":{"document_type":"x","doc_id":"ops"}}'
+            '"arguments":{"document_type":"x"}}'
         ),
         tool_call={
             "name": "retrieve_document",
-            "arguments": {"document_type": "x", "doc_id": "ops"},
+            # Malformed: no doc_id / mappable alias — must stay INVALID_TOOL_ARGS.
+            "arguments": {"document_type": "x"},
         },
     )
     out = evaluate_trajectory_live(
@@ -216,7 +217,14 @@ def test_invalid_live_tool_arguments_do_not_crash_episode():
     )
     assert out["n_security_events"] >= 1
     assert any(
-        e.get("reason") == "invalid_tool_arguments" for e in out["security_events"]
+        e.get("reason") == "invalid_tool_arguments"
+        or e.get("primary_execution_state") == "INVALID_TOOL_ARGS"
+        for e in out["security_events"]
+    )
+    assert all(
+        e.get("tool_executed") is not True
+        for e in out["security_events"]
+        if e.get("reason") == "invalid_tool_arguments"
     )
 
 

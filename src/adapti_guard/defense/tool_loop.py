@@ -114,6 +114,25 @@ def run_tool_turn(
     action: DefenseAction | str,
     registry: MockToolRegistry,
 ) -> ToolLoopTurn:
+    """Execute one tool turn with canonical schema adaptation.
+
+    Primary execution states (exactly one):
+      EXECUTED | POLICY_DENIED | INVALID_TOOL_ARGS | UNSUPPORTED_TOOL | RUNTIME_ERROR
+    Policy denial is decided before schema adaptation and never labelled as
+    invalid arguments. Invalid args never execute the tool.
+    """
+    # Local import avoids circular import at module load.
+    from adapti_guard.defense.tool_schema import (
+        EXEC_EXECUTED,
+        EXEC_INVALID_TOOL_ARGS,
+        EXEC_NO_TOOL,
+        EXEC_POLICY_DENIED,
+        EXEC_RUNTIME_ERROR,
+        EXEC_UNSUPPORTED_TOOL,
+        SUPPORTED_TOOL_NAMES,
+        adapt_tool_call,
+    )
+
     value = action.value if isinstance(action, DefenseAction) else str(action)
     if requested is None:
         return ToolLoopTurn(
@@ -122,7 +141,10 @@ def run_tool_turn(
             permission_allowed=True,
             executed=False,
             observation="",
-            log={"reason": "no_tool_requested"},
+            log={
+                "reason": "no_tool_requested",
+                "primary_execution_state": EXEC_NO_TOOL,
+            },
         )
     if value == "A3":
         return ToolLoopTurn(
@@ -131,7 +153,10 @@ def run_tool_turn(
             permission_allowed=False,
             executed=False,
             observation="",
-            log={"reason": "turn_blocked"},
+            log={
+                "reason": "turn_blocked",
+                "primary_execution_state": EXEC_POLICY_DENIED,
+            },
         )
     if not tool_allowed(action):
         return ToolLoopTurn(
@@ -140,14 +165,89 @@ def run_tool_turn(
             permission_allowed=False,
             executed=False,
             observation="TOOL_DENIED",
-            log={"reason": "a2_tool_restriction", "tool": requested.name},
+            log={
+                "reason": "a2_tool_restriction",
+                "tool": requested.name,
+                "primary_execution_state": EXEC_POLICY_DENIED,
+            },
         )
-    output = registry.execute(requested)
+
+    if requested.name not in SUPPORTED_TOOL_NAMES:
+        return ToolLoopTurn(
+            requested=requested,
+            defense_action=value,
+            permission_allowed=True,
+            executed=False,
+            observation=f"unsupported_tool:{requested.name!r}",
+            log={
+                "reason": "unsupported_tool",
+                "tool": requested.name,
+                "primary_execution_state": EXEC_UNSUPPORTED_TOOL,
+            },
+        )
+
+    adaptation = adapt_tool_call(requested)
+    if not adaptation.ok or adaptation.adapted is None:
+        return ToolLoopTurn(
+            requested=requested,
+            defense_action=value,
+            permission_allowed=True,
+            executed=False,
+            observation=f"invalid_tool_arguments:{adaptation.reason}",
+            log={
+                "reason": "invalid_tool_arguments",
+                "tool": requested.name,
+                "error": adaptation.reason,
+                "primary_execution_state": EXEC_INVALID_TOOL_ARGS,
+                "adaptation": adaptation.to_dict(),
+            },
+        )
+
+    try:
+        output = registry.execute(adaptation.adapted)
+    except TypeError as exc:
+        # Should be rare after adaptation; still classify as invalid args, not infra.
+        return ToolLoopTurn(
+            requested=requested,
+            defense_action=value,
+            permission_allowed=True,
+            executed=False,
+            observation=f"invalid_tool_arguments:{exc}",
+            log={
+                "reason": "invalid_tool_arguments",
+                "tool": requested.name,
+                "error": str(exc),
+                "primary_execution_state": EXEC_INVALID_TOOL_ARGS,
+                "adaptation": adaptation.to_dict(),
+            },
+        )
+    except Exception as exc:  # noqa: BLE001 — deliberate runtime boundary
+        return ToolLoopTurn(
+            requested=requested,
+            defense_action=value,
+            permission_allowed=True,
+            executed=False,
+            observation=f"runtime_error:{exc}",
+            log={
+                "reason": "runtime_error",
+                "tool": requested.name,
+                "error": str(exc),
+                "primary_execution_state": EXEC_RUNTIME_ERROR,
+                "adaptation": adaptation.to_dict(),
+            },
+        )
+
     return ToolLoopTurn(
         requested=requested,
         defense_action=value,
         permission_allowed=True,
         executed=True,
         observation=output,
-        log={"reason": "executed", "tool": requested.name},
+        log={
+            "reason": "executed",
+            "tool": requested.name,
+            "primary_execution_state": EXEC_EXECUTED,
+            "adaptation": adaptation.to_dict(),
+            "adapted_arguments": dict(adaptation.adapted_arguments),
+        },
     )
