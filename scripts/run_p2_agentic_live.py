@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+"""P2 live Stage-A runner CLI (frozen agentic pack).
+
+Hard gates (fail closed — never auto-spend):
+  --stage-b                       → STATUS=STOP_STAGE_B_NOT_IMPLEMENTED (exit 2)
+  --stage-a without --smoke       → STATUS=STOP_SMOKE_REQUIRED (exit 2)
+  --smoke without --stage-a       → STATUS=STOP_STAGE_A_REQUIRED (exit 2)
+  default / --preflight-only      → Stage-0 preflight only; STATUS=NO_LIVE_EXECUTION
+
+Live path requires BOTH --stage-a and --smoke. Stage A is instrumentation smoke
+only — not paper evidence. API keys are never printed or written to artifacts.
+
+Scientific contract (locked):
+  Pack:   datasets/frozen/p2_agentic_v0.1.0/  (SHA 32b40e3b…8d64dd)
+  Target: target_2 / qwen/qwen-2.5-7b-instruct (OpenRouter)
+  Judge:  judge_fallback / qwen/qwen-2.5-72b-instruct (OpenRouter)
+  Arms:   B0, STATIC-A1, PHASE1-CORE
+  Temp:   0.0 ; cache disabled
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
+
+from adapti_guard.experiments.env_loader import load_project_env
+
+load_project_env()
+
+from adapti_guard.evaluation.experiment_logging import git_commit
+from adapti_guard.evaluation.prediction_provenance import PROVENANCE_SCHEMA_VERSION
+from adapti_guard.experiments.p2_agentic_live import (
+    ARTIFACT_ROOT,
+    LOCKED_BACKEND,
+    LOCKED_JUDGE,
+    LOCKED_JUDGE_KEY,
+    LOCKED_SEED,
+    LOCKED_TARGET,
+    LOCKED_TARGET_KEY,
+    LOCKED_TEMPERATURE,
+    PACK_SHA256,
+    PRIMARY_ARMS,
+    SMOKE_CORE_ID,
+    SMOKE_SEED,
+    SMOKE_TRAJECTORY_IDS,
+    LiveRunStats,
+    P2LiveGateError,
+    build_run_manifest,
+    evaluate_trajectory_live,
+    load_p2_pack,
+    preflight,
+    score_stage_a_results,
+    smoke_subset,
+    stage_a_arm_schedule,
+    write_json,
+)
+from adapti_guard.experiments.real_llm_pipeline import (
+    BaselineRunContext,
+    EvaluationBackend,
+    PipelineConfig,
+    build_models,
+)
+
+
+def utc_stamp() -> str:
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def make_run_id(commit: str) -> str:
+    return f"p2_agentic_smoke_{utc_stamp()}_{commit[:8]}"
+
+
+def ensure_output_dir(path: Path, *, force: bool) -> None:
+    if path.exists() and any(path.iterdir()) and not force:
+        raise P2LiveGateError(
+            "STOP_OUTPUT_EXISTS",
+            f"output dir exists and is non-empty: {path} (pass --force to overwrite)",
+        )
+    path.mkdir(parents=True, exist_ok=True)
+
+
+def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
+        encoding="utf-8",
+    )
+
+
+def run_stage_a_smoke(*, run_dir: Path, run_id: str, commit: str) -> dict[str, Any]:
+    """Execute locked Stage-A smoke under OpenRouter (cache off, no judge fallback)."""
+    info = preflight(require_key=True)
+    write_json(run_dir / "preflight.json", info)
+
+    manifest = build_run_manifest(
+        run_id=run_id,
+        stage="A_smoke",
+        arms=PRIMARY_ARMS,
+        trajectory_ids=list(SMOKE_TRAJECTORY_IDS),
+        git_commit_value=commit,
+        scientific_evidence=False,
+    )
+    write_json(run_dir / "manifest.json", manifest)
+
+    config = PipelineConfig(
+        experiment_id=run_id,
+        output_dir=run_dir,
+        target_config_key=LOCKED_TARGET_KEY,
+        judge_config_key=LOCKED_JUDGE_KEY,
+        backend=EvaluationBackend.OPENROUTER,
+        baselines=list(PRIMARY_ARMS),
+        split="p2_agentic_stage_a",
+        seed=LOCKED_SEED,
+    )
+    target, judge = build_models(
+        config, EvaluationBackend.OPENROUTER, cache_enabled=False
+    )
+    judge.use_fallback = False
+
+    run_context = BaselineRunContext(
+        experiment_id=run_id,
+        model_id=LOCKED_TARGET,
+        model_config_key=LOCKED_TARGET_KEY,
+        git_commit=commit,
+        seed=LOCKED_SEED,
+        dataset_hash=PACK_SHA256,
+        cache_enabled=False,
+        config_version=PROVENANCE_SCHEMA_VERSION,
+    )
+
+    pack_rows = load_p2_pack()
+    smoke = smoke_subset(pack_rows)
+    by_id = {str(r["id"]): r for r in smoke}
+    schedule = stage_a_arm_schedule(smoke)
+
+    stats = LiveRunStats()
+    results: list[dict[str, Any]] = []
+    t_start = time.perf_counter()
+
+    for arm in PRIMARY_ARMS:
+        traj_ids = schedule[arm]
+        arm_dir = run_dir / arm
+        arm_dir.mkdir(parents=True, exist_ok=True)
+        arm_rows: list[dict[str, Any]] = []
+        print(f"Running {arm} n={len(traj_ids)} cache=off", flush=True)
+        for tid in traj_ids:
+            record = by_id[tid]
+            row = evaluate_trajectory_live(
+                record,
+                arm,
+                target=target,
+                judge=judge,
+                tool_mode="scripted_preferred",
+                call_judge=True,
+                stats=stats,
+            )
+            row = dict(row)
+            row["run_id"] = run_id
+            row["dataset_hash"] = run_context.dataset_hash
+            row["git_commit"] = run_context.git_commit
+            row["cache_enabled"] = False
+            row["temperature"] = LOCKED_TEMPERATURE
+            row["backend"] = LOCKED_BACKEND
+            row["judge_model"] = LOCKED_JUDGE
+            row["judge_config_key"] = LOCKED_JUDGE_KEY
+            row["smoke_seed"] = SMOKE_SEED
+            row["smoke_core_id"] = SMOKE_CORE_ID
+            arm_rows.append(row)
+            results.append(row)
+            line = (
+                f"  [{arm}] {tid} action={row.get('final_action')} "
+                f"tool_hasr={row.get('tool_hasr_success')} "
+                f"judge_asr={row.get('judge_asr_success')}"
+            )
+            print(line, flush=True)
+
+        write_jsonl(arm_dir / f"{arm}_predictions.jsonl", arm_rows)
+        write_json(
+            arm_dir / f"{arm}_metrics.json",
+            score_stage_a_results(arm_rows, policy=arm),
+        )
+
+    elapsed = round(time.perf_counter() - t_start, 2)
+    scored = score_stage_a_results(results)
+    write_json(run_dir / "metrics.json", scored)
+    write_jsonl(run_dir / "predictions.jsonl", results)
+    write_jsonl(
+        run_dir / "disagreement_ledger.jsonl",
+        list(scored.get("disagreements") or []),
+    )
+
+    summary = {
+        "run_id": run_id,
+        "stage": "A_smoke",
+        "dir": str(run_dir),
+        "scientific_evidence": False,
+        "n_results": len(results),
+        "elapsed_seconds": elapsed,
+        "stats": stats.to_dict(),
+        "target_model": LOCKED_TARGET,
+        "judge_model": LOCKED_JUDGE,
+        "cache_enabled": False,
+        "dataset_hash": PACK_SHA256,
+        "git_commit": commit,
+        "arms": list(PRIMARY_ARMS),
+        "trajectory_ids": list(SMOKE_TRAJECTORY_IDS),
+        "output_paths": {
+            "manifest": str(run_dir / "manifest.json"),
+            "preflight": str(run_dir / "preflight.json"),
+            "metrics": str(run_dir / "metrics.json"),
+            "predictions": str(run_dir / "predictions.jsonl"),
+            "disagreement_ledger": str(run_dir / "disagreement_ledger.jsonl"),
+        },
+    }
+    write_json(run_dir / "run_summary.json", summary)
+    write_json(run_dir / "elapsed.json", {"elapsed_seconds": elapsed})
+    return summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="P2 live Stage-A runner (frozen agentic pack; fail-closed gates)"
+    )
+    parser.add_argument(
+        "--preflight-only",
+        action="store_true",
+        help="Stage 0 static validation only (default if no live flags)",
+    )
+    parser.add_argument(
+        "--stage-a",
+        action="store_true",
+        help="Stage A smoke (NOT scientific evidence); requires --smoke",
+    )
+    parser.add_argument(
+        "--smoke",
+        action="store_true",
+        help="Authorize Stage-A smoke subset; requires --stage-a",
+    )
+    parser.add_argument(
+        "--stage-b",
+        action="store_true",
+        help="Stage B full live (not implemented)",
+    )
+    parser.add_argument(
+        "--require-key",
+        action="store_true",
+        help="Require OPENROUTER_API_KEY even for Stage-0 preflight",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Allow writing into an existing non-empty output directory",
+    )
+    parser.add_argument("--output", default="", help="Existing or new run dir")
+    args = parser.parse_args()
+
+    # --- Hard gates (before any live spend) ---
+    if args.stage_b:
+        print("STATUS=STOP_STAGE_B_NOT_IMPLEMENTED", flush=True)
+        print(
+            "P2 Stage B is not implemented. Do not pass --stage-b.",
+            file=sys.stderr,
+        )
+        return 2
+
+    if args.stage_a and not args.smoke:
+        print("STATUS=STOP_SMOKE_REQUIRED", flush=True)
+        print(
+            "Stage A requires explicit --smoke (instrumentation smoke only).",
+            file=sys.stderr,
+        )
+        return 2
+
+    if args.smoke and not args.stage_a:
+        print("STATUS=STOP_STAGE_A_REQUIRED", flush=True)
+        print(
+            "--smoke requires --stage-a. Pass both flags for Stage-A smoke.",
+            file=sys.stderr,
+        )
+        return 2
+
+    live = bool(args.stage_a and args.smoke)
+
+    try:
+        info = preflight(require_key=live or args.require_key)
+    except P2LiveGateError as exc:
+        print(f"STATUS={exc.status}", flush=True)
+        print(exc.message, file=sys.stderr, flush=True)
+        return 2
+
+    print(json.dumps(info, indent=2))
+    print("STATUS=PREFLIGHT_OK", flush=True)
+
+    if not live:
+        print("STATUS=NO_LIVE_EXECUTION", flush=True)
+        return 0
+
+    commit = git_commit() or "unknown"
+    if args.output:
+        run_dir = Path(args.output)
+        if not run_dir.is_absolute():
+            run_dir = ROOT / run_dir
+        run_id = run_dir.name
+    else:
+        run_id = make_run_id(commit)
+        run_dir = ARTIFACT_ROOT / run_id
+
+    try:
+        ensure_output_dir(run_dir, force=args.force)
+        summary = run_stage_a_smoke(run_dir=run_dir, run_id=run_id, commit=commit)
+    except P2LiveGateError as exc:
+        print(f"STATUS={exc.status}", flush=True)
+        print(exc.message, file=sys.stderr, flush=True)
+        return 2
+
+    print("STATUS=STAGE_A_COMPLETE", flush=True)
+    print(
+        "HUMAN GATE: Stage A is smoke only — not paper evidence. Do not start Stage B.",
+        flush=True,
+    )
+    print(json.dumps(summary, indent=2), flush=True)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

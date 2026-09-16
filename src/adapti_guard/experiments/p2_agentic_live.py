@@ -176,6 +176,13 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def write_json(path: Path, payload: Any) -> None:
+    """Write JSON after secret redaction. Never persist API keys."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    safe = redact_secrets(payload)
+    path.write_text(json.dumps(safe, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
 def redact_secrets(value: Any) -> Any:
     """Recursively redact secret-like keys and common credential substrings."""
     if isinstance(value, Mapping):
