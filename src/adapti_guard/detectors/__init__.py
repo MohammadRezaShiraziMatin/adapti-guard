@@ -47,3 +47,15 @@ def list_detector_catalog() -> list[dict]:
     for did, meta in DEFERRED_DETECTORS.items():
         cats.append({"detector_id": did, **meta})
     return cats
+
+
+__all__ = [
+    "DEFERRED_DETECTORS",
+    "CurrentPhase1Detector",
+    "HeuristicTaxonomyDetector",
+    "NoDetectionDetector",
+    "P3Detector",
+    "StructuredContextDetector",
+    "default_p3_detectors",
+    "list_detector_catalog",
+]

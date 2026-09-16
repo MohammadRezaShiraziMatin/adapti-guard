@@ -57,7 +57,7 @@ Risk signal = transparent function of number of fired rules (not calibrated prob
 | Field | Value |
 | --- | --- |
 | Class | `StructuredContextDetector` |
-| Signals | untrusted source channel, tool_output present, MEMORY provenance marker, privileged tool name, tool-chain transition, privilege-escalation cues in visible text |
+| Signals | untrusted source channel, tool_output present, MEMORY provenance marker, privileged tool name (`send_email`/`create_record` only), tool-chain transition into privileged tools, privilege-escalation cues in visible text |
 | Deterministic | Yes |
 | Purpose | Agentic provenance coverage complementary to lexical rules |
 
