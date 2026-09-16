@@ -15,7 +15,6 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from adapti_guard.evaluation.target_model import MockTargetModel  # noqa: F401 — reserved
 from adapti_guard.experiments.p2_agentic import (
     OfflinePolicy,
     P2AgenticHarness,
