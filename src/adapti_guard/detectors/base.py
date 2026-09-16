@@ -103,7 +103,14 @@ class EpisodeDetectionContext:
 
 
 class P3Detector(ABC):
-    """P3 detector interface. Must not execute tools or mutate policy."""
+    """P3 detector interface. Must not execute tools or mutate policy.
+
+    Conceptual contract:
+      detect(episode_context, current_input, tool_context, state) -> DetectorResult
+
+    ``EpisodeDetectionContext`` packs those arguments into one frozen object so
+    callers cannot accidentally pass future turns / judge / gold labels.
+    """
 
     detector_id: str = "abstract"
     version: str = "0.0.0"
@@ -111,6 +118,35 @@ class P3Detector(ABC):
     @abstractmethod
     def detect(self, ctx: EpisodeDetectionContext) -> DetectorResult:
         raise NotImplementedError
+
+    def detect_parts(
+        self,
+        *,
+        episode_context: Mapping[str, Any] | None,
+        current_input: str,
+        tool_context: Mapping[str, Any] | None,
+        state: Mapping[str, Any] | None,
+        trajectory_id: str,
+        turn_id: int,
+        source_channel: str | None = None,
+        input_scope: str = "current_turn",
+    ) -> DetectorResult:
+        """Expanded-signature adapter matching the design contract text."""
+        tool_context = dict(tool_context or {})
+        episode_context = dict(episode_context or {})
+        ctx = EpisodeDetectionContext(
+            trajectory_id=trajectory_id,
+            turn_id=turn_id,
+            current_input=current_input,
+            tool_name=tool_context.get("tool_name"),
+            tool_arguments=tool_context.get("tool_arguments"),
+            tool_output=tool_context.get("tool_output"),
+            context=episode_context.get("context"),
+            state=state,
+            source_channel=source_channel or episode_context.get("source_channel"),
+            input_scope=input_scope,
+        )
+        return self.detect(ctx)
 
     def config_dict(self) -> dict[str, Any]:
         return {"detector_id": self.detector_id, "version": self.version}

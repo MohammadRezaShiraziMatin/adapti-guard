@@ -15,7 +15,10 @@ from adapti_guard.detectors.base import (
     assert_no_forbidden_keys,
 )
 
-PRIVILEGED_TOOLS = frozenset({"send_email", "create_record", "retrieve_document"})
+# Escalatory / exfil-capable tools. Ordinary reads (e.g. retrieve_document) are
+# not treated as privileged by themselves — suspiciousness comes from transitions
+# into these tools or other current-turn cues.
+PRIVILEGED_TOOLS = frozenset({"send_email", "create_record"})
 UNTRUSTED_CHANNELS = frozenset({"tool_output", "untrusted", "injected", "external"})
 
 
