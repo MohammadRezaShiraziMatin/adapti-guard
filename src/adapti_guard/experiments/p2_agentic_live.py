@@ -650,6 +650,25 @@ def _ensure_supported_tool(tc: ToolCall | None, *, stats: LiveRunStats) -> None:
         )
 
 
+def _unsupported_tool_loop(tc: ToolCall, *, action: str) -> ToolLoopTurn:
+    """Record unsupported live tool names without aborting the episode."""
+    return ToolLoopTurn(
+        requested=tc,
+        defense_action=str(action),
+        permission_allowed=True,
+        executed=False,
+        observation=(
+            f"unsupported_tool:{tc.name!r}; "
+            f"allowed={sorted(SUPPORTED_TOOLS)}"
+        ),
+        log={
+            "reason": "unsupported_tool",
+            "tool": tc.name,
+            "allowed": sorted(SUPPORTED_TOOLS),
+        },
+    )
+
+
 def _call_judge_with_retries(
     judge: LLMJudge,
     sample: JudgeInput,
@@ -881,28 +900,34 @@ def evaluate_trajectory_live(
         )
 
         if requested is not None and not blocked:
-            _ensure_supported_tool(requested, stats=run_stats)
-            try:
-                loop = run_tool_turn(
-                    requested=requested, action=action, registry=registry
-                )
-            except TypeError as exc:
-                # Live models may emit unexpected kwargs; do not crash the episode.
-                loop = ToolLoopTurn(
-                    requested=requested,
-                    defense_action=str(action),
-                    permission_allowed=True,
-                    executed=False,
-                    observation=f"invalid_tool_arguments:{exc}",
-                    log={
-                        "reason": "invalid_tool_arguments",
-                        "error": str(exc),
-                        "tool": requested.name,
-                    },
-                )
+            if requested.name not in SUPPORTED_TOOLS:
+                run_stats.n_unsupported_tool_stops += 1
+                loop = _unsupported_tool_loop(requested, action=action)
                 run_stats.notes.append(
-                    f"invalid_tool_arguments:{spec.id}:t{turn_id}:{requested.name}"
+                    f"unsupported_tool:{spec.id}:t{turn_id}:{requested.name}"
                 )
+            else:
+                try:
+                    loop = run_tool_turn(
+                        requested=requested, action=action, registry=registry
+                    )
+                except TypeError as exc:
+                    # Live models may emit unexpected kwargs; do not crash the episode.
+                    loop = ToolLoopTurn(
+                        requested=requested,
+                        defense_action=str(action),
+                        permission_allowed=True,
+                        executed=False,
+                        observation=f"invalid_tool_arguments:{exc}",
+                        log={
+                            "reason": "invalid_tool_arguments",
+                            "error": str(exc),
+                            "tool": requested.name,
+                        },
+                    )
+                    run_stats.notes.append(
+                        f"invalid_tool_arguments:{spec.id}:t{turn_id}:{requested.name}"
+                    )
             permission_allowed = bool(loop.permission_allowed)
             tool_executed = bool(loop.executed)
             observation = loop.observation
@@ -989,7 +1014,11 @@ def evaluate_trajectory_live(
                     )
                 )
         elif requested is not None and blocked:
-            _ensure_supported_tool(requested, stats=run_stats)
+            if requested.name not in SUPPORTED_TOOLS:
+                run_stats.n_unsupported_tool_stops += 1
+                run_stats.notes.append(
+                    f"unsupported_tool:{spec.id}:t{turn_id}:{requested.name}"
+                )
             event = SecurityEvent(
                 tool_name=requested.name,
                 tool_arguments=dict(requested.arguments),
