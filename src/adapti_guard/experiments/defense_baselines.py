@@ -235,13 +235,22 @@ def make_b3_adaptive_v4() -> tuple[DefenseFn, AdaptiveDefenseState]:
 
 
 def make_core_defense(
-    *, defense_level: int = 0, ablation: str | None = None
+    *,
+    defense_level: int = 0,
+    ablation: str | None = None,
+    detector=None,
 ) -> tuple[DefenseFn, object]:
-    """Phase 1 core pipeline. Not VNEXT-ADAPT. Label-blind; uses declared tool names."""
+    """Phase 1 core pipeline. Not VNEXT-ADAPT. Label-blind; uses declared tool names.
+
+    Optional ``detector`` is injected into ``CoreDefensePipeline`` without changing
+    risk/policy/action thresholds (P3 detector-comparison adapter path).
+    """
     from adapti_guard.core.core_pipeline import CoreDefensePipeline
     from adapti_guard.core.episode import EpisodeInput
 
-    pipeline = CoreDefensePipeline(defense_level=defense_level, ablation=ablation)
+    pipeline = CoreDefensePipeline(
+        detector=detector, defense_level=defense_level, ablation=ablation
+    )
 
     def fn(prompt: str, context: str | None = None, **kwargs):
         for key in _LEAKED_GOLD_KWARGS:
