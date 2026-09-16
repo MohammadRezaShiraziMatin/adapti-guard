@@ -18,7 +18,7 @@
   "freeze_date_utc": "2026-09-16",
   "freeze_datetime_utc": "2026-09-16T14:16:45Z",
   "freeze_base_commit": "1f572ce5145d968736e88cae2c45e58595bc619e",
-  "freeze_commit": "PENDING_STAMP",
+  "freeze_commit": "35a21f1c29dbbccb6e9eb48da7be283e4cdb832a",
   "freeze_decision": "FREEZE-READY per Freeze Audit v3 (/opt/cursor/artifacts/p2_freeze_audit_v3_report.md); human freeze gate executed; no live evaluation",
   "audit_v3_verdict": "FREEZE-READY",
   "audit_v3_report_md": "/opt/cursor/artifacts/p2_freeze_audit_v3_report.md",
