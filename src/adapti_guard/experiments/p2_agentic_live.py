@@ -15,7 +15,6 @@ This module NEVER constructs OpenRouter clients. Callers inject ``target`` /
 
 from __future__ import annotations
 
-import copy
 import hashlib
 import json
 import os
@@ -23,7 +22,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Mapping, MutableMapping, Sequence
+from typing import Any, Mapping, Sequence
 
 from adapti_guard.defense.tool_loop import (
     MockToolRegistry,
