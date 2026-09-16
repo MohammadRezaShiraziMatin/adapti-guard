@@ -100,12 +100,19 @@ SUPPORTED_TOOLS = frozenset(
     {"search", "retrieve_document", "send_email", "create_record"}
 )
 
+# Match credential-like *keys* without redacting domain fields such as authz_token.
 _SECRET_KEY_RE = re.compile(
-    r"(api[_-]?key|authorization|bearer|secret|token|password|credential)",
+    r"(api[_-]?key|authorization|bearer|secret|password|credential|"
+    r"(^|_)(access|api|auth|id|refresh|session)_?token$|^token$)",
     re.IGNORECASE,
 )
 _SECRET_VALUE_RE = re.compile(
-    r"(?i)(sk-[A-Za-z0-9_\-]{8,}|Bearer\s+[A-Za-z0-9\-._~+/]+=*|OPENROUTER_API_KEY=\S+)"
+    r"(?i)("
+    r"sk-[A-Za-z0-9_\-]{8,}|"
+    r"Bearer\s+[A-Za-z0-9\-._~+/]+=*|"
+    r"OPENROUTER_API_KEY=\S+|"
+    r"api[_-]?key\s*[:=]\s*\S+"
+    r")"
 )
 REDACTED = "***REDACTED***"
 
@@ -234,6 +241,7 @@ def verify_p1_integrity() -> dict[str, Any]:
     return {
         "pack_path": str(P1_PATH),
         "dataset_hash": digest,
+        "p1_sha256": digest,
         "expected_sha256": P1_SHA256,
         "status": "P1_INTEGRITY_OK",
     }
@@ -1031,6 +1039,8 @@ def evaluate_trajectory_live(
                         "persistence_visible": bool(memory_writes_applied)
                         or bool(memory_reads)
                         or (state_before["memory"] != state_after["memory"]),
+                        # Authored pack intervention_action is never applied as policy.
+                        "ignored_scripted_intervention": turn.intervention_action,
                     },
                     "UNKNOWN": {},
                 }
