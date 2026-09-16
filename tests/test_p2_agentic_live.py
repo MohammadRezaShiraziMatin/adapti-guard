@@ -142,7 +142,7 @@ def test_cli_stage_b_refused():
         text=True,
     )
     assert proc.returncode == 2
-    assert "STATUS=STOP_STAGE_B_NOT_IMPLEMENTED" in proc.stdout
+    assert "STATUS=STOP_STAGE_B_REQUIRES_HUMAN_APPROVAL" in proc.stdout
 
 
 def test_trajectory_isolation_and_multi_turn_state():
