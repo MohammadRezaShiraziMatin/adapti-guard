@@ -706,15 +706,19 @@ def evaluate_trajectory_live(
     tool_mode: str = "scripted_preferred",
     call_judge: bool = True,
     stats: LiveRunStats | None = None,
+    defense_fn: Any | None = None,
+    defense_state: Any | None = None,
 ) -> dict[str, Any]:
     """Evaluate one frozen P2 trajectory under a live-capable, injectable harness.
 
     Isolation: fresh ``AgentState``, ``MockToolRegistry``, and defense state per call.
-    Authored ``intervention_action`` is ignored; ``get_defense_fn(policy_key)`` decides.
+    Authored ``intervention_action`` is ignored; ``get_defense_fn(policy_key)`` decides
+    unless an explicit ``defense_fn`` override is supplied (P3 detector injection).
     """
     run_stats = stats if stats is not None else LiveRunStats()
     spec = trajectory_from_dict(record)
-    defense_fn, defense_state = get_defense_fn(policy_key)
+    if defense_fn is None:
+        defense_fn, defense_state = get_defense_fn(policy_key)
     if defense_state is not None and hasattr(defense_state, "reset"):
         defense_state.reset()
 
