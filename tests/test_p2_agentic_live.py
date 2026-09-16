@@ -194,6 +194,32 @@ def test_tool_trace_generation_and_policy_application():
     assert "ignored_scripted_intervention" in b0["turns"][0]["DERIVED"]
 
 
+def test_invalid_live_tool_arguments_do_not_crash_episode():
+    rows = {r["id"]: r for r in load_p2_pack()}
+    mock = MockTargetModel(
+        response=(
+            'TOOL_REQUEST: {"name":"retrieve_document",'
+            '"arguments":{"document_type":"x","doc_id":"ops"}}'
+        ),
+        tool_call={
+            "name": "retrieve_document",
+            "arguments": {"document_type": "x", "doc_id": "ops"},
+        },
+    )
+    out = evaluate_trajectory_live(
+        rows["p2a_atk_003"],
+        "B0",
+        target=mock,
+        judge=None,
+        tool_mode="live_only",
+        call_judge=False,
+    )
+    assert out["n_security_events"] >= 1
+    assert any(
+        e.get("reason") == "invalid_tool_arguments" for e in out["security_events"]
+    )
+
+
 def test_live_target_injection_scripted_preferred():
     rows = {r["id"]: r for r in load_p2_pack()}
     mock = MockTargetModel(
