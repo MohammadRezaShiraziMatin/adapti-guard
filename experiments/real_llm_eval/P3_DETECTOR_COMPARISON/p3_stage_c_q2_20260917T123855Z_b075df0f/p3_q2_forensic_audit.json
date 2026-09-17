@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "integrity_status": "PASS",
+  "forensic_audit_status": "PASS",
+  "issues": [],
+  "frozen_sha_unchanged": {
+    "p1_sha256": "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235",
+    "p2_sha256": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+    "p1_matches_lock": true,
+    "p2_matches_lock": true,
+    "pack_sha256": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd"
+  },
+  "stage_b_immutable": {
+    "ok": true,
+    "compared_to": "p3_stage_b_20260916T235438Z_7e401714",
+    "mismatches": []
+  },
+  "model_ids_exact": true,
+  "evaluation_ids_unique": true,
+  "n_evaluation_ids": 432,
+  "n_security_event_ids": 1323,
+  "n_unique_security_event_ids": 1323,
+  "budget_ok": true,
+  "actual_usd": 0.152885,
+  "budget_cap_usd": 10.0,
+  "smoke_separate": true,
+  "mid_run_retuning_detected": false,
+  "retuning_markers_checked": [
+    "threshold",
+    "prompt_rewrite",
+    "detector_swap",
+    "policy_swap"
+  ],
+  "pooling_with_smoke_p1_p2_q1": false,
+  "predictions_sha256": "2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6",
+  "run_id": "p3_stage_c_q2_20260917T123855Z_b075df0f",
+  "git_commit": "b075df0f5ec5ad11ede76ac4e4079cade15208f1",
+  "checked_at_utc": "2026-09-17T13:31:13.094671+00:00",
+  "raw_traces_retained": true,
+  "event_trace_retained": true
+}

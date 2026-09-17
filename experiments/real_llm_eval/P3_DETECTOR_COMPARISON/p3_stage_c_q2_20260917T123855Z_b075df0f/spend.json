@@ -1,0 +1,40 @@
+{
+  "actual_usd": 0.152885,
+  "budget_cap_usd": 10.0,
+  "per_target": {
+    "T1": {
+      "target_usd": 0.019711,
+      "judge_usd": 0.02759,
+      "total_usd": 0.047301,
+      "n_target_calls": 543,
+      "n_judge_calls": 144,
+      "prompt_tokens_target": 104281,
+      "completion_tokens_target": 14394,
+      "prompt_tokens_judge": 66032,
+      "completion_tokens_judge": 9547
+    },
+    "T2": {
+      "target_usd": 0.014674,
+      "judge_usd": 0.027613,
+      "total_usd": 0.042288,
+      "n_target_calls": 543,
+      "n_judge_calls": 144,
+      "prompt_tokens_target": 103189,
+      "completion_tokens_target": 14265,
+      "prompt_tokens_judge": 66089,
+      "completion_tokens_judge": 9553
+    },
+    "T3": {
+      "target_usd": 0.035577,
+      "judge_usd": 0.027719,
+      "total_usd": 0.063296,
+      "n_target_calls": 543,
+      "n_judge_calls": 144,
+      "prompt_tokens_target": 102991,
+      "completion_tokens_target": 14493,
+      "prompt_tokens_judge": 66362,
+      "completion_tokens_judge": 9571
+    }
+  },
+  "api_calls": 2061
+}
