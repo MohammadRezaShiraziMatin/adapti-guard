@@ -1,22 +1,22 @@
 # Q2 Publication Package
 
-Offline standardization for Q2 journal preparation from **frozen evidence only**.
+Offline literature → novelty → synthesis → manuscript preparation from **frozen evidence only**.
 
-- API calls during this packaging/standardization: **0**
+- API calls during this packaging: **0**
 - Frozen P1/P2 and Q2 raw traces: **not modified**
-- Status: **READY_WITH_MAJOR_REVISIONS** (`q2_standardization_audit.md`)
+- Status: **READY_WITH_MAJOR_REVISIONS** (`PUBLICATION_PREPARATION_FINAL.md`)
 
-## Read order
+## Read order (this phase)
 
-1. `q2_standardization_audit.md` — issues + verdict
-2. `CONTRIBUTION_POSITIONING.md` — one central contribution
-3. `MANUSCRIPT_BLUEPRINT.md` — section map
-4. `STATISTICAL_REPORTING.md` / `FIGURES_AND_TABLES.md` — numbers from JSON
-5. `INVALID_TOOL_ARGS_ANALYSIS.md` — PRIMARY vs SENSITIVITY vs LIMITATION
-6. `BASELINE_GAP.md` — why not SOTA
-7. `LIMITATIONS.md` + `D3_AND_C4.md`
-8. `q2_reproducibility_audit.md`
+1. `PROJECT_STATUS.md` — VERIFIED / DERIVED / UNAVAILABLE / NOT CLAIMABLE
+2. `PUBLICATION_PREPARATION_FINAL.md` — operator questions
+3. `MANUSCRIPT_V1.md` — complete draft
+4. `RELATED_WORK_MATRIX.md` + `NOVELTY_AUDIT.md` — PARTIAL GAP
+5. `CONTRIBUTION_POSITIONING.md` — one central contribution
+6. `CLAIM_EVIDENCE_MATRIX.md` — claim → source → type
+7. `FIGURES_AND_TABLES.md` + `STATISTICAL_REPORTING.md`
+8. `INVALID_TOOL_ARGS_ANALYSIS.md` · `BASELINE_GAP.md` · `LIMITATIONS.md` · `D3_AND_C4.md`
+9. `Q2_REPRODUCIBILITY_CHECKLIST.md` · `Q2_FINAL_CLAIMS_AUDIT.md`
+10. `PEER_REVIEW_SIMULATION.md` · `VENUE_REQUIREMENTS.md`
 
-Prior packaging notes (still valid as supporting): `q2_final_statistics.md`, `q2_publication_executive_report.md`, `q2_publication_readiness_gate.md`.
-
-Canonical copies of audits also under `/opt/cursor/artifacts/`.
+Standardization-era notes remain supporting: `q2_standardization_audit.md`, `q2_final_statistics.md`, `MANUSCRIPT_BLUEPRINT.md`.

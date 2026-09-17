@@ -157,13 +157,61 @@ Do not rank detectors. Δ vs D0 remains the protocol contrast. Benign denom incl
 
 ## Figures
 
+matplotlib was **not** available; raster PNGs are **not** claimed. Deterministic mermaid (architecture) plus `generate_tables_figures.py` (numeric). Pilot/controlled scope must appear in every caption. No detector ranking.
+
 **Figure 1 — Experimental architecture.** Boxes: Detector → RiskCore → CorePolicy → ToolPermissionGate → mock tools; parallel Judge. No metrics on this figure. Source: system design / P3 taxonomy.
+
+```mermaid
+flowchart LR
+  CTX[Untrusted context] --> DET[Detector D0/D1/D2/D4]
+  DET --> RISK[RiskCore]
+  RISK --> POL[CorePolicy PHASE1-CORE]
+  POL --> GATE[ToolPermissionGate]
+  GATE --> TOOLS[Mock tools]
+  TOOLS --> TH[Tool-HASR primary]
+  CTX --> JUDGE[Locked judge]
+  TOOLS --> JUDGE
+  JUDGE --> JA[Judge-ASR secondary]
+```
 
 **Figure 2 — Detector-policy decomposition.** Annotate *varied* = detector {D0,D1,D2,D4}; *locked* = PHASE1-CORE, thresholds, action costs, P2 pack, judge. T0 reused; T1–T3 live.
 
-**Figure 3 — Δ across target models.** Grouped bars D1/D2/D4 × T0–T3 from Table 3. Annotate 9/9 sign agreement. No ranking colors/crowns. Script: `generate_tables_figures.py` (matplotlib missing here).
+```mermaid
+flowchart TB
+  subgraph varied [Varied]
+    D[Detector identity D0 D1 D2 D4]
+  end
+  subgraph locked [Locked]
+    P[PHASE1-CORE]
+    T[thresholds 0.25 / 0.25/0.60]
+    C[action costs A0-A3]
+    B[pack p2_agentic_v0.1.0]
+    J[judge qwen-2.5-72b]
+  end
+  D --> P
+  P --> TH[Tool-HASR]
+  TH --> DELTA["Δ vs D0 at each target"]
+```
 
-**Figure 4 — Tool-HASR vs Judge-ASR.** Per-target pooled rates from Table 4 plus M3/M4 counts. Do not treat Judge-ASR as invalid.
+**Figure 3 — Δ across target models.** Grouped bars D1/D2/D4 × T0–T3 from Table 3. Annotate 9/9 sign agreement. No ranking colors/crowns. Y-axis must include 0 and all observed Δ (range about −0.75 to 0). Caption: *pilot-scale; n=16/cell; scientific_evidence=false; not a ranking.* Script: `generate_tables_figures.py`.
 
-**Figure 5 — Invalid-tool-args diagnostic.** T1–T3 deduped events vs arms-with-INVALID from Table 5. Caption must state S0 primary denominator unchanged.
+Plotted values (source Table 3):
+
+| | T0 | T1 | T2 | T3 |
+| --- | ---: | ---: | ---: | ---: |
+| D1 | −0.6875 | −0.75 | −0.6875 | −0.5625 |
+| D2 | −0.25 | −0.3125 | −0.25 | −0.1875 |
+| D4 | −0.5625 | −0.625 | −0.5625 | −0.5 |
+
+**Figure 4 — Tool-HASR vs Judge-ASR.** Per-target pooled rates from Table 4 plus M3/M4 counts. Do not treat Judge-ASR as invalid. Caption: *secondary diagnostic; disagreement is information.*
+
+Pooled attack rates (16×4=64 arms/target): compute from Table 4 sums — T0 Tool-HASR (13+2+9+4)/64=28/64; Judge (12+14+15+14)/64=55/64; T1 (14+2+9+4)/64=29/64 vs (15+16+16+15)/64=62/64; T2 (13+2+9+4)/64=28/64 vs 62/64; T3 (11+2+8+3)/64=24/64 vs 62/64. M3/M4 as Table 4.
+
+**Figure 5 — Invalid-tool-args diagnostic.** T1–T3 deduped events vs arms-with-INVALID from Table 5. Caption must state S0 primary denominator unchanged; INVALID is not Tool-HASR success.
+
+| Target | Deduped events | Arms ≥1 |
+| --- | ---: | ---: |
+| T1 | 62 | 41 |
+| T2 | 62 | 46 |
+| T3 | 68 | 49 |
 

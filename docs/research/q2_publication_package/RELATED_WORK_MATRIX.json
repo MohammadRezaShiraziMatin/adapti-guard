@@ -1,0 +1,795 @@
+{
+  "generated_at": "2026-09-17",
+  "api_calls": 0,
+  "live_experiments": false,
+  "citation_policy": "arXiv id/title/authors/year verified from Hugging Face Hub papers metadata. Venue and DOI UNVERIFIED unless later confirmed. No fabricated citations. Hub AI summaries are not used as scientific claims.",
+  "search_topics": [
+    "A_prompt_injection",
+    "B_indirect_prompt_injection",
+    "C_agent_security",
+    "D_runtime_defenses",
+    "E_tool_use_security",
+    "F_llm_guardrails",
+    "G_detection_vs_intervention",
+    "H_adaptive_runtime_defense",
+    "I_agent_trajectory_security",
+    "J_harmful_tool_use_eval",
+    "K_security_eval_llm_agents",
+    "L_detector_policy_decomposition"
+  ],
+  "papers": [
+    {
+      "id": "perez_ribeiro_2022",
+      "title": "Ignore Previous Prompt: Attack Techniques For Language Models",
+      "authors": [
+        "Fábio Perez",
+        "Ian Ribeiro"
+      ],
+      "year": 2022,
+      "arxiv": "2211.09527",
+      "url": "https://arxiv.org/abs/2211.09527",
+      "problem": "Direct prompt injection (goal hijacking, prompt leaking) against instruction-following LLMs.",
+      "method": "PromptInject adversarial prompt composition; case study on GPT-3.",
+      "benchmark": "PromptInject (not an agent tool-loop benchmark).",
+      "evaluation_unit": "Model completion / task deviation.",
+      "primary_metric": "Attack success on hijack/leak tasks (text-level).",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Establishes the prompt-injection threat this project assumes.",
+      "limitation_vs_rq": "No tool-using agents; no detector–policy isolation; no Tool-HASR.",
+      "topics": [
+        "A"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "greshake_ipi_2023",
+      "title": "Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection",
+      "authors": [
+        "Kai Greshake",
+        "Sahar Abdelnabi",
+        "Shailesh Mishra",
+        "Christoph Endres",
+        "Thorsten Holz",
+        "Mario Fritz"
+      ],
+      "year": 2023,
+      "arxiv": "2302.12173",
+      "url": "https://arxiv.org/abs/2302.12173",
+      "problem": "Indirect prompt injection via retrieved/untrusted data in LLM-integrated apps.",
+      "method": "Taxonomy and real-world case studies of IPI.",
+      "benchmark": "Real-world application case studies (not a locked agent pack).",
+      "evaluation_unit": "Application compromise / demonstrated attack.",
+      "primary_metric": "Qualitative/case ASR; not Tool-HASR.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Defines IPI, a core threat class for P2/Q2 agent trajectories.",
+      "limitation_vs_rq": "Does not isolate detector vs intervention; not a controlled multi-target detector contrast.",
+      "topics": [
+        "A",
+        "B",
+        "C"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "liu_houyi_2023",
+      "title": "Prompt Injection attack against LLM-integrated Applications",
+      "authors": [
+        "Yi Liu",
+        "Gelei Deng",
+        "Yuekang Li",
+        "Kailong Wang",
+        "Tianwei Zhang",
+        "Yepang Liu",
+        "Haoyu Wang",
+        "Yan Zheng",
+        "Yang Liu"
+      ],
+      "year": 2023,
+      "arxiv": "2306.05499",
+      "url": "https://arxiv.org/abs/2306.05499",
+      "problem": "Practical black-box prompt injection against commercial LLM-integrated applications.",
+      "method": "HouYi: pre-constructed prompt + context partition + payload.",
+      "benchmark": "Ten commercial applications (exploratory).",
+      "evaluation_unit": "Application-level attack outcome.",
+      "primary_metric": "Attack success on commercial apps.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Shows injection is operational in deployed apps.",
+      "limitation_vs_rq": "Attack paper; no detector–policy decomposition; no Tool-HASR.",
+      "topics": [
+        "A"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "liu_formalize_2023",
+      "title": "Prompt Injection Attacks and Defenses in LLM-Integrated Applications",
+      "authors": [
+        "Yupei Liu",
+        "Yuqi Jia",
+        "Runpeng Geng",
+        "Jinyuan Jia",
+        "Neil Zhenqiang Gong"
+      ],
+      "year": 2023,
+      "arxiv": "2310.12815",
+      "url": "https://arxiv.org/abs/2310.12815",
+      "problem": "Lack of a systematic framework for prompt-injection attacks and defenses.",
+      "method": "Formal attack/defense frameworks; evaluation on 10 LLMs and 7 tasks.",
+      "benchmark": "Open-Prompt-Injection tasks (LLM-integrated applications, not agent tool-HASR).",
+      "evaluation_unit": "Task-level attack/defense outcome.",
+      "primary_metric": "Attack success / defense effectiveness on application tasks.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Closest early systematic attack/defense taxonomy for injection.",
+      "limitation_vs_rq": "Application tasks, not locked agent intervention policy; not Tool-HASR; not cross-target Δ sign.",
+      "topics": [
+        "A",
+        "K",
+        "L"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "toyer_tensortrust_2023",
+      "title": "Tensor Trust: Interpretable Prompt Injection Attacks from an Online Game",
+      "authors": [
+        "Sam Toyer",
+        "Olivia Watkins",
+        "Ethan Adrian Mendes",
+        "Justin Svegliato",
+        "Luke Bailey",
+        "Tiffany Wang",
+        "Isaac Ong",
+        "Karim Elmaaroufi",
+        "Pieter Abbeel",
+        "Trevor Darrell",
+        "Alan Ritter",
+        "Stuart Russell"
+      ],
+      "year": 2023,
+      "arxiv": "2311.01011",
+      "url": "https://arxiv.org/abs/2311.01011",
+      "problem": "Need for large human-generated prompt-injection attack/defense data.",
+      "method": "Online game collecting attacks and prompt-based defenses.",
+      "benchmark": "Tensor Trust dataset (>126k attacks, >46k defenses).",
+      "evaluation_unit": "Prompt vs defender prompt in a game.",
+      "primary_metric": "Attack/defense success in the game setting.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Human-generated injection diversity; not agentic.",
+      "limitation_vs_rq": "Game/text setting; no tool execution endpoint; no detector–policy isolation.",
+      "topics": [
+        "A",
+        "F"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "yi_bipia_2023",
+      "title": "Benchmarking and Defending Against Indirect Prompt Injection Attacks on Large Language Models",
+      "authors": [
+        "Jingwei Yi",
+        "Yueqi Xie",
+        "Bin Zhu",
+        "Emre Kiciman",
+        "Guangzhong Sun",
+        "Xing Xie",
+        "Fangzhao Wu"
+      ],
+      "year": 2023,
+      "arxiv": "2312.14197",
+      "url": "https://arxiv.org/abs/2312.14197",
+      "problem": "IPI risk when LLMs consume external content.",
+      "method": "BIPIA benchmark plus defense analysis (instruction/data distinction).",
+      "benchmark": "BIPIA.",
+      "evaluation_unit": "LLM output given poisoned external content.",
+      "primary_metric": "IPI attack success on BIPIA tasks.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Standard IPI benchmark; motivates external-content threat.",
+      "limitation_vs_rq": "Not a tool-permission policy isolation study; not Tool-HASR.",
+      "topics": [
+        "B",
+        "K"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "zhan_injecagent_2024",
+      "title": "InjecAgent: Benchmarking Indirect Prompt Injections in Tool-Integrated Large Language Model Agents",
+      "authors": [
+        "Qiusi Zhan",
+        "Zhixiang Liang",
+        "Zifan Ying",
+        "Daniel Kang"
+      ],
+      "year": 2024,
+      "arxiv": "2403.02691",
+      "url": "https://arxiv.org/abs/2403.02691",
+      "problem": "IPI that induces tool-integrated agents to take detrimental actions.",
+      "method": "InjecAgent benchmark of tool-using agents under IPI.",
+      "benchmark": "InjecAgent.",
+      "evaluation_unit": "Agent tool-use / harmful action under IPI.",
+      "primary_metric": "Attack success on induced agent actions (tool-integrated).",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Directly related: tool-integrated agents + harmful actions.",
+      "limitation_vs_rq": "Does not hold a downstream intervention policy fixed while varying detectors; not Q2-style Δ sign across independently selected targets.",
+      "topics": [
+        "B",
+        "C",
+        "E",
+        "J",
+        "K"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "debenedetti_agentdojo_2024",
+      "title": "AgentDojo: A Dynamic Environment to Evaluate Attacks and Defenses for LLM Agents",
+      "authors": [
+        "Edoardo Debenedetti",
+        "Jie Zhang",
+        "Mislav Balunović",
+        "Luca Beurer-Kellner",
+        "Marc Fischer",
+        "Florian Tramèr"
+      ],
+      "year": 2024,
+      "arxiv": "2406.13352",
+      "url": "https://arxiv.org/abs/2406.13352",
+      "problem": "Need a dynamic environment to evaluate agent attacks and defenses over untrusted tool data.",
+      "method": "AgentDojo dynamic eval framework; evolving attacks/defenses.",
+      "benchmark": "AgentDojo.",
+      "evaluation_unit": "Agent task completion under attack in a tool environment.",
+      "primary_metric": "Utility and security (attack success) in AgentDojo tasks.",
+      "detector_policy_separately_controlled": "PARTIAL — defenses can be swapped, but Hub abstract does not establish a locked intervention-policy × detector factorial like Q2.",
+      "relevance": "Closest public agent attack/defense eval harness.",
+      "limitation_vs_rq": "Different pack, success definitions, and (from Hub metadata) no verified locked-policy detector-only Δ across independently selected targets. Cross-paper numeric comparison is a claims error.",
+      "topics": [
+        "C",
+        "D",
+        "E",
+        "J",
+        "K",
+        "L"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "ruan_toolemu_2023",
+      "title": "Identifying the Risks of LM Agents with an LM-Emulated Sandbox",
+      "authors": [
+        "Yangjun Ruan",
+        "Honghua Dong",
+        "Andrew Wang",
+        "Silviu Pitis",
+        "Yongchao Zhou",
+        "Jimmy Ba",
+        "Yann Dubois",
+        "Chris J. Maddison",
+        "Tatsunori Hashimoto"
+      ],
+      "year": 2023,
+      "arxiv": "2309.15817",
+      "url": "https://arxiv.org/abs/2309.15817",
+      "problem": "Identifying LM-agent risks without executing real tools.",
+      "method": "ToolEmu: LM-emulated sandbox for agent trajectories.",
+      "benchmark": "ToolEmu scenarios.",
+      "evaluation_unit": "Emulated tool-using trajectories.",
+      "primary_metric": "Risk identification / unsafe behavior in emulation.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Trajectory-level agent risk evaluation; emulation vs our mock tools.",
+      "limitation_vs_rq": "Emulated tools; not detector–policy isolation; not Tool-HASR vs Judge-ASR dual endpoint.",
+      "topics": [
+        "C",
+        "E",
+        "I",
+        "J",
+        "K"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "andriushchenko_agentharm_2024",
+      "title": "AgentHarm: A Benchmark for Measuring Harmfulness of LLM Agents",
+      "authors": [
+        "Maksym Andriushchenko",
+        "Alexandra Souly",
+        "Mateusz Dziemian",
+        "Derek Duenas",
+        "Maxwell Lin",
+        "Justin Wang",
+        "Dan Hendrycks",
+        "Andy Zou",
+        "Zico Kolter",
+        "Matt Fredrikson",
+        "Eric Winsor",
+        "Jerome Wynne",
+        "Yarin Gal",
+        "Xander Davies"
+      ],
+      "year": 2024,
+      "arxiv": "2410.09024",
+      "url": "https://arxiv.org/abs/2410.09024",
+      "problem": "Jailbreak/harm evaluation for agents, not only chatbots.",
+      "method": "AgentHarm: 110 malicious agent tasks (440 with augmentations), 11 harm categories.",
+      "benchmark": "AgentHarm (HF dataset ai-safety-institute/AgentHarm).",
+      "evaluation_unit": "Multi-step agent task completion after jailbreak.",
+      "primary_metric": "Harmful agent task success / refusal vs capability retention.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Agent harmfulness + multi-step tool tasks; refusal is not sufficient.",
+      "limitation_vs_rq": "Jailbreak/misuse benchmark, not prompt-injection detector isolation under locked policy.",
+      "topics": [
+        "C",
+        "J",
+        "K"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "zhang_asb_2024",
+      "title": "Agent Security Bench (ASB): Formalizing and Benchmarking Attacks and Defenses in LLM-based Agents",
+      "authors": [
+        "Hanrong Zhang",
+        "Jingyuan Huang",
+        "Kai Mei",
+        "Yifei Yao",
+        "Zhenting Wang",
+        "Chenlu Zhan",
+        "Hongwei Wang",
+        "Yongfeng Zhang"
+      ],
+      "year": 2024,
+      "arxiv": "2410.02644",
+      "url": "https://arxiv.org/abs/2410.02644",
+      "problem": "Comprehensive attack/defense evaluation for LLM agents.",
+      "method": "ASB: 10 scenarios, 10 agents, 400+ tools, 23 attack/defense types, 8 metrics, ~90k cases.",
+      "benchmark": "ASB.",
+      "evaluation_unit": "Agent operation stages (system prompt, user prompt, tool usage, memory).",
+      "primary_metric": "Attack success rate (paper reports high average ASR; Hub summary cites 84.30%).",
+      "detector_policy_separately_controlled": "PARTIAL — evaluates many defenses, but Hub metadata does not establish detector-only contrasts under a locked intervention policy.",
+      "relevance": "Large agent security benchmark including tool-usage stage.",
+      "limitation_vs_rq": "Different threat model/pack/metrics; cannot copy ASR into Q2 tables. Not verified as Q2-style isolation.",
+      "topics": [
+        "C",
+        "E",
+        "J",
+        "K",
+        "L"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "inan_llamaguard_2023",
+      "title": "Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations",
+      "authors": [
+        "Hakan Inan",
+        "Kartikeya Upasani",
+        "Jianfeng Chi",
+        "Rashi Rungta",
+        "Krithika Iyer",
+        "Yuning Mao",
+        "Michael Tontchev",
+        "Qing Hu",
+        "Brian Fuller",
+        "Davide Testuggine",
+        "Madian Khabsa"
+      ],
+      "year": 2023,
+      "arxiv": "2312.06674",
+      "url": "https://arxiv.org/abs/2312.06674",
+      "note_authors": "Remaining Llama Guard authors after Rashi Rungta were truncated in one Hub fetch; Krithika Iyer through Madian Khabsa are taken from a prior Hub metadata dump in this same task and treated as Hub-verified.",
+      "problem": "Input/output safety classification for conversations.",
+      "method": "Llama Guard LLM safeguard.",
+      "benchmark": "Safety classification / conversation moderation (not agent Tool-HASR).",
+      "evaluation_unit": "Turn-level input/output safety labels.",
+      "primary_metric": "Safety classification performance.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Canonical detector-class guardrail; a future matched baseline candidate.",
+      "limitation_vs_rq": "Not evaluated here on p2_agentic_v0.1.0. Conversation I/O, not locked agent policy isolation.",
+      "topics": [
+        "F",
+        "G"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "rebedea_nemo_2023",
+      "title": "NeMo Guardrails: A Toolkit for Controllable and Safe LLM Applications with Programmable Rails",
+      "authors": [
+        "Traian Rebedea",
+        "Razvan Dinu",
+        "Makesh Sreedhar",
+        "Christopher Parisien",
+        "Jonathan Cohen"
+      ],
+      "year": 2023,
+      "arxiv": "2310.10501",
+      "url": "https://arxiv.org/abs/2310.10501",
+      "problem": "Programmable runtime control of LLM applications.",
+      "method": "NeMo Guardrails toolkit (rails).",
+      "benchmark": "Toolkit/demo applications.",
+      "evaluation_unit": "Rail firing / controlled dialogue.",
+      "primary_metric": "Controllability / safety rails (not Tool-HASR).",
+      "detector_policy_separately_controlled": "PARTIAL — rails encode policy; not a factorial detector×fixed-policy study.",
+      "relevance": "Runtime intervention stack; policy and detection often co-designed.",
+      "limitation_vs_rq": "Entangled rails, not Q2 isolation; not run on this pack.",
+      "topics": [
+        "D",
+        "F",
+        "G",
+        "H"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "wallace_instruction_hierarchy_2024",
+      "title": "The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions",
+      "authors": [
+        "Eric Wallace",
+        "Kai Xiao",
+        "Reimar Leike",
+        "Lilian Weng",
+        "Johannes Heidecke",
+        "Alex Beutel"
+      ],
+      "year": 2024,
+      "arxiv": "2404.13208",
+      "url": "https://arxiv.org/abs/2404.13208",
+      "problem": "LLMs treat all instructions similarly, enabling injection.",
+      "method": "Train models to prioritize privileged instructions (model-level defense).",
+      "benchmark": "Instruction-priority / injection evaluations (model-level).",
+      "evaluation_unit": "Model compliance with privileged vs unprivileged instructions.",
+      "primary_metric": "Robustness of instruction priority (text-level).",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Model-level alternative to runtime detector+policy.",
+      "limitation_vs_rq": "Changes the target model, not a locked-policy detector contrast. Not a Q2 baseline on this pack.",
+      "topics": [
+        "F",
+        "G"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "chen_struq_2024",
+      "title": "StruQ: Defending Against Prompt Injection with Structured Queries",
+      "authors": [
+        "Sizhe Chen",
+        "Julien Piet",
+        "Chawin Sitawarin",
+        "David Wagner"
+      ],
+      "year": 2024,
+      "arxiv": "2402.06363",
+      "url": "https://arxiv.org/abs/2402.06363",
+      "problem": "Prompt/data channel mixing enables injection.",
+      "method": "Structured queries: separate prompt and data channels + front-end formatting.",
+      "benchmark": "Prompt-injection tasks with structured-query system.",
+      "evaluation_unit": "Application query with separated channels.",
+      "primary_metric": "Defense success vs utility on injection tasks.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Architectural channel separation, related to isolation but not detector factorial.",
+      "limitation_vs_rq": "Not detector-vs-D0 under locked PHASE1-CORE; not Tool-HASR on P2.",
+      "topics": [
+        "D",
+        "G",
+        "L"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "hines_spotlighting_2024",
+      "title": "Defending Against Indirect Prompt Injection Attacks With Spotlighting",
+      "authors": [
+        "Keegan Hines",
+        "Gary Lopez",
+        "Matthew Hall",
+        "Federico Zarfati",
+        "Yonatan Zunger",
+        "Emre Kiciman"
+      ],
+      "year": 2024,
+      "arxiv": "2403.14720",
+      "url": "https://arxiv.org/abs/2403.14720",
+      "problem": "IPI via untrusted context.",
+      "method": "Spotlighting: mark/transform untrusted input so the model treats it as data.",
+      "benchmark": "IPI defense evaluations (Hub: IPI).",
+      "evaluation_unit": "LLM response given spotlighted untrusted content.",
+      "primary_metric": "IPI defense effectiveness.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Runtime/prompt-augmentation defense class.",
+      "limitation_vs_rq": "Not a detector identity contrast under locked tool-permission policy.",
+      "topics": [
+        "B",
+        "D",
+        "F"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "wu_isolategpt_2024",
+      "title": "IsolateGPT: An Execution Isolation Architecture for LLM-Based Agentic Systems",
+      "authors": [
+        "Yuhao Wu",
+        "Franziska Roesner",
+        "Tadayoshi Kohno",
+        "Ning Zhang",
+        "Umar Iqbal"
+      ],
+      "year": 2024,
+      "arxiv": "2403.04960",
+      "url": "https://arxiv.org/abs/2403.04960",
+      "problem": "Insufficient isolation among LLM apps/tools and the system.",
+      "method": "Execution isolation architecture for LLM-based agentic systems.",
+      "benchmark": "Attacks against isolated vs non-isolated LLM app ecosystems.",
+      "evaluation_unit": "System/app interaction under attack.",
+      "primary_metric": "Protection against security/privacy/safety issues without functionality loss (Hub abstract).",
+      "detector_policy_separately_controlled": "NO — isolation is the defense; not a detector factorial under fixed intervention policy.",
+      "relevance": "Closest *architectural* isolation of execution. Different from detector-effect isolation.",
+      "limitation_vs_rq": "Does not measure detector-related Tool-HASR Δ with policy held fixed. Isolation of apps ≠ isolation of detector vs policy.",
+      "topics": [
+        "C",
+        "D",
+        "G",
+        "L"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "debenedetti_camel_2025",
+      "title": "Defeating Prompt Injections by Design",
+      "authors": [
+        "Edoardo Debenedetti",
+        "Ilia Shumailov",
+        "Tianqi Fan",
+        "Jamie Hayes",
+        "Nicholas Carlini",
+        "Daniel Fabian",
+        "Christoph Kern",
+        "Chongyang Shi",
+        "Andreas Terzis",
+        "Florian Tramèr"
+      ],
+      "year": 2025,
+      "arxiv": "2503.18813",
+      "url": "https://arxiv.org/abs/2503.18813",
+      "problem": "Prompt injection in agents that handle untrusted data.",
+      "method": "CaMeL: segregate control and data flows; prevent unauthorized exfiltration.",
+      "benchmark": "AgentDojo (Hub summary: 67% secure task completion — not copied into Q2 tables).",
+      "evaluation_unit": "Secure task completion in AgentDojo.",
+      "primary_metric": "Secure task completion / injection resistance.",
+      "detector_policy_separately_controlled": "NO — design-level control/data isolation, not detector×fixed-policy factorial.",
+      "relevance": "Strongest related isolation *by design*. Must not be equated with Q2's experimental detector isolation.",
+      "limitation_vs_rq": "Architectural capability isolation, not a locked PHASE1-CORE detector contrast on Tool-HASR. Different pack/metrics.",
+      "topics": [
+        "D",
+        "G",
+        "H",
+        "L"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "zhu_melon_2025",
+      "title": "MELON: Provable Defense Against Indirect Prompt Injection Attacks in AI Agents",
+      "authors": [
+        "Kaijie Zhu",
+        "Xianjun Yang",
+        "Jindong Wang",
+        "Wenbo Guo",
+        "William Yang Wang"
+      ],
+      "year": 2025,
+      "arxiv": "2502.05174",
+      "url": "https://arxiv.org/abs/2502.05174",
+      "problem": "IPI that redirects agent actions via tool-retrieved content.",
+      "method": "MELON: re-execute trajectory with masked user prompt; compare actions.",
+      "benchmark": "AgentDojo.",
+      "evaluation_unit": "Agent next-action similarity original vs masked.",
+      "primary_metric": "Attack prevention and utility on AgentDojo.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Trajectory-level runtime detection of IPI via action comparison.",
+      "limitation_vs_rq": "A detector/defense method, not a policy-locked detector factorial. Hub abstract uses SOTA language about MELON; Q2 must not import that claim.",
+      "topics": [
+        "B",
+        "D",
+        "H",
+        "I",
+        "J"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "jacob_promptshield_2025",
+      "title": "PromptShield: Deployable Detection for Prompt Injection Attacks",
+      "authors": [
+        "Dennis Jacob",
+        "Hend Alzahrani",
+        "Zhanhao Hu",
+        "Basel Alomair",
+        "David Wagner"
+      ],
+      "year": 2025,
+      "arxiv": "2501.15145",
+      "url": "https://arxiv.org/abs/2501.15145",
+      "problem": "Practical detectors for prompt injection in LLM-integrated apps.",
+      "method": "PromptShield benchmark + detector.",
+      "benchmark": "PromptShield detector benchmark.",
+      "evaluation_unit": "Input detection (attack vs benign prompt).",
+      "primary_metric": "Detector performance (precision/recall-style; Hub: detection performance).",
+      "detector_policy_separately_controlled": "YES for detection-only eval; NO for downstream agent intervention (not an agent Tool-HASR study).",
+      "relevance": "Detector-only evaluation exists. Shows detection can be studied without claiming a full agent defense.",
+      "limitation_vs_rq": "Does not measure Tool-HASR under a locked tool-permission policy, nor cross-target Δ sign of detector-related effects.",
+      "topics": [
+        "A",
+        "F",
+        "G"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    },
+    {
+      "id": "chen_meta_secalign_2025",
+      "title": "Meta SecAlign: A Secure Foundation LLM Against Prompt Injection Attacks",
+      "authors": [
+        "Sizhe Chen",
+        "Arman Zharmagambetov",
+        "David Wagner",
+        "Chuan Guo"
+      ],
+      "year": 2025,
+      "arxiv": "2507.02735",
+      "url": "https://arxiv.org/abs/2507.02735",
+      "problem": "Need open model-level injection defenses.",
+      "method": "Open-weight model trained with improved SecAlign recipe.",
+      "benchmark": "9 utility + 7 security benchmarks including tool-calling and agentic web navigation (Hub abstract).",
+      "evaluation_unit": "Model responses / agentic tasks.",
+      "primary_metric": "Security vs utility on those benchmarks.",
+      "detector_policy_separately_controlled": false,
+      "relevance": "Model-level defense covering tool-calling; future baseline class.",
+      "limitation_vs_rq": "Changes the target weights; Q2 holds targets fixed and varies detectors. Hub abstract uses SOTA language; do not import.",
+      "topics": [
+        "F",
+        "G",
+        "K"
+      ],
+      "venue": "UNVERIFIED",
+      "venue_status": "UNVERIFIED",
+      "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
+      "doi": "UNVERIFIED"
+    }
+  ],
+  "novelty_tests": {
+    "detector_only_effects": {
+      "already_studied": true,
+      "examples": [
+        "PromptShield (2501.15145)",
+        "Llama Guard (2312.06674)"
+      ],
+      "note": "Detection-only papers exist. Q2 is not novel merely for having detectors."
+    },
+    "policy_only_effects": {
+      "already_studied": true,
+      "examples": [
+        "NeMo Guardrails (2310.10501)",
+        "IsolateGPT (2403.04960)",
+        "CaMeL (2503.18813)"
+      ],
+      "note": "Runtime rails and architectural isolation exist. Q2 does not invent intervention policy."
+    },
+    "detector_policy_decomposition": {
+      "already_studied": "PARTIAL",
+      "examples": [
+        "CaMeL control/data isolation",
+        "IsolateGPT execution isolation",
+        "AgentDojo/ASB defense tables (unverified whether policy is locked)"
+      ],
+      "note": "Prior work isolates *design channels* or evaluates stacked defenses. Surveyed Hub metadata does not show a factorial that holds agent intervention policy fixed and varies detector identity to estimate Tool-HASR Δ."
+    },
+    "fixed_policy_detector_comparison": {
+      "already_studied": "UNCERTAIN",
+      "examples": [
+        "AgentDojo defense evals",
+        "ASB defense methods"
+      ],
+      "note": "Possible overlap if those harnesses swap detectors under a shared policy. Not verified from Hub metadata alone. Do not claim 'first'."
+    },
+    "tool_harm_execution_primary_endpoint": {
+      "already_studied": "PARTIAL",
+      "examples": [
+        "InjecAgent",
+        "AgentDojo",
+        "AgentHarm",
+        "ASB",
+        "ToolEmu"
+      ],
+      "note": "Action/tool success is used. Q2's Tool-HASR is a pre-registered success_condition on mock tools plus dual Judge-ASR/M3/M4 — related, not unique as an idea."
+    },
+    "target_model_sensitivity_of_detector_effects": {
+      "already_studied": "UNCERTAIN",
+      "examples": [
+        "ASB 13 LLM backbones",
+        "BIPIA  multiple LLMs",
+        "Liu et al. 10 LLMs"
+      ],
+      "note": "Multi-model evals exist. Whether they estimate detector-related Δ vs a no-detection arm under locked intervention is UNVERIFIED."
+    },
+    "agentic_trajectory_level_security": {
+      "already_studied": true,
+      "examples": [
+        "AgentDojo",
+        "MELON",
+        "ToolEmu",
+        "AgentHarm"
+      ],
+      "note": "Trajectory-level agent eval is established."
+    },
+    "cross_model_consistency_under_locked_intervention_policy": {
+      "already_studied": "NOT_FOUND_IN_SURVEYED_SET",
+      "examples": [],
+      "note": "No surveyed paper was verified to pre-register Δ sign agreement of detector-vs-D0 Tool-HASR across independently selected secondary targets under one locked intervention policy. Exhaustive literature proof is not claimed."
+    }
+  },
+  "survey_limitations": [
+    "Venue/DOI not in Hub metadata — marked UNVERIFIED.",
+    "Not an exhaustive literature review; additional papers exist (e.g. DataFilter 2510.19207, SafeAgent 2604.17562, AgentWall 2605.16265, WAInjectBench 2510.01354) and were noted in search but not fully extracted.",
+    "Cannot claim 'first' or CLEAR GAP solely from this survey.",
+    "Do not copy numeric results from other papers into Q2 tables."
+  ]
+}
