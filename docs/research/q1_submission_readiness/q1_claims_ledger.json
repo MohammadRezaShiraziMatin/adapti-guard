@@ -1,0 +1,95 @@
+{
+  "generated_at_utc": "2026-09-17T14:18:06.653567+00:00",
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Detector choice affects Tool-HASR under fixed PHASE1-CORE policy relative to D0",
+      "evidence": "P3 Stage-B PHASE1-CORE \u0394(D1/D2/D4)=\u22120.6875/\u22120.25/\u22120.5625; n=16 attacks/cell",
+      "status": "SUPPORTED",
+      "safe_wording": "Under the locked P2 pack and PHASE1-CORE policy on T0, D1/D2/D4 reduce Tool-HASR relative to D0 (pilot-scale).",
+      "unsafe_wording": "Detectors provide robust agent security / D1 is best.",
+      "limitation": "n=16 attacks; scientific_evidence=false on P3; no detector ranking"
+    },
+    {
+      "id": "C2",
+      "claim": "Detector effects can be isolated from intervention policy by holding policy fixed",
+      "evidence": "P3 protocol: only detector varies; same thresholds/tools/policy",
+      "status": "SUPPORTED",
+      "safe_wording": "The protocol isolates detector-related contrasts under a fixed policy stratum.",
+      "unsafe_wording": "We causally prove detectors alone cause all security gains in the wild.",
+      "limitation": "Isolation is experimental-design isolation, not full causal identification against all confounders (e.g., INVALID rates)"
+    },
+    {
+      "id": "C3",
+      "claim": "Tool-HASR is an execution-grounded security endpoint distinct from Judge-ASR",
+      "evidence": "P3 Stage-B M3=61 M4=22; Q2 live M3=108 M4=3; definitions in tool_hasr.py",
+      "status": "SUPPORTED",
+      "safe_wording": "Tool-HASR and Judge-ASR disagree substantially; Tool-HASR tracks harmful tool execution.",
+      "unsafe_wording": "Judge-ASR is useless / Tool-HASR is always superior.",
+      "limitation": "Neither metric alone captures all threat semantics"
+    },
+    {
+      "id": "C4",
+      "claim": "D-vs-D0 Tool-HASR contrast sign generalizes to T1\u2013T3",
+      "evidence": "Q2 9/9 sign agreements; verdict supported",
+      "status": "SUPPORTED",
+      "safe_wording": "Directional consistency of \u0394 across the four evaluated target models under PHASE1-CORE.",
+      "unsafe_wording": "Generalizes to all LLMs / model-independent / universally robust.",
+      "limitation": "4 models; reduced design; scientific_evidence=false; T0 not re-run under Q2 harness"
+    },
+    {
+      "id": "C5",
+      "claim": "PHASE1-CORE improves security vs B0 on P1 L1",
+      "evidence": "L1 HASR B0 41/44 vs CORE 22/44 (judge-aliased HASR)",
+      "status": "PARTIALLY_SUPPORTED",
+      "safe_wording": "On P1 L1, PHASE1-CORE reduces official (judge-aliased) HASR vs B0 at pilot scale.",
+      "unsafe_wording": "Adaptive policy proves production safety.",
+      "limitation": "P1 metric \u2260 Tool-HASR; single model; mechanism leaves with 0 detector hits"
+    },
+    {
+      "id": "C6",
+      "claim": "Cost-aware defense with validated monetary costs",
+      "evidence": "ACTION_COSTS A0=0,A1=0.1,A2=0.25,A3=0.5; no invoice validation",
+      "status": "NOT_SUPPORTED",
+      "safe_wording": "Normalized experimental intervention cost weights used for relative accounting.",
+      "unsafe_wording": "Optimal cost-aware defense / real USD savings.",
+      "limitation": "Weights are assumptions; offline sensitivity does not validate economics"
+    },
+    {
+      "id": "C7",
+      "claim": "ADAPTI-GUARD is novel as an end-to-end breakthrough defense",
+      "evidence": "novelty audit: established components + novel integration",
+      "status": "PARTIALLY_SUPPORTED",
+      "safe_wording": "Novel integration: detector\u2013policy isolation protocol + Tool-HASR evaluation for agentic tool use.",
+      "unsafe_wording": "First/only/breakthrough agent security system.",
+      "limitation": "Requires external literature verification; systems+evaluation paper, not SOTA defense"
+    },
+    {
+      "id": "C8",
+      "claim": "Results generalize beyond P1/P2 packs",
+      "evidence": "P1 n_atk=44; P2 n_atk=16; limited mechanisms; C4=0 in P1",
+      "status": "NOT_SUPPORTED",
+      "safe_wording": "Findings are scoped to frozen P1/P2 packs and evaluated models.",
+      "unsafe_wording": "Broad agent security generalization.",
+      "limitation": "Pilot-scale; incomplete adaptive/indirect/memory coverage"
+    },
+    {
+      "id": "C9",
+      "claim": "INVALID_TOOL_ARGS overturns primary \u0394 conclusions",
+      "evidence": "S0/S1/S2: no sign flips; S2 cross-target 9/9 agree",
+      "status": "NOT_SUPPORTED",
+      "safe_wording": "INVALID is frequent and must be reported; primary \u0394 signs remain stable under locked S0/S2.",
+      "unsafe_wording": "INVALID is negligible / ignore schema failures.",
+      "limitation": "Still a measurement confound; does not remove need for transparency"
+    },
+    {
+      "id": "C10",
+      "claim": "Detector ranking / winner among D1,D2,D4",
+      "evidence": "protocol forbids ranking; P3 scientific_evidence=false",
+      "status": "OUT_OF_SCOPE",
+      "safe_wording": "Report per-detector contrasts vs D0 without ranking.",
+      "unsafe_wording": "D1 wins / best detector.",
+      "limitation": "Explicit design non-goal"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "generated_at_utc": "2026-09-17T14:18:06.653567+00:00",
+  "scope": "literature-positioning audit; no new citations invented",
+  "external_literature_verification_required": true,
+  "note": "Comparative claims vs published systems require author literature review; marked UNVERIFIED_EXTERNAL where applicable.",
+  "established_components": [
+    {
+      "component": "prompt-injection / jailbreak detection patterns",
+      "status": "ESTABLISHED",
+      "evidence_basis": "general field; UNVERIFIED_EXTERNAL for specific papers"
+    },
+    {
+      "component": "runtime guardrails / output filtering for LLMs",
+      "status": "ESTABLISHED",
+      "evidence_basis": "UNVERIFIED_EXTERNAL"
+    },
+    {
+      "component": "policy-based intervention (allow/sanitize/deny/block)",
+      "status": "ESTABLISHED",
+      "evidence_basis": "access-control and safety-filter literature; UNVERIFIED_EXTERNAL"
+    },
+    {
+      "component": "tool-using agent evaluation harnesses",
+      "status": "ESTABLISHED_EMERGING",
+      "evidence_basis": "agent benchmarks exist; UNVERIFIED_EXTERNAL for exact prior Tool-HASR analogues"
+    },
+    {
+      "component": "cost-sensitive decision making",
+      "status": "ESTABLISHED",
+      "evidence_basis": "generic decision theory / cost-sensitive classification; UNVERIFIED_EXTERNAL"
+    },
+    {
+      "component": "heuristic detectors and provenance cues",
+      "status": "ESTABLISHED",
+      "evidence_basis": "D2/D4 are interpretable instantiations, not new ML families"
+    }
+  ],
+  "novel_integration_mechanism": [
+    {
+      "claim": "Controlled isolation of detector-related security effects from downstream intervention policy in an agentic tool-execution loop",
+      "status": "DEFENSIBLE_AS_PRIMARY",
+      "support": "P3 causal structure: only detector varies; same pack/policy/tools/thresholds; \u0394 vs D0 under PHASE1-CORE"
+    },
+    {
+      "claim": "Tool-HASR as execution-grounded primary endpoint (harmful tool execution matching success_condition)",
+      "status": "DEFENSIBLE_AS_SECONDARY",
+      "support": "P2/P3 protocol; distinct from judge textual ASR; M3/M4 forensic disagreement quantified"
+    },
+    {
+      "claim": "Explicit detector \u2192 risk \u2192 policy \u2192 tool-gate \u2192 execution pipeline with locked costs and forensic states",
+      "status": "DEFENSIBLE_AS_SYSTEMS_CONTRIBUTION",
+      "support": "ADAPTI-GUARD architecture + P2.4 execution states including INVALID_TOOL_ARGS"
+    },
+    {
+      "claim": "Cross-target directional consistency of detector-vs-D0 Tool-HASR contrasts (Q2)",
+      "status": "DEFENSIBLE_AS_SECONDARY_BOUNDED",
+      "support": "9/9 sign agreements on T1\u2013T3; not universal LLM generalization"
+    }
+  ],
+  "strongest_defensible_contribution": "A controlled protocol that isolates detector-related effects on agentic tool-security outcomes (Tool-HASR) from downstream intervention policy, with execution-grounded metrics, forensic disagreement analysis, and bounded cross-target directional consistency.",
+  "claims_that_must_be_weakened": [
+    "ADAPTI-GUARD is a breakthrough defense",
+    "universally robust / model-independent security",
+    "best detector / ranking among D1/D2/D4",
+    "solves prompt injection",
+    "production-ready agent security",
+    "statistically powered confirmatory efficacy",
+    "generalizes beyond evaluated packs/models"
+  ],
+  "claims_that_should_not_appear": [
+    "winner / SOTA detector",
+    "outperforms all prior defenses",
+    "closes adaptive attack threat (C4)",
+    "semantic detector superiority (D3 deferred)",
+    "monetary cost optimality of A0\u2013A3 weights",
+    "pooling Track-A smoke or L1 with P3 as one estimand"
+  ],
+  "novelty_boundary_by_area": {
+    "prompt_injection_defenses": "ESTABLISHED techniques used; novelty not in inventing injection defense",
+    "runtime_guardrails": "ESTABLISHED class; contribution is agentic tool-loop integration + measurement",
+    "adaptive_defenses": "PARTIAL \u2014 PHASE1-CORE adapts actions by risk; not adaptive-attacker-closed",
+    "agent_security": "EVALUATION + SYSTEMS contribution; not a new agent architecture",
+    "tool_use_security": "PRIMARY measurement contribution via Tool-HASR",
+    "policy_based_intervention": "ESTABLISHED; held fixed in P3 detector isolation",
+    "cost_aware_defense": "SECONDARY \u2014 normalized experimental weights, not validated USD costs",
+    "detector_policy_separation": "PRIMARY methodological contribution",
+    "agentic_security_evaluation": "PRIMARY protocol contribution (P2 pack + Tool-HASR + forensic)"
+  }
+}

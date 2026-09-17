@@ -1,0 +1,259 @@
+{
+  "generated_at_utc": "2026-09-17T14:18:06.653567+00:00",
+  "persona": "hostile_but_fair_journal_reviewer",
+  "scores_1_to_5": {
+    "novelty": 3,
+    "significance": 3,
+    "methodological_rigor": 4,
+    "reproducibility": 4,
+    "statistical_validity": 3,
+    "benchmark_quality": 3,
+    "baseline_quality": 2,
+    "generalization": 2,
+    "clarity": 3,
+    "limitations_honesty": 4,
+    "threat_validity": 3,
+    "claim_evidence_alignment": 3
+  },
+  "overall_readiness": "CONDITIONAL \u2014 publishable as rigorous pilot/protocol paper if claims stay bounded; not ready as confirmatory SOTA defense paper",
+  "weaknesses": [
+    {
+      "id": "W1",
+      "area": "benchmark_size",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": true,
+      "fix": "State pilot n explicitly; weaken generalization claims; power analysis as limitation",
+      "impact": "Prevents overclaim rejection"
+    },
+    {
+      "id": "W2",
+      "area": "scientific_evidence_flags",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": true,
+      "fix": "Either keep scientific_evidence=false and frame as protocol/pilot study, or justify confirmatory scope narrowly with caveats \u2014 do not silently upgrade",
+      "impact": "Claim/evidence alignment"
+    },
+    {
+      "id": "W3",
+      "area": "external_baselines",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": false,
+      "fix": "Document gap; compare conceptually to published defenses; do not fabricate reconstructions",
+      "impact": "Reviewers will demand baselines; acknowledge"
+    },
+    {
+      "id": "W4",
+      "area": "novelty_positioning",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Rewrite related work with verified citations; position as evaluation+isolation contribution",
+      "impact": "Acceptance depends on honest novelty"
+    },
+    {
+      "id": "W5",
+      "area": "INVALID_TOOL_ARGS",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Include S0/S1/S2 in paper; already shows sign stability",
+      "impact": "Credibility of Tool-HASR"
+    },
+    {
+      "id": "W6",
+      "area": "metric_continuity_P1_vs_P2",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Explicit dual-metric narrative; never equate L1 HASR with Tool-HASR",
+      "impact": "Avoid reviewer confusion"
+    },
+    {
+      "id": "W7",
+      "area": "cost_model",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Label costs as normalized weights; include offline sensitivity",
+      "impact": "Avoid economic overclaim"
+    },
+    {
+      "id": "W8",
+      "area": "D3_deferred",
+      "severity": "LOW",
+      "fixable_without_new_experiment": true,
+      "fix": "State deferred; do not claim complete detector taxonomy evaluation",
+      "impact": "Minor completeness"
+    },
+    {
+      "id": "W9",
+      "area": "doc_lag_P3C",
+      "severity": "LOW",
+      "fixable_without_new_experiment": true,
+      "fix": "Update design docs to reflect Stage-B/Q2 completion without changing results",
+      "impact": "Reproducibility clarity"
+    },
+    {
+      "id": "W10",
+      "area": "utility_tradeoff",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Report twin/HN FPR and utility prominently; security without utility is incomplete",
+      "impact": "Balanced claims"
+    },
+    {
+      "id": "W11",
+      "area": "adaptive_attacks_C4",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": false,
+      "fix": "Bound threat model: C4/adaptive attacker out of scope",
+      "impact": "Threat validity"
+    },
+    {
+      "id": "W12",
+      "area": "model_diversity",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Use Q2 wording: directional consistency across evaluated targets only",
+      "impact": "Generalization honesty"
+    }
+  ],
+  "remaining_HIGH": [
+    {
+      "id": "W1",
+      "area": "benchmark_size",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": true,
+      "fix": "State pilot n explicitly; weaken generalization claims; power analysis as limitation",
+      "impact": "Prevents overclaim rejection"
+    },
+    {
+      "id": "W2",
+      "area": "scientific_evidence_flags",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": true,
+      "fix": "Either keep scientific_evidence=false and frame as protocol/pilot study, or justify confirmatory scope narrowly with caveats \u2014 do not silently upgrade",
+      "impact": "Claim/evidence alignment"
+    },
+    {
+      "id": "W3",
+      "area": "external_baselines",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": false,
+      "fix": "Document gap; compare conceptually to published defenses; do not fabricate reconstructions",
+      "impact": "Reviewers will demand baselines; acknowledge"
+    },
+    {
+      "id": "W11",
+      "area": "adaptive_attacks_C4",
+      "severity": "HIGH",
+      "fixable_without_new_experiment": false,
+      "fix": "Bound threat model: C4/adaptive attacker out of scope",
+      "impact": "Threat validity"
+    }
+  ],
+  "remaining_MEDIUM": [
+    {
+      "id": "W4",
+      "area": "novelty_positioning",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Rewrite related work with verified citations; position as evaluation+isolation contribution",
+      "impact": "Acceptance depends on honest novelty"
+    },
+    {
+      "id": "W5",
+      "area": "INVALID_TOOL_ARGS",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Include S0/S1/S2 in paper; already shows sign stability",
+      "impact": "Credibility of Tool-HASR"
+    },
+    {
+      "id": "W6",
+      "area": "metric_continuity_P1_vs_P2",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Explicit dual-metric narrative; never equate L1 HASR with Tool-HASR",
+      "impact": "Avoid reviewer confusion"
+    },
+    {
+      "id": "W7",
+      "area": "cost_model",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Label costs as normalized weights; include offline sensitivity",
+      "impact": "Avoid economic overclaim"
+    },
+    {
+      "id": "W10",
+      "area": "utility_tradeoff",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Report twin/HN FPR and utility prominently; security without utility is incomplete",
+      "impact": "Balanced claims"
+    },
+    {
+      "id": "W12",
+      "area": "model_diversity",
+      "severity": "MEDIUM",
+      "fixable_without_new_experiment": true,
+      "fix": "Use Q2 wording: directional consistency across evaluated targets only",
+      "impact": "Generalization honesty"
+    }
+  ],
+  "remaining_LOW": [
+    {
+      "id": "W8",
+      "area": "D3_deferred",
+      "severity": "LOW",
+      "fixable_without_new_experiment": true,
+      "fix": "State deferred; do not claim complete detector taxonomy evaluation",
+      "impact": "Minor completeness"
+    },
+    {
+      "id": "W9",
+      "area": "doc_lag_P3C",
+      "severity": "LOW",
+      "fixable_without_new_experiment": true,
+      "fix": "Update design docs to reflect Stage-B/Q2 completion without changing results",
+      "impact": "Reproducibility clarity"
+    }
+  ],
+  "fix_before_submission": [
+    "Rewrite abstract/intro around primary contribution (detector\u2013policy isolation + Tool-HASR protocol); demote secondary bullets",
+    "Complete related-work with verified citations (no invented refs)",
+    "Add explicit Limitations section covering n, C4, baselines, costs, INVALID, scientific_evidence=false",
+    "Include S0/S1/S2 INVALID sensitivity and M3/M4 endpoint justification",
+    "Include Q2 directional-consistency table with safe wording",
+    "Label ACTION_COSTS as normalized experimental weights + offline cost sensitivity",
+    "Baseline gap: state unavailable fair reconstructions; do not fabricate",
+    "Align all claims to claims ledger; remove ranking/winner/universal language",
+    "Update P3 design docs that still say P3-C not started (documentation only)",
+    "Do NOT run new live experiments solely to inflate claims before addressing claim alignment"
+  ],
+  "Q1_READINESS_STATUS": {
+    "Evidence_integrity": "PASS (frozen SHAs; Q2 forensic PASS; no evidence mutation in this task)",
+    "Scientific_analysis": "COMPLETE_FOR_EXISTING_EVIDENCE (S0/S1/S2, \u0394, endpoint, cost offline)",
+    "Novelty_positioning": "DRAFTED_PENDING_EXTERNAL_LIT_VERIFY",
+    "Generalization": "BOUNDED_PILOT (documented; not closed experimentally)",
+    "Baseline_coverage": "GAP_DOCUMENTED (critical gap; no new live baselines)",
+    "Statistical_package": "COMPLETE_FROM_EXISTING",
+    "Claim_alignment": "LEDGER_READY (must enforce in manuscript)",
+    "Paper_readiness": "CONDITIONAL_NOT_YET_SUBMISSION_READY",
+    "Remaining_HIGH_risks": [
+      "benchmark_size",
+      "scientific_evidence_flags",
+      "external_baselines",
+      "adaptive_attacks_C4"
+    ],
+    "Remaining_MEDIUM_risks": [
+      "novelty_positioning",
+      "INVALID_TOOL_ARGS",
+      "metric_continuity_P1_vs_P2",
+      "cost_model",
+      "utility_tradeoff",
+      "model_diversity"
+    ],
+    "Remaining_LOW_risks": [
+      "D3_deferred",
+      "doc_lag_P3C"
+    ]
+  }
+}
