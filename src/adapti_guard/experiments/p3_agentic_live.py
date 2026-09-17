@@ -465,9 +465,14 @@ def evaluate_p3_arm(
     row["stage"] = stage
     row["repetition_id"] = repetition_id or ("R1" if stage == "B" else None)
     row["scientific_evidence"] = False
-    row["p3_harness_version"] = (
-        STAGE_B_HARNESS_VERSION if stage in {"B", "C_Q1"} else LIVE_HARNESS_VERSION
-    )
+    if stage == "C_Q2":
+        from adapti_guard.experiments.p3_stage_c_q2 import HARNESS_VERSION_Q2
+
+        row["p3_harness_version"] = HARNESS_VERSION_Q2
+    elif stage in {"B", "C_Q1"}:
+        row["p3_harness_version"] = STAGE_B_HARNESS_VERSION
+    else:
+        row["p3_harness_version"] = LIVE_HARNESS_VERSION
     return row
 
 
