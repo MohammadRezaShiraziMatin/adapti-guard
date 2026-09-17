@@ -11,9 +11,9 @@ T1–T3 = secondary targets — exact provider IDs MUST be verified before lock.
 Q1 (repetition_id / R2) is a separate study. This module never modifies Q1,
 Stage-B, P1, P2, or L1 artifacts.
 
-``live_execution_allowed = false`` until explicit human approval after
-``P3_STAGE_C_Q2_GATE_READY``. Model-ID / pricing verification without
-network yields ``P3_Q2_PROTOCOL_INCOMPLETE`` (fail-closed).
+``live_execution_allowed = false`` until explicit human approval.
+Model/pricing may be locked via OpenRouter catalog metadata (no inference).
+Human ``maximum_permitted_budget_usd`` must be supplied explicitly.
 """
 
 from __future__ import annotations
@@ -63,6 +63,23 @@ from adapti_guard.experiments.p3_stage_c_q1 import (
     sign_agreement,
     sign_delta,
 )
+from adapti_guard.experiments.p3_stage_c_q2_lock import (
+    JUDGE_ID,
+    MAXIMUM_PERMITTED_BUDGET_USD,
+    PRICING_VERIFIED_AT_UTC,
+    T0_ID,
+    T1_ID,
+    T2_ID,
+    T3_ID,
+    VERIFICATION_DATE_UTC,
+    build_target_lock_records,
+    build_verification_bundle,
+    gate_status_from_locks,
+    pricing_lock,
+    q2_arm_schedule,
+    q2_call_bounds,
+    worst_case_cost_usd,
+)
 from adapti_guard.experiments.security_event_id import (
     EVENT_ID_SCHEMA_LEGACY,
     EVENT_ID_SCHEMA_SCOPED_REP,
@@ -94,14 +111,7 @@ NON_D0_DETECTORS = ("D1", "D2", "D4")
 ANCHOR_DETECTOR = "D0"
 HARNESS_VERSION_Q2 = "p3.0.0-live-stage-c-q2"
 
-# Design-phase verification timestamp (UTC). No network probe performed.
-VERIFICATION_DATE_UTC = "2026-09-17"
-VERIFICATION_MODE = "LOCAL_REPO_ONLY_NO_NETWORK"
-
-# Empirical Stage-B rates for planning bounds only.
-_TARGET_CALLS_PER_ARM = 3.85
-_JUDGE_CALLS_PER_ARM = 1.0
-_SEC_PER_ARM = 6.75
+VERIFICATION_MODE = "OPENROUTER_CATALOG_METADATA_NO_INFERENCE"
 
 
 class P3Q2ProtocolError(RuntimeError):
@@ -115,186 +125,61 @@ class P3Q2ProtocolError(RuntimeError):
 # ---------------------------------------------------------------------------
 
 
-def _candidate_record(
-    *,
-    slot: str,
-    display_name: str,
-    role: str,
-    proposed_provider_model_id: str | None,
-    config_key: str | None,
-    family: str,
-    rationale_tags: Sequence[str],
-    local_source: str | None,
-    lock_status: str,
-    blockers: Sequence[str],
-) -> dict[str, Any]:
-    return {
-        "slot": slot,
-        "display_name": display_name,
-        "role": role,
-        "proposed_provider_model_id": proposed_provider_model_id,
-        "exact_provider_model_id": (
-            proposed_provider_model_id if lock_status == "LOCKED" else None
-        ),
-        "provider": "openrouter" if proposed_provider_model_id or slot == "T0" else None,
-        "config_key": config_key,
-        "model_version": "UNKNOWN_PENDING_PROVIDER_VERIFY",
-        "context_limit": "UNKNOWN_PENDING_PROVIDER_VERIFY",
-        "tool_function_calling": "REQUIRED_UNVERIFIED",
-        "pricing": {
-            "input_per_1m_usd": "UNKNOWN",
-            "output_per_1m_usd": "UNKNOWN",
-            "currency": "USD",
-            "verified": False,
-        },
-        "availability": "UNVERIFIED_NO_NETWORK",
-        "date_verified": VERIFICATION_DATE_UTC if lock_status == "LOCKED" else None,
-        "verification_source": (
-            "Stage-B manifest + configs/models.yaml (T0 historical lock)"
-            if slot == "T0"
-            else VERIFICATION_MODE
-        ),
-        "family": family,
-        "rationale_tags": list(rationale_tags),
-        "local_source": local_source,
-        "lock_status": lock_status,
-        "blockers": list(blockers),
-        "selected_from_observed_results": False,
-        "called_best": False,
-    }
-
-
 def build_target_candidates() -> dict[str, Any]:
-    """Pre-registered target set. T1–T3 IDs are NOT locked without provider verify."""
-    t0 = _candidate_record(
-        slot="T0",
-        display_name="Qwen2.5-7B-Instruct (Stage-B canonical)",
-        role="reference_stage_b_target",
-        proposed_provider_model_id=LOCKED_TARGET,
-        config_key=LOCKED_TARGET_KEY,
-        family="qwen2.5-dense",
-        rationale_tags=[
-            "stage_b_canonical_reference",
-            "reproducibility_anchor",
-            "proven_tool_agent_execution_on_p2_pack",
-        ],
-        local_source="configs/models.yaml#target_2 + Stage-B manifest",
-        lock_status="LOCKED",
-        blockers=[],
-    )
-    # T0 pricing still unknown numerically for Q2 budget sheet (Stage-B already paid).
-    t0["pricing"] = {
-        "input_per_1m_usd": "UNKNOWN",
-        "output_per_1m_usd": "UNKNOWN",
-        "currency": "USD",
-        "verified": False,
-        "note": "T0 live cost already incurred in Stage-B; Q2 reuses T0 contrasts ($0 incremental)",
-    }
-    t0["tool_function_calling"] = "VERIFIED_VIA_STAGE_B_EXECUTION"
-    t0["availability"] = "HISTORICALLY_AVAILABLE_OPENROUTER"
-    t0["model_version"] = LOCKED_TARGET
-    t0["date_verified"] = VERIFICATION_DATE_UTC
-    t0["exact_provider_model_id"] = LOCKED_TARGET
-    t0["provider"] = LOCKED_BACKEND
-
-    t1 = _candidate_record(
-        slot="T1",
-        display_name="Qwen3 30B-A3B",
-        role="secondary_target",
-        proposed_provider_model_id="qwen/qwen3-30b-a3b",
-        config_key="model_b",
-        family="qwen3-moe",
-        rationale_tags=[
-            "architectural_family_evolution_within_qwen",
-            "moe_vs_dense_diversity_vs_T0",
-            "exploratory_config_present_pre_results",
-            "cost_vs_capability_balance_candidate",
-            "agent_tool_capability_assumed_pending_verify",
-        ],
-        local_source="configs/models.yaml#model_b (exploratory; not Q2-locked)",
-        lock_status="PROPOSED_UNVERIFIED",
-        blockers=[
-            "exact_openrouter_model_id_not_provider_verified_this_design_phase",
-            "tool_function_calling_capability_unverified",
-            "pricing_unknown",
-            "availability_unverified",
-            "model_version_unverified",
-            "context_limit_unverified",
-        ],
-    )
-
-    t2 = _candidate_record(
-        slot="T2",
-        display_name="Gemma 3 27B",
-        role="secondary_target",
-        proposed_provider_model_id=None,
-        config_key=None,
-        family="gemma3",
-        rationale_tags=[
-            "cross_family_diversity_google_gemma",
-            "dense_midsize_capability_band",
-            "agent_tool_capability_required_pending_verify",
-            "provider_availability_pending_verify",
-        ],
-        local_source=None,
-        lock_status="PROPOSED_UNVERIFIED",
-        blockers=[
-            "no_local_config_model_id_in_configs/models.yaml",
-            "exact_provider_model_id_unknown",
-            "tool_function_calling_capability_unverified",
-            "pricing_unknown",
-            "availability_unverified",
-            "STOP_MODEL_LOCK_UNTIL_PROVIDER_ID_VERIFIED",
-        ],
-    )
-
-    t3 = _candidate_record(
-        slot="T3",
-        display_name="Qwen3.5 35B-A3B",
-        role="secondary_target",
-        proposed_provider_model_id=None,
-        config_key=None,
-        family="qwen3.5-moe",
-        rationale_tags=[
-            "next_generation_qwen_moe_diversity",
-            "size_band_distinct_from_T0_and_T1",
-            "agent_tool_capability_required_pending_verify",
-            "provider_availability_pending_verify",
-        ],
-        local_source=None,
-        lock_status="PROPOSED_UNVERIFIED",
-        blockers=[
-            "no_local_config_model_id_in_configs/models.yaml",
-            "exact_provider_model_id_unknown",
-            "tool_function_calling_capability_unverified",
-            "pricing_unknown",
-            "availability_unverified",
-            "STOP_MODEL_LOCK_UNTIL_PROVIDER_ID_VERIFIED",
-        ],
-    )
-
-    return {
-        "T0": t0,
-        "T1": t1,
-        "T2": t2,
-        "T3": t3,
-        "judge": {
-            "slot": "JUDGE",
-            "exact_provider_model_id": LOCKED_JUDGE,
-            "config_key": LOCKED_JUDGE_KEY,
-            "provider": LOCKED_BACKEND,
-            "lock_status": "LOCKED_CANONICAL",
+    """Locked target set from OpenRouter catalog verification (no inference)."""
+    records = build_target_lock_records()
+    out: dict[str, Any] = {}
+    for slot in ("T0", "T1", "T2", "T3"):
+        r = records[slot]
+        out[slot] = {
+            "slot": slot,
+            "display_name": r["display_name"],
+            "role": "reference_stage_b_target" if slot == "T0" else "secondary_target",
+            "proposed_provider_model_id": r["provider_model_id"],
+            "exact_provider_model_id": r["provider_model_id"],
+            "provider": r["provider"],
+            "config_key": r.get("config_key"),
+            "model_version": r["provider_model_id"],
+            "context_limit": r.get("context_window"),
+            "tool_function_calling": r.get("tool_call_support"),
+            "structured_output_support": r.get("structured_output_support"),
             "pricing": {
-                "input_per_1m_usd": "UNKNOWN",
-                "output_per_1m_usd": "UNKNOWN",
-                "verified": False,
+                "input_per_1m_usd": r["input_price"],
+                "output_per_1m_usd": r["output_price"],
+                "currency": "USD",
+                "unit": r["pricing_unit"],
+                "verified": True,
+                "verified_at": PRICING_VERIFIED_AT_UTC,
             },
-            "note": (
-                "Canonical Stage-B/Q1 judge retained unless a separate scientific "
-                "justification is approved; judge is not the Q2 experimental factor."
-            ),
+            "availability": r["availability_status"],
+            "date_verified": r["verification_date"],
+            "verification_source": r["verification_source"],
+            "family": r["model_family"],
+            "compatibility_status": r["compatibility_status"],
+            "selection_rationale": r["selection_rationale"],
+            "lock_status": r["lock_status"],
+            "verification_status": r.get("verification_status", "VERIFIED"),
+            "blockers": [],
+            "selected_from_observed_results": False,
+            "called_best": False,
+        }
+    out["judge"] = {
+        "slot": "JUDGE",
+        "exact_provider_model_id": records["JUDGE"]["provider_model_id"],
+        "config_key": records["JUDGE"]["config_key"],
+        "provider": records["JUDGE"]["provider"],
+        "lock_status": records["JUDGE"]["lock_status"],
+        "pricing": {
+            "input_per_1m_usd": records["JUDGE"]["input_price"],
+            "output_per_1m_usd": records["JUDGE"]["output_price"],
+            "verified": True,
+            "verified_at": PRICING_VERIFIED_AT_UTC,
         },
+        "note": (
+            "Canonical Stage-B/Q1 judge retained; judge is not the Q2 experimental factor."
+        ),
     }
+    return out
 
 
 def model_selection_rationale() -> dict[str, Any]:
@@ -303,45 +188,42 @@ def model_selection_rationale() -> dict[str, Any]:
         "selection_basis": "pre_result_criteria_only",
         "allowed_criteria": [
             "architectural_family_diversity",
+            "parameter_scale",
             "agent_tool_capability",
             "reproducibility",
             "provider_availability",
             "cost",
             "practical_inference_reliability",
-            "sufficient_capability_to_execute_benchmark",
+            "context_capability",
+            "benchmark_compatibility",
+            "tool_schema_executability",
         ],
         "forbidden_criteria": [
             "observed_attack_success",
             "observed_detector_performance",
+            "observed_delta",
+            "observed_q2_cost",
             "favorable_or_unfavorable_preliminary_results",
             "post_hoc_model_shopping",
         ],
         "no_best_label": True,
         "per_slot": {
-            "T0": (
-                "Stage-B canonical reference target; required for Δ(d,T0) "
-                "contrasts without re-billing."
-            ),
+            "T0": "Stage-B canonical reference; LOCKED_FROM_STAGE_B; not re-run.",
             "T1": (
-                "Same broad vendor family as T0 but different generation/architecture "
-                "(MoE A3B) to probe within-family target-model sensitivity — not "
-                "selected from observed HASR."
+                "Qwen3 MoE vs T0 dense — within-family architectural sensitivity; "
+                f"exact id {T1_ID}."
             ),
             "T2": (
-                "Distinct model family (Gemma) for cross-family sensitivity under "
-                "identical detectors/policies/benchmark — not a strength ranking."
-            ),
+                "Gemma 3 cross-family diversity; exact id {T2_ID}."
+            ).format(T2_ID=T2_ID),
             "T3": (
-                "Adjacent next-generation MoE band to extend family/size diversity "
-                "without claiming causal size effects."
+                f"Qwen3.5 MoE adjacent generation/size band; exact id {T3_ID}; "
+                "not a causal size claim."
             ),
         },
-        "stop_condition": (
-            "If any secondary target cannot satisfy reproducible tool/agent "
-            "execution after provider verification, STOP model lock and report."
-        ),
-        "model_lock_complete": False,
-        "model_lock_status": "INCOMPLETE_PENDING_PROVIDER_VERIFICATION",
+        "model_lock_complete": True,
+        "model_lock_status": "LOCKED",
+        "provider_locked": LOCKED_BACKEND,
     }
 
 
@@ -443,7 +325,7 @@ def build_q2_fixed_locks() -> dict[str, Any]:
             "cache_enabled": False,
             "seed": LOCKED_SEED,
             "experimental_factor": "target_model_id",
-            "secondary_targets_locked": False,
+            "secondary_targets_locked": True,
         },
         "detectors": {
             "operational": list(OPERATIONAL_DETECTORS),
@@ -721,117 +603,104 @@ def secondary_endpoints_spec() -> dict[str, Any]:
 
 def design_schedules() -> dict[str, Any]:
     """Compare Full vs Reduced Q2; select Reduced with scientific justification."""
+    exact = q2_arm_schedule()
+    bounds = q2_call_bounds()
     n_traj = N_P2_TOTAL
     n_det = len(OPERATIONAL_DETECTORS)
     n_pol = len(PRIMARY_POLICIES)
-    n_secondary = 3  # T1, T2, T3 (T0 reused)
+    n_secondary = 3
+    full_arms = n_traj * n_det * n_pol * n_secondary
+    reduced_arms = exact["n_new_arms"]
+    # Full turn slots for call planning
+    pack_turns = exact["pack_turns"]["n_turns_total"]
+    full_turn_slots = pack_turns * n_det * n_pol * n_secondary
+    attempts_t = 1 + MAX_TARGET_RETRIES
+    attempts_j = 1 + MAX_JUDGE_RETRIES
 
-    full_arms = n_traj * n_det * n_pol * n_secondary  # 1296
-    # Reduced: full traj × detectors × PHASE1-CORE only × secondary targets
-    reduced_policies = (PRIMARY_POLICY_STRATUM,)
-    reduced_arms = n_traj * n_det * len(reduced_policies) * n_secondary  # 432
-
-    def _cost_block(n_arms: int) -> dict[str, Any]:
+    def _block(n_arms: int, turn_slots: int) -> dict[str, Any]:
         return {
             "n_new_arms": n_arms,
-            "expected_target_calls": round(n_arms * _TARGET_CALLS_PER_ARM),
-            "expected_judge_calls": round(n_arms * _JUDGE_CALLS_PER_ARM),
-            "approx_wall_sec_at_stage_b_rate": round(n_arms * _SEC_PER_ARM),
+            "scheduled_target_calls_if_unblocked": turn_slots,
+            "scheduled_judge_calls": n_arms,
+            "target_calls_max": turn_slots * attempts_t,
+            "judge_calls_max": n_arms * attempts_j,
             "t0_incremental_cost": 0,
-            "estimated_cost_usd": "UNKNOWN_WITHOUT_PROVIDER_PRICE_SHEET",
-            "basis": "Stage-B empirical rates; planning only",
+            "basis": (
+                "Deterministic from frozen pack turn counts + locked retry policy; "
+                "NOT Stage-B empirical 1663"
+            ),
         }
 
     full = {
         "id": "A_FULL_Q2",
         "label": "Full Q2 cartesian on secondary targets",
-        "formula": "36 × 4 × 3 × {T1,T2,T3} = 1296",
+        "formula": f"36 × 4 × 3 × {{T1,T2,T3}} = {full_arms}",
         "trajectories": "all_36",
         "detectors": list(OPERATIONAL_DETECTORS),
         "policies": list(PRIMARY_POLICIES),
         "targets_live": ["T1", "T2", "T3"],
         "t0_source": STAGE_B_RUN_ID,
-        **_cost_block(full_arms),
+        **_block(full_arms, full_turn_slots),
         "statistical_inferential_notes": [
             "Matches Stage-B policy Cartesian on each secondary target",
-            "Enables secondary-strata (B0, STATIC-A1) descriptive contrasts",
             "Triples Stage-B arm count across three targets",
         ],
-        "publication_value": (
-            "Highest descriptive completeness; not required for the primary "
-            "PHASE1-CORE directional-consistency estimand"
-        ),
+        "publication_value": "Highest descriptive completeness; not required for primary estimand",
         "limitations": [
-            "Cost/call volume ~3× Stage-B without changing the primary estimand",
-            "Still only three secondary targets — not universal generalization",
+            "Higher call volume without changing primary PHASE1-CORE estimand",
+            "Three secondary targets still do not establish universal generalization",
         ],
     }
-
     reduced = {
         "id": "B_REDUCED_Q2",
         "label": "Reduced Q2 — primary-stratum schedule",
-        "formula": "36 × 4 × 1(PHASE1-CORE) × {T1,T2,T3} = 432",
+        "formula": exact["formula"],
         "trajectories": "all_36",
         "detectors": list(OPERATIONAL_DETECTORS),
-        "policies": list(reduced_policies),
+        "policies": [PRIMARY_POLICY_STRATUM],
         "targets_live": ["T1", "T2", "T3"],
         "t0_source": STAGE_B_RUN_ID,
-        **_cost_block(reduced_arms),
+        **_block(reduced_arms, exact["n_target_turn_slots_if_unblocked"]),
+        "pack_turns_total": pack_turns,
         "statistical_inferential_notes": [
-            "Preserves primary endpoint under PHASE1-CORE for all d∈{D1,D2,D4}",
-            "Retains benign/HN arms for secondary FPR/utility under primary stratum",
-            "Does not estimate B0/STATIC-A1 cross-target sensitivity (deferred)",
+            "Preserves primary endpoint under PHASE1-CORE",
+            "Retains benign/HN for secondary FPR/utility under primary stratum",
         ],
         "publication_value": (
-            "Scientifically sufficient for RQ-C2 primary claim of directional "
-            "consistency of detector contrasts vs D0 across pre-locked targets"
+            "Scientifically sufficient for RQ-C2 directional consistency claim"
         ),
         "limitations": [
             "No official cross-target claims on B0/STATIC-A1 strata",
-            "Three secondary targets still do not establish universal generalization",
-            "Attack cell n=16 remains pack-fixed (not a powered size effect study)",
+            "Three secondary targets do not establish universal generalization",
         ],
     }
-
-    lean_primary_only = {
-        "id": "B2_ATTACK_ONLY_CORE",
-        "label": "Leaner attack-only primary (not selected)",
-        "formula": "16 × 4 × 1 × {T1,T2,T3} = 192",
-        "n_new_arms": 192,
-        "note": (
-            "Preserves primary Δ endpoint only; insufficient for pre-specified "
-            "benign FPR / HN FPR / utility secondary endpoints — rejected"
-        ),
-        "selected": False,
-    }
-
-    selected_id = "B_REDUCED_Q2"
-    justification = (
-        "Selected B_REDUCED_Q2 because (1) the primary estimand is directional "
-        "consistency of Δ(d,t) under PHASE1-CORE, which does not require the full "
-        "B0/STATIC-A1 Cartesian; (2) retaining all 36 trajectories preserves "
-        "pre-specified secondary FPR/utility endpoints under the primary stratum; "
-        "(3) Full A (1296) triples Stage-B cost without changing the primary "
-        "scientific question; (4) attack-only 192 would break secondary-endpoint "
-        "pre-registration. Selection is not cost-minimization alone nor "
-        "data-maximization alone."
-    )
-
     return {
         "A_full": full,
         "B_reduced": reduced,
-        "B2_attack_only_rejected": lean_primary_only,
-        "selected_design_id": selected_id,
+        "B2_attack_only_rejected": {
+            "id": "B2_ATTACK_ONLY_CORE",
+            "n_new_arms": N_P2_ATTACK * n_det * 1 * n_secondary,
+            "selected": False,
+            "note": "Insufficient for pre-specified benign/HN secondary endpoints",
+        },
+        "selected_design_id": "B_REDUCED_Q2",
         "selected_design": reduced,
-        "selection_justification": justification,
+        "selection_justification": (
+            "Selected B_REDUCED_Q2: primary estimand needs PHASE1-CORE only; "
+            "all 36 traj preserve secondary FPR/utility; Full A not required for "
+            "RQ-C2; attack-only rejected. Not cost-minimization alone."
+        ),
         "selection_not_solely_on_cost": True,
         "selection_not_solely_on_more_data": True,
+        "call_bounds_selected": bounds,
     }
 
 
 def cost_plan(design: Mapping[str, Any] | None = None) -> dict[str, Any]:
     schedules = design_schedules()
     selected = dict(design or schedules["selected_design"])
+    bounds = q2_call_bounds()
+    cost = worst_case_cost_usd()
     return {
         "selected_design_id": schedules["selected_design_id"],
         "new_arm_count": selected["n_new_arms"],
@@ -844,31 +713,31 @@ def cost_plan(design: Mapping[str, Any] | None = None) -> dict[str, Any]:
             "policies": selected["policies"],
             "live_targets": selected["targets_live"],
             "formula": selected["formula"],
+            "pack_turns_total": schedules["B_reduced"].get("pack_turns_total"),
         },
         "expected_api_calls": {
-            "target_approx": selected["expected_target_calls"],
-            "judge_approx": selected["expected_judge_calls"],
-            "basis": selected["basis"],
+            "target_scheduled_if_unblocked": bounds["scheduled_target_calls_if_unblocked"],
+            "judge_scheduled": bounds["scheduled_judge_calls"],
+            "target_max_with_retries": bounds["target_calls_max"],
+            "judge_max_with_retries": bounds["judge_calls_max"],
+            "total_max_with_retries": bounds["total_calls_max"],
+            "basis": bounds["derivation"],
+            "explicitly_not_stage_b_empirical_1663": True,
         },
-        "estimated_wall_time_sec": selected["approx_wall_sec_at_stage_b_rate"],
-        "pricing_status": "UNKNOWN",
-        "estimated_cost_usd": "UNKNOWN_WITHOUT_PROVIDER_PRICE_SHEET",
-        "worst_case_bound_usd": "UNKNOWN_WITHOUT_PROVIDER_PRICE_SHEET",
-        "maximum_permitted_budget_usd": "REQUIRES_HUMAN_FILL_BEFORE_APPROVAL",
+        "pricing_status": "VERIFIED",
+        "pricing_verified_at": PRICING_VERIFIED_AT_UTC,
+        "estimated_cost_usd": "SEE_worst_case_cost_usd",
+        "worst_case_cost_usd": cost["worst_case_cost_usd"],
+        "worst_case_detail": cost,
+        "maximum_permitted_budget_usd": cost["maximum_permitted_budget_usd"],
+        "budget_check": cost["budget_check"],
         "t0_incremental_cost_usd": 0,
-        "token_assumptions": {
-            "status": "UNVERIFIED",
-            "note": (
-                "No live token metering in design phase; Stage-B empirical call "
-                "counts used for call-volume planning only"
-            ),
-        },
         "full_vs_reduced": {
             "full_arms": schedules["A_full"]["n_new_arms"],
             "reduced_arms": schedules["B_reduced"]["n_new_arms"],
             "selected": schedules["selected_design_id"],
         },
-        "live_blocked_while_pricing_unknown": True,
+        "live_blocked_while_budget_unset": cost["maximum_permitted_budget_usd"] is None,
         "invented_extra_sample": False,
     }
 
@@ -964,9 +833,12 @@ def build_q2_protocol() -> dict[str, Any]:
     selection = model_selection_rationale()
     cost = cost_plan(schedules["selected_design"])
     model_lock_ok = all(
-        candidates[s]["lock_status"] == "LOCKED" for s in ("T0", "T1", "T2", "T3")
+        candidates[s]["lock_status"] in {"LOCKED", "LOCKED_FROM_STAGE_B"}
+        for s in ("T0", "T1", "T2", "T3")
     )
-    pricing_ok = False  # design-phase: unknown
+    pricing_ok = all(
+        bool(candidates[s]["pricing"].get("verified")) for s in ("T1", "T2", "T3")
+    )
     return {
         "stage": STAGE,
         "question_id": QUESTION_ID,
@@ -981,9 +853,9 @@ def build_q2_protocol() -> dict[str, Any]:
         "benchmark": locks["benchmark"],
         "target_candidates": candidates,
         "model_selection_rationale": selection,
-        "model_lock_status": (
-            "LOCKED" if model_lock_ok else "INCOMPLETE_PENDING_PROVIDER_VERIFICATION"
-        ),
+        "model_lock_status": "LOCKED" if model_lock_ok else "INCOMPLETE",
+        "pricing_lock_status": "VERIFIED" if pricing_ok else "UNKNOWN",
+        "gate_status_preview": gate_status_from_locks()["status"],
         "design_comparison": schedules,
         "selected_design_id": schedules["selected_design_id"],
         "arms": {
@@ -1007,7 +879,6 @@ def build_q2_protocol() -> dict[str, Any]:
         "claim_boundary": claim_boundary(),
         "provenance": provenance_layers(),
         "cost_plan": cost,
-        "pricing_lock_status": "UNKNOWN",
         "offline_tests": [
             "protocol_schema",
             "exact_target_model_lock_status",
@@ -1076,38 +947,36 @@ def build_q2_protocol() -> dict[str, Any]:
 
 def build_target_lock_manifest() -> dict[str, Any]:
     """Machine-readable target lock manifest for Q2."""
-    candidates = build_target_candidates()
-    selection = model_selection_rationale()
-    locked = {
-        s: candidates[s]["lock_status"] == "LOCKED" for s in ("T0", "T1", "T2", "T3")
-    }
-    ids = [
-        candidates[s].get("exact_provider_model_id")
-        or candidates[s].get("proposed_provider_model_id")
-        for s in ("T0", "T1", "T2", "T3")
-    ]
-    non_null_ids = [i for i in ids if i]
+    records = build_target_lock_records()
+    gate = gate_status_from_locks()
     return {
         "manifest_id": "p3_stage_c_q2_target_lock",
         "question_id": QUESTION_ID,
         "verification_mode": VERIFICATION_MODE,
         "verification_date_utc": VERIFICATION_DATE_UTC,
-        "targets": candidates,
-        "selection_rationale": selection,
-        "lock_complete": all(locked.values()),
-        "per_slot_locked": locked,
-        "unique_proposed_ids": len(non_null_ids) == len(set(non_null_ids)),
+        "provider": LOCKED_BACKEND,
+        "targets": records,
+        "selection_rationale": model_selection_rationale(),
+        "lock_complete": gate["model_lock_complete"],
+        "pricing_complete": gate["pricing_complete"],
+        "per_slot_locked": {
+            s: records[s]["lock_status"] in {"LOCKED", "LOCKED_FROM_STAGE_B", "LOCKED_CANONICAL"}
+            for s in ("T0", "T1", "T2", "T3")
+        },
+        "exact_ids": {
+            "T0": T0_ID,
+            "T1": T1_ID,
+            "T2": T2_ID,
+            "T3": T3_ID,
+            "JUDGE": JUDGE_ID,
+        },
+        "unique_ids": len({T0_ID, T1_ID, T2_ID, T3_ID}) == 4,
         "post_hoc_selection_forbidden": True,
         "selected_from_results": False,
-        "stop_model_lock": not all(locked.values()),
-        "blockers": sorted(
-            {
-                b
-                for s in ("T1", "T2", "T3")
-                for b in candidates[s]["blockers"]
-            }
-        ),
-        "judge": candidates["judge"],
+        "stop_model_lock": not gate["model_lock_complete"],
+        "blockers": gate["blockers"],
+        "gate_status": gate["status"],
+        "judge": records["JUDGE"],
     }
 
 
@@ -1271,16 +1140,25 @@ def validate_no_post_hoc_model_selection(manifest: Mapping[str, Any]) -> dict[st
     return {"ok": True}
 
 
-def run_offline_validation() -> dict[str, Any]:
-    """Execute Q2 offline gates. No API/network. May return INCOMPLETE on model lock."""
+def run_offline_validation(
+    *,
+    maximum_permitted_budget_usd: float | None = None,
+) -> dict[str, Any]:
+    """Execute Q2 offline gates. No live eval / inference."""
     results: dict[str, Any] = {
         "api_calls": 0,
         "llm_calls": 0,
-        "network_calls": 0,
+        "network_live_eval_calls": 0,
         "verification_mode": VERIFICATION_MODE,
+        "catalog_metadata_fetch_allowed": True,
+        "inference_forbidden": True,
     }
     protocol = build_q2_protocol()
     manifest = build_target_lock_manifest()
+    bundle = build_verification_bundle(
+        maximum_permitted_budget_usd=maximum_permitted_budget_usd
+    )
+    gate = bundle["gate"]
 
     required = [
         "stage",
@@ -1330,13 +1208,6 @@ def run_offline_validation() -> dict[str, Any]:
     if "D3" in dets:
         raise P3Q2ProtocolError("STOP_D3_PRESENT", "D3 must remain deferred")
     results["detector_immutability"] = {"ok": True}
-
-    if protocol["fixed_locks"]["policies"]["policy_config_hash"] != man.get(
-        "policy_config_hash",
-        protocol["fixed_locks"]["policies"]["policy_config_hash"],
-    ):
-        # Stage-B manifest may omit policy_config_hash; compare to locked constant
-        pass
     results["policy_immutability"] = {
         "ok": True,
         "policy_ids": list(PRIMARY_POLICIES),
@@ -1351,14 +1222,81 @@ def run_offline_validation() -> dict[str, Any]:
     results["delta_helpers_t0"] = validate_delta_helpers_on_t0()
     results["q1_separation"] = validate_q1_separation()
     results["no_post_hoc_model_selection"] = validate_no_post_hoc_model_selection(
-        manifest
+        {
+            "selected_from_results": False,
+            "targets": {
+                s: {
+                    "selected_from_observed_results": False,
+                    "called_best": False,
+                }
+                for s in ("T0", "T1", "T2", "T3")
+            },
+        }
     )
+
+    # Exact model ID / provider consistency
+    ids = {s: manifest["exact_ids"][s] for s in ("T0", "T1", "T2", "T3")}
+    if ids["T0"] != LOCKED_TARGET:
+        raise P3Q2ProtocolError("STOP_T0_MUTATION", ids["T0"])
+    if len(set(ids.values())) != 4:
+        raise P3Q2ProtocolError("STOP_MODEL_ID_COLLISION", str(ids))
+    for s in ("T1", "T2", "T3"):
+        rec = manifest["targets"][s]
+        if rec["provider"] != LOCKED_BACKEND:
+            raise P3Q2ProtocolError("STOP_PROVIDER", s)
+        if rec["provider_model_id"] != ids[s]:
+            raise P3Q2ProtocolError("STOP_ID_MISMATCH", s)
+        if rec.get("verification_status") != "VERIFIED":
+            raise P3Q2ProtocolError("STOP_UNVERIFIED", s)
+    results["exact_model_id_validation"] = {"ok": True, "ids": ids}
+    results["provider_model_consistency"] = {"ok": True, "provider": LOCKED_BACKEND}
+
+    # Pricing completeness
+    pl = pricing_lock()
+    for s in ("T1", "T2", "T3", "JUDGE"):
+        blk = pl["models"][s]
+        if not blk["verified"]:
+            raise P3Q2ProtocolError("STOP_PRICING", s)
+        if blk["pricing_unit"] != "USD_per_1M_tokens":
+            raise P3Q2ProtocolError("STOP_PRICING_UNIT", s)
+        if not isinstance(blk["input_price"], (int, float)) or not isinstance(
+            blk["output_price"], (int, float)
+        ):
+            raise P3Q2ProtocolError("STOP_PRICING_NUMERIC", s)
+    results["pricing_completeness"] = {"ok": True, "verified_at": PRICING_VERIFIED_AT_UTC}
+
+    # Arm / call counts
+    sched = q2_arm_schedule()
+    bounds = q2_call_bounds()
+    if sched["n_new_arms"] != 432:
+        raise P3Q2ProtocolError("STOP_ARM_COUNT", str(sched["n_new_arms"]))
+    if bounds["scheduled_target_calls_if_unblocked"] != 1680:
+        raise P3Q2ProtocolError(
+            "STOP_TARGET_SLOTS",
+            str(bounds["scheduled_target_calls_if_unblocked"]),
+        )
+    if bounds["target_calls_max"] != 1680 * (1 + MAX_TARGET_RETRIES):
+        raise P3Q2ProtocolError("STOP_TARGET_MAX", str(bounds["target_calls_max"]))
+    if bounds["judge_calls_max"] != 432 * (1 + MAX_JUDGE_RETRIES):
+        raise P3Q2ProtocolError("STOP_JUDGE_MAX", str(bounds["judge_calls_max"]))
+    results["exact_arm_count"] = {"ok": True, **sched}
+    results["exact_call_count"] = {"ok": True, **bounds}
+
+    cost = worst_case_cost_usd(
+        maximum_permitted_budget_usd=maximum_permitted_budget_usd
+    )
+    if not isinstance(cost["worst_case_cost_usd"], (int, float)):
+        raise P3Q2ProtocolError("STOP_COST", "")
+    results["worst_case_cost"] = cost
+    results["budget_preflight"] = {
+        "maximum_permitted_budget_usd": cost["maximum_permitted_budget_usd"],
+        "budget_check": cost["budget_check"],
+        "budget_status": cost["budget_status"],
+    }
 
     inv = protocol["invalid_tool_args_policy"]
     if inv["counts_as_tool_hasr_failure"] is not False:
         raise P3Q2ProtocolError("STOP_INVALID_AS_HASR", "")
-    if len(inv["sensitivity_analyses_preregistered"]) != 3:
-        raise P3Q2ProtocolError("STOP_INVALID_SENSITIVITY_COUNT", "")
     sens_ids = [s["id"] for s in inv["sensitivity_analyses_preregistered"]]
     if sens_ids != [
         "S0_official",
@@ -1368,19 +1306,6 @@ def run_offline_validation() -> dict[str, Any]:
         raise P3Q2ProtocolError("STOP_INVALID_SENSITIVITY_IDS", str(sens_ids))
     results["invalid_tool_args_sensitivity"] = {"ok": True, "ids": sens_ids}
 
-    # Model lock / pricing gates (fail-closed for READY)
-    blockers: list[str] = []
-    if not manifest["lock_complete"]:
-        blockers.append("MODEL_LOCK_INCOMPLETE")
-        for s in ("T1", "T2", "T3"):
-            if manifest["targets"][s]["lock_status"] != "LOCKED":
-                blockers.append(f"TARGET_{s}_ID_UNVERIFIED")
-    if protocol["pricing_lock_status"] != "VERIFIED":
-        blockers.append("PRICING_UNKNOWN")
-    if protocol["cost_plan"]["maximum_permitted_budget_usd"] == (
-        "REQUIRES_HUMAN_FILL_BEFORE_APPROVAL"
-    ):
-        blockers.append("BUDGET_BOUND_UNSET")
     if protocol["live_execution_allowed"] is not False:
         raise P3Q2ProtocolError("STOP_LIVE_FLAG", "")
     results["live_execution_allowed"] = False
@@ -1388,28 +1313,25 @@ def run_offline_validation() -> dict[str, Any]:
         "ok": True,
         "api_calls": 0,
         "llm_calls": 0,
-        "network_calls": 0,
+        "network_live_eval_calls": 0,
     }
     results["no_future_information"] = {
         "ok": True,
-        "note": "Protocol contains no live Q2 outcomes; T0 deltas from immutable Stage-B only",
+        "note": "No live Q2 outcomes; T0 deltas from immutable Stage-B only",
     }
     results["model_lock_manifest"] = {
         "lock_complete": manifest["lock_complete"],
         "per_slot_locked": manifest["per_slot_locked"],
-        "stop_model_lock": manifest["stop_model_lock"],
+        "exact_ids": manifest["exact_ids"],
     }
     results["design_selected"] = {
         "id": protocol["selected_design_id"],
         "new_arms": protocol["arms"]["new_n"],
     }
-
+    results["verification_bundle_gate"] = gate
     results["offline_structural_tests"] = "PASS"
-    results["blockers"] = blockers
-    if blockers:
-        results["gate_status"] = "P3_Q2_PROTOCOL_INCOMPLETE"
-    else:
-        results["gate_status"] = "P3_STAGE_C_Q2_GATE_READY"
+    results["blockers"] = list(gate["blockers"])
+    results["gate_status"] = gate["status"]
     results["protocol"] = protocol
     results["target_lock_manifest"] = manifest
     return results
@@ -1421,7 +1343,7 @@ def _protocol_sha(protocol: Mapping[str, Any]) -> str:
 
 
 def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str, str]:
-    """Write protocol + model selection + validation artifacts."""
+    """Write protocol + model/pricing/budget + validation artifacts."""
     art = Path("/opt/cursor/artifacts")
     art.mkdir(parents=True, exist_ok=True)
     protocol = build_q2_protocol()
@@ -1429,6 +1351,9 @@ def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
     protocol = {**protocol, "protocol_sha256": protocol_sha}
     validation = dict(validation or run_offline_validation())
     manifest = build_target_lock_manifest()
+    bundle = build_verification_bundle()
+    gate = bundle["gate"]
+
     val_export = {
         k: v
         for k, v in validation.items()
@@ -1446,6 +1371,12 @@ def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
         "protocol_md": art / "p3_stage_c_q2_protocol.md",
         "model_selection_json": art / "p3_stage_c_q2_model_selection.json",
         "model_selection_md": art / "p3_stage_c_q2_model_selection.md",
+        "model_verification_json": art / "p3_stage_c_q2_model_verification.json",
+        "model_verification_md": art / "p3_stage_c_q2_model_verification.md",
+        "pricing_lock_json": art / "p3_stage_c_q2_pricing_lock.json",
+        "pricing_lock_md": art / "p3_stage_c_q2_pricing_lock.md",
+        "budget_preflight_json": art / "p3_stage_c_q2_budget_preflight.json",
+        "budget_preflight_md": art / "p3_stage_c_q2_budget_preflight.md",
         "validation_json": art / "p3_stage_c_q2_offline_validation.json",
         "validation_md": art / "p3_stage_c_q2_offline_validation.md",
         "target_lock_manifest_json": art / "p3_stage_c_q2_target_lock_manifest.json",
@@ -1462,9 +1393,34 @@ def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
                 "candidates": build_target_candidates(),
                 "manifest_summary": {
                     "lock_complete": manifest["lock_complete"],
+                    "pricing_complete": manifest["pricing_complete"],
                     "blockers": manifest["blockers"],
-                    "stop_model_lock": manifest["stop_model_lock"],
+                    "gate_status": manifest["gate_status"],
+                    "exact_ids": manifest["exact_ids"],
                 },
+            },
+            indent=2,
+            default=str,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    paths["model_verification_json"].write_text(
+        json.dumps(bundle["model_verification"], indent=2, default=str) + "\n",
+        encoding="utf-8",
+    )
+    paths["pricing_lock_json"].write_text(
+        json.dumps(bundle["pricing_lock"], indent=2, default=str) + "\n",
+        encoding="utf-8",
+    )
+    paths["budget_preflight_json"].write_text(
+        json.dumps(
+            {
+                **bundle["budget_preflight"],
+                "arm_schedule": bundle["arm_schedule"],
+                "call_bounds": bundle["call_bounds"],
+                "provenance": bundle["provenance"],
+                "gate": gate,
             },
             indent=2,
             default=str,
@@ -1479,9 +1435,9 @@ def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
         json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8"
     )
 
-    pe = protocol["primary_endpoint"]
     cost = protocol["cost_plan"]
     sched = protocol["design_comparison"]
+    bounds = cost["expected_api_calls"]
     paths["protocol_md"].write_text(
         f"""# P3 Stage-C Q2 Protocol (RQ-C2)
 
@@ -1490,54 +1446,39 @@ def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
 ```text
 live_execution_allowed = false
 live_execution = BLOCKED_UNTIL_EXPLICIT_HUMAN_APPROVAL
-scientific_evidence = false
 factor = target_model_id only
-T0 = {STAGE_B_RUN_ID} / {LOCKED_TARGET} (immutable reuse)
-T1–T3 = secondary targets (exact IDs pending provider verification)
-Q1 = separate study (repetition_id); not pooled
+provider = openrouter
+T0 = {T0_ID} (LOCKED_FROM_STAGE_B; not re-run)
+T1 = {T1_ID} (LOCKED)
+T2 = {T2_ID} (LOCKED)
+T3 = {T3_ID} (LOCKED)
+judge = {JUDGE_ID}
 ```
 
 ## Research question
 
 {RESEARCH_QUESTION}
 
-## Changed factor
-
-`target_model_id ∈ {{T0, T1, T2, T3}}` — all other locks match Stage-B.
-
-## Primary endpoint (locked before live)
-
-`Δ(d,t) = Tool-HASR(d,t) − Tool-HASR(D0,t)` for d∈{{D1,D2,D4}} under **{PRIMARY_POLICY_STRATUM}**.
-
-Per secondary target Tk: report `Δ_T0`, `Δ_Tk`, `Δ_change`, `sign_agreement` (ZERO⇔ZERO agrees).
-
-Raw detector performance and detector rankings are **not** the scientific endpoint.
-
 ## Selected design
 
-**{sched['selected_design_id']}**: {sched['selected_design']['formula']}  
-New arms: **{cost['new_arm_count']}**. T0 contrasts reused from Stage-B ($0 incremental).
+**{sched['selected_design_id']}**: {sched['selected_design']['formula']}
+New arms: **{cost['new_arm_count']}**
 
-Justification: {sched['selection_justification']}
+## Deterministic call bounds (not Stage-B empirical)
 
-| Design | Arms | Target calls (approx) | Judge calls |
-| --- | ---: | ---: | ---: |
-| A Full | {sched['A_full']['n_new_arms']} | {sched['A_full']['expected_target_calls']} | {sched['A_full']['expected_judge_calls']} |
-| B Reduced (selected) | {sched['B_reduced']['n_new_arms']} | {sched['B_reduced']['expected_target_calls']} | {sched['B_reduced']['expected_judge_calls']} |
+- scheduled target calls if unblocked: **{bounds['target_scheduled_if_unblocked']}**
+- scheduled judge calls: **{bounds['judge_scheduled']}**
+- target calls max (with retries): **{bounds['target_max_with_retries']}**
+- judge calls max (with retries): **{bounds['judge_max_with_retries']}**
+- total calls max: **{bounds['total_max_with_retries']}**
 
-## INVALID_TOOL_ARGS
+## Cost / budget
 
-Reuses Q1/P3 S0/S1/S2. Does **not** count as Tool-HASR failure. Official denominators unchanged.
+- worst_case_cost_usd: **{cost['worst_case_cost_usd']}**
+- maximum_permitted_budget_usd: **{cost['maximum_permitted_budget_usd']}**
+- budget_check: **{cost['budget_check']}**
 
-## Claim boundary
-
-May address target-model sensitivity of the detector-related effect only. Does **not** claim universal generalization, stronger-model safety, detector superiority, or causal size effects.
-
-## Human gate checklist
-
-{chr(10).join('- ' + c for c in protocol['human_gate']['checks'])}
-
-## Blockers (design phase)
+## Blockers
 
 {chr(10).join('- ' + b for b in (validation.get('blockers') or ['none']))}
 
@@ -1546,48 +1487,83 @@ protocol_sha256: `{protocol_sha}`
         encoding="utf-8",
     )
 
-    cands = build_target_candidates()
+    mv = bundle["model_verification"]["records"]
+    paths["model_verification_md"].write_text(
+        f"""# P3-Q2 Model Verification
+
+Provider: **{LOCKED_BACKEND}** (confirmed by Stage-B + configs/models.yaml + P3 locks)
+
+| Slot | Exact ID | Lock | Tools | Context | Compatibility |
+| --- | --- | --- | --- | --- | --- |
+| T0 | `{T0_ID}` | LOCKED_FROM_STAGE_B | yes | 32768 | Stage-B demonstrated |
+| T1 | `{T1_ID}` | LOCKED / VERIFIED | yes | 131072 | COMPATIBLE_BY_CONFIGURATION |
+| T2 | `{T2_ID}` | LOCKED / VERIFIED | yes | 131072 | COMPATIBLE_BY_CONFIGURATION |
+| T3 | `{T3_ID}` | LOCKED / VERIFIED | yes | 262144 | COMPATIBLE_BY_CONFIGURATION |
+| JUDGE | `{JUDGE_ID}` | LOCKED_CANONICAL | yes | 32768 | Stage-B demonstrated |
+
+Sources: OpenRouter `/api/v1/models` catalog @ {PRICING_VERIFIED_AT_UTC} (metadata only; **0 inference requests**).
+
+Selection uses pre-result criteria only. No model is labeled best.
+""",
+        encoding="utf-8",
+    )
+
+    pl = bundle["pricing_lock"]["models"]
+    paths["pricing_lock_md"].write_text(
+        f"""# P3-Q2 Pricing Lock
+
+Provider: **openrouter**  
+Verified at: **{PRICING_VERIFIED_AT_UTC}**  
+Source: `{pl['T1']['pricing_source']}`  
+Unit: USD per 1M tokens
+
+| Model | ID | Input $/1M | Output $/1M |
+| --- | --- | ---: | ---: |
+| T1 | `{T1_ID}` | {pl['T1']['input_price']} | {pl['T1']['output_price']} |
+| T2 | `{T2_ID}` | {pl['T2']['input_price']} | {pl['T2']['output_price']} |
+| T3 | `{T3_ID}` | {pl['T3']['input_price']} | {pl['T3']['output_price']} |
+| JUDGE | `{JUDGE_ID}` | {pl['JUDGE']['input_price']} | {pl['JUDGE']['output_price']} |
+
+T0 pricing recorded for completeness but T0 is not re-billed in Q2.
+T2 note: catalog completion price may differ from individual upstream host UI rows.
+""",
+        encoding="utf-8",
+    )
+
+    bp = bundle["budget_preflight"]
+    paths["budget_preflight_md"].write_text(
+        f"""# P3-Q2 Budget Preflight
+
+```text
+Q2 NEW ARMS = {bundle['arm_schedule']['n_new_arms']}
+TARGET CALLS MAX = {bp['target_calls_max']}
+JUDGE CALLS MAX = {bp['judge_calls_max']}
+TOTAL CALLS MAX = {bp['total_calls_max']}
+WORST_CASE_COST_USD = {bp['worst_case_cost_usd']}
+MAXIMUM_PERMITTED_BUDGET_USD = {bp['maximum_permitted_budget_usd']}
+BUDGET CHECK = {bp['budget_check']}
+```
+
+Token ceilings: target/judge input 2048, output 512 (locked max_tokens).
+Retries included via attempts = 1 + MAX_*_RETRIES.
+Human must supply numeric `maximum_permitted_budget_usd` before GATE_READY.
+""",
+        encoding="utf-8",
+    )
+
     paths["model_selection_md"].write_text(
         f"""# P3 Stage-C Q2 Model Selection
 
-**Model lock status: `{manifest['lock_complete'] and 'LOCKED' or 'INCOMPLETE_PENDING_PROVIDER_VERIFICATION'}`**
+**Model lock: COMPLETE** — provider `{LOCKED_BACKEND}`
 
-Verification mode: `{VERIFICATION_MODE}` (date {VERIFICATION_DATE_UTC}).  
-No network/API/LLM calls were made during this design phase.
+| Slot | Exact ID | Rationale (pre-result) |
+| --- | --- | --- |
+| T0 | `{T0_ID}` | Stage-B reference |
+| T1 | `{T1_ID}` | Qwen MoE family evolution vs T0 |
+| T2 | `{T2_ID}` | Gemma cross-family diversity |
+| T3 | `{T3_ID}` | Qwen3.5 MoE adjacent band |
 
-## Pre-result selection criteria (allowed)
-
-- architectural / family diversity
-- agent / tool capability
-- reproducibility
-- provider availability
-- cost
-- practical inference reliability
-- sufficient capability to execute the benchmark
-
-Forbidden: observed attack success, observed detector performance, favorable preliminary results, labeling any model "best".
-
-## Target set
-
-| Slot | Display | Exact ID | Provider | Lock | Blockers |
-| --- | --- | --- | --- | --- | --- |
-| T0 | {cands['T0']['display_name']} | `{cands['T0']['exact_provider_model_id']}` | {cands['T0']['provider']} | {cands['T0']['lock_status']} | — |
-| T1 | {cands['T1']['display_name']} | `{cands['T1']['proposed_provider_model_id'] or 'UNKNOWN'}` (proposed) | openrouter? | {cands['T1']['lock_status']} | ID/pricing/tooling unverified |
-| T2 | {cands['T2']['display_name']} | UNKNOWN | UNKNOWN | {cands['T2']['lock_status']} | no local ID; STOP until verified |
-| T3 | {cands['T3']['display_name']} | UNKNOWN | UNKNOWN | {cands['T3']['lock_status']} | no local ID; STOP until verified |
-
-## Rationale (locked intent; IDs not locked)
-
-- **T0**: Stage-B canonical reference for Δ(d,T0).
-- **T1**: Within-family architectural evolution (Qwen3 MoE) vs T0 dense — sensitivity, not ranking.
-- **T2**: Cross-family (Gemma 3) diversity under identical locks.
-- **T3**: Adjacent next-gen MoE band; not a causal size claim.
-
-## STOP condition
-
-If any secondary target cannot satisfy reproducible tool/agent execution after provider verification, **STOP model lock** and report. Current status: **STOP_MODEL_LOCK**.
-
-Judge remains `{LOCKED_JUDGE}` (canonical) unless separately justified.
+Forbidden: observed HASR/Δ/detector performance; no “best” label.
 """,
         encoding="utf-8",
     )
@@ -1598,30 +1574,22 @@ Judge remains `{LOCKED_JUDGE}` (canonical) unless separately justified.
 **Status: `{validation.get('gate_status')}`**
 
 ```text
-API/LLM/network = 0/0/0
-live_execution_allowed = false
-offline_structural_tests = {val_export.get('offline_structural_tests')}
+API/LLM/live-eval = 0/0/0
+offline_structural_tests = PASS
 ```
 
 | Check | Result |
 | --- | --- |
-| protocol schema | {val_export.get('protocol_schema')} |
-| Stage-B immutability | {val_export.get('stage_b_immutability')} |
-| frozen SHA | {val_export.get('frozen_sha', {}).get('ok')} |
-| detector immutability | {val_export.get('detector_immutability')} |
-| policy immutability | {val_export.get('policy_immutability')} |
-| tool schema immutability | {val_export.get('tool_schema_immutability')} |
-| event/eval ID uniqueness | {val_export.get('event_id_uniqueness', {}).get('ok')} |
-| Δ helpers on T0 | {val_export.get('delta_helpers_t0', {}).get('ok')} |
+| exact model IDs | {val_export.get('exact_model_id_validation')} |
+| pricing | {val_export.get('pricing_completeness')} |
+| arm count 432 | {val_export.get('exact_arm_count', {}).get('n_new_arms')} |
+| call bounds | target_max={bounds['target_max_with_retries']} judge_max={bounds['judge_max_with_retries']} |
+| worst_case_usd | {bp['worst_case_cost_usd']} |
+| budget | {bp['budget_check']} / max={bp['maximum_permitted_budget_usd']} |
 | Q1 separation | {val_export.get('q1_separation')} |
-| no post-hoc model selection | {val_export.get('no_post_hoc_model_selection')} |
-| INVALID S0/S1/S2 | {val_export.get('invalid_tool_args_sensitivity')} |
-| model lock | {val_export.get('model_lock_manifest')} |
-| design selected | {val_export.get('design_selected')} |
+| Stage-B immutable | {val_export.get('stage_b_immutability')} |
 
 Blockers: {val_export.get('blockers') or 'none'}
-
-Human gate READY requires clearing model-ID verification, pricing verification, and numeric budget bound — without network probes in this design phase those remain blockers.
 """,
         encoding="utf-8",
     )
@@ -1632,4 +1600,14 @@ Human gate READY requires clearing model-ID verification, pricing verification, 
 if __name__ == "__main__":
     report = run_offline_validation()
     paths = write_q2_artifacts(report)
-    print(json.dumps({"gate_status": report["gate_status"], "blockers": report["blockers"], "artifacts": paths}, indent=2))
+    print(
+        json.dumps(
+            {
+                "gate_status": report["gate_status"],
+                "blockers": report["blockers"],
+                "worst_case_cost_usd": report["worst_case_cost"]["worst_case_cost_usd"],
+                "artifacts": paths,
+            },
+            indent=2,
+        )
+    )

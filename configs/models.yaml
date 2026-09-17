@@ -40,6 +40,28 @@ models:
     max_tokens: 512
     description: "Exploratory target — qwen/qwen3-30b-a3b (OpenRouter)"
 
+  # --- P3 Stage-C Q2 locked secondary targets (pre-result; no live auth) ---
+  q2_t1:
+    provider: openrouter
+    model: qwen/qwen3-30b-a3b
+    temperature: 0.0
+    max_tokens: 512
+    description: "P3-Q2 T1 locked — qwen/qwen3-30b-a3b (OpenRouter catalog verified)"
+
+  q2_t2:
+    provider: openrouter
+    model: google/gemma-3-27b-it
+    temperature: 0.0
+    max_tokens: 512
+    description: "P3-Q2 T2 locked — google/gemma-3-27b-it (OpenRouter catalog verified)"
+
+  q2_t3:
+    provider: openrouter
+    model: qwen/qwen3.5-35b-a3b
+    temperature: 0.0
+    max_tokens: 512
+    description: "P3-Q2 T3 locked — qwen/qwen3.5-35b-a3b (OpenRouter catalog verified)"
+
   model_c:
     provider: openrouter
     model: deepseek/deepseek-chat-v3-0324
