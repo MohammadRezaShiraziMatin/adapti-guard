@@ -1,0 +1,56 @@
+{
+  "FINAL_PACKAGING_STATUS": "READY_WITH_MAJOR_REVISIONS",
+  "API_CALLS": 0,
+  "LLM_CALLS": 0,
+  "NETWORK_CALLS": 0,
+  "LIVE_EVAL": false,
+  "Q2_RERUN": false,
+  "P1_MODIFIED": false,
+  "P2_MODIFIED": false,
+  "Q2_TRACE_MODIFIED": false,
+  "P1_SHA": "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235",
+  "P2_SHA": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+  "Q2_PREDICTIONS_SHA": "2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6",
+  "STAGE_B_TRACE_STATUS": "MISSING_LOCALLY",
+  "BIBLIOGRAPHY_STATUS": "PARTIAL",
+  "FIGURES_STATUS": "COMPLETE",
+  "MANUSCRIPT_STATUS": "CONSISTENT",
+  "CLAIMS_STATUS": "GREEN",
+  "REPRODUCIBILITY_STATUS": "PARTIAL",
+  "VENUE_STATUS": "CATEGORY_ONLY",
+  "novelty_status": "PARTIAL_GAP",
+  "scientific_evidence": false,
+  "CRITICAL_BLOCKERS": [
+    "Stage-B predictions.jsonl MISSING_LOCALLY (official T0 rates retained in Q2 report; T0 INVALID not independently recomputed)",
+    "Bibliography venue/DOI UNVERIFIED (offline; not invented)",
+    "No venue selected / no camera-ready template"
+  ],
+  "MAJOR_REVISIONS": [
+    "Human: attach Stage-B traces read-only if they exist elsewhere",
+    "Human: verify venues/DOIs from official pages (network allowed for humans, not this agent packaging)",
+    "Convert MANUSCRIPT_V1.md to a chosen venue template after category decision",
+    "Keep scientific_evidence=false and n=16 in every public abstract"
+  ],
+  "MINOR_REVISIONS": [
+    "matplotlib-quality figures if matplotlib is later available offline",
+    "Full-text AgentDojo/ASB read to reduce novelty UNCERTAIN remainder",
+    "Expand paired discordant counts in the manuscript body"
+  ],
+  "q2_checks": {
+    "arms": "432/432",
+    "spend_usd": 0.152885,
+    "sign_agreement": "9/9",
+    "tool_hasr_T1T3": "81/192",
+    "judge_asr_T1T3": "186/192",
+    "M3": 108,
+    "M4": 3,
+    "INVALID": "192 events / 136 arms",
+    "S2_sign_agreement": "9/9",
+    "deltas_D1_D2_D4_T0_T3": "all NEG"
+  },
+  "figures": [
+    "docs/research/q2_publication_package/figures/figure3_delta_across_targets.png",
+    "docs/research/q2_publication_package/figures/figure4_toolhasr_vs_judgeasr.png",
+    "docs/research/q2_publication_package/figures/figure5_invalid_tool_args.png"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "timestamp_utc": "2026-09-17T20:55:00+00:00",
+  "branch": "cursor/q2-final-publication-packaging-f6f3",
+  "parent_commit": "376bd6a08a97760c5734e459ad6d8da79a597aaf",
+  "current_commit": "376bd6a08a97760c5734e459ad6d8da79a597aaf",
+  "dirty_state_at_inspection": "clean_then_packaging_edits",
+  "API_CALLS": 0,
+  "LLM_CALLS": 0,
+  "NETWORK_CALLS": 0,
+  "LIVE_EVAL": false,
+  "Q2_RERUN": false,
+  "P1_MODIFIED": false,
+  "P2_MODIFIED": false,
+  "Q2_TRACE_MODIFIED": false,
+  "frozen_sha_verification": {
+    "p1": {
+      "expected": "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235",
+      "observed": "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235",
+      "match": true
+    },
+    "p2": {
+      "expected": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+      "observed": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+      "match": true
+    },
+    "q2_predictions": {
+      "expected": "2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6",
+      "observed": "2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6",
+      "match": true
+    }
+  },
+  "q2_evidence_commit_object": "b075df0f5ec5ad11ede76ac4e4079cade15208f1",
+  "q2_evidence_commit_user_typo_edeaf4c": "NOT_A_GIT_OBJECT",
+  "q2_run_id": "p3_stage_c_q2_20260917T123855Z_b075df0f",
+  "stage_b_run_id": "p3_stage_b_20260916T235438Z_7e401714",
+  "STAGE_B_TRACE_STATUS": "MISSING_LOCALLY",
+  "blockers": [
+    "Stage-B predictions.jsonl missing locally (not in workspace, git history, or /opt/cursor)",
+    "Related-work venue/DOI UNVERIFIED (offline packaging; no network)",
+    "matplotlib missing; figures rendered with stdlib PNG instead",
+    "No venue selected (CATEGORY_ONLY)",
+    "n=16 / scientific_evidence=false remains a scientific scope limit, not a packaging bug"
+  ]
+}

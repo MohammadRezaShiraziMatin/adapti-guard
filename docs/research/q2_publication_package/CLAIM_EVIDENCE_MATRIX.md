@@ -15,6 +15,7 @@ Legend: **OBSERVED** locked-run fact · **DERIVED** computed from observed · **
 | C07 | Cell Tool-HASR n/N and Wilson CIs as tabulated | `q2_final_statistics.json` | DERIVED | Yes (matches live report) | n=16/cell | Wide CIs |
 | C08 | All twelve Δ(d,t) for D1/D2/D4 × T0–T3 are NEG | statistics JSON | DERIVED | Yes | These 12 cells | No Δ CI; not a ranking |
 | C09 | Sign agreement 9/9 | statistics JSON / live report | DERIVED | Yes | 3 detectors × 3 secondary targets | Descriptive; no Q2 p-value |
+| C00 | Under a locked intervention policy, detector-related Tool-HASR differences relative to D0 remained directionally consistent across the locked target and three independently selected secondary targets | Table 3; 9/9 sign agreement; n=16/cell | INTERPRETATION of OBSERVED/DERIVED | Yes if scoped | Four OpenRouter models; PHASE1-CORE; `scientific_evidence=false` | Not universal causality; not confirmatory; not a ranking |
 | C10 | Directionally consistent on selected T0–T3 | C08+C09 | INTERPRETATION | Yes if scoped | Four OpenRouter models | Not all LLMs; not confirmatory |
 | C11 | Q2 live Tool-HASR 81/192; Judge-ASR 186/192 | statistics / Table 4 | DERIVED | Yes | T1–T3 attack arms | Pooled across detectors; not a ranking |
 | C12 | M3=108, M4=3 on T1–T3 | statistics | DERIVED | Yes | T1–T3 | Diagnostic, not a win/loss |
@@ -34,7 +35,11 @@ Legend: **OBSERVED** locked-run fact · **DERIVED** computed from observed · **
 | C26 | Q2 is confirmatory | — | — | **Must not appear as assertion** | — | Protocol says false |
 | C27 | Track B reverses Track A or Q2 reverses VNEXT FAIL | dual-track docs | — | **Must not appear** | Different packs | Mixing is a claims error |
 | C28 | Stage-B predictions present on this checkout | glob | LIMITATION | Absence verified | Packaging | T0 INVALID cited prior derived |
-| C29 | matplotlib figures rendered | import check | LIMITATION | Absence | Packaging | Specs/scripts only |
+| C29 | Figures 3–5 PNG rendered | `figures/*.png` + `render_figures_offline.py` | DERIVED | Yes (stdlib PNG) | Packaging | matplotlib still MISSING; no Δ CI |
 | C30 | Δ T2 equals Δ T0 exactly | Table 3 | OBSERVED | Yes in sample | n=16 | Coincidence; not general equality |
 
 No unsupported positive empirical claims were left unflagged. C23 venues remain UNVERIFIED by design.
+
+**C00 allowed wording:** “Under a locked intervention policy, detector-related Tool-HASR differences relative to D0 remained directionally consistent across the locked target and three independently selected secondary targets.”
+
+**C00 forbidden overclaim:** universal causality; confirmatory multi-model proof; best/SOTA detector; production robustness; “solves prompt injection.”
