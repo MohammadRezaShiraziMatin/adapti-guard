@@ -1,0 +1,90 @@
+{
+  "generated_at_utc": "2026-09-17T14:46:41.488710+00:00",
+  "api_calls": 0,
+  "claims": [
+    {
+      "id": "A1",
+      "claim": "Detector-related Tool-HASR effect vs D0 is NEG under PHASE1-CORE on T0",
+      "status": "GREEN",
+      "safe": "On locked T0/PHASE1-CORE, \u0394(D1/D2/D4) are negative (pilot n=16).",
+      "unsafe": "Detectors guarantee security."
+    },
+    {
+      "id": "A2",
+      "claim": "\u0394 sign remains consistent on T1\u2013T3 (9/9)",
+      "status": "GREEN",
+      "safe": "Directional consistency across evaluated targets T0\u2013T3.",
+      "unsafe": "Generalizes to all LLMs / universally robust."
+    },
+    {
+      "id": "A3",
+      "claim": "Protocol isolates detector from policy",
+      "status": "GREEN",
+      "safe": "Experimental isolation under fixed policy stratum.",
+      "unsafe": "Full causal identification in production."
+    },
+    {
+      "id": "A4",
+      "claim": "Tool-HASR and Judge-ASR measure different endpoints",
+      "status": "GREEN",
+      "safe": "Large M3 mass shows divergence; Tool-HASR is execution-grounded primary.",
+      "unsafe": "Judge-ASR is invalid."
+    },
+    {
+      "id": "A5",
+      "claim": "INVALID does not overturn primary \u0394 signs",
+      "status": "GREEN",
+      "safe": "Under locked S0/S2, signs stable; INVALID must still be reported.",
+      "unsafe": "INVALID is negligible."
+    },
+    {
+      "id": "A6",
+      "claim": "ADAPTI-GUARD is production-ready / SOTA",
+      "status": "RED",
+      "safe": "(remove)",
+      "unsafe": "production-ready / SOTA / best detector"
+    },
+    {
+      "id": "A7",
+      "claim": "Results prove robust generalization",
+      "status": "RED",
+      "safe": "Bounded directional consistency on 4 models / P2 pack.",
+      "unsafe": "proves robust / significantly generalizes"
+    },
+    {
+      "id": "A8",
+      "claim": "Cost-aware defense with real USD intervention costs",
+      "status": "RED",
+      "safe": "Normalized experimental action weights; token-USD separate.",
+      "unsafe": "cost-optimal / scalable economic defense"
+    },
+    {
+      "id": "A9",
+      "claim": "D1 superior to D2/D4",
+      "status": "RED",
+      "safe": "Report \u0394 vs D0 without ranking.",
+      "unsafe": "best / superior detector"
+    },
+    {
+      "id": "A10",
+      "claim": "Adaptive attacker (C4) handled",
+      "status": "RED",
+      "safe": "Out of scope / not established.",
+      "unsafe": "robust to adaptive attacks"
+    },
+    {
+      "id": "A11",
+      "claim": "Q2 scientific_evidence confirmatory",
+      "status": "YELLOW",
+      "safe": "Protocol-complete pilot consistency study; scientific_evidence=false retained.",
+      "unsafe": "confirmatory multi-model proof"
+    },
+    {
+      "id": "A12",
+      "claim": "Novelty of detector-policy isolation + Tool-HASR protocol",
+      "status": "YELLOW",
+      "safe": "Defensible integration/protocol contribution pending verified related work.",
+      "unsafe": "first/only breakthrough"
+    }
+  ]
+}
