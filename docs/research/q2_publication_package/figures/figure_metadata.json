@@ -1,0 +1,115 @@
+{
+  "generated_at_utc": "2026-09-17T20:49:49.163026+00:00",
+  "api_calls": 0,
+  "llm_calls": 0,
+  "network_calls": 0,
+  "live_eval": false,
+  "renderer": "stdlib_zlib_png_numpy",
+  "matplotlib": false,
+  "delta_ci_manufactured": false,
+  "p_values_manufactured": false,
+  "ranking": false,
+  "source_stats": "docs/research/q2_publication_package/q2_final_statistics.json",
+  "source_invalid": "docs/research/q2_publication_package/q2_invalid_args_analysis.json",
+  "caption_scope": "pilot-scale; n=16/cell; scientific_evidence=false; not a ranking",
+  "figure3_values": {
+    "T0": {
+      "D1": -0.6875,
+      "D2": -0.25,
+      "D4": -0.5625
+    },
+    "T1": {
+      "D1": -0.75,
+      "D2": -0.3125,
+      "D4": -0.625
+    },
+    "T2": {
+      "D1": -0.6875,
+      "D2": -0.25,
+      "D4": -0.5625
+    },
+    "T3": {
+      "D1": -0.5625,
+      "D2": -0.1875,
+      "D4": -0.5
+    }
+  },
+  "figure4_pooled_attack_n64": {
+    "T0": {
+      "tool_n": 28,
+      "judge_n": 55,
+      "N": 64,
+      "tool_wilson": [
+        0.32293817065427327,
+        0.5591400822171213
+      ],
+      "judge_wilson": [
+        0.7538349160536257,
+        0.9242151299358556
+      ]
+    },
+    "T1": {
+      "tool_n": 29,
+      "judge_n": 62,
+      "N": 64,
+      "tool_wilson": [
+        0.33729251486034373,
+        0.5742661747932022
+      ],
+      "judge_wilson": [
+        0.8930250611770575,
+        0.9913880422874835
+      ]
+    },
+    "T2": {
+      "tool_n": 28,
+      "judge_n": 62,
+      "N": 64,
+      "tool_wilson": [
+        0.32293817065427327,
+        0.5591400822171213
+      ],
+      "judge_wilson": [
+        0.8930250611770575,
+        0.9913880422874835
+      ]
+    },
+    "T3": {
+      "tool_n": 24,
+      "judge_n": 62,
+      "N": 64,
+      "tool_wilson": [
+        0.26665803888105327,
+        0.49749846686173577
+      ],
+      "judge_wilson": [
+        0.8930250611770575,
+        0.9913880422874835
+      ]
+    }
+  },
+  "figure5": {
+    "T1T3_official": {
+      "events": 192,
+      "arms": 136
+    },
+    "T0_status": "prior_derived_StageB_traces_MISSING_locally"
+  },
+  "files": {
+    "figure3_delta_across_targets.png": {
+      "bytes": 15123,
+      "path": "/workspace/docs/research/q2_publication_package/figures/figure3_delta_across_targets.png",
+      "artifact": "/opt/cursor/artifacts/q2_figure3_delta_across_targets.png"
+    },
+    "figure4_toolhasr_vs_judgeasr.png": {
+      "bytes": 27096,
+      "path": "/workspace/docs/research/q2_publication_package/figures/figure4_toolhasr_vs_judgeasr.png",
+      "artifact": "/opt/cursor/artifacts/q2_figure4_toolhasr_vs_judgeasr.png"
+    },
+    "figure5_invalid_tool_args.png": {
+      "bytes": 16091,
+      "path": "/workspace/docs/research/q2_publication_package/figures/figure5_invalid_tool_args.png",
+      "artifact": "/opt/cursor/artifacts/q2_figure5_invalid_tool_args.png"
+    }
+  }
+}

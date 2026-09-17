@@ -3,7 +3,7 @@
 **Manuscript V1 (internal).** Not a venue submission.  
 **Evidence freeze:** Q2 run `p3_stage_c_q2_20260917T123855Z_b075df0f` · commit `b075df0f5ec5ad11ede76ac4e4079cade15208f1`.  
 **This packaging:** LIVE_EVAL=false · API_CALLS=0 · no new experiments.  
-**Protocol flag:** `scientific_evidence=false` (pilot-scale directional consistency, not a confirmatory multi-model study).
+**Protocol flag:** `scientific_evidence=false`. This is a **protocol-complete pilot-scale directional consistency study**, not a confirmatory multi-model study.
 
 Related-work citations use Hub-verified arXiv identifiers. **Venue and DOI are UNVERIFIED** (`RELATED_WORK_MATRIX.md`).
 
@@ -21,7 +21,7 @@ Related-work citations use Hub-verified arXiv identifiers. **Venue and DOI are U
 
 **Main observed finding.** Under locked PHASE1-CORE, D1/D2/D4 all had negative Tool-HASR Δ versus D0 on the Stage-B target T0, and the same sign on independently selected T1–T3 (9/9 sign agreements). This is a controlled isolation finding on four OpenRouter-served models.
 
-**Limitations.** Pilot scale (`scientific_evidence=false`); wide Wilson intervals; Qwen-heavy target set; frequent INVALID_TOOL_ARGS (192 events / 136 arms on Q2 live); large Judge-ASR vs Tool-HASR disagreement (M3=108 on T1–T3); no matched external baseline; D3 deferred; open adaptive attackers out of scope; Stage-B raw traces not in the current checkout.
+**Limitations.** Pilot scale (`scientific_evidence=false`); wide Wilson intervals; Qwen-heavy target set; frequent INVALID_TOOL_ARGS (192 events / 136 arms on Q2 live); large Judge-ASR vs Tool-HASR disagreement (M3=108, M4=3 on T1–T3); no matched external baseline; D3 deferred; open adaptive attackers out of scope. **Official T0 Tool-HASR/Δ** is reused from Stage-B run `p3_stage_b_20260916T235438Z_7e401714`. **Local artifact availability:** Stage-B `predictions.jsonl` is `MISSING_LOCALLY` on this checkout (not fabricated).
 
 **Contribution.** A controlled framework for isolating detector-related effects from downstream intervention policy in LLM-agent security, with a bounded cross-target directional-consistency check. The study does not claim a universal defense, a best detector, or production robustness.
 
@@ -33,7 +33,7 @@ Tool-using language-model agents can cause harm by **executing** a tool call, no
 
 This paper studies **attribution**, not leaderboard performance. The central contribution is a controlled framework for isolating detector-related effects from downstream intervention policy. Concretely, we lock PHASE1-CORE (thresholds, action costs, frozen pack, judge) and vary detector identity {D0, D1, D2, D4}, where D0 is a no-detection arm. Primary security is Tool-HASR. Secondary is Judge-ASR. The Q2 question (RQ-C2) asks whether the detector-related Tool-HASR Δ observed on a locked primary target remains **directionally consistent** on three independently selected secondary targets.
 
-The answer, under this protocol, is yes: 9/9 Δ signs agree (all negative). That finding is scoped to four models, n=16 per cell, mock tools, and `scientific_evidence=false`. It is not evidence that any detector is best, that the system is production-ready, or that prompt injection is solved.
+This paper is a **protocol-complete pilot-scale directional consistency study**. The answer, under this protocol, is yes: 9/9 Δ signs agree (all negative). That finding is scoped to four models, n=16 per cell, mock tools, and `scientific_evidence=false`. It is not evidence that any detector is best, that the system is production-ready, or that prompt injection is solved.
 
 This manuscript does not reverse other tracks in the same repository. Track A (VNEXT confirmation) is an immutable FAIL on a different pack and treatment. Track B (Phase-1 confirmatory LIVE) is a scoped SUPPORTED_IMPROVEMENT on a third pack. Q2 must not be pooled with either.
 
@@ -214,7 +214,7 @@ Intervals on the underlying rates are wide (especially 2/16 cells). Magnitudes s
 | D2, T3 | −0.25 | −0.1875 | 0.0625 | True |
 | D4, T3 | −0.5625 | −0.5 | 0.0625 | True |
 
-**Sign agreement: 9/9 (disagree=0).**
+**Sign agreement: 9/9 (disagree=0).** Rendered: `figures/figure3_delta_across_targets.png` (stdlib PNG; matplotlib unavailable).
 
 Δ-change is descriptive. Sign agreement uses signs of Δ_T0 and Δ_Tk, not the sign of Δ-change.
 
@@ -255,13 +255,13 @@ Interpretation, no more: under locked PHASE1-CORE, the detector-related Tool-HAS
 | T3 | 39 | 1 |
 | Q2 live T1–T3 | 108 | 3 |
 
-Q2 live Judge-ASR: 186/192 = 0.96875.
+Q2 live Judge-ASR: 186/192 = 0.96875. T1–T3 M3=108; M4=3. Rendered: `figures/figure4_toolhasr_vs_judgeasr.png`.
 
 Judge-ASR is high across detectors, including D1/D2/D4 where Tool-HASR is lower. The endpoints measure different things. Tool-HASR is operational harmful execution. Judge-ASR is a judge-model assessment. Disagreement is diagnostic information. We do not claim Judge-ASR is invalid.
 
 ### 9.2 INVALID_TOOL_ARGS
 
-**PRIMARY (S0):** official Q2 live INVALID = 192 unique events, 136/432 arms. Independent recompute on `predictions.jsonl` matches. INVALID is not Tool-HASR success and is not negligible.
+**PRIMARY (S0):** official Q2 live INVALID = 192 unique events, 136/432 arms. Independent recompute on `predictions.jsonl` matches. INVALID is not Tool-HASR success and is not negligible. Rendered: `figures/figure5_invalid_tool_args.png`.
 
 **SENSITIVITY (S2):** excluding arms with ≥1 INVALID does not flip within-target Δ signs (0 flips). S2 cross-target sign agreement vs T0 S2 remains 9/9. Magnitudes are not interchangeable with S0.
 
@@ -307,7 +307,7 @@ See also `LIMITATIONS.md` and `D3_AND_C4.md`.
 3. **Limited model diversity / Qwen-heavy set.** T0, T1, T3 are Qwen-line; T2 is Gemma-3; all via OpenRouter. No GPT/Claude/Gemini-native API family.
 4. **External baseline gap.** Q2 is not an external comparative benchmark.
 5. **INVALID_TOOL_ARGS is frequent** (192/136 on Q2 live). Not success; not negligible.
-6. **Stage-B traces unavailable** on this checkout. T0 reuse is documented; independent T0 INVALID recompute is blocked here.
+6. **T0 reuse vs local Stage-B traces.** **Official evidence result:** T0 Tool-HASR/Δ are reused from Stage-B `p3_stage_b_20260916T235438Z_7e401714` (not re-run); Q2 live report JSON records those cells. **Local artifact availability:** `STAGE_B_TRACE_STATUS = MISSING_LOCALLY` — `predictions.jsonl` is not on this checkout and was not fabricated. T0 INVALID counts remain cited from prior derived JSON.
 7. **D3 deferred.** No embedding-detector numbers.
 8. **C4 open adaptive attacker out of scope.** P2 C4-mini templates are scripted, not an interactive attacker. PHASE1-CORE action adaptation ≠ closed-loop adaptive adversary.
 9. **Provider/runtime effects.** Tool-call formatting, schema compliance, residual nondeterminism at temperature 0.
@@ -316,7 +316,8 @@ See also `LIMITATIONS.md` and `D3_AND_C4.md`.
 12. **Limited generalization.** Four models, one pack, one policy, one judge.
 13. **Judge-ASR vs Tool-HASR.** Dual reporting is required; they are not interchangeable.
 14. **Related-work venues UNVERIFIED.** Bibliography is not camera-ready.
-15. **Figures not rasterized** in this environment (matplotlib unavailable).
+15. **Figures 3–5** are rendered offline as PNG via stdlib zlib (matplotlib unavailable; no network install). Source: `q2_final_statistics.json` / `q2_invalid_args_analysis.json`. No Δ CI or p-values were added.
+16. **No universal defense, SOTA/best, production robustness, or Q2 confirmatory claim.** This remains a protocol-complete pilot-scale directional consistency study.
 
 ---
 
@@ -351,7 +352,8 @@ See also `LIMITATIONS.md` and `D3_AND_C4.md`.
 | temperature / cache / seed | 0.0 / false / 42 |
 | historical API calls | 2061 |
 | this packaging API calls | 0 |
-| analysis | `p3_stage_c_q2.py`, `generate_tables_figures.py`, this package |
+| analysis | `p3_stage_c_q2.py`, `generate_tables_figures.py`, `render_figures_offline.py`, this package |
+| figures 3–5 | `docs/research/q2_publication_package/figures/*.png` (stdlib PNG; matplotlib **MISSING**) |
 
 **MISSING on this checkout:** Stage-B `predictions.jsonl`. Recorded Stage-B predictions SHA `7b0b72d942dae988d87acf238424c9f2d331b62d5ec582c9ba7d9bfbb293c214` is not re-hashed here.
 

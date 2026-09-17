@@ -1,5 +1,7 @@
 # Venue requirements (no final selection)
 
+**VENUE_STATUS = CATEGORY_ONLY**
+
 **Do not choose a journal by prestige. Do not claim acceptance probability.**  
 This file maps **categories** and the information a later venue decision needs. Article-type length limits below are **UNVERIFIED** until the official author kit is checked at submission time.
 

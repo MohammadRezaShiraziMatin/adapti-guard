@@ -44,9 +44,10 @@ Arms with ≥1 INVALID (not event counts):
 
 Event-level `event_trace` INVALID by detector (T1–T3): D0=63, D1=30, D2=53, D4=46 (sum 192). Do not interpret as a detector ranking.
 
-### T0 (Stage-B; not recomputed this checkout)
+### T0 (Stage-B)
 
-Cited prior derived (PHASE1-CORE): 61 deduped events, 39 arms, 14 attack arms, 15 trajectories, attack Tool-HASR true/false = 5/9. **Reproducibility caveat:** Stage-B `predictions.jsonl` is missing from this branch.
+**Official evidence result:** T0 Tool-HASR/Δ live in the Q2 report / `q2_final_statistics.json` (reuse of `p3_stage_b_20260916T235438Z_7e401714`).  
+**Local artifact availability:** `STAGE_B_TRACE_STATUS = MISSING_LOCALLY`. T0 INVALID counts are cited from prior derived JSON (`q2_invalid_args_analysis.json`), not re-derived here. Source traces were not modified because they are not present.
 
 ## Can INVALID alter Tool-HASR interpretation?
 

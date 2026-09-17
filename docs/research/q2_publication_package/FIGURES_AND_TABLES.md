@@ -157,7 +157,14 @@ Do not rank detectors. Δ vs D0 remains the protocol contrast. Benign denom incl
 
 ## Figures
 
-matplotlib was **not** available; raster PNGs are **not** claimed. Deterministic mermaid (architecture) plus `generate_tables_figures.py` (numeric). Pilot/controlled scope must appear in every caption. No detector ranking.
+matplotlib was **not** available; Figures 3–5 were rendered with `render_figures_offline.py` (numpy + stdlib zlib PNG). **No network install.** No Δ CI. No p-values. Not a ranking.
+
+PNG paths:
+
+- `docs/research/q2_publication_package/figures/figure3_delta_across_targets.png`
+- `docs/research/q2_publication_package/figures/figure4_toolhasr_vs_judgeasr.png`
+- `docs/research/q2_publication_package/figures/figure5_invalid_tool_args.png`
+- metadata: `figures/figure_metadata.json`
 
 **Figure 1 — Experimental architecture.** Boxes: Detector → RiskCore → CorePolicy → ToolPermissionGate → mock tools; parallel Judge. No metrics on this figure. Source: system design / P3 taxonomy.
 
