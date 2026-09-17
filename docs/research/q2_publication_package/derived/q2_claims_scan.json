@@ -1,84 +1,102 @@
 {
-  "generated_at_utc": "2026-09-17T18:22:45.168171+00:00",
+  "generated_at_utc": "2026-09-17T18:37:19.350630+00:00",
   "api_calls": 0,
   "banned_term_hits_in_package": [
     {
       "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 46,
+      "line": 54,
       "term": "SOTA",
       "excerpt": "8. Explicit \u201cnot a ranking\u201d / no SOTA language even if one method has lower Tool-HASR."
     },
     {
       "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 50,
-      "term": "SOTA",
-      "excerpt": "## Why Q2 must not be described as SOTA / best / superior"
-    },
-    {
-      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 50,
+      "line": 65,
       "term": "best",
-      "excerpt": "## Why Q2 must not be described as SOTA / best / superior"
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection,\u201d \u201coutperforms CaMeL/AgentDojo defenses.\u201d"
     },
     {
       "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 50,
+      "line": 65,
       "term": "superior",
-      "excerpt": "## Why Q2 must not be described as SOTA / best / superior"
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection,\u201d \u201coutperforms CaMeL/AgentDojo defenses.\u201d"
     },
     {
       "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 58,
-      "term": "best",
-      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
-    },
-    {
-      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 58,
-      "term": "superior",
-      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
-    },
-    {
-      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 58,
+      "line": 65,
       "term": "state-of-the-art",
-      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection,\u201d \u201coutperforms CaMeL/AgentDojo defenses.\u201d"
     },
     {
       "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
-      "line": 58,
+      "line": 65,
       "term": "solves prompt injection",
-      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection,\u201d \u201coutperforms CaMeL/AgentDojo defenses.\u201d"
+    },
+    {
+      "path": "docs/research/q2_publication_package/CLAIM_EVIDENCE_MATRIX.md",
+      "line": 18,
+      "term": "confirmatory",
+      "excerpt": "| C10 | Directionally consistent on selected T0\u2013T3 | C08+C09 | INTERPRETATION | Yes if scoped | Four OpenRouter models | Not all LLMs; not confirmatory |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/CLAIM_EVIDENCE_MATRIX.md",
+      "line": 33,
+      "term": "Production-ready",
+      "excerpt": "| C25 | Production-ready / SOTA / best / universal / solves injection | \u2014 | \u2014 | **Must not appear as assertion** | \u2014 | Forbidden |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/CLAIM_EVIDENCE_MATRIX.md",
+      "line": 33,
+      "term": "SOTA",
+      "excerpt": "| C25 | Production-ready / SOTA / best / universal / solves injection | \u2014 | \u2014 | **Must not appear as assertion** | \u2014 | Forbidden |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/CLAIM_EVIDENCE_MATRIX.md",
+      "line": 33,
+      "term": "best",
+      "excerpt": "| C25 | Production-ready / SOTA / best / universal / solves injection | \u2014 | \u2014 | **Must not appear as assertion** | \u2014 | Forbidden |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/CLAIM_EVIDENCE_MATRIX.md",
+      "line": 34,
+      "term": "confirmatory",
+      "excerpt": "| C26 | Q2 is confirmatory | \u2014 | \u2014 | **Must not appear as assertion** | \u2014 | Protocol says false |"
     },
     {
       "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
-      "line": 54,
+      "line": 64,
       "term": "SOTA",
       "excerpt": "- SOTA / best / superior detector or defense."
     },
     {
       "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
-      "line": 54,
+      "line": 64,
       "term": "best",
       "excerpt": "- SOTA / best / superior detector or defense."
     },
     {
       "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
-      "line": 54,
+      "line": 64,
       "term": "superior",
       "excerpt": "- SOTA / best / superior detector or defense."
     },
     {
       "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
-      "line": 55,
+      "line": 65,
       "term": "Production-ready",
       "excerpt": "- Production-ready or universally effective protection."
     },
     {
       "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
-      "line": 55,
+      "line": 65,
       "term": "universally effective",
       "excerpt": "- Production-ready or universally effective protection."
+    },
+    {
+      "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
+      "line": 66,
+      "term": "confirmatory",
+      "excerpt": "- Confirmation for all LLMs; Q2 is not a confirmatory multi-model study."
     },
     {
       "path": "docs/research/q2_publication_package/D3_AND_C4.md",
@@ -88,9 +106,15 @@
     },
     {
       "path": "docs/research/q2_publication_package/LIMITATIONS.md",
-      "line": 45,
+      "line": 29,
+      "term": "confirmatory",
+      "excerpt": "The locked Q2 run is a protocol-complete **pilot** directional-consistency study. It is not a confirmatory multi-model study and not a qualified-win track (MSID \u2227 significance \u2227 U)."
+    },
+    {
+      "path": "docs/research/q2_publication_package/LIMITATIONS.md",
+      "line": 49,
       "term": "SOTA",
-      "excerpt": "None fairly reconstructed on this pack. See `BASELINE_GAP.md`. Not SOTA."
+      "excerpt": "None fairly reconstructed on this pack. Current Q2 is not an external comparative benchmark. See `BASELINE_GAP.md`. Not SOTA."
     },
     {
       "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
@@ -171,16 +195,298 @@
       "excerpt": "| solves prompt injection | does not establish universal generalization |"
     },
     {
-      "path": "docs/research/q2_publication_package/README.md",
-      "line": 16,
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 6,
+      "term": "confirmatory",
+      "excerpt": "**Protocol flag:** `scientific_evidence=false` (pilot-scale directional consistency, not a confirmatory multi-model study)."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 26,
+      "term": "best",
+      "excerpt": "**Contribution.** A controlled framework for isolating detector-related effects from downstream intervention policy in LLM-agent security, with a bounded cross-target directional-consistency check. The study does not claim a universal defen"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 36,
+      "term": "best",
+      "excerpt": "The answer, under this protocol, is yes: 9/9 \u0394 signs agree (all negative). That finding is scoped to four models, n=16 per cell, mock tools, and `scientific_evidence=false`. It is not evidence that any detector is best, that the system is p"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 36,
+      "term": "production-ready",
+      "excerpt": "The answer, under this protocol, is yes: 9/9 \u0394 signs agree (all negative). That finding is scoped to four models, n=16 per cell, mock tools, and `scientific_evidence=false`. It is not evidence that any detector is best, that the system is p"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 38,
+      "term": "confirmatory",
+      "excerpt": "This manuscript does not reverse other tracks in the same repository. Track A (VNEXT confirmation) is an immutable FAIL on a different pack and treatment. Track B (Phase-1 confirmatory LIVE) is a scoped SUPPORTED_IMPROVEMENT on a third pack"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 69,
+      "term": "confirmatory",
+      "excerpt": "Q2 is **not** powered as a confirmatory hypothesis test. The run sets `scientific_evidence=false`. \u201cSupported\u201d in the live verdict means protocol sign-agreement support, not Track B `SUPPORTED_IMPROVEMENT` and not a qualified win (MSID \u2227 si"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 306,
+      "term": "confirmatory",
+      "excerpt": "2. **`scientific_evidence=false`.** Protocol-complete directional consistency, not a confirmatory powered study."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 335,
+      "term": "prove",
+      "excerpt": "| Label-blind path assumed | Internal | Gold labels must not leak; protocol forbids it; this paper does not re-prove the implementation |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_V1.md",
+      "line": 364,
+      "term": "best",
+      "excerpt": "Under a locked intervention policy, detector identity is associated with lower operational harmful-tool rates than a no-detection arm, and that association kept sign across three independently selected secondary targets in this pilot. The c"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PROJECT_STATUS.md",
+      "line": 96,
+      "term": "confirmatory",
+      "excerpt": "- `scientific_evidence=false` (protocol-complete pilot, not confirmatory)"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PROJECT_STATUS.md",
+      "line": 119,
       "term": "SOTA",
-      "excerpt": "6. `BASELINE_GAP.md` \u2014 why not SOTA"
+      "excerpt": "- SOTA / best / superior / production-ready / universal robustness"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PROJECT_STATUS.md",
+      "line": 119,
+      "term": "best",
+      "excerpt": "- SOTA / best / superior / production-ready / universal robustness"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PROJECT_STATUS.md",
+      "line": 119,
+      "term": "superior",
+      "excerpt": "- SOTA / best / superior / production-ready / universal robustness"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PROJECT_STATUS.md",
+      "line": 119,
+      "term": "production-ready",
+      "excerpt": "- SOTA / best / superior / production-ready / universal robustness"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PROJECT_STATUS.md",
+      "line": 120,
+      "term": "confirmatory",
+      "excerpt": "- Q2 as confirmatory multi-model study"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PUBLICATION_PREPARATION_FINAL.md",
+      "line": 21,
+      "term": "prove",
+      "excerpt": "## 3. What does Q2 prove/establish under its protocol?"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PUBLICATION_PREPARATION_FINAL.md",
+      "line": 23,
+      "term": "prove",
+      "excerpt": "It does not \u201cprove\u201d a general law. Under locked PHASE1-CORE on frozen `p2_agentic_v0.1.0`:"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PUBLICATION_PREPARATION_FINAL.md",
+      "line": 34,
+      "term": "SOTA",
+      "excerpt": "Universal defense; SOTA/best detector; production robustness; confirmatory multi-model study; that detectors are the sole cause of outcomes; causal ID in deployment; fair comparison to CaMeL/IsolateGPT/Llama Guard/PromptShield/AgentDojo def"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PUBLICATION_PREPARATION_FINAL.md",
+      "line": 34,
+      "term": "best",
+      "excerpt": "Universal defense; SOTA/best detector; production robustness; confirmatory multi-model study; that detectors are the sole cause of outcomes; causal ID in deployment; fair comparison to CaMeL/IsolateGPT/Llama Guard/PromptShield/AgentDojo def"
+    },
+    {
+      "path": "docs/research/q2_publication_package/PUBLICATION_PREPARATION_FINAL.md",
+      "line": 34,
+      "term": "confirmatory",
+      "excerpt": "Universal defense; SOTA/best detector; production robustness; confirmatory multi-model study; that detectors are the sole cause of outcomes; causal ID in deployment; fair comparison to CaMeL/IsolateGPT/Llama Guard/PromptShield/AgentDojo def"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "best",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "superior",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "SOTA",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "state-of-the-art",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "guarantee",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "guaranteed",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "production-ready",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "optimal",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 10,
+      "term": "proves",
+      "excerpt": "`best` \u00b7 `better` \u00b7 `superior` \u00b7 `SOTA` \u00b7 `state-of-the-art` \u00b7 `guarantee` \u00b7 `guaranteed` \u00b7 `universal` \u00b7 `universally` \u00b7 `production-ready` \u00b7 `optimal` \u00b7 `solves` \u00b7 `proves`"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 12,
+      "term": "confirmatory",
+      "excerpt": "(Also scanned: `confirmatory` as a Q2-status word.)"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 18,
+      "term": "confirmatory",
+      "excerpt": "| `MANUSCRIPT_V1.md` | \u201cdoes not claim \u2026 production\u201d; \u201cnot \u2026 confirmatory\u201d; related-work notes that Hub abstracts of MELON/Meta SecAlign *use* SOTA language **which Q2 must not import** | Allowed negation / literature-hygiene. No asserted S"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 18,
+      "term": "SOTA",
+      "excerpt": "| `MANUSCRIPT_V1.md` | \u201cdoes not claim \u2026 production\u201d; \u201cnot \u2026 confirmatory\u201d; related-work notes that Hub abstracts of MELON/Meta SecAlign *use* SOTA language **which Q2 must not import** | Allowed negation / literature-hygiene. No asserted S"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 18,
+      "term": "SOTA",
+      "excerpt": "| `MANUSCRIPT_V1.md` | \u201cdoes not claim \u2026 production\u201d; \u201cnot \u2026 confirmatory\u201d; related-work notes that Hub abstracts of MELON/Meta SecAlign *use* SOTA language **which Q2 must not import** | Allowed negation / literature-hygiene. No asserted S"
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 31,
+      "term": "SOTA",
+      "excerpt": "1. Manuscript related-work mentions that MELON/Meta SecAlign Hub abstracts contain SOTA wording \u2014 must stay clearly attributed to those abstracts, never adopted."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 33,
+      "term": "universally effective",
+      "excerpt": "3. \u201cUniversal\u201d appears in BIPIA Hub summary (\u201cuniversally vulnerable\u201d) \u2014 if quoted, attribute; do not say Q2 is universally effective."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 39,
+      "term": "best",
+      "excerpt": "No asserted best/superior/SOTA/production-ready/universal-robustness/solves-injection/proves-all-LLMs claim in manuscript results. Q2 is not called confirmatory."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 39,
+      "term": "superior",
+      "excerpt": "No asserted best/superior/SOTA/production-ready/universal-robustness/solves-injection/proves-all-LLMs claim in manuscript results. Q2 is not called confirmatory."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 39,
+      "term": "SOTA",
+      "excerpt": "No asserted best/superior/SOTA/production-ready/universal-robustness/solves-injection/proves-all-LLMs claim in manuscript results. Q2 is not called confirmatory."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 39,
+      "term": "production-ready",
+      "excerpt": "No asserted best/superior/SOTA/production-ready/universal-robustness/solves-injection/proves-all-LLMs claim in manuscript results. Q2 is not called confirmatory."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 39,
+      "term": "proves",
+      "excerpt": "No asserted best/superior/SOTA/production-ready/universal-robustness/solves-injection/proves-all-LLMs claim in manuscript results. Q2 is not called confirmatory."
+    },
+    {
+      "path": "docs/research/q2_publication_package/Q2_FINAL_CLAIMS_AUDIT.md",
+      "line": 39,
+      "term": "confirmatory",
+      "excerpt": "No asserted best/superior/SOTA/production-ready/universal-robustness/solves-injection/proves-all-LLMs claim in manuscript results. Q2 is not called confirmatory."
+    },
+    {
+      "path": "docs/research/q2_publication_package/RELATED_WORK_MATRIX.json",
+      "line": 643,
+      "term": "SOTA",
+      "excerpt": "\"limitation_vs_rq\": \"A detector/defense method, not a policy-locked detector factorial. Hub abstract uses SOTA language about MELON; Q2 must not import that claim.\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/RELATED_WORK_MATRIX.json",
+      "line": 706,
+      "term": "SOTA",
+      "excerpt": "\"limitation_vs_rq\": \"Changes the target weights; Q2 holds targets fixed and varies detectors. Hub abstract uses SOTA language; do not import.\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/RELATED_WORK_MATRIX.md",
+      "line": 345,
+      "term": "SOTA",
+      "excerpt": "- **Limitation vs Q2:** A detector/defense method, not a policy-locked detector factorial. Hub abstract uses SOTA language about MELON; Q2 must not import that claim."
+    },
+    {
+      "path": "docs/research/q2_publication_package/RELATED_WORK_MATRIX.md",
+      "line": 379,
+      "term": "SOTA",
+      "excerpt": "- **Limitation vs Q2:** Changes the target weights; Q2 holds targets fixed and varies detectors. Hub abstract uses SOTA language; do not import."
     },
     {
       "path": "docs/research/q2_publication_package/STATISTICAL_REPORTING.md",
       "line": 4,
       "term": "confirmatory",
       "excerpt": "Protocol: `scientific_evidence=false`; Q2 is a **sign-agreement / directional-consistency** study, not a confirmatory MSID/McNemar gate (those gates belong to other tracks\u2019 frozen AUDITs)."
+    },
+    {
+      "path": "docs/research/q2_publication_package/VENUE_REQUIREMENTS.md",
+      "line": 9,
+      "term": "SOTA",
+      "excerpt": "**Not:** SOTA defense paper; not a systems bake-off; not a large-n confirmatory multi-model study."
+    },
+    {
+      "path": "docs/research/q2_publication_package/VENUE_REQUIREMENTS.md",
+      "line": 9,
+      "term": "confirmatory",
+      "excerpt": "**Not:** SOTA defense paper; not a systems bake-off; not a large-n confirmatory multi-model study."
+    },
+    {
+      "path": "docs/research/q2_publication_package/VENUE_REQUIREMENTS.md",
+      "line": 11,
+      "term": "Best",
+      "excerpt": "Best category fit is a venue that accepts **evaluation methodology**, **negative/partial results**, and **agent security measurement** without requiring a leaderboard."
     },
     {
       "path": "docs/research/q2_publication_package/q2_claims_audit.json",
@@ -621,6 +927,6 @@
       "excerpt": "9. **Claim strength** \u2014 results package GREEN for scoped \u0394/sign; RED for SOTA/best."
     }
   ],
-  "n_hits": 103,
+  "n_hits": 154,
   "note": "Hits include claims-audit documents that list banned terms as forbidden examples. Distinguish meta-discussion from asserted claims."
 }
