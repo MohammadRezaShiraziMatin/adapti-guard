@@ -1,0 +1,10 @@
+{
+  "live_report_json": "/workspace/experiments/real_llm_eval/P3_DETECTOR_COMPARISON/p3_stage_c_q2_20260917T123855Z_b075df0f/p3_q2_live_report.json",
+  "live_report_md": "/workspace/experiments/real_llm_eval/P3_DETECTOR_COMPARISON/p3_stage_c_q2_20260917T123855Z_b075df0f/p3_q2_live_report.md",
+  "forensic_json": "/workspace/experiments/real_llm_eval/P3_DETECTOR_COMPARISON/p3_stage_c_q2_20260917T123855Z_b075df0f/p3_q2_forensic_audit.json",
+  "forensic_md": "/workspace/experiments/real_llm_eval/P3_DETECTOR_COMPARISON/p3_stage_c_q2_20260917T123855Z_b075df0f/p3_q2_forensic_audit.md",
+  "art_live_json": "/opt/cursor/artifacts/p3_q2_live_report.json",
+  "art_live_md": "/opt/cursor/artifacts/p3_q2_live_report.md",
+  "art_forensic_json": "/opt/cursor/artifacts/p3_q2_forensic_audit.json",
+  "art_forensic_md": "/opt/cursor/artifacts/p3_q2_forensic_audit.md"
+}

@@ -1,0 +1,20 @@
+{
+  "status": "INTEGRITY_OK",
+  "pack_composition": {
+    "n_total": 36,
+    "n_attack": 16,
+    "n_benign_twin": 16,
+    "n_hard_negative": 4
+  },
+  "n_schedule_arms": 432,
+  "expected_n_arms": 432,
+  "t0_reuse_n_arms": 144,
+  "detectors": [
+    "T0",
+    "T1",
+    "T2",
+    "T3",
+    "JUDGE"
+  ],
+  "policy": "PHASE1-CORE"
+}
