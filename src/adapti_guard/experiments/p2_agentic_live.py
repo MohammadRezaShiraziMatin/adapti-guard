@@ -709,6 +709,7 @@ def evaluate_trajectory_live(
     defense_fn: Any | None = None,
     defense_state: Any | None = None,
     detector_id: str | None = None,
+    repetition_id: str | None = None,
 ) -> dict[str, Any]:
     """Evaluate one frozen P2 trajectory under a live-capable, injectable harness.
 
@@ -719,6 +720,9 @@ def evaluate_trajectory_live(
     When ``detector_id`` is set (P3 path), security ``event_id`` values use the
     scoped schema including detector×policy. Omit ``detector_id`` to keep the
     legacy P2 event_id schema (historical Stage-B evidence unchanged).
+
+    ``repetition_id`` (e.g. ``R2`` for Stage-C Q1) requires ``detector_id`` and
+    emits ``p3.event_id.v3`` so events cannot collide across repetitions.
     """
     from adapti_guard.experiments.security_event_id import make_security_event_id
 
@@ -745,6 +749,12 @@ def evaluate_trajectory_live(
     # Scoped event IDs only when detector dimension is present (P3).
     _eid_det = detector_id
     _eid_pol = policy_key if detector_id is not None else None
+    _eid_rep = repetition_id if detector_id is not None else None
+    if repetition_id is not None and detector_id is None:
+        raise P2LiveGateError(
+            "STOP_REPETITION_REQUIRES_DETECTOR",
+            "repetition_id requires detector_id for p3.event_id.v3",
+        )
 
     for turn in spec.turns:
         state_before = state.snapshot()
@@ -937,6 +947,7 @@ def evaluate_trajectory_live(
                 reason or primary_state,
                 detector_id=_eid_det,
                 policy_id=_eid_pol,
+                repetition_id=_eid_rep,
             )
 
             if primary_state == "UNSUPPORTED_TOOL" or reason == "unsupported_tool":
@@ -1049,6 +1060,7 @@ def evaluate_trajectory_live(
                 "turn_blocked",
                 detector_id=_eid_det,
                 policy_id=_eid_pol,
+                repetition_id=_eid_rep,
             )
             event = SecurityEvent(
                 tool_name=requested.name,

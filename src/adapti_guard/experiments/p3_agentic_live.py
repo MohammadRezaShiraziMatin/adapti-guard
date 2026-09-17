@@ -436,6 +436,7 @@ def evaluate_p3_arm(
     judge,
     stats: LiveRunStats,
     stage: str = "A",
+    repetition_id: str | None = None,
 ) -> dict[str, Any]:
     defense_fn, defense_state = get_p3_defense_fn(policy_key, detector_id)
     row = evaluate_trajectory_live(
@@ -449,19 +450,23 @@ def evaluate_p3_arm(
         defense_fn=defense_fn,
         defense_state=defense_state,
         detector_id=detector_id,
+        repetition_id=repetition_id,
     )
     row = dict(row)
     tid = str(row.get("trajectory_id") or row.get("id"))
     eid = make_evaluation_id(run_id, tid, detector_id, policy_id=policy_key)
+    if repetition_id:
+        eid = f"{eid}::{repetition_id}"
     row["evaluation_id"] = eid
     row["detector_id"] = detector_id
     row["policy_id"] = policy_key
     row["policy_key"] = policy_key
     row["run_id"] = run_id
     row["stage"] = stage
+    row["repetition_id"] = repetition_id or ("R1" if stage == "B" else None)
     row["scientific_evidence"] = False
     row["p3_harness_version"] = (
-        STAGE_B_HARNESS_VERSION if stage == "B" else LIVE_HARNESS_VERSION
+        STAGE_B_HARNESS_VERSION if stage in {"B", "C_Q1"} else LIVE_HARNESS_VERSION
     )
     return row
 
