@@ -26,3 +26,16 @@ jobs:
           pip install "google-genai>=1.0" "openai>=1.0"
       - name: Run tests
         run: python -m pytest tests/ -q --tb=short
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ruff
+        run: pip install "ruff>=0.6"
+      - name: Run ruff
+        run: ruff check src/ tests/
