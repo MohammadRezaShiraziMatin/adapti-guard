@@ -1,13 +1,13 @@
 # Venue decision matrix (no selection)
 
 **As of:** 2026-09-18  
-**VENUE_STATUS = CATEGORY_ONLY**  
-**NETWORK_CALLS=0 this turn.** Deadlines, page limits, and “currently open” flags are **UNVERIFIED** unless an official source was already in the package (none were). **Do not invent deadlines. Do not claim a venue is open.**
+**VENUE_STATUS = NOT_SELECTED**  
+**NETWORK_CALLS=0 this turn.** Deadlines, page limits, and “currently open” flags are **UNVERIFIED**. **Do not invent deadlines. Do not claim a venue is open. Do not rank venues. Do not call any venue “best”.**
 
 This file compares **realistic venue categories**. It does not convert the manuscript to a venue template. No venue is selected. No acceptance probability is stated.
 
 Manuscript genre: **controlled attribution protocol + pilot-scale directional evidence**.  
-Not: SOTA defense; not a systems bake-off; not a large-n confirmatory multi-model study.  
+Not: a ranking defense paper; not a systems bake-off; not a large-n confirmatory multi-model study.  
 Pilot-scale risk applies to **every** row: n=16/cell, `scientific_evidence=false`, four Qwen-heavy targets, missing Stage-B raw traces, PARTIAL bibliography.
 
 ## Category A — AI Security workshop
@@ -75,8 +75,20 @@ Pilot-scale risk applies to **every** row: n=16/cell, `scientific_evidence=false
 | Submission still open | **UNVERIFIED** — not claimed |
 | Risk from pilot-scale evidence | Highest maturity bar. PARTIAL bibliography and MISSING Stage-B traces currently block a responsible journal submit |
 
-## Cross-category recommendation (not a venue pick)
+## Category F — NeurIPS / ICLR / CCS-associated workshop (unnamed)
 
-Human chooses later. This package remains **READY_WITH_MAJOR_REVISIONS**. Do not submit until Stage-B traces are packaged or explicitly accepted as a documented hole, and until venue/DOI cleanup matches the target author kit.
+| Field | Record |
+| --- | --- |
+| Scope fit | Possible if a 2026 workshop CFP matches attribution/evaluation of agent security. **No specific workshop is named or selected.** |
+| Paper format | Workshop paper — **UNVERIFIED** per CFP |
+| Submission status | **UNVERIFIED** |
+| Deadline | **UNVERIFIED** — not invented |
+| Page limit | **UNVERIFIED** |
+| Current manuscript type fit | Methods+pilot may fit a workshop; does **not** fit a main-conference ranking-defense track |
+| Unresolved | Official CFP, dates, archival status |
+
+Do not rank A–F. **VENUE_STATUS = NOT_SELECTED.**
+
+Human chooses later. **VENUE_STATUS = NOT_SELECTED.** This package remains **READY_WITH_MAJOR_REVISIONS**. Do not submit until Stage-B traces are packaged or explicitly accepted as a documented hole, and until venue/DOI cleanup matches the target author kit.
 
 Related category notes (not a decision): `VENUE_REQUIREMENTS.md`.

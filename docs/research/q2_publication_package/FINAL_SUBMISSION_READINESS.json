@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-09-17",
+  "STATUS": "READY_WITH_MAJOR_REVISIONS",
+  "submission_ready": false,
+  "blocked": false,
+  "ci": "2/2 PASS",
+  "ci_is_publication_acceptance": false,
+  "API_CALLS": 0,
+  "LLM_CALLS": 0,
+  "NETWORK_CALLS": 0,
+  "LIVE_EVAL": false,
+  "Q2_RERUN": false,
+  "P1_MODIFIED": false,
+  "P2_MODIFIED": false,
+  "Q2_TRACE_MODIFIED": false,
+  "novelty_class": "PARTIAL_GAP",
+  "VENUE_STATUS": "NOT_SELECTED",
+  "bibliography_status": "PARTIAL",
+  "stage_b_raw_trace": "MISSING_LOCALLY",
+  "reproducibility_status": "PARTIAL",
+  "scientific_evidence": false,
+  "n_per_cell": 16,
+  "manuscript_path": "docs/research/q2_publication_package/MANUSCRIPT_FINAL.md",
+  "readiness_report_path": "docs/research/q2_publication_package/FINAL_SUBMISSION_READINESS.md",
+  "q2_run_id": "p3_stage_c_q2_20260917T123855Z_b075df0f",
+  "evidence_commit": "b075df0f5ec5ad11ede76ac4e4079cade15208f1",
+  "q2_predictions_sha256": "2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6",
+  "p1_sha256": "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235",
+  "p2_sha256": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+  "p1_p2_q2_hashes_rechecked_this_pass": true,
+  "gates": {
+    "manuscript_internally_consistent": true,
+    "claims_evidence_aligned": true,
+    "bibliography_sufficiently_verified": false,
+    "figures_tables_present": true,
+    "reproducibility_complete_enough": false,
+    "no_unresolved_critical_integrity_issue": false
+  },
+  "authoritative_numbers": {
+    "arms": "432/432",
+    "spend_usd": 0.152885,
+    "sign_agreement": "9/9",
+    "tool_hasr_t1t3": "81/192",
+    "tool_hasr_t1t3_rate": 0.421875,
+    "judge_asr_t1t3": "186/192",
+    "judge_asr_t1t3_rate": 0.96875,
+    "m3_t1t3": 108,
+    "m4_t1t3": 3,
+    "invalid_events_arms": "192/136",
+    "delta": {
+      "T0": {
+        "D1": -0.6875,
+        "D2": -0.25,
+        "D4": -0.5625
+      },
+      "T1": {
+        "D1": -0.75,
+        "D2": -0.3125,
+        "D4": -0.625
+      },
+      "T2": {
+        "D1": -0.6875,
+        "D2": -0.25,
+        "D4": -0.5625
+      },
+      "T3": {
+        "D1": -0.5625,
+        "D2": -0.1875,
+        "D4": -0.5
+      }
+    }
+  },
+  "required_for_submission": [
+    "Package Stage-B traces read-only or accept MISSING_LOCALLY in the submitted PDF",
+    "Verify remaining venues/DOIs from official publisher pages",
+    "Human venue selection; apply venue template",
+    "Keep scientific_evidence=false and n=16 in the public abstract"
+  ],
+  "future_study_not_required_for_this_package": [
+    "Matched external baselines",
+    "Larger n / more model families",
+    "D3 after offline embedding lock",
+    "Open adaptive attacker (C4)",
+    "Preregistered confirmatory inferential tests"
+  ],
+  "manuscript_sha256": "3ed0bb02b30943d2c6e1b20b047d9bf85c9ae216e9da35026bc9432267498834"
+}

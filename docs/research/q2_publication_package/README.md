@@ -1,24 +1,25 @@
 # Q2 Publication Package
 
-Offline publication hardening from **frozen evidence only**. Scientific experiment CLOSED.
+Offline publication preparation from **frozen evidence only**. Scientific experiment CLOSED.
 
-- API calls during this packaging: **0**
-- LLM calls: **0**
-- Network calls: **0**
+- API / LLM / network this pass: **0**
 - Frozen P1/P2 and Q2 raw traces: **not modified**
-- Status: **READY_WITH_MAJOR_REVISIONS**
+- Status: **READY_WITH_MAJOR_REVISIONS** (`FINAL_SUBMISSION_READINESS.md`)
+- Venue: **NOT_SELECTED**
 - Reproducibility: **PARTIAL** (Stage-B raw traces MISSING_LOCALLY)
-- Novelty: **PARTIAL_GAP** (controlled attribution, not a new defense)
+- Novelty: **PARTIAL_GAP**
+- Bibliography: **PARTIAL**
 
-## Read order (hardening pass)
+## Read order
 
-1. `FINAL_WEAKNESS_CLOSURE.md` — resolved / partial / blocked
-2. `STAGE_B_EVIDENCE_STATUS.md` — official vs local trace distinction
-3. `MANUSCRIPT_V1.md` — 10-section hardened draft
-4. `RELATED_WORK_MATRIX.md` + `BIBLIOGRAPHY_VERIFICATION.md`
-5. `NOVELTY_AUDIT.md` + `CONTRIBUTION_POSITIONING.md` + `BASELINE_GAP.md`
-6. `VENUE_DECISION_MATRIX.md` + `FINAL_PEER_REVIEW_RESPONSE_MATRIX.md`
-7. `Q2_REPRODUCIBILITY_CHECKLIST.md`
-8. `figures/` — Figures 3–5 PNG (not a ranking)
+1. `FINAL_SUBMISSION_READINESS.md`
+2. `MANUSCRIPT_FINAL.md`
+3. `STAGE_B_EVIDENCE_STATUS.md`
+4. `CLAIM_EVIDENCE_MATRIX.md`
+5. `BIBLIOGRAPHY_VERIFICATION.md`
+6. `VENUE_DECISION_MATRIX.md`
+7. `REVIEWER_RESPONSE_MATRIX.md`
+8. `Q2_REPRODUCIBILITY_CHECKLIST.md`
+9. `figures/` — Figures 3–5 (not a ranking; no significance encoding)
 
-Do not mark PUBLICATION_READY while Stage-B traces are missing or the bibliography remains PARTIAL.
+Locked numbers (unchanged): 432/432 · $0.152885 · 9/9 · Tool-HASR 81/192 · Judge-ASR 186/192 · M3=108 · M4=3 · INVALID 192/136 · n=16/cell · `scientific_evidence=false`.

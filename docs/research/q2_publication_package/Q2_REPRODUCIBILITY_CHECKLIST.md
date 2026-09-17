@@ -54,8 +54,8 @@ P1/P2/Q2 raw traces were **not modified** this turn.
 | --- | --- | --- |
 | packaging branch | documentation | `cursor/q2-publication-hardening-f6f3` |
 | LIVE_EVAL this packaging | VERIFIED | false |
-| manuscript | documentation | `MANUSCRIPT_V1.md` |
-| manuscript SHA-256 | VERIFIED this pass | `e163f709ed4d5b24973ec2958b75466b68e2875526361d0911e72251d6bfaf79` |
+| manuscript FINAL | documentation | `MANUSCRIPT_FINAL.md` |
+| manuscript FINAL SHA-256 | this pass | `3ed0bb02b30943d2c6e1b20b047d9bf85c9ae216e9da35026bc9432267498834` |
 | novelty class | documentation | PARTIAL_GAP |
 | venue decision | documentation | `VENUE_DECISION_MATRIX.md` (deadlines UNVERIFIED) |
 

@@ -1,47 +1,46 @@
-# Claim–evidence matrix (MANUSCRIPT_V1, hardening pass)
+# Claim–evidence matrix (`MANUSCRIPT_FINAL.md`)
 
-**API=0.** Every substantive claim in `MANUSCRIPT_V1.md` is classified. Unsupported claims must be flagged.
+**API=0.** Every substantive claim in `MANUSCRIPT_FINAL.md` is classified.
 
-Legend: **OBSERVED** locked-run fact · **DERIVED** computed from observed · **INTERPRETATION** scoped reading · **LITERATURE CLAIM** existing Hub/package identity · **LIMITATION** absence or bound · **UNVERIFIED** not established.
+Legend: **OBSERVED** · **DERIVED** · **INTERPRETATION** · **LITERATURE CLAIM** · **LIMITATION** · **UNVERIFIED**
 
 | ID | CLAIM | SOURCE | EVIDENCE TYPE | VERIFIED? | SCOPE | LIMITATION |
 | --- | --- | --- | --- | --- | --- | --- |
-| C01 | Agent security outcomes mix detection and intervention | Method / intro | INTERPRETATION | Yes as framing | Conceptual | Not an empirical Q2 result |
-| C02 | Attribution of tool-harm to detector identity needs a locked policy | Intro / related work | INTERPRETATION | Yes as gap statement | Methodological | Novelty is PARTIAL_GAP, not CLEAR GAP |
-| C03 | Q2 holds PHASE1-CORE, pack, judge, thresholds, costs fixed and varies D0/D1/D2/D4 | `manifest.json`, lock files | OBSERVED | Yes | Q2 live + T0 reuse | T0 not re-run |
-| C04 | Tool-HASR is primary; Judge-ASR secondary | Protocol / `p3_stage_c_q2.py` | OBSERVED (protocol) | Yes | This study | Other papers use other endpoints |
-| C05 | 432/432 arms completed, 0 failed | `manifest` / live report | OBSERVED | Yes | Q2 live T1–T3 | T0 arms are Stage-B, not in 432 |
-| C06 | Historical spend $0.152885 / cap $10 | `spend.json` | OBSERVED | Yes | Q2 live | Not intervention USD |
-| C07 | Cell Tool-HASR n/N and Wilson CIs as tabulated | `q2_final_statistics.json` | DERIVED | Yes (matches live report) | n=16/cell | Wide CIs |
-| C08 | All twelve Δ(d,t) for D1/D2/D4 × T0–T3 are NEG | statistics JSON | DERIVED | Yes | These 12 cells | No Δ CI; not a ranking |
-| C09 | Sign agreement 9/9 | statistics JSON / live report | DERIVED | Yes | 3 detectors × 3 secondary targets | Descriptive; no Q2 p-value |
-| C00 | Under a locked intervention policy, detector-related Tool-HASR differences relative to D0 remained directionally consistent across the locked target and three independently selected secondary targets | Table 3; 9/9; n=16/cell | INTERPRETATION of OBSERVED/DERIVED | Yes if scoped | Four OpenRouter models; PHASE1-CORE; `scientific_evidence=false` | Not universal causality; not confirmatory; not a ranking |
-| C10 | Protocol-complete pilot-scale directional consistency | C08+C09+C17 | INTERPRETATION | Yes if scoped | Four models | Not all LLMs; not confirmatory |
-| C11 | Q2 live Tool-HASR 81/192; Judge-ASR 186/192 | statistics / Table 4 | DERIVED | Yes | T1–T3 attack arms | Pooled across detectors; not a ranking |
-| C12 | M3=108, M4=3 on T1–T3 | statistics | DERIVED | Yes | T1–T3 | Diagnostic, not a win/loss |
-| C13 | Judge-ASR and Tool-HASR capture related but non-identical operational outcomes | C11–C12 | INTERPRETATION | Yes | This study | Does not validate the judge; does not invalidate Judge-ASR |
-| C14 | INVALID 192 events / 136 arms | `metrics.json` + recompute | OBSERVED | Yes | Q2 live 432 arms | T0 INVALID not recomputed here |
-| C15 | INVALID is frequent, not silently discarded, not treated as harmless | protocol + C14 | INTERPRETATION | Yes | S0 official | Does not prove negligibility |
-| C16 | S2 sign agreement remains 9/9; 0 S0→S2 sign flips | `invalid_sensitivity` | DERIVED | Yes | Pre-specified S2 | Magnitudes ≠ S0 |
-| C17 | `scientific_evidence=false` | `manifest.json` | OBSERVED | Yes | Q2 run | Must appear in abstract |
-| C18 | D3 has no scores | detectors init / lock | LIMITATION | Yes | Q2 | Do not fill N/A% as a measurement |
-| C19 | Open C4 adaptive attacker out of scope | taxonomy / `D3_AND_C4.md` | LIMITATION | Yes | Claims | P2 C4-mini ≠ interactive attacker |
-| C20 | No external baseline on this pack; attribution study not a defense benchmark | absence | LIMITATION | Yes (absence) | Q2 | Not a comparative benchmark |
-| C21 | P1 SHA `1a0b0053…dd235`; P2 SHA `32b40e3b…8d64dd`; Q2 pred SHA `2a2c2f31…886cc6` | file hashes | OBSERVED | Yes this checkout | Frozen files | Stage-B file hash not rechecked |
-| C22 | Integrity PASS / forensic PASS | Q2 audit JSON | OBSERVED | Yes | Q2 run | Does not imply scientific_evidence true |
-| C23 | Related-work titles/authors/years/arXiv | existing Hub/package records | LITERATURE CLAIM | Yes for those fields | 21 papers | Most venue/DOI UNVERIFIED; AgentDojo/BIPIA operator-supplied |
-| C24 | Isolation protocol is a partial literature gap | novelty audit | INTERPRETATION | Qualified | Surveyed set | Exact gap cannot be claimed globally |
-| C25 | Production-ready / SOTA / best / universal / solves injection | — | — | **Must not appear as assertion** | — | Forbidden |
-| C26 | Q2 is confirmatory | — | — | **Must not appear as assertion** | — | Protocol says false |
-| C27 | Track B reverses Track A or Q2 reverses VNEXT FAIL | dual-track docs | — | **Must not appear** | Different packs | Mixing is a claims error |
-| C28 | Stage-B predictions present on this checkout | glob | LIMITATION | Absence verified | Packaging | T0 INVALID cited prior derived; 124/192 not locally found |
-| C29 | Figures 3–5 PNG rendered | `figures/*.png` + `render_figures_offline.py` | DERIVED | Yes (stdlib PNG) | Packaging | matplotlib still MISSING; no Δ CI; not a ranking |
-| C30 | Δ T2 equals Δ T0 exactly | Table 3 | OBSERVED | Yes in sample | n=16 | Coincidence; not general equality |
-| C31 | Detector-related effect under locked protocol, not unqualified causality | protocol | INTERPRETATION | Yes if scoped | This study | Item 20 in limitations |
-| C32 | Operator 124/192 is locally verified T0 | STAGE_B status | — | **Must not appear as local verification** | — | NOT_FOUND_ON_THIS_CHECKOUT |
+| C00 | Detector-related Tool-HASR Δ vs D0 remained directionally consistent across T0–T3 (9/9) | Tables 3–4 | INTERPRETATION of OBSERVED | Yes if scoped | Four models; PHASE1-CORE; n=16; `scientific_evidence=false` | Not causal proof; not confirmatory |
+| C01 | Detector, policy, Tool-HASR, Judge-ASR, M3, M4, INVALID are distinct layers | §3 | INTERPRETATION | Yes as formulation | This protocol | Not an empirical ranking |
+| C02 | Contribution is controlled attribution, not novel detector families | §4, §12 | INTERPRETATION | Yes | Surveyed set | PARTIAL_GAP |
+| C03 | Policy locked; detectors D0/D1/D2/D4 varied | manifest / lock | OBSERVED | Yes | Q2 + T0 reuse | T0 not re-run |
+| C04 | Tool-HASR primary; Judge-ASR secondary and non-identical | protocol | OBSERVED | Yes | This study | Other papers use other endpoints |
+| C05 | 432/432 completed | manifest | OBSERVED | Yes | Q2 live T1–T3 | T0 not in 432 |
+| C06 | Historical spend $0.152885 | spend.json | OBSERVED | Yes | Q2 live | Not A0–A3 USD |
+| C07 | Cell Tool-HASR n/N and Wilson CIs as tabulated | statistics JSON | DERIVED | Yes | n=16/cell | Wide CIs; no Δ CI |
+| C08 | Authoritative Δ: T0 −0.6875/−0.2500/−0.5625; T1 −0.7500/−0.3125/−0.6250; T2 −0.6875/−0.2500/−0.5625; T3 −0.5625/−0.1875/−0.5000; all NEG | statistics JSON | DERIVED | Yes | 12 cells | Not a ranking |
+| C09 | 9/9 sign agreement | statistics / live report | DERIVED | Yes | 3×3 contrasts | No Q2 p-value |
+| C10 | Pilot-scale directional consistency | C08+C09+C17 | INTERPRETATION | Yes if scoped | Tested protocol | Not general robustness |
+| C11 | T1–T3 Tool-HASR 81/192 = 0.421875; Judge-ASR 186/192 = 0.96875 | statistics | DERIVED | Yes | T1–T3 attack arms | Pooled; not a ranking |
+| C12 | M3=108, M4=3 on T1–T3 | statistics | DERIVED | Yes | T1–T3 | Diagnostic |
+| C13 | Related but non-identical endpoints; neither declared invalid | C11–C12 | INTERPRETATION | Yes | This study | No single-cause inference |
+| C14 | INVALID 192 events / 136 arms | metrics + recompute | OBSERVED | Yes | Q2 live 432 | T0 INVALID not recomputed here |
+| C15 | INVALID is a potential confounder; not discarded; not equivalent to attack success; not claimed negligible | protocol + C14 | INTERPRETATION | Yes | S0 official | Co-occurs with some Tool-HASR true |
+| C16 | S2 9/9; 0 S0→S2 flips | invalid_sensitivity | DERIVED | Yes | Pre-specified S2 | Magnitudes ≠ S0 |
+| C17 | `scientific_evidence=false` | manifest | OBSERVED | Yes | Q2 | Must appear in abstract |
+| C18 | D3 deferred | lock | LIMITATION | Yes | Q2 | No D3 scores |
+| C19 | C4 open attacker out of scope | D3_AND_C4 | LIMITATION | Yes | Claims | Not interactive adversary |
+| C20 | Attribution study, not a defense leaderboard | absence | LIMITATION | Yes | Q2 | No external numbers |
+| C21 | P1/P2/Q2 SHAs as listed; rechecked this pass | file hashes | OBSERVED | Yes | Frozen files | Stage-B bytes absent |
+| C22 | Integrity/forensic PASS on Q2 run | audit JSON | OBSERVED | Yes | Q2 | ≠ scientific_evidence true |
+| C23 | 21 arXiv identities | package Hub records | LITERATURE CLAIM | Yes for identity | 21 papers | Venues PARTIAL |
+| C24 | PARTIAL_GAP residual sentence | novelty audit | INTERPRETATION | Qualified | Surveyed set | Not global uniqueness |
+| C25 | SOTA / best / superior / guaranteed / production-ready / solves injection / causal effect | — | — | **Must not appear as assertion** | — | Forbidden |
+| C26 | Q2 confirmatory | — | — | **Must not appear** | — | Protocol false |
+| C27 | Track mixing / VNEXT reversal | dual-track | — | **Must not appear** | Different packs | Claims error |
+| C28 | Stage-B traces present | glob | LIMITATION | Absence verified | Packaging | MISSING_LOCALLY |
+| C29 | Figures 3–5 present | PNG files | DERIVED | Yes | Packaging | No significance encoding |
+| C30 | T2 Δ equals T0 Δ | Table 4 | OBSERVED | Yes in sample | n=16 | Coincidence |
+| C31 | Detector-related association, not unqualified causality | protocol | INTERPRETATION | Yes if scoped | This study | Limitation 19 |
+| C32 | Task Shield is a verified bibliographic record | matrix | — | **No; not in matrix; not cited as reference** | — | UNVERIFIED_NOT_IN_MATRIX |
+| C33 | 124/192 is locally verified T0 | STAGE_B | — | **Must not appear as local verification** | — | NOT_FOUND_ON_THIS_CHECKOUT |
 
-No unsupported positive empirical claims were left unflagged. C23 venues remain PARTIAL by design.
+**C00 allowed:** “the observed Δ direction remained consistent across T0–T3”; “9/9 preserved the negative direction”; “pilot-scale evidence of directional consistency under the tested protocol.”
 
-**C00 allowed wording:** “Under a locked intervention policy, detector-related Tool-HASR differences relative to D0 remained directionally consistent across the locked target and three independently selected secondary targets.”
-
-**C00 forbidden overclaim:** universal causality; confirmatory multi-model proof; best/SOTA detector; production robustness; “solves prompt injection”; “new defense.”
+**C00 forbidden:** universal/general robustness; SOTA; best detector/defense; production-ready; guaranteed security; causal proof; comprehensive generalization; superiority over external defenses.

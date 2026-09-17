@@ -12,7 +12,7 @@ This turn did **not** re-fetch publisher or arXiv pages. Classification uses exi
 | AgentDojo venue/DOI | NeurIPS 2024 / `10.52202/079017-2636` — **OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN** |
 | BIPIA venue/DOI | KDD 2025 / `10.1145/3690624.3709179` — **OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN** |
 | manuscript arXiv set vs matrix | **MATCH** (21 ids) |
-| Task Shield `2412.16682` | **Not in matrix; not added** |
+| Task Shield `2412.16682` | **Not in verified matrix; not added as a reference.** Noted in `MANUSCRIPT_FINAL.md` §4 only as a named class this study does not implement or compare. Identity/venue/DOI **UNVERIFIED** in-package. |
 | AgentDojo / ASB identity | **VERIFIED** (not UNCERTAIN) |
 | CaMeL | **VERIFIED paper identity**; published architectural isolation; not an unverified idea |
 

@@ -33,6 +33,6 @@ P1 SHA `1a0b0053…dd235`; P2 SHA `32b40e3b…8d64dd`; Q2 predictions SHA `2a2c2
 
 ## Readiness
 
-**FINAL_STATUS = READY_WITH_MAJOR_REVISIONS**
+**STATUS = READY_WITH_MAJOR_REVISIONS** (`FINAL_SUBMISSION_READINESS.md`)
 
-Not PUBLICATION_READY: Stage-B traces missing locally; bibliography not fully verified.
+Not SUBMISSION_READY: Stage-B traces missing locally; bibliography not fully verified. CI 2/2 PASS is not publication acceptance.
