@@ -86,23 +86,25 @@ def test_arm_and_call_counts_deterministic():
     assert d["B_reduced"]["n_new_arms"] == 432
 
 
-def test_worst_case_cost_and_budget_blocked():
+def test_worst_case_cost_and_human_budget_pass():
     cost = worst_case_cost_usd()
-    assert cost["worst_case_cost_usd"] > 0
-    assert cost["maximum_permitted_budget_usd"] is None
-    assert cost["budget_check"] == "BLOCKED"
-    assert cost["budget_status"] == "BUDGET_BOUND_UNSET"
-    # With numeric budget above worst case → PASS
+    assert cost["worst_case_cost_usd"] == pytest.approx(4.403528, abs=1e-6)
+    assert cost["maximum_permitted_budget_usd"] == 10.0
+    assert cost["budget_check"] == "PASS"
+    assert cost["budget_status"] == "BUDGET_PASS"
+    # Explicit override still respected
     cost2 = worst_case_cost_usd(maximum_permitted_budget_usd=100.0)
     assert cost2["budget_check"] == "PASS"
     cost3 = worst_case_cost_usd(maximum_permitted_budget_usd=0.01)
     assert cost3["budget_check"] == "FAIL"
 
 
-def test_gate_status_budget_bound_blocked():
+def test_gate_status_ready_with_budget():
     g = gate_status_from_locks()
-    assert g["status"] == "P3_Q2_BUDGET_BOUND_BLOCKED"
-    assert "BUDGET_BOUND_UNSET" in g["blockers"]
+    assert g["status"] == "P3_Q2_GATE_READY"
+    assert g["blockers"] == []
+    assert g["budget_check"] == "PASS"
+    assert g["maximum_permitted_budget_usd"] == 10.0
     assert g["model_lock_complete"] is True
     assert g["pricing_complete"] is True
     assert g["live_execution_allowed"] is False
@@ -132,15 +134,18 @@ def test_t0_and_stage_b_immutable():
         assert m["Tool-HASR"]["n_success"] == 124
 
 
-def test_full_offline_validation_budget_blocked():
+def test_full_offline_validation_gate_ready():
     report = run_offline_validation()
-    assert report["gate_status"] == "P3_Q2_BUDGET_BOUND_BLOCKED"
+    assert report["gate_status"] == "P3_Q2_GATE_READY"
     assert report["offline_structural_tests"] == "PASS"
+    assert report["blockers"] == []
     assert report["api_calls"] == 0
     assert report["llm_calls"] == 0
     assert report["network_live_eval_calls"] == 0
     assert report["exact_arm_count"]["n_new_arms"] == 432
     assert report["pricing_completeness"]["ok"] is True
+    assert report["budget_preflight"]["budget_check"] == "PASS"
+    assert report["budget_preflight"]["maximum_permitted_budget_usd"] == 10.0
 
 
 def test_write_artifacts_include_pricing_budget():
@@ -154,7 +159,9 @@ def test_write_artifacts_include_pricing_budget():
     ):
         assert Path(paths[key]).is_file()
     bp = json.loads(Path(paths["budget_preflight_json"]).read_text())
-    assert bp["worst_case_cost_usd"] > 0
-    assert bp["maximum_permitted_budget_usd"] is None
+    assert bp["worst_case_cost_usd"] == pytest.approx(4.403528, abs=1e-6)
+    assert bp["maximum_permitted_budget_usd"] == 10.0
+    assert "[MY_BUDGET]" not in Path(paths["budget_preflight_json"]).read_text()
+    assert "null" not in json.dumps({"maximum_permitted_budget_usd": bp["maximum_permitted_budget_usd"]})
     man = json.loads(Path(paths["target_lock_manifest_json"]).read_text())
     assert man["exact_ids"]["T2"] == "google/gemma-3-27b-it"
