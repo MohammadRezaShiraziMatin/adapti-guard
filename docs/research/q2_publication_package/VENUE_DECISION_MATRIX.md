@@ -1,8 +1,10 @@
 # Venue decision matrix (no selection)
 
-**As of:** 2026-09-18  
+**As of:** 2026-09-17  
 **VENUE_STATUS = NOT_SELECTED**  
-**NETWORK_CALLS=0 this turn.** Deadlines, page limits, and “currently open” flags are **UNVERIFIED**. **Do not invent deadlines. Do not claim a venue is open. Do not rank venues. Do not call any venue “best”.**
+**NETWORK_CALLS=0 this turn.** Deadlines, page limits, submission format, and “currently open” flags are **UNVERIFIED**. **Do not invent deadlines. Do not claim a venue is open. Do not rank venues. Do not call any venue “best”.**
+
+No venue is selected. Fit considerations are recorded by category only. Unresolved metadata: official CFP, dates, page limits, archival status, and author-kit format.
 
 This file compares **realistic venue categories**. It does not convert the manuscript to a venue template. No venue is selected. No acceptance probability is stated.
 
@@ -21,6 +23,7 @@ Pilot-scale risk applies to **every** row: n=16/cell, `scientific_evidence=false
 | Deadline | **UNVERIFIED** |
 | Current status as of 2026-09-18 | **UNVERIFIED** |
 | Submission still open | **UNVERIFIED** — not claimed |
+| Submission format | **UNVERIFIED** |
 | Risk from pilot-scale evidence | Reviewers may still demand bake-offs; `BASELINE_GAP.md` must be in the paper. Page limits may cut INVALID/M3 diagnostics that are scientifically required |
 
 ## Category B — Trustworthy / Safe AI workshop

@@ -2,6 +2,8 @@
 
 All numeric cells are copied from `q2_final_statistics.json`, `p3_q2_live_report.json`, `metrics.json`, `spend.json`, `manifest.json`, or recomputed from `predictions.jsonl` with `count_invalid_tool_arg_events`. **No hand-typed unofficial numbers. API=0.**
 
+**Manuscript table map (`MANUSCRIPT_FINAL.md`):** Table 1 study design · Table 2 target/judge models · Table 3 primary Δ · Table 4 Tool-HASR vs Judge-ASR · Table 5 INVALID diagnostics · Table 6 threats/limitations. Supporting detector-level and reproducibility tables in this file are package appendices, not additional manuscript table numbers.
+
 Rendering: matplotlib was **not** available in this environment; Figure 3–5 are specified and a deterministic script exists (`generate_tables_figures.py`). Do not invent plots.
 
 ## Table 1 — Experimental design
@@ -200,7 +202,7 @@ flowchart TB
   TH --> DELTA["Δ vs D0 at each target"]
 ```
 
-**Figure 3 — Δ Tool-HASR relative to D0 across T0–T3.** Grouped bars D1/D2/D4 × T0–T3 from Table 3. D0 is the reference (Δ=0 by definition; not a bar). Annotate 9/9 sign agreement. No ranking colors/crowns. Do not visually imply statistical significance. Y-axis includes 0 and all observed Δ (range about −0.75 to 0). Caption: *pilot-scale; n=16/cell; scientific_evidence=false; not a ranking; detector-related Δ, not causal proof.* SHA-256 `cc8ee54afa73af8d0d6ca6025fe9e403d13e335cd2dd9478f2fb00dbbd124a0a`. Script: `render_figures_offline.py`.
+**Figure 3 — Δ Tool-HASR relative to D0 across T0–T3.** Grouped bars D1/D2/D4 × T0–T3 from Table 3. D0 is the reference (Δ=0 by definition; not a bar). Annotate 9/9 sign agreement. No ranking colors/crowns. Do not visually imply statistical significance. Y-axis includes 0 and all observed Δ (range about −0.75 to 0). Caption: *Δ is relative to D0; pilot-scale directional consistency; n=16/cell; not a ranking; detector-related association under locked PHASE1-CORE.* SHA-256 `cc8ee54afa73af8d0d6ca6025fe9e403d13e335cd2dd9478f2fb00dbbd124a0a`. Script: `render_figures_offline.py`.
 
 Plotted values (source Table 3):
 
@@ -210,11 +212,11 @@ Plotted values (source Table 3):
 | D2 | −0.25 | −0.3125 | −0.25 | −0.1875 |
 | D4 | −0.5625 | −0.625 | −0.5625 | −0.5 |
 
-**Figure 4 — Tool-HASR versus Judge-ASR with M3/M4 diagnostic interpretation.** Per-target pooled rates from Table 4 plus M3/M4 counts. Tool-HASR = harmful tool execution; Judge-ASR = judge-classified attack success. Related but non-identical. Do not treat Judge-ASR as invalid. Caption: *secondary diagnostic; disagreement is information; not a ranking.* SHA-256 `747f1b807fd18d2cf9c44a717363ff44b4e9c6ab36eb31b1d0dac0ffa1445304`.
+**Figure 4 — Tool-HASR versus Judge-ASR with M3/M4 diagnostic interpretation.** Per-target pooled rates from Table 4 plus M3/M4 counts. Tool-HASR = harmful tool execution; Judge-ASR = judge-classified attack success. Related but non-identical. Do not treat Judge-ASR as invalid. Caption: *related but non-identical measurements; neither metric declared invalid; n=16/cell; not a ranking.* SHA-256 `747f1b807fd18d2cf9c44a717363ff44b4e9c6ab36eb31b1d0dac0ffa1445304`.
 
 Pooled attack rates (16×4=64 arms/target): compute from Table 4 sums — T0 Tool-HASR (13+2+9+4)/64=28/64; Judge (12+14+15+14)/64=55/64; T1 (14+2+9+4)/64=29/64 vs (15+16+16+15)/64=62/64; T2 (13+2+9+4)/64=28/64 vs 62/64; T3 (11+2+8+3)/64=24/64 vs 62/64. M3/M4 as Table 4.
 
-**Figure 5 — INVALID_TOOL_ARGS diagnostic.** T1–T3 deduped events vs arms-with-INVALID from Table 5. Caption: S0 primary denominator unchanged; INVALID is frequent, not silently discarded, not treated as harmless, not Tool-HASR success; S2 9/9 does not prove negligibility. Not a ranking. SHA-256 `f737805f97fab25bbb302bbeccdf37f731e753c7cba554232c7da104bfb1f21a`.
+**Figure 5 — INVALID_TOOL_ARGS diagnostic.** T1–T3 deduped events vs arms-with-INVALID from Table 5. Caption: INVALID_TOOL_ARGS is a diagnostic execution-state category; S0 primary denominator unchanged; frequent (192/136); not silently discarded; not Tool-HASR success; S2 9/9 does not prove negligibility. Not a ranking. SHA-256 `f737805f97fab25bbb302bbeccdf37f731e753c7cba554232c7da104bfb1f21a`.
 
 | Target | Deduped events | Arms ≥1 |
 | --- | ---: | ---: |

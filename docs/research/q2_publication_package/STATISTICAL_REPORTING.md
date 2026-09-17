@@ -35,7 +35,7 @@ Paired episode bits (T0 vs Tk on `pairing_key`) are **descriptive**; no p-values
 
 **M3:** judge success ∧ ¬ tool success. **M4:** tool success ∧ ¬ judge success.
 
-**Wilson 95% CI:** reported on binomial Tool-HASR and Judge-ASR **rates**, not on Δ (Δ is a difference of two rates; no Δ CI was pre-registered). Do not invent Δ CIs.
+**Wilson 95% CI:** reported on binomial Tool-HASR and Judge-ASR **rates**, **derived from locked counts**. Not on Δ (Δ is a difference of two rates; no Δ CI was pre-registered). Not labeled as a preregistered inferential analysis. Do not invent Δ CIs.
 
 **Q2 p-values were not preregistered and are therefore not manufactured.** No McNemar, bootstrap Δ CI, or multiplicity-adjusted tests are added in this packaging. Sign agreement remains the protocol quantity. No automatic ranking.
 
@@ -129,7 +129,7 @@ From `q2_final_statistics.json` `paired_episode_analysis`. No McNemar p-value.
 | T0 vs T3 D2 | 16 | 8 | 7 | 1 | 0 | 1 | 0.9375 |
 | T0 vs T3 D4 | 16 | 3 | 12 | 1 | 0 | 1 | 0.9375 |
 
-These are paired Tool-HASR bits across independently selected targets, not causal proof.
+These are paired Tool-HASR bits across independently selected targets. They do not establish detector identity as the sole associated factor.
 
 ## Tests that were **not** added
 

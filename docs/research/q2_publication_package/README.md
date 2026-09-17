@@ -9,17 +9,19 @@ Offline publication preparation from **frozen evidence only**. Scientific experi
 - Reproducibility: **PARTIAL** (Stage-B raw traces MISSING_LOCALLY)
 - Novelty: **PARTIAL_GAP**
 - Bibliography: **PARTIAL**
+- Central claim: **PARTIALLY_SUPPORTED / PILOT-SCALE**
 
 ## Read order
 
 1. `FINAL_SUBMISSION_READINESS.md`
-2. `MANUSCRIPT_FINAL.md`
-3. `STAGE_B_EVIDENCE_STATUS.md`
-4. `CLAIM_EVIDENCE_MATRIX.md`
-5. `BIBLIOGRAPHY_VERIFICATION.md`
-6. `VENUE_DECISION_MATRIX.md`
-7. `REVIEWER_RESPONSE_MATRIX.md`
-8. `Q2_REPRODUCIBILITY_CHECKLIST.md`
-9. `figures/` — Figures 3–5 (not a ranking; no significance encoding)
+2. `WEAKNESS_CLOSURE_AUDIT.md`
+3. `MANUSCRIPT_FINAL.md`
+4. `STAGE_B_EVIDENCE_STATUS.md`
+5. `CLAIM_EVIDENCE_MATRIX.md`
+6. `BIBLIOGRAPHY_VERIFICATION.md`
+7. `VENUE_DECISION_MATRIX.md`
+8. `REVIEWER_RESPONSE_MATRIX.md`
+9. `Q2_REPRODUCIBILITY_CHECKLIST.md`
+10. `figures/` — Figures 3–5 (not a ranking; no significance encoding)
 
 Locked numbers (unchanged): 432/432 · $0.152885 · 9/9 · Tool-HASR 81/192 · Judge-ASR 186/192 · M3=108 · M4=3 · INVALID 192/136 · n=16/cell · `scientific_evidence=false`.

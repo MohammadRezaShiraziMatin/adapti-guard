@@ -2,67 +2,65 @@
 
 **Not an official review. No scores. No new experiments.**  
 Manuscript under review: `MANUSCRIPT_FINAL.md`.  
-Separate **required for submission** from **future-study recommendations**.
+Response class is **DOCUMENTATION_FIX** or **FUTURE_STUDY**. A new experiment is not automatically justified.
 
-## Reviewer 1 — methodology / experimental design
+## Reviewer A — Security
 
-**Likely criticism.** n=16/cell and four models cannot support a general claim; T0 reuse plus missing Stage-B traces weakens the reference arm; factorial is still one policy.
+**Likely criticism.** No CaMeL / AgentDojo / ASB / Llama Guard / PromptShield numbers; INVALID may drive Tool-HASR; Qwen-heavy set; open adaptive attacker missing; paper sounds like a defense system.
 
-**Does the manuscript answer it?** Yes, as scope. Research Question and Experimental Protocol state `scientific_evidence=false`, n=16, PHASE1-CORE-only Q2 live. Limitations Table 7 items 1–3, 9, 15. Reproducibility states PARTIAL.
+**Evidence-based answer.** The research question is controlled detector-related attribution, not comparative ranking of defenses. External baselines are outside the current primary claim (methodological scope). INVALID_TOOL_ARGS is a canonical execution-state category (192 events / 136 arms), retained in S0, not treated as attack success/failure/harmlessness/detector failure, and not claimed to explain all metric disagreement. Target set is four models, three Qwen-family; model-family diversity is limited. C4 / open-ended adaptive attackers are out of scope.
 
-**Exact sections.** §2 Research Question; §6 Experimental Protocol (Tables 1–2); §10 Limitations; §11 Reproducibility.
+**Manuscript section.** Abstract; §6 Related Work; §10 Diagnostic Analysis; §11 Discussion; §12 Limitations (Table 6 items 4–8, 10–11).
 
-**Remaining unresolved.** Stage-B raw traces MISSING_LOCALLY. Independent T0 INVALID recompute is impossible on this checkout.
+**Unresolved limitation.** No matched external baseline exists. INVALID remains a confounder. Adaptive-attacker robustness is not established.
 
-**Required for submission.** Keep pilot framing; document Stage-B hole in the PDF (already in §6 and §10).  
-**Future study.** Larger n; re-run or package T0 traces; optional policy factor — new experiment.
+**New experiment necessary?** No, not to finish this package. **DOCUMENTATION_FIX** for scope sentences. **FUTURE_STUDY** for matched live baselines or C4.
 
-## Reviewer 2 — security / agent robustness
+## Reviewer B — ML / Statistics
 
-**Likely criticism.** No CaMeL / AgentDojo / ASB / Llama Guard / PromptShield / IsolateGPT / Task Shield numbers; INVALID may drive Tool-HASR; Qwen-heavy set; open adaptive attacker missing.
+**Likely criticism.** n=16/cell cannot support a general claim; 9/9 without a p-value; Wilson CIs wide; T2 exact Δ match to T0 looks over-interpreted; dual endpoints without a reconciliation test.
 
-**Does the manuscript answer it?** Yes, as an attribution study not a leaderboard (§4, §9). INVALID treated as a confounder, not discarded, not claimed negligible (§3, §8.2, Table 6). C4 out of scope (§10). Task Shield is explicitly not a verified citation and not compared.
+**Evidence-based answer.** n=16 per cell is stated as pilot-scale with limited precision and limited power. Directional consistency is an observed property of this evaluation; it does not establish population-level generalization. Inferential p-values were not preregistered and are not reported. Wilson 95% CIs are on rates, derived from locked counts, not on Δ. T2=T0 Δ is labeled n=16 coincidence. Tool-HASR vs Judge-ASR is diagnostic, not a significance contest. Paired discordants are descriptive.
 
-**Exact sections.** §4 Related Work; §8 Diagnostic Analysis; §9 Discussion; §10 Limitations items 7–12.
+**Manuscript section.** Abstract; §4 Research Question; §8 statistics paragraph; §9 Table 3 and Figure 3 caption; §10.1; `STATISTICAL_REPORTING.md`.
 
-**Remaining unresolved.** No matched external baseline exists. That is a documented scope boundary, not a hidden weakness.
+**Unresolved limitation.** No preregistered inferential test for Q2 exists. Manufacturing one would be a claims error. Power remains limited.
 
-**Required for submission.** Keep the scope sentence in abstract and discussion.  
-**Future study.** Matched live baseline experiment if a comparative-defense claim is later desired.
+**New experiment necessary?** No, not to report this pilot honestly. **DOCUMENTATION_FIX** for n=16 / derived-CI labeling. **FUTURE_STUDY** for a preregistered powered confirmatory analysis on a new freeze.
 
-## Reviewer 3 — ML / statistics
+## Reviewer C — Agent Evaluation
 
-**Likely criticism.** 9/9 without a p-value; Wilson CIs wide; T2 exact Δ match to T0 looks over-interpreted; dual endpoints without a reconciliation test.
+**Likely criticism.** T0 reuse plus missing Stage-B traces weakens the reference arm; Tool-HASR vs Judge-ASR (81/192 vs 186/192) looks like a broken metric; INVALID 192/136 looks like a failed harness; mock tools / short horizon; judge also Qwen.
 
-**Does the manuscript answer it?** Yes. §2 states p-values were not preregistered and are not reported. McNemar is not reported. Wilson CIs are on rates only. T2=T0 Δ is labeled n=16 coincidence. Tool-HASR vs Judge-ASR is diagnostic, not a significance contest. Paired discordants are descriptive.
+**Evidence-based answer.** Official Stage-B reported T0 PHASE1-CORE is reused from the Q2 live report. Local Stage-B `predictions.jsonl` is `MISSING_LOCALLY`. The manuscript distinguishes official reported result from locally reproducible raw-trace availability and does not present T0 as independently recomputed. Tool-HASR and Judge-ASR are distinct measurements; M3=108, M4=3; possible disagreement sources are listed conservatively. INVALID is retained, not discarded. Pack/horizon/judge constraints are limitations.
 
-**Exact sections.** §2; §6 statistics paragraph; §7 Table 3–4 and Figure 3 caption; §8.1; `STATISTICAL_REPORTING.md`.
+**Manuscript section.** §8 Stage-B paragraph; §10; Table 5; Table 6 items 8–9, 12–15; `STAGE_B_EVIDENCE_STATUS.md`.
 
-**Remaining unresolved.** No preregistered inferential test for Q2 exists. Manufacturing one would be a claims error.
+**Unresolved limitation.** Stage-B raw traces remain missing locally. Independent T0 INVALID recompute is impossible on this checkout. Metric disagreement is observed, not causally explained.
 
-**Required for submission.** Do not add post-hoc p-values.  
-**Future study.** Pre-register a powered confirmatory analysis on a new freeze.
+**New experiment necessary?** No, not if the hole is disclosed. **DOCUMENTATION_FIX** for official vs local distinction. **FUTURE_STUDY** to package original Stage-B bytes (read-only) or re-run T0 under rule 6.
 
-## Reviewer 4 — novelty / related work
+## Reviewer D — Novelty / Related Work
 
-**Likely criticism.** AgentDojo, ASB, CaMeL, IsolateGPT, instruction hierarchy, and InjecAgent already exist; factorial may overlap; bibliography venues incomplete.
+**Likely criticism.** AgentDojo, ASB, CaMeL, IsolateGPT, instruction hierarchy, and InjecAgent already exist; factorial may overlap; bibliography venues incomplete; “first protocol” claim.
 
-**Does the manuscript answer it?** Partially. §4 distinguishes those verified papers, keeps PARTIAL_GAP, does not claim novel detector families, does not claim full-text exclusion, does not add Task Shield as a fabricated record. Bibliography status is PARTIAL and disclosed.
+**Evidence-based answer.** Novelty class remains **PARTIAL_GAP**. The paper is not a new detector family and not a defense covering all threat models. Existing literature is separated from this paper’s controlled attribution protocol. Full-text novelty exclusion is not claimed. 21/21 identities are verified; most venue/DOI remain UNVERIFIED; AgentDojo/BIPIA venue/DOI are operator-supplied and not re-fetched. Names not in the matrix are not invented as citations.
 
-**Exact sections.** §4 Related Work; §12 Conclusion; `NOVELTY_AUDIT.md`; `BIBLIOGRAPHY_VERIFICATION.md`.
+**Manuscript section.** §6 Related Work; §14 Conclusion; `NOVELTY_AUDIT.md`; `BIBLIOGRAPHY_VERIFICATION.md`.
 
-**Remaining unresolved.** Camera-ready venue/DOI for 19/21 records; operator-supplied AgentDojo/BIPIA not publisher-rechecked; full texts not end-to-end audited.
+**Unresolved limitation.** Camera-ready venue/DOI for 19/21 records; operator-supplied AgentDojo/BIPIA not publisher-rechecked; full texts not end-to-end audited.
 
-**Required for submission.** Human venue/DOI verification from official pages.  
-**Future study.** Full-text overlap audit if authors later want to shrink PARTIAL_GAP — still not a “first” claim.
+**New experiment necessary?** No. **DOCUMENTATION_FIX** for PARTIAL_GAP and bibliography honesty. **FUTURE_STUDY** for human venue/DOI verification from official pages (network allowed only under a later authorized bibliography pass) and optional full-text overlap audit.
 
 ## Cross-review
 
-| Theme | Required for submission? | Future study? |
+| Theme | Class | New experiment required to finish this package? |
 | --- | --- | --- |
-| n=16 / scientific_evidence=false | Keep honest framing | Larger n |
-| No external baseline | Keep attribution scope | Matched live comparison |
-| Stage-B traces missing | Disclose; do not fabricate | Package original bytes |
-| No Q2 p-values | Do not manufacture | New preregistered confirmatory study |
-| PARTIAL bibliography | Verify venues before camera-ready | — |
-| INVALID / metric disagreement | Already in diagnostics | — |
+| n=16 / pilot-scale / not confirmatory | DOCUMENTATION_FIX | No |
+| No external baseline | DOCUMENTATION_FIX (scope) | No; FUTURE_STUDY only if a ranking claim is later desired |
+| Stage-B traces missing | DOCUMENTATION_FIX (disclose) | No; FUTURE_STUDY to package bytes |
+| No Q2 p-values | DOCUMENTATION_FIX (do not manufacture) | No |
+| PARTIAL bibliography | DOCUMENTATION_FIX | No for this package; required before camera-ready |
+| INVALID / metric disagreement | DOCUMENTATION_FIX | No |
+| D3 / C4 / more families | FUTURE_STUDY | Yes only if those claims are later desired |
+| PARTIAL_GAP | DOCUMENTATION_FIX | No |

@@ -1,43 +1,52 @@
-# Bibliography verification (hardening pass)
+# Bibliography verification
 
-**API_CALLS=0. LLM_CALLS=0. NETWORK_CALLS=0.**  
-This turn did **not** re-fetch publisher or arXiv pages. Classification uses existing package Hub records plus operator-supplied venue/DOI named in the hardening brief.
+**API_CALLS=0. LLM_CALLS=0. NETWORK_CALLS=0.** No publisher/arXiv re-fetch this turn.
 
 **Overall:** `BIBLIOGRAPHY_STATUS = PARTIAL`
 
-| Field | Status |
+Do **not** claim 21/21 fully publication-verified. 21/21 identities are verified from existing package Hub records. Venues/DOIs are UNVERIFIED except two operator-supplied records that were not re-checked from publisher pages.
+
+| citation key | title | authors | year | arXiv | DOI | venue | venue verification | DOI verification | source verification | notes |
+| --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- |
+| `perez_ribeiro_2022` | Ignore Previous Prompt: Attack Techniques For Language Models | Fábio Perez, Ian Ribeiro | 2022 | `2211.09527` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `greshake_ipi_2023` | Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection | Kai Greshake, Sahar Abdelnabi, Shailesh Mishra, Christoph Endres et al. | 2023 | `2302.12173` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `liu_houyi_2023` | Prompt Injection attack against LLM-integrated Applications | Yi Liu, Gelei Deng, Yuekang Li, Kailong Wang et al. | 2023 | `2306.05499` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `liu_formalize_2023` | Prompt Injection Attacks and Defenses in LLM-Integrated Applications | Yupei Liu, Yuqi Jia, Runpeng Geng, Jinyuan Jia et al. | 2023 | `2310.12815` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `toyer_tensortrust_2023` | Tensor Trust: Interpretable Prompt Injection Attacks from an Online Game | Sam Toyer, Olivia Watkins, Ethan Adrian Mendes, Justin Svegliato et al. | 2023 | `2311.01011` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `yi_bipia_2023` | Benchmarking and Defending Against Indirect Prompt Injection Attacks on Large Language Models | Jingwei Yi, Yueqi Xie, Bin Zhu, Emre Kiciman et al. | 2023 | `2312.14197` | 10.1145/3690624.3709179 | KDD 2025 | OPERATOR_SUPPLIED_NOT_RECHECKED | OPERATOR_SUPPLIED_NOT_RECHECKED | IDENTITY_VERIFIED / VENUE_OPERATOR_SUPPLIED | Identity VERIFIED. Venue/DOI operator-supplied (KDD 2025 / 10.1145/3690624.3709179), not re-checked. Not a Q2 numerical baseline. |
+| `zhan_injecagent_2024` | InjecAgent: Benchmarking Indirect Prompt Injections in Tool-Integrated Large Language Model Agents | Qiusi Zhan, Zhixiang Liang, Zifan Ying, Daniel Kang | 2024 | `2403.02691` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `debenedetti_agentdojo_2024` | AgentDojo: A Dynamic Environment to Evaluate Attacks and Defenses for LLM Agents | Edoardo Debenedetti, Jie Zhang, Mislav Balunović, Luca Beurer-Kellner et al. | 2024 | `2406.13352` | 10.52202/079017-2636 | NeurIPS 2024 | OPERATOR_SUPPLIED_NOT_RECHECKED | OPERATOR_SUPPLIED_NOT_RECHECKED | IDENTITY_VERIFIED / VENUE_OPERATOR_SUPPLIED | Identity VERIFIED. Venue/DOI operator-supplied (NeurIPS 2024 / 10.52202/079017-2636), not re-checked. Not a Q2 numerical baseline. |
+| `ruan_toolemu_2023` | Identifying the Risks of LM Agents with an LM-Emulated Sandbox | Yangjun Ruan, Honghua Dong, Andrew Wang, Silviu Pitis et al. | 2023 | `2309.15817` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `andriushchenko_agentharm_2024` | AgentHarm: A Benchmark for Measuring Harmfulness of LLM Agents | Maksym Andriushchenko, Alexandra Souly, Mateusz Dziemian, Derek Duenas et al. | 2024 | `2410.09024` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `zhang_asb_2024` | Agent Security Bench (ASB): Formalizing and Benchmarking Attacks and Defenses in LLM-based Agents | Hanrong Zhang, Jingyuan Huang, Kai Mei, Yifei Yao et al. | 2024 | `2410.02644` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | Identity VERIFIED (not UNCERTAIN). Venue UNVERIFIED. Not a Q2 factorial or numerical baseline. |
+| `inan_llamaguard_2023` | Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations | Hakan Inan, Kartikeya Upasani, Jianfeng Chi, Rashi Rungta et al. | 2023 | `2312.06674` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `rebedea_nemo_2023` | NeMo Guardrails: A Toolkit for Controllable and Safe LLM Applications with Programmable Rails | Traian Rebedea, Razvan Dinu, Makesh Sreedhar, Christopher Parisien et al. | 2023 | `2310.10501` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `wallace_instruction_hierarchy_2024` | The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions | Eric Wallace, Kai Xiao, Reimar Leike, Lilian Weng et al. | 2024 | `2404.13208` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `chen_struq_2024` | StruQ: Defending Against Prompt Injection with Structured Queries | Sizhe Chen, Julien Piet, Chawin Sitawarin, David Wagner | 2024 | `2402.06363` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `hines_spotlighting_2024` | Defending Against Indirect Prompt Injection Attacks With Spotlighting | Keegan Hines, Gary Lopez, Matthew Hall, Federico Zarfati et al. | 2024 | `2403.14720` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `wu_isolategpt_2024` | IsolateGPT: An Execution Isolation Architecture for LLM-Based Agentic Systems | Yuhao Wu, Franziska Roesner, Tadayoshi Kohno, Ning Zhang et al. | 2024 | `2403.04960` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `debenedetti_camel_2025` | Defeating Prompt Injections by Design | Edoardo Debenedetti, Ilia Shumailov, Tianqi Fan, Jamie Hayes et al. | 2025 | `2503.18813` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | Identity VERIFIED. Published architectural isolation paper, not an unverified idea. Venue UNVERIFIED. Not a Q2 factorial or numerical baseline. |
+| `zhu_melon_2025` | MELON: Provable Defense Against Indirect Prompt Injection Attacks in AI Agents | Kaijie Zhu, Xianjun Yang, Jindong Wang, Wenbo Guo et al. | 2025 | `2502.05174` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `jacob_promptshield_2025` | PromptShield: Deployable Detection for Prompt Injection Attacks | Dennis Jacob, Hend Alzahrani, Zhanhao Hu, Basel Alomair et al. | 2025 | `2501.15145` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+| `chen_meta_secalign_2025` | Meta SecAlign: A Secure Foundation LLM Against Prompt Injection Attacks | Sizhe Chen, Arman Zharmagambetov, David Wagner, Chuan Guo | 2025 | `2507.02735` | UNVERIFIED | UNVERIFIED | VENUE_UNVERIFIED | DOI_UNVERIFIED | IDENTITY_VERIFIED / VENUE_UNVERIFIED | arXiv preprint identity from package Hub metadata. Do not convert to a conference paper without evidence. |
+
+## Names inspected, not in the verified 21-record matrix
+
+These names were requested for attention. They are **not** in `RELATED_WORK_MATRIX.json`. They are **not** added as citations. Metadata is **NOT_IN_PACKAGE / NOT_INVENTED**.
+
+| Name | Status |
 | --- | --- |
-| title / authors / year / arXiv id | **VERIFIED** (21/21, existing package Hub records) |
-| venue / DOI (most records) | **UNVERIFIED** |
-| AgentDojo venue/DOI | NeurIPS 2024 / `10.52202/079017-2636` — **OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN** |
-| BIPIA venue/DOI | KDD 2025 / `10.1145/3690624.3709179` — **OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN** |
-| manuscript arXiv set vs matrix | **MATCH** (21 ids) |
-| Task Shield `2412.16682` | **Not in verified matrix; not added as a reference.** Noted in `MANUSCRIPT_FINAL.md` §4 only as a named class this study does not implement or compare. Identity/venue/DOI **UNVERIFIED** in-package. |
-| AgentDojo / ASB identity | **VERIFIED** (not UNCERTAIN) |
-| CaMeL | **VERIFIED paper identity**; published architectural isolation; not an unverified idea |
+| Task Shield (arXiv:2412.16682) | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| Adaptive Attacks (unnamed) | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| AutoDojo | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| SCOUT | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| AgentAntibody | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| HARD | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| ARGUS | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| VIGIL | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| AttriGuard | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| MCP-SafetyBench | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
+| Runtime Policy Enforcement for MCP Agents | NOT_IN_PACKAGE_BIBLIOGRAPHY; not cited; no venue/DOI invented |
 
-No metadata was invented. Venues were not guessed beyond the two operator-supplied records.
+**NOVELTY_CLASS = PARTIAL_GAP** remains. Full-text novelty exclusion is not claimed.
 
-## Per-record overall class
-
-All 21 records: identity **VERIFIED**, overall **PARTIALLY_VERIFIED** (venue/DOI incomplete or operator-supplied without publisher re-fetch). None **UNVERIFIED** as papers. None upgraded to camera-ready **VERIFIED** bibliography.
-
-## Novelty positioning preserved
-
-**PARTIAL_GAP.** Residual sentence:
-
-> The verified literature establishes extensive work on attacks, benchmarks, defenses, and adaptive evaluation, but does not establish the exact locked-policy detector-attribution factorial used here as the central measurement protocol.
-
-| Paper | arXiv | Positioning vs Q2 |
-| --- | --- | --- |
-| Greshake et al. | `2302.12173` | IPI threat literature; identity VERIFIED |
-| AgentDojo | `2406.13352` | Dynamic agent eval; identity VERIFIED; venue operator-supplied; not Q2 factorial; not a numerical baseline |
-| ASB | `2410.02644` | Agent security bench; identity VERIFIED; not UNCERTAIN; not Q2 factorial; not a numerical baseline |
-| CaMeL | `2503.18813` | Published control/data isolation; not an unverified idea; not Q2 factorial |
-| InjecAgent | `2403.02691` | Tool-integrated IPI benchmark |
-| AgentHarm | `2410.09024` | Harmfulness/jailbreak; not detector isolation |
-| IsolateGPT | `2403.04960` | Execution isolation architecture |
-| BIPIA | `2312.14197` | IPI benchmark/defense; KDD 2025 operator-supplied |
-| Instruction Hierarchy | `2404.13208` | Privileged-instruction training; changes the target |
-
-Machine-readable: `BIBLIOGRAPHY_VERIFICATION.json`.

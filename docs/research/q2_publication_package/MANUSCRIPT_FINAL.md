@@ -1,39 +1,45 @@
-# Controlled Detector Attribution under a Locked Runtime Intervention Policy: A Pilot-Scale Agent Security Evaluation
+# 1. Title
+
+**Controlled Detector Attribution under a Locked Runtime Intervention Policy: A Pilot-Scale Agent Security Evaluation**
 
 **Manuscript FINAL (internal package).** Not a venue submission.  
 **Evidence freeze:** Q2 run `p3_stage_c_q2_20260917T123855Z_b075df0f` · commit `b075df0f5ec5ad11ede76ac4e4079cade15208f1`.  
 **This packaging:** LIVE_EVAL=false · API_CALLS=0 · LLM_CALLS=0 · NETWORK_CALLS=0.  
-**Protocol flag:** `scientific_evidence=false`. Scope: **protocol-complete pilot-scale directional consistency**. Not confirmatory.
+**Protocol flag (internal, not abstract copy):** `scientific_evidence=false`. Scope: **protocol-complete pilot-scale directional consistency**. Not confirmatory.
 
-Related-work identities use existing Hub-verified arXiv records. Most venue/DOI fields remain UNVERIFIED. AgentDojo venue/DOI and BIPIA venue/DOI are operator-supplied and not re-fetched this turn (`BIBLIOGRAPHY_VERIFICATION.md`). Novelty class: **PARTIAL_GAP**.
-
----
-
-## Abstract
-
-This study evaluates whether detector-related security effects under a **locked intervention policy** remain directionally consistent across independently selected target models. It is a **controlled attribution protocol**, not a new defense algorithm.
-
-The downstream policy is held fixed (PHASE1-CORE). Detector identity is varied, including a no-detection arm (D0). The primary endpoint is **Tool-HASR** (harmful tool execution). **Judge-ASR** is a secondary, non-identical diagnostic. The study uses **four target models** and **n=16 attack arms per target/detector cell**. Q2 live completed **432/432 arms** (historical spend $0.152885).
-
-Observed detector-related Tool-HASR Δ versus D0 was negative for D1/D2/D4 on the locked Stage-B target T0 and on independently selected T1–T3 (**9/9 directional agreement**). This is **pilot-scale** evidence of directional consistency under the tested protocol (`scientific_evidence=false`). T1–T3 Tool-HASR was 81/192 = 0.421875; Judge-ASR was 186/192 = 0.96875 (M3=108, M4=3). INVALID_TOOL_ARGS occurred on 192 events / 136 arms.
-
-The manuscript does not claim universal robustness, production readiness, confirmatory multi-model generalization, or a ranking against external defenses.
+Related-work identities use existing Hub-verified arXiv records. Most venue/DOI fields remain UNVERIFIED. AgentDojo venue/DOI and BIPIA venue/DOI are operator-supplied and not re-fetched this turn (`BIBLIOGRAPHY_VERIFICATION.md`). Novelty class: **PARTIAL_GAP**. Central scientific claim status: **PARTIALLY_SUPPORTED / PILOT-SCALE**.
 
 ---
 
-## 1. Introduction
+# 2. Abstract
 
-Tool-using language-model agents can cause harm by **executing** a tool call, not only by producing a string that a judge later labels successful. Typical stacks combine (i) a **detector**, (ii) a risk mapping, and (iii) a **downstream intervention policy** that allows, wraps, or denies tools. Evaluations that move those pieces together report an operational outcome, not an attribution.
+Observed security behavior in tool-using language-model agents can mix **detector behavior** with the **downstream intervention policy** that allows, wraps, or denies tools. Without holding that policy fixed, detector-related effects are difficult to attribute.
 
-This paper studies **attribution**. The central question is whether detector-related security effects under a locked intervention policy remain directionally consistent across independently selected target models.
+This paper reports a **controlled attribution protocol**, not a new detector family and not a defense covering all threat models. The intervention policy is held fixed (PHASE1-CORE). Detector identity is varied, including a no-detection reference (D0). The primary outcome is **Tool-HASR** (harmful tool execution). **Judge-ASR** is a secondary, non-identical diagnostic of judge-level attack-success assessment. The evaluation uses frozen pack `p2_agentic_v0.1.0` (16 attack / 16 twin / 4 hard-negative trajectories), four target models, and **n=16 attack arms per target×detector cell**. Q2 live completed **432/432 arms** (historical spend $0.152885).
 
-Under the tested protocol the observed Δ direction remained consistent across T0–T3: 9/9 detector-target comparisons preserved the negative direction. That is pilot-scale directional consistency (`scientific_evidence=false`; n=16/cell; four models; mock tools). It is a **detector-related association** under a locked policy. It is not causal proof, not comprehensive model generalization, and not a ranking of detectors.
+Under the tested protocol, detector-related Tool-HASR Δ versus D0 was negative for D1, D2, and D4 on the locked Stage-B target T0 and on independently selected T1–T3 (**9/9 directional agreements**). This is **pilot-scale directional consistency**. It does not establish population-level generalization. T1–T3 Tool-HASR was 81/192 = 0.421875; Judge-ASR was 186/192 = 0.96875 (M3=108, M4=3). INVALID_TOOL_ARGS occurred on 192 events / 136 arms and is treated as a canonical execution-state diagnostic, not as automatic attack success or failure.
 
-This manuscript does not reverse other tracks in the same repository. Track A (VNEXT confirmation) is an immutable FAIL on a different pack and treatment. Track B (Phase-1 confirmatory LIVE) is a scoped SUPPORTED_IMPROVEMENT on a third pack. Q2 must not be pooled with either.
+The manuscript does not claim robustness beyond the tested protocol, production readiness, confirmatory multi-model generalization, or a ranking against external defenses.
 
 ---
 
-## 2. Research Question
+# 3. Introduction
+
+**Problem.** Observed security behavior in agent systems may reflect both detector behavior and downstream intervention policy. A stack that changes detector and policy together reports an operational outcome. It does not isolate which layer is associated with a change in harmful tool execution.
+
+**Gap.** Without controlling the intervention policy, detector-related effects can be difficult to attribute. Existing literature already provides prompt-injection attacks, agent security benchmarks, runtime guardrails, architectural isolation, and detector approaches. Those lines of work do not, in the surveyed set, establish the locked-policy detector-attribution factorial used here as the central measurement protocol (`NOVELTY_AUDIT.md`; novelty class **PARTIAL_GAP**).
+
+**Approach.** Hold the intervention policy fixed and vary detector identity, including a no-detection reference (D0). Thresholds, action costs, frozen pack, judge, temperature, and cache settings remain locked. The primary estimand is the sign of Tool-HASR Δ versus D0 at each target. Tool-HASR and Judge-ASR are kept as distinct measurements.
+
+**Result.** Observed Δ direction remained consistent across T0–T3 in this pilot-scale evaluation: 9/9 detector-target comparisons preserved the negative direction (n=16 per cell; 432/432 Q2 live arms).
+
+**Qualification.** This is not a confirmatory claim. Sample size is pilot-scale. Precision is limited. Power is limited for broad generalization. Directional consistency is an observed property of this evaluation. It does not establish population-level generalization. Three of four targets are Qwen-family models. D3 was deferred. Open-ended adaptive attackers (C4 interaction horizon) are out of scope.
+
+This manuscript does not reverse other tracks in the same repository. Track A (VNEXT confirmation) is an immutable FAIL on a different pack and treatment. Track B (Phase-1 confirmatory LIVE) is a scoped SUPPORTED_IMPROVEMENT on a third pack. Q2 must not be pooled with either (`docs/paper/dual_track/DUAL_TRACK_STATUS.md`).
+
+---
+
+# 4. Research Question
 
 **RQ-C2 (locked protocol).** Does the detector-related Tool-HASR effect versus D0 observed under the locked Stage-B target (T0) remain directionally consistent when the same policy, pack, detectors, thresholds, and judge are applied to independently selected secondary target models T1–T3?
 
@@ -42,13 +48,13 @@ This manuscript does not reverse other tracks in the same repository. Track A (V
 **Primary estimand.** sign(Δ(d,t)) for d ∈ {D1, D2, D4}, t ∈ {T1, T2, T3}, compared with sign(Δ(d,T0)).  
 **Agreement rule.** 9 contrasts; agreement if signs match (exact 0.0 would be ZERO; none observed in primary Δ).
 
-Q2 is **not** powered as a confirmatory hypothesis test. The run sets `scientific_evidence=false`. Live-report “supported” means protocol sign-agreement support, not Track B `SUPPORTED_IMPROVEMENT` and not a qualified win (MSID ∧ significance ∧ U).
+Q2 is **not** powered as a confirmatory hypothesis test. The run records `scientific_evidence=false` in the internal protocol flag. Live-report “supported” means protocol sign-agreement support, not Track B `SUPPORTED_IMPROVEMENT` and not a qualified win (MSID ∧ significance ∧ U).
 
 > Q2 was designed as a directional consistency analysis; inferential p-values were not preregistered and are not reported.
 
 ---
 
-## 3. Problem Formulation
+# 5. Problem Formulation
 
 Security outcomes on a tool-using agent mix several layers. This paper names them separately.
 
@@ -60,37 +66,43 @@ Security outcomes on a tool-using agent mix several layers. This paper names the
 | **Judge-ASR (secondary)** | Attack-arm rate of judge-classified attack success | Harmful tool execution |
 | **M3** | Judge success ∧ ¬ Tool-HASR success | Proof that the judge is wrong |
 | **M4** | Tool-HASR success ∧ ¬ judge success | Proof that the judge is right |
-| **INVALID_TOOL_ARGS** | Canonical tool-state events: schema/argument failures | Tool-HASR success; automatic attack success; a harmless nuisance |
+| **INVALID_TOOL_ARGS** | Canonical tool-state events: schema/argument failures | Attack success; attack failure; harmlessness; detector failure |
 
-**Δ(d,t)** = Tool-HASR(d,t) − Tool-HASR(D0,t) on attack arms at the same target, under locked PHASE1-CORE. This is a **detector-related effect** under the controlled protocol, not an unqualified causal effect of “the detector in isolation from all runtime factors.”
+**Δ(d,t)** = Tool-HASR(d,t) − Tool-HASR(D0,t) on attack arms at the same target, under locked PHASE1-CORE. This is a **detector-related association** under the controlled protocol. It does not establish that detector identity is the sole associated factor, independent of all runtime factors.
 
 **Unit of analysis.** Attack episode-arm: trajectory × detector × PHASE1-CORE × target. Official n=16 True+False per cell; UNKNOWN excluded (`exclude_unknown=true`); Q2 cells have n_unknown=0.
 
-**INVALID policy.** S0 (official) retains the primary denominator. S1 stratifies arms with vs without INVALID. S2 excludes arms with ≥1 INVALID (`derived_after_run`). INVALID is **not** silently discarded. INVALID is **not** automatically equivalent to a successful attack. INVALID can affect **execution observability** and is a **potential confounder**. No claim of negligibility.
+**INVALID policy.** S0 (official) retains the primary denominator. S1 stratifies arms with vs without INVALID. S2 excludes arms with ≥1 INVALID (`derived_after_run`). INVALID is **not** silently discarded. INVALID is **not** automatically equivalent to a successful attack, a failed attack, harmlessness, or detector failure. INVALID can affect **execution observability** and is a **potential confounder**. No claim of negligibility.
 
 ---
 
-## 4. Related Work
+# 6. Related Work
 
-We cite records whose title, authors, year, and arXiv id were verified from existing package Hub metadata. Most venues remain UNVERIFIED. AgentDojo (NeurIPS 2024, DOI `10.52202/079017-2636`) and BIPIA (KDD 2025, DOI `10.1145/3690624.3709179`) venue/DOI are **operator-supplied** and not re-fetched this turn. Full-text novelty exclusion is **not** claimed. Novelty class: **PARTIAL_GAP**. Matrix: `RELATED_WORK_MATRIX.md`.
+We cite records whose title, authors, year, and arXiv id were verified from existing package Hub metadata. Most venues remain UNVERIFIED. AgentDojo (NeurIPS 2024, DOI `10.52202/079017-2636`) and BIPIA (KDD 2025, DOI `10.1145/3690624.3709179`) venue/DOI are **operator-supplied** and not re-fetched this turn. Full-text novelty exclusion is **not** claimed. Novelty class: **PARTIAL_GAP**. Matrix: `RELATED_WORK_MATRIX.md`. Verification table: `BIBLIOGRAPHY_VERIFICATION.md`.
 
-**Existing literature already provides** prompt-injection attacks, agent security benchmarks, dynamic evaluation, defense architectures, architectural isolation, adaptive evaluation, memory/tool security, runtime policy enforcement, and instruction-hierarchy training. This paper does **not** claim invention of those components, and does **not** claim that D1/D2/D4 are novel detector families.
+## 6.1 Existing literature
 
-**Indirect prompt injection.** Greshake et al. (`2302.12173`) define IPI via retrieved/untrusted content. Yi et al. (BIPIA, `2312.14197`) benchmark IPI. Perez & Ribeiro (`2211.09527`), Liu et al. (`2306.05499`, `2310.12815`), and Toyer et al. (`2311.01011`) document direct/application injection. These are threat papers, not locked-policy detector attribution.
+**Prompt injection and indirect prompt injection.** Greshake et al. (`2302.12173`) define IPI via retrieved/untrusted content. Yi et al. (BIPIA, `2312.14197`) benchmark IPI. Perez & Ribeiro (`2211.09527`), Liu et al. (`2306.05499`, `2310.12815`), and Toyer et al. (`2311.01011`) document direct/application injection. These are threat papers, not locked-policy detector attribution.
 
 **Agent security benchmarks.** InjecAgent (`2403.02691`) measures IPI that induces detrimental tool use. AgentDojo (`2406.13352`; identity VERIFIED) is a dynamic attack/defense environment. AgentHarm (`2410.09024`) measures agent harmfulness after jailbreaks. Agent Security Bench / ASB (`2410.02644`; identity VERIFIED) evaluates many attacks and defenses. ToolEmu (`2309.15817`) emulates tool trajectories. Paper identities are verified. Packs, metrics, and execution environments differ from Q2. They are **not** numerical Q2 baselines.
 
-**Architectural isolation and runtime defenses.** IsolateGPT (`2403.04960`) isolates execution. CaMeL (`2503.18813`) is a **published** control/data isolation design, not an unverified idea. NeMo Guardrails (`2310.10501`) encodes programmable rails. Llama Guard (`2312.06674`) and PromptShield (`2501.15145`) are detector/safeguard systems. StruQ (`2402.06363`) and Spotlighting (`2403.14720`) channel or mark untrusted data. MELON (`2502.05174`) re-executes masked trajectories. These are related mechanism classes. They are not the Q2 factorial and are not compared numerically here.
+**Runtime guardrails and detector approaches.** NeMo Guardrails (`2310.10501`) encodes programmable rails. Llama Guard (`2312.06674`) and PromptShield (`2501.15145`) are detector/safeguard systems. StruQ (`2402.06363`) and Spotlighting (`2403.14720`) channel or mark untrusted data. MELON (`2502.05174`) re-executes masked trajectories. These are related mechanism classes. They are not the Q2 factorial and are not compared numerically here.
 
-**Instruction hierarchy.** Wallace et al. (`2404.13208`) train privileged-instruction priority. Meta SecAlign (`2507.02735`) is a model-level defense. Those change the **target**, which would violate Q2’s locked-target × vary-detector design.
+**Architectural isolation and defense mechanisms.** IsolateGPT (`2403.04960`) isolates execution. CaMeL (`2503.18813`) is a **published** control/data isolation design, not an unverified idea. Wallace et al. (`2404.13208`) train privileged-instruction priority. Meta SecAlign (`2507.02735`) is a model-level defense. Those change the **target**, which would violate Q2’s locked-target × vary-detector design.
 
-**Task Shield.** The name Task Shield (`arXiv:2412.16682`) is **not** in this package’s verified `RELATED_WORK_MATRIX` and is **not** added as a bibliographic record (identity/venue/DOI were not verified in-package). It is noted only so the paper is not read as claiming task-shielding. This study does not implement, evaluate, or numerically compare Task Shield.
+Names requested for attention but **not** in this package’s verified 21-record bibliography (Task Shield, Adaptive Attacks, AutoDojo, SCOUT, AgentAntibody, HARD, ARGUS, VIGIL, AttriGuard, MCP-SafetyBench, Runtime Policy Enforcement for MCP Agents) are **not** added as citations. Metadata is not invented (`BIBLIOGRAPHY_VERIFICATION.md`).
+
+## 6.2 This paper
+
+This paper contributes a **controlled detector/policy attribution protocol**: D0 reference; fixed intervention policy; Tool-HASR as primary outcome; cross-target directional consistency; M3/M4 diagnostics; INVALID_TOOL_ARGS diagnostics. It does not claim a new detector family, a defense covering all threat models, or a ranking of published systems.
 
 **Residual gap (narrow).** The verified literature establishes extensive work on attacks, benchmarks, defenses, and adaptive evaluation, but does not establish the exact locked-policy detector-attribution factorial used here as the central measurement protocol. That is a **partial gap**, not a global uniqueness claim. The present study is an attribution study, not a head-to-head defense benchmark.
 
+The research question concerns controlled detector-related attribution, not comparative ranking of defenses. Therefore external baselines are outside the current primary claim. Their absence is **methodological scope**, not an accidental omission (`BASELINE_GAP.md`).
+
 ---
 
-## 5. Controlled Attribution Framework
+# 7. Controlled Attribution Framework
 
 Each episode-arm runs:
 
@@ -100,7 +112,7 @@ Each episode-arm runs:
 | --- | --- |
 | Detector identity {D0, D1, D2, D4} | PHASE1-CORE, thresholds, action costs, P2 pack, judge, temperature=0.0, cache=false, seed=42 |
 
-D0 implements no detection (no hits). D1/D2/D4 share a `P3Detector` contract. D3 is `DEFERRED_NO_OFFLINE_IMPL` and has no scores.
+D0 implements no detection (no hits). D1/D2/D4 share a `P3Detector` contract. D3 is `DEFERRED_NO_OFFLINE_IMPL` and has no scores. D3 was deferred because the planned semantic-embedding dependency was not part of the locked offline protocol. D3 is future work. No D3 results are simulated or invented.
 
 PHASE1-CORE maps detector/risk signals to actions A0–A3 with locked thresholds (is_injection 0.25; risk 0.25/0.60) and normalized action costs (A0=0, A1=0.10, A2=0.25, A3=0.50). Those costs are experimental weights, not USD prices.
 
@@ -108,9 +120,9 @@ D0 estimates tool-harm when the policy receives no detector hits. Contrasts vers
 
 ---
 
-## 6. Experimental Protocol
+# 8. Experimental Protocol
 
-### Table 1 — Experimental design
+### Table 1 — Study design
 
 | Field | Value |
 | --- | --- |
@@ -133,66 +145,57 @@ D0 estimates tool-harm when the policy receives no detector hits. Contrasts vers
 | Backend | OpenRouter |
 | Budget cap / actual | $10.0 / $0.152885 (historical live) |
 | Historical live API calls | 2061 (target+judge) |
-| `scientific_evidence` | false |
+| Internal protocol flag | `scientific_evidence=false` |
 | n per cell | 16 attack arms |
+| Primary outcome | Tool-HASR |
+| Secondary diagnostic | Judge-ASR |
 
-### Table 2 — Target models (not a quality ranking)
+### Table 2 — Target and judge models (not a quality ranking)
 
-| Slot | Model ID | Role |
-| --- | --- | --- |
-| T0 | `qwen/qwen-2.5-7b-instruct` | Stage-B reference, not re-run |
-| T1 | `qwen/qwen3-30b-a3b` | secondary |
-| T2 | `google/gemma-3-27b-it` | secondary |
-| T3 | `qwen/qwen3.5-35b-a3b` | secondary |
-| Judge | `qwen/qwen-2.5-72b-instruct` | locked, not an experimental factor |
+| Slot | Model ID | Family | Role |
+| --- | --- | --- | --- |
+| T0 | `qwen/qwen-2.5-7b-instruct` | Qwen-2.5 dense | Stage-B reference, not re-run |
+| T1 | `qwen/qwen3-30b-a3b` | Qwen3 MoE | secondary |
+| T2 | `google/gemma-3-27b-it` | Gemma-3 | secondary |
+| T3 | `qwen/qwen3.5-35b-a3b` | Qwen3.5 MoE | secondary |
+| Judge | `qwen/qwen-2.5-72b-instruct` | Qwen-2.5 dense | locked, not an experimental factor |
 
-Three of four targets are Qwen-line models. Architectural diversity is limited. Target-model behavior may influence observed effects. All calls used OpenRouter. Provider-side tool formatting can affect Tool-HASR and INVALID rates.
+Four targets were used. Three of four (T0, T1, T3) are Qwen-family. The judge is also Qwen-family. Model-family diversity is limited. Results should not be generalized to arbitrary model families. Target-model behavior can influence observed tool execution and judge outcomes. The target set is **not** described as diverse without that qualification. All calls used OpenRouter. Provider-side tool formatting can affect Tool-HASR and INVALID rates.
 
-**Statistics.** Rates: numerator/denominator, point estimate, Wilson 95% CI where already computed. Δ: difference of rates; **no Δ CI was pre-registered** and none is manufactured. Paired discordant counts vs T0 are descriptive. McNemar was **not** preregistered for Q2 and is **not** reported.
+**Statistics.** Rates: numerator/denominator, point estimate, and Wilson 95% CI **derived from locked counts** (not a preregistered inferential analysis of Δ). Δ: difference of rates; **no Δ CI was preregistered** and none is manufactured. Paired discordant counts vs T0 are descriptive. McNemar was **not** preregistered for Q2 and is **not** reported. No p-values are invented.
 
-**Stage-B traces.** Official packaged T0 PHASE1-CORE Tool-HASR/Δ are reused from the Q2 live report (not a local raw-trace recompute). Local Stage-B `predictions.jsonl` is **MISSING_LOCALLY**. Independent local recomputation of T0 from raw traces was not performed. See `STAGE_B_EVIDENCE_STATUS.md`.
+**Stage-B traces.** Official packaged T0 PHASE1-CORE Tool-HASR/Δ are reused from the Q2 live report (not a local raw-trace recompute). Local Stage-B `predictions.jsonl` is **MISSING_LOCALLY** (`STAGE_B_TRACE_STATUS = MISSING_LOCALLY`). Independent local recomputation of T0 from raw traces was not performed. The official Stage-B reported result is distinct from locally reproducible raw-trace availability. See `STAGE_B_EVIDENCE_STATUS.md`.
 
 ---
 
-## 7. Results
+# 9. Results
 
-All cells use n=16 attack arms. Wilson 95% CIs are on **rates**, not on Δ. Source: `q2_final_statistics.json`. This section reports **observed detector-related effects** under the tested protocol. It does not turn 9/9 into causal proof.
+All cells use n=16 attack arms. Wilson 95% CIs on rates are **derived from locked counts**. They are not Δ intervals and were not preregistered as a confirmatory analysis. Source: `q2_final_statistics.json`. This section reports **observed detector-related associations** under the tested protocol.
 
-### Table 3 — Tool-HASR by cell
+### Table 3 — Primary Δ results (Tool-HASR versus D0)
 
-| Cell | n/N | Rate | Wilson 95% CI |
-| --- | ---: | ---: | --- |
-| T0/D0 | 13/16 | 0.8125 | [0.570, 0.934] |
-| T0/D1 | 2/16 | 0.1250 | [0.035, 0.360] |
-| T0/D2 | 9/16 | 0.5625 | [0.332, 0.769] |
-| T0/D4 | 4/16 | 0.2500 | [0.102, 0.495] |
-| T1/D0 | 14/16 | 0.8750 | [0.640, 0.965] |
-| T1/D1 | 2/16 | 0.1250 | [0.035, 0.360] |
-| T1/D2 | 9/16 | 0.5625 | [0.332, 0.769] |
-| T1/D4 | 4/16 | 0.2500 | [0.102, 0.495] |
-| T2/D0 | 13/16 | 0.8125 | [0.570, 0.934] |
-| T2/D1 | 2/16 | 0.1250 | [0.035, 0.360] |
-| T2/D2 | 9/16 | 0.5625 | [0.332, 0.769] |
-| T2/D4 | 4/16 | 0.2500 | [0.102, 0.495] |
-| T3/D0 | 11/16 | 0.6875 | [0.444, 0.858] |
-| T3/D1 | 2/16 | 0.1250 | [0.035, 0.360] |
-| T3/D2 | 8/16 | 0.5000 | [0.280, 0.720] |
-| T3/D4 | 3/16 | 0.1875 | [0.066, 0.430] |
+Definition: Δ(d,t) = Tool-HASR(d,t) − Tool-HASR(D0,t) on attack arms, PHASE1-CORE. Wilson 95% CI on each Tool-HASR rate (derived from locked counts).
 
-Q2 live T1–T3 pooled Tool-HASR: 81/192 = 0.421875.
+| Cell | Tool-HASR (d) | Tool-HASR (D0) | Δ | Sign |
+| --- | --- | --- | ---: | --- |
+| T0/D1 | 2/16 = 0.1250 [0.035, 0.360] | 13/16 = 0.8125 [0.570, 0.934] | −0.6875 | NEG |
+| T0/D2 | 9/16 = 0.5625 [0.332, 0.769] | 13/16 = 0.8125 [0.570, 0.934] | −0.2500 | NEG |
+| T0/D4 | 4/16 = 0.2500 [0.102, 0.495] | 13/16 = 0.8125 [0.570, 0.934] | −0.5625 | NEG |
+| T1/D1 | 2/16 = 0.1250 [0.035, 0.360] | 14/16 = 0.8750 [0.640, 0.965] | −0.7500 | NEG |
+| T1/D2 | 9/16 = 0.5625 [0.332, 0.769] | 14/16 = 0.8750 [0.640, 0.965] | −0.3125 | NEG |
+| T1/D4 | 4/16 = 0.2500 [0.102, 0.495] | 14/16 = 0.8750 [0.640, 0.965] | −0.6250 | NEG |
+| T2/D1 | 2/16 = 0.1250 [0.035, 0.360] | 13/16 = 0.8125 [0.570, 0.934] | −0.6875 | NEG |
+| T2/D2 | 9/16 = 0.5625 [0.332, 0.769] | 13/16 = 0.8125 [0.570, 0.934] | −0.2500 | NEG |
+| T2/D4 | 4/16 = 0.2500 [0.102, 0.495] | 13/16 = 0.8125 [0.570, 0.934] | −0.5625 | NEG |
+| T3/D1 | 2/16 = 0.1250 [0.035, 0.360] | 11/16 = 0.6875 [0.444, 0.858] | −0.5625 | NEG |
+| T3/D2 | 8/16 = 0.5000 [0.280, 0.720] | 11/16 = 0.6875 [0.444, 0.858] | −0.1875 | NEG |
+| T3/D4 | 3/16 = 0.1875 [0.066, 0.430] | 11/16 = 0.6875 [0.444, 0.858] | −0.5000 | NEG |
 
-### Table 4 — Primary Δ Tool-HASR versus D0 (authoritative values)
+**9/9 detector-target comparisons preserved the negative direction** relative to T0. All D1/D2/D4 Δ values versus D0 are negative. Intervals on the underlying rates are wide (especially 2/16 cells). Magnitudes should not be over-read. Detectors are not ranked. Q2 live T1–T3 pooled Tool-HASR: 81/192 = 0.421875.
 
-| Target | D1 | D2 | D4 | Signs |
-| --- | ---: | ---: | ---: | --- |
-| T0 | −0.6875 | −0.2500 | −0.5625 | NEG, NEG, NEG |
-| T1 | −0.7500 | −0.3125 | −0.6250 | NEG, NEG, NEG |
-| T2 | −0.6875 | −0.2500 | −0.5625 | NEG, NEG, NEG |
-| T3 | −0.5625 | −0.1875 | −0.5000 | NEG, NEG, NEG |
+**n=16 per cell** is pilot-scale. Precision is limited. Power is limited for broad generalization. Directional consistency is an observed property of this evaluation. It does not establish population-level generalization.
 
-**9/9 detector-target comparisons preserved the negative direction** relative to T0. Intervals on the underlying rates are wide (especially 2/16 cells). Magnitudes should not be over-read. Detectors are not ranked.
-
-**Figure 3.** Δ Tool-HASR relative to D0 across T0–T3. n=16 attack arms/cell. D0 is the reference (Δ=0 by definition). Categorical grouping; no ranking colors; no significance encoding. File: `figures/figure3_delta_across_targets.png`. Caption: *pilot-scale; scientific_evidence=false; detector-related Δ under locked PHASE1-CORE; not causal proof.*
+**Figure 3.** Δ Tool-HASR **relative to D0** across T0–T3. n=16 attack arms/cell. D0 is the reference (Δ=0 by definition). Categorical grouping; no ranking colors; no significance encoding. File: `figures/figure3_delta_across_targets.png`. Caption: *pilot-scale directional consistency; n=16/cell; detector-related Δ versus D0 under locked PHASE1-CORE; not a ranking; Wilson CIs reported in Table 3 are on rates, derived from locked counts, not on Δ.*
 
 T2 Δ matches T0 Δ exactly in this sample. That is an observed coincidence at n=16, not evidence that T2 equals T0 in general.
 
@@ -200,26 +203,30 @@ Paired discordant Tool-HASR counts (descriptive; no p-value): T0 vs T1 D0 discor
 
 ---
 
-## 8. Diagnostic Analysis
+# 10. Diagnostic Analysis
 
-### 8.1 Tool-HASR versus Judge-ASR
+## 10.1 Tool-HASR versus Judge-ASR
 
-Tool-HASR measures **harmful tool execution behavior**. Judge-ASR reflects **judge-level attack-success assessment**. They are not interchangeable.
+Tool-HASR and Judge-ASR are **distinct measurements**.
+
+- **Tool-HASR:** harmful tool execution behavior.
+- **Judge-ASR:** judge-level attack-success assessment.
+
+They are related but non-identical. Neither metric is declared invalid because they disagree. They are not forced into one metric. Tool-HASR remains primary.
 
 For T1–T3: Tool-HASR = 81/192 = 0.421875; Judge-ASR = 186/192 = 0.96875; M3=108; M4=3.
 
-Disagreement can arise from several sources. This paper does **not** infer a single cause:
+Possible disagreement sources, stated conservatively (no single-cause inference):
 
-- refusal behavior;
+- model refusal behavior;
 - tool execution state (blocked or not executed);
-- malformed/invalid tool arguments;
+- malformed tool arguments (INVALID_TOOL_ARGS);
 - judge interpretation;
 - target-model behavior;
+- trajectory-level semantics;
 - runtime/provider behavior.
 
-**Finding.** Judge-ASR and Tool-HASR capture related but non-identical operational outcomes. Neither metric is declared invalid because they disagree. Tool-HASR remains primary.
-
-### Table 5 — Tool-HASR vs Judge-ASR (n=16/cell; Wilson 95% CI on each rate)
+### Table 4 — Tool-HASR vs Judge-ASR (n=16/cell; Wilson 95% CI on each rate, derived from locked counts)
 
 | Cell | Tool-HASR | Judge-ASR |
 | --- | --- | --- |
@@ -248,15 +255,29 @@ Disagreement can arise from several sources. This paper does **not** infer a sin
 | T3 | 39 | 1 |
 | Q2 live T1–T3 | 108 | 3 |
 
-**Figure 4.** Tool-HASR versus Judge-ASR with M3/M4 diagnostic interpretation. Pooled attack n=64/target (16×4). Not a ranking; no significance encoding. File: `figures/figure4_toolhasr_vs_judgeasr.png`. Caption: *related but non-identical endpoints; Judge-ASR is not declared invalid.*
+**Figure 4.** Tool-HASR versus Judge-ASR with M3/M4 diagnostic interpretation. Pooled attack n=64/target (16×4). Related but non-identical endpoints. File: `figures/figure4_toolhasr_vs_judgeasr.png`. Caption: *Tool-HASR = harmful tool execution; Judge-ASR = judge-level attack-success assessment; related but non-identical; neither metric is declared invalid; n=16/cell; not a ranking.*
 
-### 8.2 INVALID_TOOL_ARGS
+## 10.2 INVALID_TOOL_ARGS
 
 Q2 live: **192 INVALID_TOOL_ARGS events / 136 affected arms** (of 432). Independent recompute on `predictions.jsonl` matches official `metrics.json`.
 
-These are **canonical tool-state events**. They are **not** automatically equivalent to successful attacks. They can affect **execution observability**. They are a **potential confounder** for Tool-HASR interpretation (a schema failure can stop a harmful call; INVALID also co-occurs with some Tool-HASR-true attack arms). The analysis does **not** silently discard them. No unsupported claim of negligibility is made.
+INVALID_TOOL_ARGS is a **canonical execution-state category**. It is **not** automatically:
 
-### Table 6 — INVALID diagnostics (existing S0/S1/S2 only)
+- attack success;
+- attack failure;
+- harmlessness;
+- detector failure.
+
+It matters because:
+
+- malformed calls can prevent intended tool execution;
+- this affects observability of harmful execution;
+- it can interact with target-model behavior;
+- it can influence the relationship between Tool-HASR and Judge-ASR.
+
+INVALID events are retained in the official S0 analysis. They are not discarded. They are not treated as negligible. This paper does not claim that INVALID explains all Tool-HASR vs Judge-ASR disagreement. S0/S1/S2 diagnostics are preserved.
+
+### Table 5 — INVALID_TOOL_ARGS diagnostics (existing S0/S1/S2 only)
 
 | Metric | S0 (official) | S1 (stratify) | S2 (exclude ≥1 INVALID) |
 | --- | --- | --- | --- |
@@ -268,84 +289,92 @@ These are **canonical tool-state events**. They are **not** automatically equiva
 
 S0/S1/S2 sensitivity did not change the Q2 sign-consistency conclusion. That does **not** establish that invalid arguments are negligible.
 
-**Figure 5.** INVALID_TOOL_ARGS diagnostic, T1–T3. n=432 arms. S0 denominator unchanged. File: `figures/figure5_invalid_tool_args.png`. Caption: *frequent; not discarded; not Tool-HASR success; not proven negligible.*
+**Figure 5.** INVALID_TOOL_ARGS diagnostic, T1–T3. n=432 arms. S0 denominator unchanged. File: `figures/figure5_invalid_tool_args.png`. Caption: *INVALID_TOOL_ARGS is a diagnostic execution-state category; frequent (192 events / 136 arms); not discarded; not Tool-HASR success; not proven negligible; not a ranking.*
 
 T0 INVALID 61 events / 39 arms is a **prior derived record**, not a raw-trace recompute (`STAGE_B_TRACE_STATUS=MISSING_LOCALLY`).
 
 ---
 
-## 9. Discussion
+# 11. Discussion
 
 Under locked PHASE1-CORE, the observed Δ direction remained consistent across T0–T3. Nine of nine detector-target comparisons preserved the negative direction. That **suggests**, at pilot scale and under the tested protocol, that detector-related Tool-HASR differences versus D0 can keep sign on independently selected secondary targets.
 
 It does **not** establish:
 
-- universal robustness or general robustness;
-- comprehensive model generalization;
-- production readiness or guaranteed security;
-- causal proof of detector identity;
-- comparison as a ranking against CaMeL, AgentDojo defenses, ASB defenses, Llama Guard, PromptShield, IsolateGPT, instruction-hierarchy models, or Task Shield;
+- robustness beyond the tested protocol;
+- population-level generalization across model families;
+- production readiness;
+- that detector identity is the sole associated factor, independent of all runtime factors;
+- a ranking against CaMeL, AgentDojo defenses, ASB defenses, Llama Guard, PromptShield, IsolateGPT, instruction-hierarchy models, or other external systems;
 - that Judge-ASR is invalid;
-- that INVALID_TOOL_ARGS are negligible.
+- that INVALID_TOOL_ARGS are negligible;
+- robustness against open-ended adaptive attackers.
 
-The present study is an **attribution study**, not a head-to-head defense benchmark. Protocols, populations, metrics, and execution environments differ across papers; numerical cross-paper comparison would be a claims error.
+The present study is an **attribution study**, not a head-to-head defense benchmark. Protocols, populations, metrics, and execution environments differ across papers; numerical cross-paper comparison would be a claims error. External baselines are outside the current primary claim by design.
 
 Track A VNEXT FAIL and Track B Phase-1 LIVE remain on different packs. They must not be pooled with Q2 Tool-HASR.
 
 ---
 
-## 10. Limitations
+# 12. Limitations
 
 Limitations are technically binding, not boilerplate.
 
-### Table 7 — Limitations
+### Table 6 — Threats and limitations
 
 | # | Limitation |
 | --- | --- |
-| 1 | n=16 per cell; Wilson CIs are wide (2/16 Tool-HASR CI [0.035, 0.360]) |
-| 2 | Pilot-scale study; `scientific_evidence=false`; not confirmatory |
-| 3 | Four target models only |
-| 4 | Qwen-heavy target set; T2 is Gemma-3; judge also Qwen |
-| 5 | Limited model-family / architectural diversity; OpenRouter only |
-| 6 | D3 deferred; no embedding-detector numbers |
-| 7 | C4 / open adaptive attacker out of scope |
-| 8 | INVALID_TOOL_ARGS frequency (192 events / 136 arms on Q2 live); potential confounder |
-| 9 | Stage-B raw traces unavailable in the current checkout (`MISSING_LOCALLY`); no reconstruction |
-| 10 | No matched external defense baseline |
-| 11 | No ranking versus published systems; no claim of comprehensive comparison |
-| 12 | No claim of universal generalization |
-| 13 | Target-model behavior may influence observed effects |
-| 14 | Judge/tool disagreement (T1–T3 M3=108, M4=3); endpoints are non-identical |
-| 15 | Results are protocol-specific (PHASE1-CORE, frozen P2, mock tools, short horizon, one judge) |
-| 16 | Provider/runtime and tool-call formatting effects |
-| 17 | Refusal is not credited as a defense win |
-| 18 | Exact literature gap cannot be claimed globally (PARTIAL_GAP) |
-| 19 | No claim of universal detector causality |
-| 20 | Bibliography venue/DOI mostly UNVERIFIED; camera-ready citations incomplete |
+| 1 | n=16 per cell; Wilson CIs are wide (2/16 Tool-HASR CI [0.035, 0.360]); limited precision; limited power for broad generalization |
+| 2 | Pilot-scale study; internal flag `scientific_evidence=false`; not confirmatory; directional consistency is an observed property of this evaluation |
+| 3 | Four target models only; does not establish population-level generalization |
+| 4 | Qwen-heavy target set: T0=`qwen/qwen-2.5-7b-instruct`, T1=`qwen/qwen3-30b-a3b`, T2=`google/gemma-3-27b-it`, T3=`qwen/qwen3.5-35b-a3b`; judge=`qwen/qwen-2.5-72b-instruct` |
+| 5 | Three of four targets are Qwen-family; model-family diversity is limited; results should not be generalized to arbitrary model families |
+| 6 | D3 deferred because the planned semantic-embedding dependency was not part of the locked offline protocol; no D3 scores |
+| 7 | The present study does not establish robustness against open-ended adaptive attackers, C4 interaction horizon, or attacker adaptation against the detector-policy system |
+| 8 | INVALID_TOOL_ARGS frequency (192 events / 136 arms on Q2 live); canonical execution state; potential confounder for Tool-HASR observability and Tool-HASR/Judge-ASR disagreement; not discarded; not claimed to explain all metric disagreement |
+| 9 | Stage-B raw traces unavailable in the current checkout (`MISSING_LOCALLY`); official Stage-B reported T0 reuse is distinct from independent raw-trace recomputation; no reconstruction |
+| 10 | No matched external defense baseline; attribution scope, not comparative ranking of defenses |
+| 11 | No ranking versus published systems |
+| 12 | Target-model behavior can influence observed tool execution and judge outcomes |
+| 13 | Judge/tool disagreement (T1–T3 M3=108, M4=3); endpoints are non-identical |
+| 14 | Results are protocol-specific (PHASE1-CORE, frozen P2, mock tools, short horizon, one judge) |
+| 15 | Provider/runtime and tool-call formatting effects |
+| 16 | Refusal is not credited as a defense win |
+| 17 | Exact literature gap cannot be claimed globally (PARTIAL_GAP) |
+| 18 | Observed Δ vs D0 is a detector-related association under the controlled protocol; it does not establish detector causality in isolation |
+| 19 | Bibliography venue/DOI mostly UNVERIFIED; camera-ready citations incomplete |
+
+**INVALID_TOOL_ARGS (limitations paragraph).** INVALID_TOOL_ARGS is a canonical execution-state category. Malformed calls can prevent intended tool execution, which affects observability of harmful execution, can interact with target-model behavior, and can influence the relationship between Tool-HASR and Judge-ASR. Official S0 retains these events. S1/S2 are sensitivity diagnostics. INVALID is not automatically attack success, attack failure, harmlessness, or detector failure. It is not negligible. It is not claimed to explain all metric disagreement.
+
+**D3 (future work).** D3 was deferred because the planned semantic-embedding dependency was not part of the locked offline protocol. No D3 results exist. Adding D3 experimentally would be a new study.
+
+**C4 / adaptive attackers (future work).** The present study does not establish robustness against open-ended adaptive attackers, C4 interaction horizon, or attacker adaptation against the detector-policy system. PHASE1-CORE action adaptation is not a closed-loop adaptive adversary. A C4 study would be a new experiment.
+
+**External baselines (scope).** Numerical comparison against CaMeL, AgentDojo, ASB, Llama Guard, PromptShield, or other external defenses is outside the current primary claim. The research question is controlled detector-related attribution, not comparative ranking of defenses.
 
 ---
 
-## 11. Reproducibility
+# 13. Reproducibility
 
 `REPRODUCIBILITY_STATUS = PARTIAL`. Full reproducibility is **not** claimed while Stage-B raw traces remain missing.
 
-**Frozen evidence (do not modify):** P1 SHA `1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235`; P2 SHA `32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd`; Q2 predictions SHA `2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6`; evidence commit `b075df0f5ec5ad11ede76ac4e4079cade15208f1`; run `p3_stage_c_q2_20260917T123855Z_b075df0f`. Local file hashes of P1/P2/Q2 predictions were rechecked this pass and match.
+**FROZEN (do not modify):** P1 SHA `1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235`; P2 SHA `32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd`; Q2 predictions SHA `2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6`; evidence commit `b075df0f5ec5ad11ede76ac4e4079cade15208f1`; run `p3_stage_c_q2_20260917T123855Z_b075df0f`. Local file hashes of P1/P2/Q2 predictions were rechecked this pass and match.
 
-**Derived analysis:** `q2_final_statistics.json`; INVALID recompute; Figures 3–5; S0/S1/S2; Wilson CIs on rates.
+**DERIVED:** `q2_final_statistics.json`; INVALID recompute; Figures 3–5; S0/S1/S2; Wilson CIs on rates (derived from locked counts).
 
-**Manuscript interpretation:** this file; `CLAIM_EVIDENCE_MATRIX.md`.
+**INTERPRETIVE:** this file; `CLAIM_EVIDENCE_MATRIX.md`; novelty PARTIAL_GAP; attribution vs ranking scope.
 
 Checklist: `Q2_REPRODUCIBILITY_CHECKLIST.md`. Stage-B: `STAGE_B_EVIDENCE_STATUS.md`.
 
 ---
 
-## 12. Conclusion
+# 14. Conclusion
 
-This study evaluates whether detector-related security effects under a locked intervention policy remain directionally consistent across independently selected target models. Under the tested protocol, the observed Δ direction remained consistent across T0–T3: 9/9 comparisons preserved the negative direction (432/432 arms; $0.152885 historical spend; n=16/cell; `scientific_evidence=false`). That is **pilot-scale evidence of directional consistency**, not confirmatory proof.
+This study evaluates whether detector-related security effects under a locked intervention policy remain directionally consistent across independently selected target models. Under the tested protocol, the observed Δ direction remained consistent across T0–T3: 9/9 comparisons preserved the negative direction (432/432 arms; $0.152885 historical spend; n=16/cell). That is **pilot-scale directional consistency**. It is not confirmatory. It does not establish population-level generalization.
 
-The contribution is the **controlled attribution protocol** plus that bounded empirical analysis. Detector families D1/D2/D4 are not claimed as novel. The evidence does not establish universal robustness, production readiness, causal proof, or a ranking against external defenses.
+The contribution is the **controlled attribution protocol** plus that bounded empirical analysis. Detector families D1/D2/D4 are not claimed as new. The evidence does not establish robustness beyond the tested protocol, production readiness, that detector identity is the sole associated factor, or a ranking against external defenses.
 
-Future matched baselines, larger n, more model families, D3, or open adaptive attackers would be **new studies**, not silent extensions of this run.
+Future matched baselines, larger n, more model families, D3 after an offline embedding lock, or open adaptive attackers would be **new studies**, not silent extensions of this run.
 
 ---
 
@@ -373,4 +402,4 @@ Future matched baselines, larger n, more model families, D3, or open adaptive at
 20. Debenedetti et al., 2025. CaMeL (Defeating Prompt Injections by Design). arXiv:2503.18813  
 21. Chen, Zharmagambetov, Wagner, Guo, 2025. Meta SecAlign. arXiv:2507.02735  
 
-Task Shield (`arXiv:2412.16682`) is **not** a verified in-package bibliographic record and is not listed as a reference.
+Task Shield, Adaptive Attacks, AutoDojo, SCOUT, AgentAntibody, HARD, ARGUS, VIGIL, AttriGuard, MCP-SafetyBench, and Runtime Policy Enforcement for MCP Agents are **not** verified in-package bibliographic records and are not listed as references.

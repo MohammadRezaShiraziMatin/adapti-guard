@@ -35,4 +35,4 @@ P1 SHA `1a0b0053…dd235`; P2 SHA `32b40e3b…8d64dd`; Q2 predictions SHA `2a2c2
 
 **STATUS = READY_WITH_MAJOR_REVISIONS** (`FINAL_SUBMISSION_READINESS.md`)
 
-Not SUBMISSION_READY: Stage-B traces missing locally; bibliography not fully verified. CI 2/2 PASS is not publication acceptance.
+Central claim: **PARTIALLY_SUPPORTED / PILOT-SCALE**. Not SUBMISSION_READY: Stage-B traces missing locally; bibliography not fully verified. CI 2/2 PASS is not publication acceptance. Weakness audit: `WEAKNESS_CLOSURE_AUDIT.md`.

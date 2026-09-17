@@ -10,7 +10,7 @@ This is a **protocol-complete pilot-scale directional consistency study**. `scie
 5. **Pilot-scale evidence.** Not a large-n confirmatory multi-model study.
 6. **`scientific_evidence=false`.** Protocol-complete directional consistency, not confirmation.
 7. **No matched external defense baseline.** The present study is an attribution study, not a head-to-head defense benchmark (`BASELINE_GAP.md`).
-8. **No SOTA comparison.** Other papers’ numeric ASRs are incommensurable without matched conditions.
+8. **No ranking comparison against published systems.** Other papers’ numeric ASRs are incommensurable without matched conditions.
 9. **No production robustness claim.**
 10. **D3 deferred.** `DEFERRED_NO_OFFLINE_IMPL`. No D3 numbers (`D3_AND_C4.md`).
 11. **C4 / open adaptive attacker out of scope.** P2 C4-mini is scripted. PHASE1-CORE action adaptation ≠ closed-loop adaptive adversary.
@@ -22,7 +22,7 @@ This is a **protocol-complete pilot-scale directional consistency study**. `scie
 17. **Judge/Tool metric disagreement.** T1–T3 M3=108, M4=3. Judge-ASR and Tool-HASR capture related but non-identical operational outcomes. Judge-ASR is not declared invalid.
 18. **Stage-B raw trace unavailable locally.** Official packaged T0 PHASE1-CORE is reused from `p3_stage_b_20260916T235438Z_7e401714`. `STAGE_B_TRACE_STATUS = MISSING_LOCALLY`. Operator-stated 124/192 aggregate was not found as a local file and was not reconstructed. Independent T0 recompute was not performed (`STAGE_B_EVIDENCE_STATUS.md`).
 19. **Exact literature gap cannot be claimed globally.** Novelty remains PARTIAL_GAP. AgentDojo/ASB identities are VERIFIED; that does not prove uniqueness of the factorial.
-20. **No claim of universal detector causality.** Observed Δ vs D0 is a detector-related effect under the controlled protocol.
+20. **Observed Δ vs D0 is a detector-related association under the controlled protocol.** It does not establish a causal effect of detector identity in isolation from all runtime factors.
 
 ## Threats (short)
 
@@ -34,4 +34,4 @@ This is a **protocol-complete pilot-scale directional consistency study**. `scie
 | OpenRouter runtime | Provider-specific tool formatting |
 | T0 not re-run; traces missing locally | Independent T0 INVALID recompute blocked here; official T0 rates remain in Q2 report JSON |
 | Model selection | Pre-registered but Qwen-heavy |
-| Attribution vs causality | Detector-related ≠ universal causal proof |
+| Attribution vs association | Detector-related association under locked policy; does not establish detector identity as the sole associated factor |

@@ -16,7 +16,7 @@ A controlled evaluation protocol that:
 3. measures Tool-HASR (harmful tool execution);
 4. tests whether detector-related Δ relative to D0 preserves sign across independently selected target models.
 
-This is **one** methodological contribution with supporting measurements. It is not a claim of a new universal defense.
+This is **one** methodological contribution with supporting measurements. It is not a claim of a defense covering all threat models.
 
 ## What existing literature already provides
 
