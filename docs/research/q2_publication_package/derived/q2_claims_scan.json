@@ -1,0 +1,626 @@
+{
+  "generated_at_utc": "2026-09-17T18:22:45.168171+00:00",
+  "api_calls": 0,
+  "banned_term_hits_in_package": [
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 46,
+      "term": "SOTA",
+      "excerpt": "8. Explicit \u201cnot a ranking\u201d / no SOTA language even if one method has lower Tool-HASR."
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 50,
+      "term": "SOTA",
+      "excerpt": "## Why Q2 must not be described as SOTA / best / superior"
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 50,
+      "term": "best",
+      "excerpt": "## Why Q2 must not be described as SOTA / best / superior"
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 50,
+      "term": "superior",
+      "excerpt": "## Why Q2 must not be described as SOTA / best / superior"
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 58,
+      "term": "best",
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 58,
+      "term": "superior",
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 58,
+      "term": "state-of-the-art",
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
+    },
+    {
+      "path": "docs/research/q2_publication_package/BASELINE_GAP.md",
+      "line": 58,
+      "term": "solves prompt injection",
+      "excerpt": "Forbidden: \u201cbest detector,\u201d \u201csuperior to published guards,\u201d \u201cstate-of-the-art,\u201d \u201csolves prompt injection.\u201d"
+    },
+    {
+      "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
+      "line": 54,
+      "term": "SOTA",
+      "excerpt": "- SOTA / best / superior detector or defense."
+    },
+    {
+      "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
+      "line": 54,
+      "term": "best",
+      "excerpt": "- SOTA / best / superior detector or defense."
+    },
+    {
+      "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
+      "line": 54,
+      "term": "superior",
+      "excerpt": "- SOTA / best / superior detector or defense."
+    },
+    {
+      "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
+      "line": 55,
+      "term": "Production-ready",
+      "excerpt": "- Production-ready or universally effective protection."
+    },
+    {
+      "path": "docs/research/q2_publication_package/CONTRIBUTION_POSITIONING.md",
+      "line": 55,
+      "term": "universally effective",
+      "excerpt": "- Production-ready or universally effective protection."
+    },
+    {
+      "path": "docs/research/q2_publication_package/D3_AND_C4.md",
+      "line": 32,
+      "term": "robust",
+      "excerpt": "**Interpretation:** Q2 directional consistency is not evidence of robustness to adaptive attacks. Do not write \u201chandles C4\u201d or \u201crobust to adaptive attackers.\u201d"
+    },
+    {
+      "path": "docs/research/q2_publication_package/LIMITATIONS.md",
+      "line": 45,
+      "term": "SOTA",
+      "excerpt": "None fairly reconstructed on this pack. See `BASELINE_GAP.md`. Not SOTA."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 3,
+      "term": "universally effective",
+      "excerpt": "Controlled empirical / methodological study. **Not** a claim of a universally effective defense."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 4,
+      "term": "confirmatory",
+      "excerpt": "`scientific_evidence=false`. Do not use \u201cconfirmatory\u201d unless quoting another track\u2019s locked protocol."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 17,
+      "term": "SOTA",
+      "excerpt": "- Not claimed: SOTA, production-ready, all-LLM generalization."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 17,
+      "term": "production-ready",
+      "excerpt": "- Not claimed: SOTA, production-ready, all-LLM generalization."
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 80,
+      "term": "best",
+      "excerpt": "| best / superior / SOTA | observed \u0394 vs D0 under the locked protocol |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 80,
+      "term": "superior",
+      "excerpt": "| best / superior / SOTA | observed \u0394 vs D0 under the locked protocol |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 80,
+      "term": "SOTA",
+      "excerpt": "| best / superior / SOTA | observed \u0394 vs D0 under the locked protocol |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 81,
+      "term": "robust",
+      "excerpt": "| robust / guaranteed / production-ready | pilot-scale; target-model sensitivity |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 81,
+      "term": "guaranteed",
+      "excerpt": "| robust / guaranteed / production-ready | pilot-scale; target-model sensitivity |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 81,
+      "term": "production-ready",
+      "excerpt": "| robust / guaranteed / production-ready | pilot-scale; target-model sensitivity |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 82,
+      "term": "proves",
+      "excerpt": "| proves / confirms for all LLMs | evidence is consistent with directional \u0394 sign on T0\u2013T3 |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 83,
+      "term": "cost-optimal",
+      "excerpt": "| cost-optimal | normalized action weights; token-USD reported separately |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/MANUSCRIPT_BLUEPRINT.md",
+      "line": 84,
+      "term": "solves prompt injection",
+      "excerpt": "| solves prompt injection | does not establish universal generalization |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/README.md",
+      "line": 16,
+      "term": "SOTA",
+      "excerpt": "6. `BASELINE_GAP.md` \u2014 why not SOTA"
+    },
+    {
+      "path": "docs/research/q2_publication_package/STATISTICAL_REPORTING.md",
+      "line": 4,
+      "term": "confirmatory",
+      "excerpt": "Protocol: `scientific_evidence=false`; Q2 is a **sign-agreement / directional-consistency** study, not a confirmatory MSID/McNemar gate (those gates belong to other tracks\u2019 frozen AUDITs)."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 10,
+      "term": "guarantee",
+      "excerpt": "\"unsafe\": \"Detectors guarantee security.\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 17,
+      "term": "robust",
+      "excerpt": "\"unsafe\": \"Generalizes to all LLMs / universally robust.\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 42,
+      "term": "production-ready",
+      "excerpt": "\"claim\": \"ADAPTI-GUARD is production-ready / SOTA\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 42,
+      "term": "SOTA",
+      "excerpt": "\"claim\": \"ADAPTI-GUARD is production-ready / SOTA\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 45,
+      "term": "production-ready",
+      "excerpt": "\"unsafe\": \"production-ready / SOTA / best detector\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 45,
+      "term": "SOTA",
+      "excerpt": "\"unsafe\": \"production-ready / SOTA / best detector\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 45,
+      "term": "best",
+      "excerpt": "\"unsafe\": \"production-ready / SOTA / best detector\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 49,
+      "term": "prove",
+      "excerpt": "\"claim\": \"Results prove robust generalization\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 49,
+      "term": "robust",
+      "excerpt": "\"claim\": \"Results prove robust generalization\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 52,
+      "term": "proves",
+      "excerpt": "\"unsafe\": \"proves robust / significantly generalizes\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 52,
+      "term": "robust",
+      "excerpt": "\"unsafe\": \"proves robust / significantly generalizes\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 59,
+      "term": "cost-optimal",
+      "excerpt": "\"unsafe\": \"cost-optimal / scalable economic defense\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 63,
+      "term": "superior",
+      "excerpt": "\"claim\": \"D1 superior to D2/D4\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 66,
+      "term": "best",
+      "excerpt": "\"unsafe\": \"best / superior detector\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 66,
+      "term": "superior",
+      "excerpt": "\"unsafe\": \"best / superior detector\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 73,
+      "term": "robust",
+      "excerpt": "\"unsafe\": \"robust to adaptive attacks\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 77,
+      "term": "confirmatory",
+      "excerpt": "\"claim\": \"Q2 scientific_evidence confirmatory\","
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.json",
+      "line": 80,
+      "term": "confirmatory",
+      "excerpt": "\"unsafe\": \"confirmatory multi-model proof\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 7,
+      "term": "guarantee",
+      "excerpt": "| A1 | Detector-related Tool-HASR effect vs D0 is NEG under PHASE1-CORE on T0 | **GREEN** | On locked T0/PHASE1-CORE, \u0394(D1/D2/D4) are negative (pilot n=16). | Detectors guarantee security. |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 8,
+      "term": "robust",
+      "excerpt": "| A2 | \u0394 sign remains consistent on T1\u2013T3 (9/9) | **GREEN** | Directional consistency across evaluated targets T0\u2013T3. | Generalizes to all LLMs / universally robust. |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 12,
+      "term": "production-ready",
+      "excerpt": "| A6 | ADAPTI-GUARD is production-ready / SOTA | **RED** | (remove) | production-ready / SOTA / best detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 12,
+      "term": "SOTA",
+      "excerpt": "| A6 | ADAPTI-GUARD is production-ready / SOTA | **RED** | (remove) | production-ready / SOTA / best detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 12,
+      "term": "production-ready",
+      "excerpt": "| A6 | ADAPTI-GUARD is production-ready / SOTA | **RED** | (remove) | production-ready / SOTA / best detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 12,
+      "term": "SOTA",
+      "excerpt": "| A6 | ADAPTI-GUARD is production-ready / SOTA | **RED** | (remove) | production-ready / SOTA / best detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 12,
+      "term": "best",
+      "excerpt": "| A6 | ADAPTI-GUARD is production-ready / SOTA | **RED** | (remove) | production-ready / SOTA / best detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 13,
+      "term": "prove",
+      "excerpt": "| A7 | Results prove robust generalization | **RED** | Bounded directional consistency on 4 models / P2 pack. | proves robust / significantly generalizes |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 13,
+      "term": "robust",
+      "excerpt": "| A7 | Results prove robust generalization | **RED** | Bounded directional consistency on 4 models / P2 pack. | proves robust / significantly generalizes |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 13,
+      "term": "proves",
+      "excerpt": "| A7 | Results prove robust generalization | **RED** | Bounded directional consistency on 4 models / P2 pack. | proves robust / significantly generalizes |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 13,
+      "term": "robust",
+      "excerpt": "| A7 | Results prove robust generalization | **RED** | Bounded directional consistency on 4 models / P2 pack. | proves robust / significantly generalizes |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 14,
+      "term": "cost-optimal",
+      "excerpt": "| A8 | Cost-aware defense with real USD intervention costs | **RED** | Normalized experimental action weights; token-USD separate. | cost-optimal / scalable economic defense |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 15,
+      "term": "superior",
+      "excerpt": "| A9 | D1 superior to D2/D4 | **RED** | Report \u0394 vs D0 without ranking. | best / superior detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 15,
+      "term": "best",
+      "excerpt": "| A9 | D1 superior to D2/D4 | **RED** | Report \u0394 vs D0 without ranking. | best / superior detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 15,
+      "term": "superior",
+      "excerpt": "| A9 | D1 superior to D2/D4 | **RED** | Report \u0394 vs D0 without ranking. | best / superior detector |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 16,
+      "term": "robust",
+      "excerpt": "| A10 | Adaptive attacker (C4) handled | **RED** | Out of scope / not established. | robust to adaptive attacks |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 17,
+      "term": "confirmatory",
+      "excerpt": "| A11 | Q2 scientific_evidence confirmatory | **YELLOW** | Protocol-complete pilot consistency study; scientific_evidence=false retained. | confirmatory multi-model proof |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 17,
+      "term": "confirmatory",
+      "excerpt": "| A11 | Q2 scientific_evidence confirmatory | **YELLOW** | Protocol-complete pilot consistency study; scientific_evidence=false retained. | confirmatory multi-model proof |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 21,
+      "term": "proves",
+      "excerpt": "`proves`, `guarantees`, `robust`, `generalizes` (unbounded), `best`, `superior`, `state-of-the-art`, `significantly`, `causal` (unqualified), `scalable`, `production-ready`."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 21,
+      "term": "robust",
+      "excerpt": "`proves`, `guarantees`, `robust`, `generalizes` (unbounded), `best`, `superior`, `state-of-the-art`, `significantly`, `causal` (unqualified), `scalable`, `production-ready`."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 21,
+      "term": "best",
+      "excerpt": "`proves`, `guarantees`, `robust`, `generalizes` (unbounded), `best`, `superior`, `state-of-the-art`, `significantly`, `causal` (unqualified), `scalable`, `production-ready`."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 21,
+      "term": "superior",
+      "excerpt": "`proves`, `guarantees`, `robust`, `generalizes` (unbounded), `best`, `superior`, `state-of-the-art`, `significantly`, `causal` (unqualified), `scalable`, `production-ready`."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 21,
+      "term": "state-of-the-art",
+      "excerpt": "`proves`, `guarantees`, `robust`, `generalizes` (unbounded), `best`, `superior`, `state-of-the-art`, `significantly`, `causal` (unqualified), `scalable`, `production-ready`."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit.md",
+      "line": 21,
+      "term": "production-ready",
+      "excerpt": "`proves`, `guarantees`, `robust`, `generalizes` (unbounded), `best`, `superior`, `state-of-the-art`, `significantly`, `causal` (unqualified), `scalable`, `production-ready`."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 6,
+      "term": "SOTA",
+      "excerpt": "Banned-term grep over `docs/research/q2_publication_package/` found **51** hits; **all** were meta (listing forbidden phrases in audit/limitations/novelty notes), not asserted SOTA/best claims in results text. Frozen Q2 `manifest.json` rese"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 6,
+      "term": "best",
+      "excerpt": "Banned-term grep over `docs/research/q2_publication_package/` found **51** hits; **all** were meta (listing forbidden phrases in audit/limitations/novelty notes), not asserted SOTA/best claims in results text. Frozen Q2 `manifest.json` rese"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 12,
+      "term": "guarantee",
+      "excerpt": "| A1 | Detector-related Tool-HASR effect vs D0 is NEG on T0 PHASE1-CORE | **GREEN** | Observed \u0394(D1/D2/D4)=\u22120.6875/\u22120.25/\u22120.5625, n=16 | Detectors guarantee security |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 13,
+      "term": "Universally effective",
+      "excerpt": "| A2 | \u0394 sign consistent on T1\u2013T3 (9/9) | **GREEN** | Directionally consistent on evaluated T0\u2013T3 | Universally effective / all LLMs |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 17,
+      "term": "Production-ready",
+      "excerpt": "| A6 | Production-ready / SOTA | **RED** | (omit) | production-ready / SOTA / best |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 17,
+      "term": "SOTA",
+      "excerpt": "| A6 | Production-ready / SOTA | **RED** | (omit) | production-ready / SOTA / best |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 17,
+      "term": "production-ready",
+      "excerpt": "| A6 | Production-ready / SOTA | **RED** | (omit) | production-ready / SOTA / best |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 17,
+      "term": "SOTA",
+      "excerpt": "| A6 | Production-ready / SOTA | **RED** | (omit) | production-ready / SOTA / best |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 17,
+      "term": "best",
+      "excerpt": "| A6 | Production-ready / SOTA | **RED** | (omit) | production-ready / SOTA / best |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 18,
+      "term": "Proves",
+      "excerpt": "| A7 | Proves robust generalization | **RED** | Bounded directional consistency, four models | proves / robust / all LLMs |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 18,
+      "term": "robust",
+      "excerpt": "| A7 | Proves robust generalization | **RED** | Bounded directional consistency, four models | proves / robust / all LLMs |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 18,
+      "term": "proves",
+      "excerpt": "| A7 | Proves robust generalization | **RED** | Bounded directional consistency, four models | proves / robust / all LLMs |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 18,
+      "term": "robust",
+      "excerpt": "| A7 | Proves robust generalization | **RED** | Bounded directional consistency, four models | proves / robust / all LLMs |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 19,
+      "term": "Cost-optimal",
+      "excerpt": "| A8 | Cost-optimal defense | **RED** | Normalized weights; $0.152885 token-USD | cost-optimal |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 19,
+      "term": "cost-optimal",
+      "excerpt": "| A8 | Cost-optimal defense | **RED** | Normalized weights; $0.152885 token-USD | cost-optimal |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 20,
+      "term": "superior",
+      "excerpt": "| A9 | D1 superior to D2/D4 | **RED** | Report each \u0394 vs D0; no ranking | best / superior |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 20,
+      "term": "best",
+      "excerpt": "| A9 | D1 superior to D2/D4 | **RED** | Report each \u0394 vs D0; no ranking | best / superior |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 20,
+      "term": "superior",
+      "excerpt": "| A9 | D1 superior to D2/D4 | **RED** | Report each \u0394 vs D0; no ranking | best / superior |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 21,
+      "term": "robust",
+      "excerpt": "| A10 | Adaptive C4 handled | **RED** | Out of claim scope | robust to adaptive attacks |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 22,
+      "term": "confirmatory",
+      "excerpt": "| A11 | Q2 confirmatory | **YELLOW** | Protocol-complete pilot; `scientific_evidence=false` | confirmatory multi-model proof |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_claims_audit_standardization.md",
+      "line": 22,
+      "term": "confirmatory",
+      "excerpt": "| A11 | Q2 confirmatory | **YELLOW** | Protocol-complete pilot; `scientific_evidence=false` | confirmatory multi-model proof |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_limitations.md",
+      "line": 5,
+      "term": "state-of-the-art",
+      "excerpt": "Do not describe Q2 as a protocol-qualified confirmation study or as a ranking/state-of-the-art result. Frame as protocol-complete pilot-scale directional consistency (`scientific_evidence=false`)."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_novelty_audit.md",
+      "line": 20,
+      "term": "Best",
+      "excerpt": "| Best/SOTA detector | Forbidden by protocol | Bake-offs common | Do not claim | CRITICAL if present |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_novelty_audit.md",
+      "line": 20,
+      "term": "SOTA",
+      "excerpt": "| Best/SOTA detector | Forbidden by protocol | Bake-offs common | Do not claim | CRITICAL if present |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.json",
+      "line": 12,
+      "term": "SOTA",
+      "excerpt": "\"SOTA/best/universal-defense claims remain unsupported if introduced (C1)\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.json",
+      "line": 12,
+      "term": "best",
+      "excerpt": "\"SOTA/best/universal-defense claims remain unsupported if introduced (C1)\""
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.md",
+      "line": 17,
+      "term": "SOTA",
+      "excerpt": "| C1 | **CRITICAL** | Claim strength | A SOTA/best/universal-defense paper would be unsupported. Current package results text does **not** assert those (grep hits are meta). | Keep RED list; manuscript must not introduce them |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.md",
+      "line": 17,
+      "term": "best",
+      "excerpt": "| C1 | **CRITICAL** | Claim strength | A SOTA/best/universal-defense paper would be unsupported. Current package results text does **not** assert those (grep hits are meta). | Keep RED list; manuscript must not introduce them |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.md",
+      "line": 21,
+      "term": "SOTA",
+      "excerpt": "| M3 | **MAJOR** | External baselines | None on this pack | `BASELINE_GAP.md`; never SOTA |"
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.md",
+      "line": 45,
+      "term": "SOTA",
+      "excerpt": "9. **Claim strength** \u2014 results package GREEN for scoped \u0394/sign; RED for SOTA/best."
+    },
+    {
+      "path": "docs/research/q2_publication_package/q2_standardization_audit.md",
+      "line": 45,
+      "term": "best",
+      "excerpt": "9. **Claim strength** \u2014 results package GREEN for scoped \u0394/sign; RED for SOTA/best."
+    }
+  ],
+  "n_hits": 103,
+  "note": "Hits include claims-audit documents that list banned terms as forbidden examples. Distinguish meta-discussion from asserted claims."
+}
