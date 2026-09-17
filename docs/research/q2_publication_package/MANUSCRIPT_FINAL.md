@@ -15,7 +15,7 @@ Related-work identities use existing Hub-verified arXiv records. Most venue/DOI 
 
 Observed security behavior in tool-using language-model agents can mix **detector behavior** with the **downstream intervention policy** that allows, wraps, or denies tools. Without holding that policy fixed, detector-related effects are difficult to attribute.
 
-This paper reports a **controlled attribution protocol**, not a new detector family and not a defense covering all threat models. The intervention policy is held fixed (PHASE1-CORE). Detector identity is varied, including a no-detection reference (D0). The primary outcome is **Tool-HASR** (harmful tool execution). **Judge-ASR** is a secondary, non-identical diagnostic of judge-level attack-success assessment. The evaluation uses frozen pack `p2_agentic_v0.1.0` (16 attack / 16 twin / 4 hard-negative trajectories), four target models, and **n=16 attack arms per target×detector cell**. Q2 live completed **432/432 arms** (historical spend $0.152885).
+This paper reports a **controlled attribution protocol**, not a new detector family and not a defense covering all threat models. The research question is whether the detector-related Tool-HASR effect observed under a locked Stage-B target remains directionally consistent when the same locked policy, pack, detectors, thresholds, and judge are applied to independently selected secondary target models. The intervention policy is held fixed (PHASE1-CORE). Detector identity is varied, including a no-detection reference (D0). The primary outcome is **Tool-HASR** (harmful tool execution). **Judge-ASR** is a secondary, non-identical diagnostic of judge-level attack-success assessment. The evaluation uses frozen pack `p2_agentic_v0.1.0` (16 attack / 16 twin / 4 hard-negative trajectories), four target models, and **n=16 attack arms per target×detector cell**. Q2 live completed **432/432 arms** (historical spend $0.152885).
 
 Under the tested protocol, detector-related Tool-HASR Δ versus D0 was negative for D1, D2, and D4 on the locked Stage-B target T0 and on independently selected T1–T3 (**9/9 directional agreements**). This is **pilot-scale directional consistency**. It does not establish population-level generalization. T1–T3 Tool-HASR was 81/192 = 0.421875; Judge-ASR was 186/192 = 0.96875 (M3=108, M4=3). INVALID_TOOL_ARGS occurred on 192 events / 136 arms and is treated as a canonical execution-state diagnostic, not as automatic attack success or failure.
 
@@ -104,9 +104,27 @@ The research question concerns controlled detector-related attribution, not comp
 
 # 7. Controlled Attribution Framework
 
-Each episode-arm runs:
+Each episode-arm runs the following control structure. What is **varied** is detector identity; what is **locked** is everything else.
 
-**Detector → RiskCore → CorePolicy (PHASE1-CORE) → ToolPermissionGate → mock tools**, with a parallel **judge** that does not enter the detector→policy path. Gold labels (`is_attack`, `label`, `category`) do not enter that path.
+```
+[Varied]  Detector (D0 / D1 / D2 / D4)
+            │  detector signal
+            ▼
+[Locked]  RiskCore
+            │  risk score
+            ▼
+[Locked]  CorePolicy (PHASE1-CORE)  →  intervention action A0–A3
+            │  thresholds 0.25 / 0.25 / 0.60;  action costs A0=0 A1=0.10 A2=0.25 A3=0.50
+            ▼
+[Locked]  ToolPermissionGate
+            │  allow / wrap / deny
+            ▼
+[Locked]  Mock tools  ──►  Tool-HASR  (primary: harmful tool execution)
+
+[Parallel, locked]  Judge (qwen-2.5-72b)  ──►  Judge-ASR  (secondary: judge-level assessment)
+```
+
+Gold labels (`is_attack`, `label`, `category`) do not enter the detector→policy path. The judge does not enter the detector→policy path.
 
 | Varied | Locked |
 | --- | --- |
