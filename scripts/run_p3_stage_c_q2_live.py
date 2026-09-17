@@ -257,7 +257,10 @@ def run_q2_live(*, run_dir: Path, run_id: str, commit: str) -> dict[str, Any]:
                 "STOP_TARGET_MODEL_MISMATCH",
                 f"{slot}: got {target.model_id} expected {SLOT_TO_MODEL[slot]}",
             )
-        jid = getattr(judge, "model_id", None) or getattr(judge, "model", None)
+        j_model = getattr(judge, "model", None)
+        jid = getattr(judge, "model_id", None)
+        if jid is None and j_model is not None:
+            jid = getattr(j_model, "model_id", None)
         if jid is not None and str(jid) != JUDGE_ID:
             raise P3Q2LiveGateError(
                 "STOP_JUDGE_MODEL_MISMATCH", f"got {jid} expected {JUDGE_ID}"
