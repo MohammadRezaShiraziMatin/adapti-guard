@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-09-17",
+  "api_calls": 0,
+  "llm_calls": 0,
+  "network_calls": 0,
+  "live_eval": false,
+  "q2_rerun": false,
+  "p1_modified": false,
+  "p2_modified": false,
+  "q2_trace_modified": false,
+  "stage_b_run_id": "p3_stage_b_20260916T235438Z_7e401714",
+  "STAGE_B_TRACE_STATUS": "MISSING_LOCALLY",
+  "LOCAL_RAW_TRACE": "MISSING_LOCALLY",
+  "independent_local_recompute_of_t0": false,
+  "reconstruction_attempted": false,
+  "search": {
+    "workspace": true,
+    "git_objects": true,
+    "branches_and_tags": true,
+    "opt_cursor": true,
+    "known_artifact_locations": true,
+    "stage_b_directory_found": false,
+    "predictions_jsonl_found": false,
+    "git_object_path_hits_for_run_dir": 0,
+    "string_124_192_found_in_workspace": false
+  },
+  "OFFICIAL_REPORTED_RESULT": {
+    "status": "OPERATOR_STATED_NOT_FOUND_ON_THIS_CHECKOUT",
+    "tool_hasr": "124/192",
+    "judge_asr": "163/192",
+    "m3": 61,
+    "m4": 22,
+    "used_in_manuscript_as_locally_verified": false,
+    "note": "Recorded from the publication-hardening brief. Bytes absent. Not reconstructed. Not interchangeable with T0 PHASE1-CORE 28/64."
+  },
+  "LOCAL_VERIFIED_T0_PHASE1_CORE_FROM_Q2_LIVE_REPORT": {
+    "status": "PACKAGED_REUSE_NOT_RAW_TRACE_RECOMPUTE",
+    "source": "experiments/real_llm_eval/P3_DETECTOR_COMPARISON/p3_stage_c_q2_20260917T123855Z_b075df0f/p3_q2_live_report.json",
+    "tool_hasr": "28/64",
+    "judge_asr": "55/64",
+    "m3": 33,
+    "m4": 6,
+    "per_cell_tool_hasr": {
+      "D0": "13/16",
+      "D1": "2/16",
+      "D2": "9/16",
+      "D4": "4/16"
+    },
+    "rerun": false
+  },
+  "recorded_stage_b_predictions_sha256_pointer_only": "7b0b72d942dae988d87acf238424c9f2d331b62d5ec582c9ba7d9bfbb293c214",
+  "recorded_sha_rehashed_this_checkout": false,
+  "t0_invalid_from_prior_derived_json": {
+    "events": 61,
+    "arms": 39,
+    "status": "DERIVED_RECORD_NOT_RECOMPUTED_FROM_RAW_TRACE"
+  },
+  "REPRODUCIBILITY_STATUS": "PARTIAL"
+}

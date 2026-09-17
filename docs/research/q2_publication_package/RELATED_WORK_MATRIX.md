@@ -2,13 +2,50 @@
 
 **API calls this task:** 0. **Live experiments:** false. **Frozen evidence modified:** false.
 
-## Citation integrity
+## Citation integrity (hardening pass, 2026-09-17)
 
-- **VERIFIED:** arXiv identifier, title, author list, and year from Hugging Face Hub `papers/<arxiv>/metadata.json`.
-- **UNVERIFIED:** venue (conference/journal), DOI, page numbers. Hub metadata did not include these fields.
+This turn: **NETWORK_CALLS=0**. Publisher/arXiv pages were **not** re-fetched. Classification uses existing package Hub records plus operator-supplied venue/DOI where named in the hardening brief.
+
+| Class | Meaning |
+| --- | --- |
+| **VERIFIED** | Paper identity (title, authors, year, arXiv id) confirmed from existing package Hub metadata |
+| **PARTIALLY_VERIFIED** | Identity VERIFIED; venue and/or DOI still UNVERIFIED, or venue/DOI are operator-supplied and not re-checked from a publisher page this turn |
+| **UNVERIFIED** | Identity not established (none of the 21 matrix records) |
+
 - Hub AI summaries are **not** treated as scientific claims.
 - Numeric results reported in other papers are **not** copied into Q2 tables.
-- Additional papers appeared in Hub search (e.g. DataFilter `2510.19207`, SafeAgent `2604.17562`, AgentWall `2605.16265`, WAInjectBench `2510.01354`) but were **not fully extracted**; they are listed as **SURVEY-INCOMPLETE**, not as citations in the manuscript body.
+- Task Shield (`arXiv:2412.16682`) was **not** already in this matrix and was **not** added.
+- **AgentDojo** and **ASB** paper identities are **VERIFIED**. They are not marked UNCERTAIN.
+- **CaMeL** (`2503.18813`) is a published architectural isolation paper, not an unverified idea.
+- Additional papers appeared in an earlier Hub search (e.g. DataFilter `2510.19207`, SafeAgent `2604.17562`, AgentWall `2605.16265`, WAInjectBench `2510.01354`) but were **not fully extracted**; they remain **SURVEY-INCOMPLETE**, not manuscript citations.
+
+## Record classification (21/21 identity VERIFIED; overall PARTIALLY_VERIFIED)
+
+| Paper | arXiv | Identity | Venue / DOI | Overall |
+| --- | --- | --- | --- | --- |
+| Perez & Ribeiro | `2211.09527` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Greshake et al. | `2302.12173` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Liu, Deng, et al. | `2306.05499` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Liu, Jia, et al. | `2310.12815` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Toyer et al. | `2311.01011` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Yi et al. (BIPIA) | `2312.14197` | VERIFIED | KDD 2025 / `10.1145/3690624.3709179` (OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN) | PARTIALLY_VERIFIED |
+| Zhan et al. (InjecAgent) | `2403.02691` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Debenedetti et al. (AgentDojo) | `2406.13352` | VERIFIED | NeurIPS 2024 / `10.52202/079017-2636` (OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN) | PARTIALLY_VERIFIED |
+| Ruan et al. (ToolEmu) | `2309.15817` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Andriushchenko et al. (AgentHarm) | `2410.09024` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Zhang et al. (ASB) | `2410.02644` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Inan et al. (Llama Guard) | `2312.06674` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Rebedea et al. (NeMo) | `2310.10501` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Wallace et al. (Instruction Hierarchy) | `2404.13208` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Chen et al. (StruQ) | `2402.06363` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Hines et al. (Spotlighting) | `2403.14720` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Wu et al. (IsolateGPT) | `2403.04960` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Debenedetti et al. (CaMeL) | `2503.18813` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Zhu et al. (MELON) | `2502.05174` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Jacob et al. (PromptShield) | `2501.15145` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+| Chen et al. (Meta SecAlign) | `2507.02735` | VERIFIED | UNVERIFIED | PARTIALLY_VERIFIED |
+
+**Bibliography overall:** PARTIAL. Camera-ready venue/DOI cleanup remains a blocker for PUBLICATION_READY.
 
 ## How to read this matrix
 
@@ -42,9 +79,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Kai Greshake, Sahar Abdelnabi, Shailesh Mishra, Christoph Endres, Thorsten Holz, Mario Fritz
 - **Year:** 2023
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** UNVERIFIED
 - **arXiv:** `2302.12173` · URL: https://arxiv.org/abs/2302.12173
 - **DOI:** UNVERIFIED
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED
 - **Problem:** Indirect prompt injection via retrieved/untrusted data in LLM-integrated apps.
 - **Method:** Taxonomy and real-world case studies of IPI.
 - **Benchmark:** Real-world application case studies (not a locked agent pack).
@@ -110,9 +148,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Jingwei Yi, Yueqi Xie, Bin Zhu, Emre Kiciman, Guangzhong Sun, Xing Xie, Fangzhao Wu
 - **Year:** 2023
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** KDD 2025 (OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN)
 - **arXiv:** `2312.14197` · URL: https://arxiv.org/abs/2312.14197
-- **DOI:** UNVERIFIED
+- **DOI:** `10.1145/3690624.3709179` (OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN)
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED
 - **Problem:** IPI risk when LLMs consume external content.
 - **Method:** BIPIA benchmark plus defense analysis (instruction/data distinction).
 - **Benchmark:** BIPIA.
@@ -127,9 +166,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Qiusi Zhan, Zhixiang Liang, Zifan Ying, Daniel Kang
 - **Year:** 2024
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** UNVERIFIED
 - **arXiv:** `2403.02691` · URL: https://arxiv.org/abs/2403.02691
 - **DOI:** UNVERIFIED
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED
 - **Problem:** IPI that induces tool-integrated agents to take detrimental actions.
 - **Method:** InjecAgent benchmark of tool-using agents under IPI.
 - **Benchmark:** InjecAgent.
@@ -144,17 +184,18 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Edoardo Debenedetti, Jie Zhang, Mislav Balunović, Luca Beurer-Kellner, Marc Fischer, Florian Tramèr
 - **Year:** 2024
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** NeurIPS 2024 (OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN)
 - **arXiv:** `2406.13352` · URL: https://arxiv.org/abs/2406.13352
-- **DOI:** UNVERIFIED
+- **DOI:** `10.52202/079017-2636` (OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN)
+- **Record status:** identity VERIFIED (not UNCERTAIN); overall PARTIALLY_VERIFIED
 - **Problem:** Need a dynamic environment to evaluate agent attacks and defenses over untrusted tool data.
 - **Method:** AgentDojo dynamic eval framework; evolving attacks/defenses.
 - **Benchmark:** AgentDojo.
 - **Evaluation unit:** Agent task completion under attack in a tool environment.
 - **Primary metric:** Utility and security (attack success) in AgentDojo tasks.
-- **Detector and policy separately controlled:** PARTIAL — defenses can be swapped, but Hub abstract does not establish a locked intervention-policy × detector factorial like Q2.
-- **Relevance to ADAPTI-GUARD:** Closest public agent attack/defense eval harness.
-- **Limitation vs Q2:** Different pack, success definitions, and (from Hub metadata) no verified locked-policy detector-only Δ across independently selected targets. Cross-paper numeric comparison is a claims error.
+- **Detector and policy separately controlled:** Defenses can be swapped in a dynamic environment. That is not the Q2 locked-intervention-policy × detector-identity factorial.
+- **Relevance to ADAPTI-GUARD:** Established agent attack/defense evaluation environment.
+- **Limitation vs Q2:** Different pack, success definitions, and execution environment. The paper identity is verified. The Q2 factorial is not established as AgentDojo’s central measurement protocol. Cross-paper numeric comparison is a claims error.
 - **Topics:** C, D, E, J, K, L
 
 ### 9. Identifying the Risks of LM Agents with an LM-Emulated Sandbox
@@ -178,9 +219,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Maksym Andriushchenko, Alexandra Souly, Mateusz Dziemian, Derek Duenas, Maxwell Lin, Justin Wang, Dan Hendrycks, Andy Zou, Zico Kolter, Matt Fredrikson, Eric Winsor, Jerome Wynne, Yarin Gal, Xander Davies
 - **Year:** 2024
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** UNVERIFIED
 - **arXiv:** `2410.09024` · URL: https://arxiv.org/abs/2410.09024
 - **DOI:** UNVERIFIED
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED
 - **Problem:** Jailbreak/harm evaluation for agents, not only chatbots.
 - **Method:** AgentHarm: 110 malicious agent tasks (440 with augmentations), 11 harm categories.
 - **Benchmark:** AgentHarm (HF dataset ai-safety-institute/AgentHarm).
@@ -203,9 +245,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 - **Benchmark:** ASB.
 - **Evaluation unit:** Agent operation stages (system prompt, user prompt, tool usage, memory).
 - **Primary metric:** Attack success rate (paper reports high average ASR; Hub summary cites 84.30%).
-- **Detector and policy separately controlled:** PARTIAL — evaluates many defenses, but Hub metadata does not establish detector-only contrasts under a locked intervention policy.
+- **Record status:** identity VERIFIED (not UNCERTAIN); venue/DOI UNVERIFIED; overall PARTIALLY_VERIFIED
+- **Detector and policy separately controlled:** Evaluates many attacks and defenses. That is not the Q2 locked-intervention-policy × detector-identity factorial.
 - **Relevance to ADAPTI-GUARD:** Large agent security benchmark including tool-usage stage.
-- **Limitation vs Q2:** Different threat model/pack/metrics; cannot copy ASR into Q2 tables. Not verified as Q2-style isolation.
+- **Limitation vs Q2:** Different threat model, pack, and metrics; cannot copy ASR into Q2 tables. Paper identity is verified. ASB is not used as a numerical baseline.
 - **Topics:** C, E, J, K, L
 
 ### 12. Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations
@@ -247,9 +290,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Eric Wallace, Kai Xiao, Reimar Leike, Lilian Weng, Johannes Heidecke, Alex Beutel
 - **Year:** 2024
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** UNVERIFIED
 - **arXiv:** `2404.13208` · URL: https://arxiv.org/abs/2404.13208
 - **DOI:** UNVERIFIED
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED
 - **Problem:** LLMs treat all instructions similarly, enabling injection.
 - **Method:** Train models to prioritize privileged instructions (model-level defense).
 - **Benchmark:** Instruction-priority / injection evaluations (model-level).
@@ -298,9 +342,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 - **Authors:** Yuhao Wu, Franziska Roesner, Tadayoshi Kohno, Ning Zhang, Umar Iqbal
 - **Year:** 2024
-- **Venue:** UNVERIFIED (UNVERIFIED)
+- **Venue:** UNVERIFIED
 - **arXiv:** `2403.04960` · URL: https://arxiv.org/abs/2403.04960
 - **DOI:** UNVERIFIED
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED
 - **Problem:** Insufficient isolation among LLM apps/tools and the system.
 - **Method:** Execution isolation architecture for LLM-based agentic systems.
 - **Benchmark:** Attacks against isolated vs non-isolated LLM app ecosystems.
@@ -318,14 +363,15 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 - **Venue:** UNVERIFIED (UNVERIFIED)
 - **arXiv:** `2503.18813` · URL: https://arxiv.org/abs/2503.18813
 - **DOI:** UNVERIFIED
+- **Record status:** identity VERIFIED; overall PARTIALLY_VERIFIED. CaMeL is a published architectural defense paper, not an unverified idea.
 - **Problem:** Prompt injection in agents that handle untrusted data.
 - **Method:** CaMeL: segregate control and data flows; prevent unauthorized exfiltration.
-- **Benchmark:** AgentDojo (Hub summary: 67% secure task completion — not copied into Q2 tables).
+- **Benchmark:** AgentDojo (Hub summary numeric claims are **not** copied into Q2 tables).
 - **Evaluation unit:** Secure task completion in AgentDojo.
 - **Primary metric:** Secure task completion / injection resistance.
-- **Detector and policy separately controlled:** NO — design-level control/data isolation, not detector×fixed-policy factorial.
-- **Relevance to ADAPTI-GUARD:** Strongest related isolation *by design*. Must not be equated with Q2's experimental detector isolation.
-- **Limitation vs Q2:** Architectural capability isolation, not a locked PHASE1-CORE detector contrast on Tool-HASR. Different pack/metrics.
+- **Detector and policy separately controlled:** Design-level control/data isolation. That is a real defense architecture. It is not the Q2 detector×fixed-policy factorial.
+- **Relevance to ADAPTI-GUARD:** Architectural isolation by design. Related class; different mechanism than detector attribution under a locked policy.
+- **Limitation vs Q2:** Architectural capability isolation, not a locked PHASE1-CORE detector contrast on Tool-HASR. Different pack/metrics. Not a numerical baseline.
 - **Topics:** D, G, H, L
 
 ### 19. MELON: Provable Defense Against Indirect Prompt Injection Attacks in AI Agents
@@ -398,9 +444,10 @@ Q2 research question (protocol): under locked PHASE1-CORE, does the detector-rel
 
 ## Survey limitations
 
-- Venue/DOI not in Hub metadata — marked UNVERIFIED.
-- Not an exhaustive literature review; additional papers exist (e.g. DataFilter 2510.19207, SafeAgent 2604.17562, AgentWall 2605.16265, WAInjectBench 2510.01354) and were noted in search but not fully extracted.
-- Cannot claim 'first' or CLEAR GAP solely from this survey.
+- Most venue/DOI fields remain UNVERIFIED (NETWORK_CALLS=0 this turn). AgentDojo and BIPIA venue/DOI are operator-supplied and not re-checked from publisher pages.
+- Not an exhaustive literature review; additional papers exist and were not fully extracted.
+- Cannot claim “first,” “unique,” or CLEAR GAP solely from this survey.
 - Do not copy numeric results from other papers into Q2 tables.
+- Residual gap is protocol-narrow: the verified literature establishes attacks, benchmarks, defenses, and adaptive evaluation, but does not establish the exact locked-policy detector-attribution factorial used here as the central measurement protocol.
 
 See `NOVELTY_AUDIT.md` for the novelty test against this matrix.

@@ -1,57 +1,78 @@
 # Novelty audit
 
-**API calls:** 0. **Live experiments:** false.  
-**Source:** `RELATED_WORK_MATRIX.json` (21 Hub-verified arXiv records) plus Q2 locked protocol.  
-**Rule:** do not claim novelty merely because a method looks different. Missing implementation in this repo ≠ new science.
+**API calls:** 0. **Live experiments:** false. **NETWORK_CALLS=0.**  
+**Source:** `RELATED_WORK_MATRIX.json` (21 records; identity VERIFIED from existing package Hub metadata).  
+**NOVELTY_CLASS = PARTIAL_GAP** (unchanged).  
+**Rule:** do not claim novelty merely because a method looks different. Missing implementation in this repo ≠ new science. Do not write “first,” “unique,” “no prior work,” or “novel for the first time.”
 
-## Central contribution under test
+## Positioning: controlled attribution, not a new defense
 
-A **controlled framework for isolating detector-related effects from downstream intervention policy** in LLM-agent security, with Tool-HASR as the primary operational endpoint and a bounded cross-target Δ sign check (Q2 / RQ-C2).
+The contribution under test is **controlled attribution**, not invention of a new defense algorithm.
 
-This is **one** contribution with supporting measurements. It is not five unrelated algorithmic inventions.
+A controlled evaluation protocol that:
+
+1. holds the downstream intervention policy fixed (PHASE1-CORE);
+2. varies detector identity, including a no-detection arm (D0);
+3. measures Tool-HASR (harmful tool execution);
+4. tests whether detector-related Δ relative to D0 preserves sign across independently selected target models.
+
+This is **one** methodological contribution with supporting measurements. It is not a claim of a new universal defense.
+
+## What existing literature already provides
+
+The verified literature establishes extensive work on:
+
+| Already provided | Examples in the surveyed set (arXiv) |
+| --- | --- |
+| Prompt-injection attacks | Perez & Ribeiro `2211.09527`; Liu et al. `2306.05499`, `2310.12815`; Tensor Trust `2311.01011` |
+| Indirect prompt injection | Greshake et al. `2302.12173`; BIPIA `2312.14197`; InjecAgent `2403.02691` |
+| Agent security benchmarks | AgentDojo `2406.13352`; ASB `2410.02644`; AgentHarm `2410.09024`; ToolEmu `2309.15817` |
+| Dynamic evaluation | AgentDojo (identity VERIFIED; NeurIPS 2024 operator-supplied) |
+| Defense architectures | CaMeL `2503.18813`; IsolateGPT `2403.04960`; StruQ `2402.06363`; Spotlighting `2403.14720` |
+| Architectural isolation | CaMeL (published design, not an unverified idea); IsolateGPT |
+| Adaptive attacks / adaptive evaluation | AgentDojo evolving attacks; MELON `2502.05174` (masked re-execution). Q2 C4 open attacker remains out of scope |
+| Memory/tool security | ASB tool/memory stages; InjecAgent tool-integrated IPI |
+| Runtime security mechanisms | NeMo Guardrails `2310.10501`; Llama Guard `2312.06674`; PromptShield `2501.15145`; Instruction Hierarchy `2404.13208` |
+
+The paper does **not** claim invention of those components. AgentDojo and ASB are **verified papers**, not uncertain citations. CaMeL is a **published architectural defense**, not a rumor.
+
+## Residual gap (narrow)
+
+**NOVELTY_CLASS = PARTIAL_GAP**
+
+> The verified literature establishes extensive work on attacks, benchmarks, defenses, and adaptive evaluation, but does not establish the exact locked-policy detector-attribution factorial used here as the central measurement protocol.
+
+That sentence is the maximum claim. It is **not** a global uniqueness proof. Exact literature gap cannot be claimed globally (`LIMITATIONS.md` item 19).
 
 ## Explicit tests against prior work
 
 | Question | Already studied in surveyed set? | Evidence | Implication for Q2 |
 | --- | --- | --- | --- |
-| Detector-only effects | **Yes** | PromptShield (`2501.15145`); Llama Guard (`2312.06674`) | Not novel as “we built a detector.” |
-| Policy-only / intervention effects | **Yes** | NeMo Guardrails (`2310.10501`); IsolateGPT (`2403.04960`); CaMeL (`2503.18813`) | Not novel as “we added a runtime policy.” |
-| Detector–policy decomposition | **Partial** | CaMeL isolates *control vs data*; IsolateGPT isolates *execution*; AgentDojo/ASB evaluate many defenses | Architectural isolation ≠ experimental factorial with policy locked and detector identity varied. |
-| Fixed-policy detector comparison | **Uncertain** | AgentDojo and ASB swap defenses; Hub metadata does not verify a locked intervention policy × detector identity design | Cannot claim “first.” Possible overlap remains. |
-| Tool-harm execution as primary endpoint | **Partial** | InjecAgent, AgentDojo, AgentHarm, ASB, ToolEmu all score actions/tools | Tool-HASR is related. Dual Tool-HASR vs Judge-ASR + M3/M4 is a measurement contribution, not a new harm theory. |
-| Target-model sensitivity of detector effects | **Uncertain** | ASB ~13 backbones; BIPIA and Liu et al. evaluate many LLMs | Multi-model evals exist. Detector-related Δ vs D0 under locked intervention is not verified in those papers from Hub metadata. |
-| Agentic trajectory-level security | **Yes** | AgentDojo, MELON, ToolEmu, AgentHarm | Established. |
-| Cross-model consistency under locked intervention policy | **Not found in surveyed set** | No verified paper pre-registers Δ(d,t) sign agreement of detector-vs-D0 Tool-HASR across independently selected secondary targets with one locked policy | Distinctive *protocol*. Not a proof of uniqueness. |
+| Detector-only effects | Yes | PromptShield `2501.15145`; Llama Guard `2312.06674` | Not a new detector family. |
+| Policy-only / intervention effects | Yes | NeMo `2310.10501`; IsolateGPT; CaMeL | Not a new runtime policy. |
+| Architectural isolation | Yes | CaMeL control/data; IsolateGPT execution | Related class; different mechanism than detector identity under a locked policy. |
+| Agent attack/defense benchmarks | Yes | AgentDojo, ASB, InjecAgent, AgentHarm | Established. Paper identities VERIFIED. Not numerical Q2 baselines. |
+| Locked-policy detector-attribution factorial as the *central* protocol | Not established in the surveyed set as that central protocol | Matrix + this audit | PARTIAL_GAP. Not “first.” Not “no prior work.” |
+| Tool-harm execution as an endpoint | Partial | InjecAgent, AgentDojo, AgentHarm, ASB, ToolEmu score actions/tools | Tool-HASR is related. Dual Tool-HASR vs Judge-ASR + M3/M4 is a measurement layer, not a new harm theory. |
+| Cross-model directional Δ vs D0 under one locked policy | Not established as the surveyed papers’ central protocol | — | Distinctive protocol. Not uniqueness. |
 
 ## What is *not* novel
 
-- Prompt-injection threat models (Perez & Ribeiro; Greshake; Liu et al.).
-- Guardrail detectors and programmable rails (Llama Guard; NeMo).
-- Model-level instruction hierarchy / SecAlign-class training (Wallace et al.; Chen et al. Meta SecAlign).
-- Channel separation (StruQ) and spotlighting of untrusted data (Hines et al.).
-- Cost-sensitive actions as a general ML idea (A0–A3 here are experimental weights).
-- Adaptive *attacker* evaluation (out of Q2 claim scope; C4 open attacker not run).
-
-D1/D2/D4 are **interpretable instantiations** under a shared `P3Detector` contract. They are not claimed as new detector families.
+- Prompt-injection threat models.
+- Guardrail detectors and programmable rails.
+- Model-level instruction hierarchy / SecAlign-class training.
+- Channel separation and spotlighting.
+- Cost-sensitive actions as a general ML idea.
+- Adaptive attacker evaluation (out of Q2 claim scope).
+- D1/D2/D4 as new detector families (they are instantiations under a shared `P3Detector` contract).
 
 ## Residual uncertainty (do not paper over)
 
-1. Full texts of AgentDojo and ASB were **not** read end-to-end in this audit. They may contain defense tables that hold some policy constant.
-2. Venue versions may differ from arXiv abstracts.
-3. Industry products (Prompt Shields, vendor firewalls) are not academic papers and were not experimentally compared.
-4. A “CLEAR GAP” would require exhaustive search plus full-text confirmation. This audit does not have that.
-
-## Classification
-
-**PARTIAL GAP**
-
-- **Supported distinctiveness:** experimental isolation of detector identity under a *locked* agent intervention policy, with Tool-HASR Δ vs a no-detection arm (D0), plus a pre-registered cross-target sign-agreement check on independently selected models.
-- **Not a clear gap:** detection, rails, architectural isolation, agent benchmarks, and multi-model evals already exist.
-- **Uncertain remainder:** whether AgentDojo/ASB already implemented a close cousin of the factorial.
-
-Do **not** write “first,” “only,” or “CLEAR GAP.”  
-Do **not** upgrade this to CLEAR GAP without full-text confirmation of AgentDojo/ASB defense protocols.
+1. Full texts of AgentDojo and ASB were not read end-to-end in this audit. Their paper identities are verified; whether a close cousin of the factorial appears inside those full texts is **not** upgraded to a global “no overlap” claim.
+2. Venue versions may differ from arXiv abstracts. Most venue/DOI fields remain UNVERIFIED; AgentDojo/BIPIA venue/DOI are operator-supplied and not re-fetched this turn.
+3. Industry products were not experimentally compared.
+4. A CLEAR GAP would require exhaustive search plus full-text confirmation. This audit does not have that. **Do not upgrade to CLEAR GAP.**
 
 ## Safe novelty sentence for the manuscript
 
-Prior work studies prompt injection, agent benchmarks, detectors, and architectural isolation. What this study adds is a **controlled attribution protocol**: hold downstream intervention policy, thresholds, pack, and judge fixed; vary detector identity including a no-detection arm; measure operational harmful tool execution (Tool-HASR); and test whether the detector-related Δ sign remains consistent on independently selected target models. That protocol is **partially distinct** from surveyed work; it is **not** a claim of a new universal defense.
+Prior work already provides prompt-injection attacks, agent security benchmarks, dynamic evaluation, defense architectures, architectural isolation, adaptive evaluation, memory/tool security, and runtime security mechanisms. This study does not claim invention of those components. What it adds is a **controlled attribution protocol**: hold downstream intervention policy, thresholds, pack, and judge fixed; vary detector identity including D0; measure Tool-HASR; and test whether detector-related Δ relative to D0 preserves sign across independently selected target models. Novelty class: **PARTIAL_GAP**.

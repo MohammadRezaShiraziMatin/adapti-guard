@@ -1,31 +1,43 @@
-# Bibliography verification (offline)
+# Bibliography verification (hardening pass)
 
 **API_CALLS=0. LLM_CALLS=0. NETWORK_CALLS=0.**  
-Mode: compare `MANUSCRIPT_V1.md` references to existing `RELATED_WORK_MATRIX.json` records only. No Hub/web lookup in this packaging pass.
+This turn did **not** re-fetch publisher or arXiv pages. Classification uses existing package Hub records plus operator-supplied venue/DOI named in the hardening brief.
 
 **Overall:** `BIBLIOGRAPHY_STATUS = PARTIAL`
 
 | Field | Status |
 | --- | --- |
-| title / authors / year / arXiv id | **VERIFIED_FROM_EXISTING_PACKAGE_RECORD** (21/21) |
-| venue | **UNVERIFIED** |
-| DOI | **UNVERIFIED** |
+| title / authors / year / arXiv id | **VERIFIED** (21/21, existing package Hub records) |
+| venue / DOI (most records) | **UNVERIFIED** |
+| AgentDojo venue/DOI | NeurIPS 2024 / `10.52202/079017-2636` — **OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN** |
+| BIPIA venue/DOI | KDD 2025 / `10.1145/3690624.3709179` — **OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN** |
 | manuscript arXiv set vs matrix | **MATCH** (21 ids) |
+| Task Shield `2412.16682` | **Not in matrix; not added** |
+| AgentDojo / ASB identity | **VERIFIED** (not UNCERTAIN) |
+| CaMeL | **VERIFIED paper identity**; published architectural isolation; not an unverified idea |
 
-No metadata was invented. Venues were not guessed.
+No metadata was invented. Venues were not guessed beyond the two operator-supplied records.
+
+## Per-record overall class
+
+All 21 records: identity **VERIFIED**, overall **PARTIALLY_VERIFIED** (venue/DOI incomplete or operator-supplied without publisher re-fetch). None **UNVERIFIED** as papers. None upgraded to camera-ready **VERIFIED** bibliography.
 
 ## Novelty positioning preserved
 
-**PARTIAL GAP.** The exact detector×locked-policy×Tool-HASR Δ sign factorial is **not** claimed to be globally unique. AgentDojo (`2406.13352`) and ASB (`2410.02644`) full texts were **not** completely audited.
+**PARTIAL_GAP.** Residual sentence:
+
+> The verified literature establishes extensive work on attacks, benchmarks, defenses, and adaptive evaluation, but does not establish the exact locked-policy detector-attribution factorial used here as the central measurement protocol.
 
 | Paper | arXiv | Positioning vs Q2 |
 | --- | --- | --- |
-| Prompt injection / IPI | `2211.09527`, `2302.12173`, `2306.05499`, `2310.12815` | Threat literature; not the factorial |
-| Guardrails / detectors | `2312.06674`, `2310.10501`, `2501.15145` | Detector- or rail-class; not locked-policy Tool-HASR Δ |
-| Architectural isolation | CaMeL `2503.18813`; IsolateGPT `2403.04960` | Isolates channels/execution, **not** detector identity under fixed intervention |
-| AgentDojo | `2406.13352` | Closest harness; full-text overlap **UNCERTAIN** |
+| Greshake et al. | `2302.12173` | IPI threat literature; identity VERIFIED |
+| AgentDojo | `2406.13352` | Dynamic agent eval; identity VERIFIED; venue operator-supplied; not Q2 factorial; not a numerical baseline |
+| ASB | `2410.02644` | Agent security bench; identity VERIFIED; not UNCERTAIN; not Q2 factorial; not a numerical baseline |
+| CaMeL | `2503.18813` | Published control/data isolation; not an unverified idea; not Q2 factorial |
 | InjecAgent | `2403.02691` | Tool-integrated IPI benchmark |
-| ASB | `2410.02644` | Large agent security bench; full-text overlap **UNCERTAIN** |
 | AgentHarm | `2410.09024` | Harmfulness/jailbreak; not detector isolation |
+| IsolateGPT | `2403.04960` | Execution isolation architecture |
+| BIPIA | `2312.14197` | IPI benchmark/defense; KDD 2025 operator-supplied |
+| Instruction Hierarchy | `2404.13208` | Privileged-instruction training; changes the target |
 
 Machine-readable: `BIBLIOGRAPHY_VERIFICATION.json`.

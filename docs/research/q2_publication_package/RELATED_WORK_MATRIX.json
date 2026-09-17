@@ -2,7 +2,7 @@
   "generated_at": "2026-09-17",
   "api_calls": 0,
   "live_experiments": false,
-  "citation_policy": "arXiv id/title/authors/year verified from Hugging Face Hub papers metadata. Venue and DOI UNVERIFIED unless later confirmed. No fabricated citations. Hub AI summaries are not used as scientific claims.",
+  "citation_policy": "Paper identity (arXiv id/title/authors/year) VERIFIED from existing package Hub metadata. This turn: NETWORK_CALLS=0; no publisher/arXiv re-fetch. Venue/DOI remain UNVERIFIED except operator-supplied AgentDojo (NeurIPS 2024, DOI 10.52202/079017-2636) and BIPIA (KDD 2025, DOI 10.1145/3690624.3709179), which are OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN. No fabricated citations. Task Shield (arXiv:2412.16682) was not already in this matrix and was not added. AgentDojo and ASB paper identities are VERIFIED (not UNCERTAIN). CaMeL is a published architectural defense paper, not an unverified idea.",
   "search_topics": [
     "A_prompt_injection",
     "B_indirect_prompt_injection",
@@ -22,7 +22,7 @@
       "id": "perez_ribeiro_2022",
       "title": "Ignore Previous Prompt: Attack Techniques For Language Models",
       "authors": [
-        "Fábio Perez",
+        "F\u00e1bio Perez",
         "Ian Ribeiro"
       ],
       "year": 2022,
@@ -35,14 +35,20 @@
       "primary_metric": "Attack success on hijack/leak tasks (text-level).",
       "detector_policy_separately_controlled": false,
       "relevance": "Establishes the prompt-injection threat this project assumes.",
-      "limitation_vs_rq": "No tool-using agents; no detector–policy isolation; no Tool-HASR.",
+      "limitation_vs_rq": "No tool-using agents; no detector\u2013policy isolation; no Tool-HASR.",
       "topics": [
         "A"
       ],
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "No tool-using agents; no detector\u2013policy isolation; no Tool-HASR."
     },
     {
       "id": "greshake_ipi_2023",
@@ -74,7 +80,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Greshake et al.: defines IPI. Identity VERIFIED. Not detector\u00d7locked-policy Tool-HASR factorial."
     },
     {
       "id": "liu_houyi_2023",
@@ -100,14 +112,20 @@
       "primary_metric": "Attack success on commercial apps.",
       "detector_policy_separately_controlled": false,
       "relevance": "Shows injection is operational in deployed apps.",
-      "limitation_vs_rq": "Attack paper; no detector–policy decomposition; no Tool-HASR.",
+      "limitation_vs_rq": "Attack paper; no detector\u2013policy decomposition; no Tool-HASR.",
       "topics": [
         "A"
       ],
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Attack paper; no detector\u2013policy decomposition; no Tool-HASR."
     },
     {
       "id": "liu_formalize_2023",
@@ -129,7 +147,7 @@
       "primary_metric": "Attack success / defense effectiveness on application tasks.",
       "detector_policy_separately_controlled": false,
       "relevance": "Closest early systematic attack/defense taxonomy for injection.",
-      "limitation_vs_rq": "Application tasks, not locked agent intervention policy; not Tool-HASR; not cross-target Δ sign.",
+      "limitation_vs_rq": "Application tasks, not locked agent intervention policy; not Tool-HASR; not cross-target \u0394 sign.",
       "topics": [
         "A",
         "K",
@@ -138,7 +156,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Application tasks, not locked agent intervention policy; not Tool-HASR; not cross-target \u0394 sign."
     },
     {
       "id": "toyer_tensortrust_2023",
@@ -167,7 +191,7 @@
       "primary_metric": "Attack/defense success in the game setting.",
       "detector_policy_separately_controlled": false,
       "relevance": "Human-generated injection diversity; not agentic.",
-      "limitation_vs_rq": "Game/text setting; no tool execution endpoint; no detector–policy isolation.",
+      "limitation_vs_rq": "Game/text setting; no tool execution endpoint; no detector\u2013policy isolation.",
       "topics": [
         "A",
         "F"
@@ -175,7 +199,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Game/text setting; no tool execution endpoint; no detector\u2013policy isolation."
     },
     {
       "id": "yi_bipia_2023",
@@ -204,10 +234,16 @@
         "B",
         "K"
       ],
-      "venue": "UNVERIFIED",
-      "venue_status": "UNVERIFIED",
+      "venue": "KDD 2025",
+      "venue_status": "OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "10.1145/3690624.3709179",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Paper identity verified from existing Hub/package record. Venue/DOI applied from operator brief; publisher page not re-fetched this turn. IPI benchmark/defense paper; not Q2 locked-policy detector attribution."
     },
     {
       "id": "zhan_injecagent_2024",
@@ -228,7 +264,7 @@
       "primary_metric": "Attack success on induced agent actions (tool-integrated).",
       "detector_policy_separately_controlled": false,
       "relevance": "Directly related: tool-integrated agents + harmful actions.",
-      "limitation_vs_rq": "Does not hold a downstream intervention policy fixed while varying detectors; not Q2-style Δ sign across independently selected targets.",
+      "limitation_vs_rq": "Does not hold a downstream intervention policy fixed while varying detectors; not Q2-style \u0394 sign across independently selected targets.",
       "topics": [
         "B",
         "C",
@@ -239,7 +275,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "InjecAgent: tool-integrated IPI benchmark. Identity VERIFIED. Not Q2 factorial."
     },
     {
       "id": "debenedetti_agentdojo_2024",
@@ -247,10 +289,10 @@
       "authors": [
         "Edoardo Debenedetti",
         "Jie Zhang",
-        "Mislav Balunović",
+        "Mislav Balunovi\u0107",
         "Luca Beurer-Kellner",
         "Marc Fischer",
-        "Florian Tramèr"
+        "Florian Tram\u00e8r"
       ],
       "year": 2024,
       "arxiv": "2406.13352",
@@ -260,9 +302,9 @@
       "benchmark": "AgentDojo.",
       "evaluation_unit": "Agent task completion under attack in a tool environment.",
       "primary_metric": "Utility and security (attack success) in AgentDojo tasks.",
-      "detector_policy_separately_controlled": "PARTIAL — defenses can be swapped, but Hub abstract does not establish a locked intervention-policy × detector factorial like Q2.",
+      "detector_policy_separately_controlled": "PARTIAL \u2014 defenses can be swapped, but Hub abstract does not establish a locked intervention-policy \u00d7 detector factorial like Q2.",
       "relevance": "Closest public agent attack/defense eval harness.",
-      "limitation_vs_rq": "Different pack, success definitions, and (from Hub metadata) no verified locked-policy detector-only Δ across independently selected targets. Cross-paper numeric comparison is a claims error.",
+      "limitation_vs_rq": "Different pack, success definitions, and (from Hub metadata) no verified locked-policy detector-only \u0394 across independently selected targets. Cross-paper numeric comparison is a claims error.",
       "topics": [
         "C",
         "D",
@@ -271,10 +313,16 @@
         "K",
         "L"
       ],
-      "venue": "UNVERIFIED",
-      "venue_status": "UNVERIFIED",
+      "venue": "NeurIPS 2024",
+      "venue_status": "OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "10.52202/079017-2636",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "OPERATOR_SUPPLIED_NOT_RECHECKED_THIS_TURN",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Paper identity verified from existing Hub/package record. Venue/DOI applied from operator brief; publisher page not re-fetched this turn (NETWORK_CALLS=0). Not UNCERTAIN as a paper. Not a Q2 factorial match. Not a numerical baseline."
     },
     {
       "id": "ruan_toolemu_2023",
@@ -300,7 +348,7 @@
       "primary_metric": "Risk identification / unsafe behavior in emulation.",
       "detector_policy_separately_controlled": false,
       "relevance": "Trajectory-level agent risk evaluation; emulation vs our mock tools.",
-      "limitation_vs_rq": "Emulated tools; not detector–policy isolation; not Tool-HASR vs Judge-ASR dual endpoint.",
+      "limitation_vs_rq": "Emulated tools; not detector\u2013policy isolation; not Tool-HASR vs Judge-ASR dual endpoint.",
       "topics": [
         "C",
         "E",
@@ -311,7 +359,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Emulated tools; not detector\u2013policy isolation; not Tool-HASR vs Judge-ASR dual endpoint."
     },
     {
       "id": "andriushchenko_agentharm_2024",
@@ -351,7 +405,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "AgentHarm: agent harmfulness/jailbreak benchmark. Identity VERIFIED. Not detector isolation under locked policy."
     },
     {
       "id": "zhang_asb_2024",
@@ -374,7 +434,7 @@
       "benchmark": "ASB.",
       "evaluation_unit": "Agent operation stages (system prompt, user prompt, tool usage, memory).",
       "primary_metric": "Attack success rate (paper reports high average ASR; Hub summary cites 84.30%).",
-      "detector_policy_separately_controlled": "PARTIAL — evaluates many defenses, but Hub metadata does not establish detector-only contrasts under a locked intervention policy.",
+      "detector_policy_separately_controlled": "PARTIAL \u2014 evaluates many defenses, but Hub metadata does not establish detector-only contrasts under a locked intervention policy.",
       "relevance": "Large agent security benchmark including tool-usage stage.",
       "limitation_vs_rq": "Different threat model/pack/metrics; cannot copy ASR into Q2 tables. Not verified as Q2-style isolation.",
       "topics": [
@@ -387,7 +447,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "ASB: agent security benchmark. Identity VERIFIED. Not UNCERTAIN. Different pack/metrics; not Q2 factorial. Not a numerical baseline."
     },
     {
       "id": "inan_llamaguard_2023",
@@ -424,7 +490,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Not evaluated here on p2_agentic_v0.1.0. Conversation I/O, not locked agent policy isolation."
     },
     {
       "id": "rebedea_nemo_2023",
@@ -444,7 +516,7 @@
       "benchmark": "Toolkit/demo applications.",
       "evaluation_unit": "Rail firing / controlled dialogue.",
       "primary_metric": "Controllability / safety rails (not Tool-HASR).",
-      "detector_policy_separately_controlled": "PARTIAL — rails encode policy; not a factorial detector×fixed-policy study.",
+      "detector_policy_separately_controlled": "PARTIAL \u2014 rails encode policy; not a factorial detector\u00d7fixed-policy study.",
       "relevance": "Runtime intervention stack; policy and detection often co-designed.",
       "limitation_vs_rq": "Entangled rails, not Q2 isolation; not run on this pack.",
       "topics": [
@@ -456,7 +528,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Entangled rails, not Q2 isolation; not run on this pack."
     },
     {
       "id": "wallace_instruction_hierarchy_2024",
@@ -487,7 +565,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Instruction Hierarchy: trains privileged-instruction priority. Identity VERIFIED. Changes the target, not a locked-policy detector contrast."
     },
     {
       "id": "chen_struq_2024",
@@ -517,7 +601,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Not detector-vs-D0 under locked PHASE1-CORE; not Tool-HASR on P2."
     },
     {
       "id": "hines_spotlighting_2024",
@@ -549,7 +639,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Not a detector identity contrast under locked tool-permission policy."
     },
     {
       "id": "wu_isolategpt_2024",
@@ -569,9 +665,9 @@
       "benchmark": "Attacks against isolated vs non-isolated LLM app ecosystems.",
       "evaluation_unit": "System/app interaction under attack.",
       "primary_metric": "Protection against security/privacy/safety issues without functionality loss (Hub abstract).",
-      "detector_policy_separately_controlled": "NO — isolation is the defense; not a detector factorial under fixed intervention policy.",
+      "detector_policy_separately_controlled": "NO \u2014 isolation is the defense; not a detector factorial under fixed intervention policy.",
       "relevance": "Closest *architectural* isolation of execution. Different from detector-effect isolation.",
-      "limitation_vs_rq": "Does not measure detector-related Tool-HASR Δ with policy held fixed. Isolation of apps ≠ isolation of detector vs policy.",
+      "limitation_vs_rq": "Does not measure detector-related Tool-HASR \u0394 with policy held fixed. Isolation of apps \u2260 isolation of detector vs policy.",
       "topics": [
         "C",
         "D",
@@ -581,7 +677,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "IsolateGPT: execution-isolation architecture. Identity VERIFIED. Architectural isolation \u2260 detector\u00d7fixed-policy factorial."
     },
     {
       "id": "debenedetti_camel_2025",
@@ -596,17 +698,17 @@
         "Christoph Kern",
         "Chongyang Shi",
         "Andreas Terzis",
-        "Florian Tramèr"
+        "Florian Tram\u00e8r"
       ],
       "year": 2025,
       "arxiv": "2503.18813",
       "url": "https://arxiv.org/abs/2503.18813",
       "problem": "Prompt injection in agents that handle untrusted data.",
       "method": "CaMeL: segregate control and data flows; prevent unauthorized exfiltration.",
-      "benchmark": "AgentDojo (Hub summary: 67% secure task completion — not copied into Q2 tables).",
+      "benchmark": "AgentDojo (Hub summary: 67% secure task completion \u2014 not copied into Q2 tables).",
       "evaluation_unit": "Secure task completion in AgentDojo.",
       "primary_metric": "Secure task completion / injection resistance.",
-      "detector_policy_separately_controlled": "NO — design-level control/data isolation, not detector×fixed-policy factorial.",
+      "detector_policy_separately_controlled": "NO \u2014 design-level control/data isolation, not detector\u00d7fixed-policy factorial.",
       "relevance": "Strongest related isolation *by design*. Must not be equated with Q2's experimental detector isolation.",
       "limitation_vs_rq": "Architectural capability isolation, not a locked PHASE1-CORE detector contrast on Tool-HASR. Different pack/metrics.",
       "topics": [
@@ -618,7 +720,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "CaMeL: published architectural control/data isolation design (arXiv:2503.18813). Not an unverified idea. Not Q2 detector-attribution factorial. Not a numerical baseline."
     },
     {
       "id": "zhu_melon_2025",
@@ -651,7 +759,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "A detector/defense method, not a policy-locked detector factorial. Hub abstract uses SOTA language about MELON; Q2 must not import that claim."
     },
     {
       "id": "jacob_promptshield_2025",
@@ -673,7 +787,7 @@
       "primary_metric": "Detector performance (precision/recall-style; Hub: detection performance).",
       "detector_policy_separately_controlled": "YES for detection-only eval; NO for downstream agent intervention (not an agent Tool-HASR study).",
       "relevance": "Detector-only evaluation exists. Shows detection can be studied without claiming a full agent defense.",
-      "limitation_vs_rq": "Does not measure Tool-HASR under a locked tool-permission policy, nor cross-target Δ sign of detector-related effects.",
+      "limitation_vs_rq": "Does not measure Tool-HASR under a locked tool-permission policy, nor cross-target \u0394 sign of detector-related effects.",
       "topics": [
         "A",
         "F",
@@ -682,7 +796,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Does not measure Tool-HASR under a locked tool-permission policy, nor cross-target \u0394 sign of detector-related effects."
     },
     {
       "id": "chen_meta_secalign_2025",
@@ -712,7 +832,13 @@
       "venue": "UNVERIFIED",
       "venue_status": "UNVERIFIED",
       "metadata_source": "Hugging Face Hub papers metadata.json (arXiv id, title, authors, publishedAt)",
-      "doi": "UNVERIFIED"
+      "doi": "UNVERIFIED",
+      "paper_identity_status": "VERIFIED",
+      "identity_source": "existing_package_Hub_metadata_title_authors_year_arxiv",
+      "network_recheck_this_turn": false,
+      "doi_status": "UNVERIFIED",
+      "overall_record_status": "PARTIALLY_VERIFIED",
+      "positioning_vs_q2": "Changes the target weights; Q2 holds targets fixed and varies detectors. Hub abstract uses SOTA language; do not import."
     }
   ],
   "novelty_tests": {
@@ -740,7 +866,7 @@
         "IsolateGPT execution isolation",
         "AgentDojo/ASB defense tables (unverified whether policy is locked)"
       ],
-      "note": "Prior work isolates *design channels* or evaluates stacked defenses. Surveyed Hub metadata does not show a factorial that holds agent intervention policy fixed and varies detector identity to estimate Tool-HASR Δ."
+      "note": "Prior work isolates *design channels* or evaluates stacked defenses. Surveyed Hub metadata does not show a factorial that holds agent intervention policy fixed and varies detector identity to estimate Tool-HASR \u0394."
     },
     "fixed_policy_detector_comparison": {
       "already_studied": "UNCERTAIN",
@@ -759,7 +885,7 @@
         "ASB",
         "ToolEmu"
       ],
-      "note": "Action/tool success is used. Q2's Tool-HASR is a pre-registered success_condition on mock tools plus dual Judge-ASR/M3/M4 — related, not unique as an idea."
+      "note": "Action/tool success is used. Q2's Tool-HASR is a pre-registered success_condition on mock tools plus dual Judge-ASR/M3/M4 \u2014 related, not unique as an idea."
     },
     "target_model_sensitivity_of_detector_effects": {
       "already_studied": "UNCERTAIN",
@@ -768,7 +894,7 @@
         "BIPIA  multiple LLMs",
         "Liu et al. 10 LLMs"
       ],
-      "note": "Multi-model evals exist. Whether they estimate detector-related Δ vs a no-detection arm under locked intervention is UNVERIFIED."
+      "note": "Multi-model evals exist. Whether they estimate detector-related \u0394 vs a no-detection arm under locked intervention is UNVERIFIED."
     },
     "agentic_trajectory_level_security": {
       "already_studied": true,
@@ -783,13 +909,29 @@
     "cross_model_consistency_under_locked_intervention_policy": {
       "already_studied": "NOT_FOUND_IN_SURVEYED_SET",
       "examples": [],
-      "note": "No surveyed paper was verified to pre-register Δ sign agreement of detector-vs-D0 Tool-HASR across independently selected secondary targets under one locked intervention policy. Exhaustive literature proof is not claimed."
+      "note": "No surveyed paper was verified to pre-register \u0394 sign agreement of detector-vs-D0 Tool-HASR across independently selected secondary targets under one locked intervention policy. Exhaustive literature proof is not claimed."
     }
   },
   "survey_limitations": [
-    "Venue/DOI not in Hub metadata — marked UNVERIFIED.",
+    "Venue/DOI not in Hub metadata \u2014 marked UNVERIFIED.",
     "Not an exhaustive literature review; additional papers exist (e.g. DataFilter 2510.19207, SafeAgent 2604.17562, AgentWall 2605.16265, WAInjectBench 2510.01354) and were noted in search but not fully extracted.",
     "Cannot claim 'first' or CLEAR GAP solely from this survey.",
     "Do not copy numeric results from other papers into Q2 tables."
-  ]
+  ],
+  "verification_this_turn": {
+    "network_calls": 0,
+    "n_papers": 21,
+    "identity_verified": 21,
+    "venue_doi_operator_supplied": [
+      "2406.13352",
+      "2312.14197"
+    ],
+    "venue_doi_unverified": 19,
+    "overall_bibliography_status": "PARTIAL",
+    "task_shield_added": false,
+    "agentdojo_identity": "VERIFIED",
+    "asb_identity": "VERIFIED",
+    "camel_status": "VERIFIED_PAPER_IDENTITY_ARCHITECTURAL_DEFENSE_NOT_UNVERIFIED_IDEA"
+  },
+  "hardening_pass": "q2_publication_hardening"
 }

@@ -111,5 +111,13 @@
       "path": "/workspace/docs/research/q2_publication_package/figures/figure5_invalid_tool_args.png",
       "artifact": "/opt/cursor/artifacts/q2_figure5_invalid_tool_args.png"
     }
-  }
+  },
+  "sha256": {
+    "figure3_delta_across_targets.png": "cc8ee54afa73af8d0d6ca6025fe9e403d13e335cd2dd9478f2fb00dbbd124a0a",
+    "figure4_toolhasr_vs_judgeasr.png": "747f1b807fd18d2cf9c44a717363ff44b4e9c6ab36eb31b1d0dac0ffa1445304",
+    "figure5_invalid_tool_args.png": "f737805f97fab25bbb302bbeccdf37f731e753c7cba554232c7da104bfb1f21a"
+  },
+  "statistical_significance_implied": false,
+  "d0_is_reference": true,
+  "hardening_pass": "q2_publication_hardening"
 }
