@@ -15,7 +15,7 @@
 
 ## Verdict
 
-**Q2_PUBLICATION_READINESS = READY_WITH_REQUIRED_REVISIONS**
+**Q2_PUBLICATION_READINESS = READY_WITH_MAJOR_REVISIONS**
 
 ### Required revisions (no new experiments)
 1. Draft manuscript enforcing one central contribution + claims audit

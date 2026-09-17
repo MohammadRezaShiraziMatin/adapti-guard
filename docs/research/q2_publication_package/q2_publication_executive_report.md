@@ -23,14 +23,14 @@ Detector behavior can be experimentally isolated from downstream intervention po
 ## 4. Required paper revisions
 See readiness gate: draft MS, verified related work, render figs/tables from JSON, pilot framing, baseline gap, limitations, purge RED claims.
 
-## 5. Claims that must be weakened
-Universal generalization; robust/guarantees; SOTA/best detector; production-ready; monetary cost optimality; confirmatory multi-model proof; Judge-ASR invalid.
+## 5. Claims that must not appear
+Do not assert unbounded generalization, guarantees, detector ranking, production readiness, monetary cost optimality, multi-model proof, or that Judge-ASR is invalid. Use `q2_claims_audit_standardization.md`.
 
 ## 6. Tables/figures still required
 Tables 1–7 and Figures 1–5 per `q2_paper_blueprint.md` — **specifications done; rendering pending** (no misleading plots created).
 
 ## 7. Q2 readiness verdict
-**READY_WITH_REQUIRED_REVISIONS**
+**READY_WITH_MAJOR_REVISIONS** (see `q2_standardization_audit.md`). Prior packaging used READY_WITH_REQUIRED_REVISIONS for the same class of writing/citation/baseline gaps.
 
 ## 8. Exact files created
 - `/opt/cursor/artifacts/q2_claims_audit.json`

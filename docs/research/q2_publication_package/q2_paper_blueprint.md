@@ -13,7 +13,7 @@ RQ: Does the detector-related security effect under locked Stage-B target remain
 | 5 | Benchmark & Protocol | P1/P2 SHAs; Tool-HASR def; locks | Freeze + protocol | T1–T2 | Power? |
 | 6 | Detector-Policy Isolation | Only detector varies | P3 design | Fig2 | Confounders? |
 | 7 | Results | Δ vs D0 on T0; no ranking | Stage-B | T3 | Small n? |
-| 8 | Cross-Target Validation | 9/9 sign agreement | Q2 | Fig3, T4 | All LLMs? |
+| 8 | Cross-Target Analysis | 9/9 sign agreement | Q2 | Fig3, T4 | All LLMs? (no: selected set only) |
 | 9 | Forensic Analysis | M3/M4; INVALID S0/S2 | Q2+SB traces | Fig4, T5–T6 | INVALID bias? |
 | 10 | Cost and Utility | Normalized weights; action dists | Traces | Fig5 | Real money? |
 | 11 | Limitations | Full list | This package | T7 | Hidden weaknesses? |

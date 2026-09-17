@@ -1,0 +1,47 @@
+{
+  "generated_at_utc": "2026-09-17T18:30:00Z",
+  "api_calls_this_task": 0,
+  "live_experiments_required": false,
+  "frozen_evidence_modified": false,
+  "q2_raw_traces_modified": false,
+  "run_id": "p3_stage_c_q2_20260917T123855Z_b075df0f",
+  "commit": "b075df0f5ec5ad11ede76ac4e4079cade15208f1",
+  "Q2_STANDARDIZATION_STATUS": "READY_WITH_MAJOR_REVISIONS",
+  "critical_issues": [
+    "No verified external bibliography; citations must not be invented (C2)",
+    "SOTA/best/universal-defense claims remain unsupported if introduced (C1)"
+  ],
+  "major_issues": [
+    "Full manuscript not drafted (M1)",
+    "Pilot n=16 / scientific_evidence=false (M2)",
+    "No fair external baselines on this pack (M3)",
+    "Four-target Qwen-heavy model set (M4)",
+    "INVALID_TOOL_ARGS frequent (192 events / 136 arms) (M5)",
+    "Stage-B predictions.jsonl absent this checkout (M6)",
+    "Large M3 disagreement Tool-HASR vs Judge-ASR (M7)"
+  ],
+  "minor_issues": [
+    "D3 deferred (m1)",
+    "Open C4 out of claim scope (m2)",
+    "Figures not rendered; matplotlib missing (m3)",
+    "Normalized costs vs token-USD easy to conflate (m4)",
+    "Frozen manifest uses 'generalize' wording (m5)",
+    "No pre-registered Δ CI (m6)"
+  ],
+  "optional_issues": [
+    "P3_DETECTOR_TAXONOMY 'production' phrasing if cited (O1)",
+    "Q2 live is PHASE1-CORE-only reduced design (O2)"
+  ],
+  "baseline_gap": "documented_no_external_comparison",
+  "invalid_args_status": "recomputed_match_official_192_events_136_arms_S0_unchanged_S2_9_of_9",
+  "claims_status": "no_asserted_SOTA_in_package_prose_meta_hits_only",
+  "statistics_status": "rates_have_n_N_wilson_delta_sign_locked_no_posthoc_tests",
+  "reproducibility_status": "shas_match_stage_b_traces_missing_this_checkout",
+  "manuscript_status": "blueprint_only",
+  "official_q2_numbers_preserved": {
+    "arms_completed": "432/432",
+    "actual_usd": 0.152885,
+    "sign_agreement": "9/9",
+    "T0_delta_D1_D2_D4": [-0.6875, -0.25, -0.5625]
+  }
+}
