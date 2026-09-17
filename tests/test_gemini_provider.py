@@ -10,7 +10,6 @@ import yaml
 from adapti_guard.evaluation.target_model import (
     GeminiTargetModel,
     GenerationRequest,
-    GenerationResult,
     build_target_model,
 )
 

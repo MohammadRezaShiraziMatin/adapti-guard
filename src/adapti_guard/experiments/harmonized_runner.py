@@ -7,10 +7,10 @@ Policy selection is the only intentional difference between methods.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
-from enum import Enum
 import hashlib
 import json
+from dataclasses import asdict, dataclass, field
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -22,8 +22,6 @@ from adapti_guard.adaptation.policy_update_engine import (
     PolicyState,
     PolicyUpdateEngine,
 )
-from adapti_guard.attacker.adaptive_attacker import AdaptiveAttacker
-from adapti_guard.core.models import DefenseAction
 from adapti_guard.defense.action_layer import DefenseActionLayer
 from adapti_guard.detector.prompt_injection_detector import (
     PromptInjectionDetector,
@@ -35,13 +33,12 @@ from adapti_guard.evaluation.outcome_evaluator import OutcomeEvaluator
 from adapti_guard.policy.policy_engine import DefensePolicyEngine
 from adapti_guard.risk.risk_engine import RiskEngine
 
-
 RUNNER_VERSION = "harmonized_v1.0.0"
 METRIC_VERSION = "metrics.py@v1"
 SCHEDULE_PATTERN = "A A A L repeated (episode_id % 4 == 0 -> legitimate)"
 
 
-class PolicyMode(str, Enum):
+class PolicyMode(StrEnum):
     FIXED_L0 = "fixed_l0"
     FIXED_L1 = "fixed_l1"
     FIXED_L2 = "fixed_l2"
@@ -164,17 +161,13 @@ class NoCostGateFeedbackEngine(FeedbackEngine):
             - self.cost_weight * cost_penalty
         )
 
-        if outcome.legitimate_task and outcome.legitimate_success:
-            signal = "REDUCE_DEFENSE"
-        elif (
+        if outcome.legitimate_task and outcome.legitimate_success or (
             outcome.legitimate_task
             and not outcome.legitimate_success
             and utility_feedback == 0.0
         ):
             signal = "REDUCE_DEFENSE"
-        elif outcome.attack_success:
-            signal = "INCREASE_DEFENSE"
-        elif (
+        elif outcome.attack_success or (
             outcome.attack_present
             and security_feedback >= 1.0
             and utility_feedback == 0.0
@@ -234,10 +227,9 @@ class AblationPolicyUpdateEngine(PolicyUpdateEngine):
             if self.allow_escalation:
                 state.attack_pressure += 1
                 state.legitimate_pressure = 0
-        elif feedback.adaptation_signal == "REDUCE_DEFENSE":
-            if self.allow_deescalation:
-                state.legitimate_pressure += 1
-                state.attack_pressure = 0
+        elif feedback.adaptation_signal == "REDUCE_DEFENSE" and self.allow_deescalation:
+            state.legitimate_pressure += 1
+            state.attack_pressure = 0
 
         if self.allow_escalation and state.attack_pressure >= self.attack_threshold:
             if state.defense_level < 3:
@@ -451,15 +443,9 @@ class HarmonizedRunner:
 
             defense = self.action_layer.execute(action, payload)
 
-            if attack_present:
-                attack_ok = attack_succeeded(action, attack_family, defense)
-            else:
-                attack_ok = False
+            attack_ok = attack_succeeded(action, attack_family, defense) if attack_present else False
 
-            if legitimate_task:
-                legitimate_succeeded = action.value in {"A0", "A1", "A2"}
-            else:
-                legitimate_succeeded = False
+            legitimate_succeeded = action.value in {"A0", "A1", "A2"} if legitimate_task else False
 
             outcome = self.outcome_evaluator.evaluate(
                 action=action,

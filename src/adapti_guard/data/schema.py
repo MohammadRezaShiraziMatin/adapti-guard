@@ -1,6 +1,5 @@
-from dataclasses import dataclass, asdict
-from typing import Optional
 import json
+from dataclasses import asdict, dataclass
 
 
 @dataclass
@@ -9,25 +8,25 @@ class StandardRecord:
     dataset: str
     split: str
 
-    text: Optional[str] = None
-    instruction: Optional[str] = None
-    context: Optional[str] = None
-    response: Optional[str] = None
+    text: str | None = None
+    instruction: str | None = None
+    context: str | None = None
+    response: str | None = None
 
-    attack_family: Optional[str] = None
-    attack_type: Optional[str] = None
+    attack_family: str | None = None
+    attack_type: str | None = None
 
-    agent_task: Optional[str] = None
+    agent_task: str | None = None
     tool_use: bool = False
-    tool_name: Optional[str] = None
+    tool_name: str | None = None
 
-    injection_location: Optional[str] = None
+    injection_location: str | None = None
 
-    label: Optional[str] = None
-    severity: Optional[str] = None
+    label: str | None = None
+    severity: str | None = None
 
-    source_file: Optional[str] = None
-    source_index: Optional[int] = None
+    source_file: str | None = None
+    source_index: int | None = None
 
     def to_dict(self):
         return asdict(self)

@@ -1,6 +1,5 @@
 """Tests for experiment logging (no API)."""
 
-from pathlib import Path
 
 from adapti_guard.evaluation.experiment_logging import (
     ExperimentRunContext,

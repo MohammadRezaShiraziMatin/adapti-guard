@@ -1,12 +1,11 @@
 """Tests for blind independent LLM judge."""
 
-import json
 
 from adapti_guard.evaluation.evaluation_modes import REAL_LLM_JUDGE
 from adapti_guard.evaluation.llm_judge import (
     FORBIDDEN_JUDGE_FIELDS,
-    JudgeInput,
     JUDGE_SYSTEM_PROMPT,
+    JudgeInput,
 )
 
 

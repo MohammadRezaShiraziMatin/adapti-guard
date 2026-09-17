@@ -8,10 +8,11 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
+from adapti_guard.detectors.base import P2_SHA256
 from adapti_guard.experiments.p2_agentic_live import (
     LOCKED_BACKEND,
     LOCKED_JUDGE,
@@ -22,8 +23,8 @@ from adapti_guard.experiments.p2_agentic_live import (
     LOCKED_TEMPERATURE,
     MAX_JUDGE_RETRIES,
     MAX_TARGET_RETRIES,
-    PACK_SHA256,
     P1_SHA256,
+    PACK_SHA256,
 )
 from adapti_guard.experiments.p3_agentic_live import (
     N_P2_ATTACK,
@@ -32,7 +33,6 @@ from adapti_guard.experiments.p3_agentic_live import (
     N_P2_TOTAL,
     OPERATIONAL_DETECTORS,
 )
-from adapti_guard.detectors.base import P2_SHA256
 
 ROOT = Path(__file__).resolve().parents[3]
 PACK_PATH = ROOT / "datasets" / "frozen" / "p2_agentic_v0.1.0" / "dataset.jsonl"
@@ -409,7 +409,7 @@ def worst_case_cost_usd(
         * sched["n_policies"]
     )
     attempts_t = bounds["target_attempts_per_call_site"]
-    attempts_j = bounds["judge_attempts_per_call_site"]
+    bounds["judge_attempts_per_call_site"]
     calls_per_target_max = slots_per_target * attempts_t
     judge_calls_max = bounds["judge_calls_max"]
 
@@ -539,7 +539,7 @@ def gate_status_from_locks(
 
 
 def planning_provenance(*, code_commit: str | None = None) -> dict[str, Any]:
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     blob = json.dumps(
         {
             "question_id": QUESTION_ID,

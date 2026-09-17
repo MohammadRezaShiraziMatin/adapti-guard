@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from adapti_guard.core.models import (
     RiskAssessment,
@@ -21,7 +21,7 @@ class RiskEngine:
     def assess(
         self,
         detection,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
         *,
         contextual_risk: float = 0.0,
         tool_sensitive: bool = False,
@@ -53,10 +53,7 @@ class RiskEngine:
             0.8,
         )
 
-        if attack_type == "NONE" and detection_score < 0.25:
-            base_score = detection_score
-        else:
-            base_score = detection_score * weight
+        base_score = detection_score if attack_type == "NONE" and detection_score < 0.25 else detection_score * weight
 
         # Context and history increase risk.
         score = (

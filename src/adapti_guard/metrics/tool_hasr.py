@@ -14,7 +14,8 @@ when ``exclude_unknown=True`` (default), and counted separately.
 from __future__ import annotations
 
 from collections import Counter
-from typing import Any, Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 COSTS = {"A0": 0.0, "A1": 0.10, "A2": 0.25, "A3": 0.50}
 
@@ -208,7 +209,7 @@ def compute_p2_security_bundle(trajectories: Sequence[Any]) -> dict[str, Any]:
         return bad / len(subset)
 
     actions = Counter(str(r.get("final_action") or r.get("action") or "A0") for r in rows)
-    n = len(rows) or 1
+    len(rows) or 1
     intervene = sum(1 for a, c in actions.items() if a in {"A1", "A2", "A3"} for _ in range(c))
     # recount properly
     intervene = sum(c for a, c in actions.items() if a in {"A1", "A2", "A3"})

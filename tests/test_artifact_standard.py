@@ -5,7 +5,6 @@ from pathlib import Path
 from adapti_guard.experiments.artifact_standard import (
     build_run_manifest,
     build_validation_record,
-    log_structured,
     write_json,
 )
 

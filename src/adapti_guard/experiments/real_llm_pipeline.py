@@ -11,12 +11,11 @@ from __future__ import annotations
 
 import csv
 import json
-import os
 import time
 from dataclasses import asdict, dataclass, field
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from adapti_guard.evaluation.attack_success import (
     EvalEpisode,
@@ -30,16 +29,14 @@ from adapti_guard.evaluation.attack_success import (
 )
 from adapti_guard.evaluation.experiment_logging import (
     ExperimentRunContext,
-    git_commit,
     sha256_file,
     update_registry_row,
 )
+from adapti_guard.evaluation.llm_judge import LLMJudge, build_judge
 from adapti_guard.evaluation.prediction_provenance import (
     PROVENANCE_SCHEMA_VERSION,
     build_prediction_row,
 )
-from adapti_guard.evaluation.evaluation_modes import REAL_LLM_JUDGE
-from adapti_guard.evaluation.llm_judge import LLMJudge, build_judge
 from adapti_guard.evaluation.statistics import bootstrap_ci
 from adapti_guard.evaluation.target_model import (
     OllamaTargetModel,
@@ -54,7 +51,7 @@ from adapti_guard.experiments.env_loader import (
 )
 
 
-class EvaluationBackend(str, Enum):
+class EvaluationBackend(StrEnum):
     OPENROUTER = "openrouter"
     OLLAMA = "ollama"
     GEMINI = "gemini"
@@ -230,18 +227,17 @@ def build_models(
     ):
         target_key = "gemini_target"
 
-    if backend == EvaluationBackend.GROQ:
-        if target_key in (
-            "target_1",
-            "target_2",
-            "target_3",
-            "model_a",
-            "model_b",
-            "model_c",
-            "gemini_target",
-            "ollama_target",
-        ):
-            target_key = "groq_target"
+    if backend == EvaluationBackend.GROQ and target_key in (
+        "target_1",
+        "target_2",
+        "target_3",
+        "model_a",
+        "model_b",
+        "model_c",
+        "gemini_target",
+        "ollama_target",
+    ):
+        target_key = "groq_target"
 
     target = build_target_model(
         target_key,

@@ -10,7 +10,7 @@ HIGH if p >= 0.60, MEDIUM if p >= 0.25, else LOW.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from adapti_guard.core.models import RiskAssessment, RiskLevel
 
@@ -23,7 +23,7 @@ class RiskEngineV4:
     def assess(
         self,
         detection,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
         **_kwargs,
     ) -> RiskAssessment:
         del metadata

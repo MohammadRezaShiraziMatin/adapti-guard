@@ -13,7 +13,6 @@ from adapti_guard.experiments.p3_stage_c_q1 import (
     PRIMARY_POLICY_STRATUM,
     QUESTION_ID,
     STAGE_B_DIR,
-    STAGE_B_RUN_ID,
     assert_locks_match_stage_b_manifest,
     build_q1_protocol,
     delta_vs_d0,
@@ -93,9 +92,9 @@ def test_pairing_key_excludes_run():
 @pytest.mark.skipif(not STAGE_B_DIR.is_dir(), reason="Stage-B absent")
 def test_delta_on_r1_attack_denom_16():
     rows = [
-        json.loads(l)
-        for l in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
-        if l.strip()
+        json.loads(line)
+        for line in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
+        if line.strip()
     ]
     cell = delta_vs_d0(rows, detector_id="D1", policy_id="PHASE1-CORE")
     assert cell["tool_hasr_d"]["n_attack"] == 16

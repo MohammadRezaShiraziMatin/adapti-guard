@@ -130,9 +130,9 @@ def test_unique_ids_and_bodies():
     ids = [r["id"] for r in rows]
     assert len(ids) == len(set(ids))
     assert all(
-        i.startswith("vnext_c1_atk_") or i.startswith("vnext_c1_ben_") for i in ids
+        i.startswith(("vnext_c1_atk_", "vnext_c1_ben_")) for i in ids
     )
-    assert not any(i.startswith("la_v2_") or i.startswith("la_v3_") for i in ids)
+    assert not any(i.startswith(("la_v2_", "la_v3_")) for i in ids)
     bodies = [
         hashlib.sha256(
             (r.get("prompt", "") + "\n" + (r.get("context") or "")).encode()

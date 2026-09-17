@@ -4,24 +4,23 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any
 
+from adapti_guard.detectors import default_p3_detectors, list_detector_catalog
 from adapti_guard.detectors.base import (
     P1_SHA256,
     P2_SHA256,
-    DetectorResult,
     EpisodeDetectionContext,
     P3Detector,
     assert_pack_sha,
     assert_unique_ids,
-    assert_unique_output_dir,
     make_detector_observation_id,
     make_end_to_end_arm_id,
     rate_with_counts,
     timed_detect,
 )
-from adapti_guard.detectors import default_p3_detectors, list_detector_catalog
 
 ROOT = Path(__file__).resolve().parents[3]
 P1_PATH = ROOT / "datasets" / "frozen" / "p1_mechanism_v1.0.0" / "dataset.jsonl"
@@ -117,7 +116,7 @@ def layer_a_detection_summary(
             hit = bool((r.get("result") or {}).get("detector_hit"))
             traj_hit[tid] = bool(traj_hit.get(tid, False) or hit)
 
-        def _rate(ids: set[str]) -> dict[str, Any]:
+        def _rate(ids: set[str], traj_hit: set[str] = traj_hit) -> dict[str, Any]:
             present = [tid for tid in ids if tid in traj_hit]
             hits = sum(1 for tid in present if traj_hit[tid])
             return rate_with_counts(hits, len(present))

@@ -95,7 +95,7 @@ def test_unique_ids_and_exact_bodies():
     rows = _rows()
     ids = [r["id"] for r in rows]
     assert len(ids) == len(set(ids))
-    assert all(i.startswith("la_v3_atk_") or i.startswith("la_v3_ben_") for i in ids)
+    assert all(i.startswith(("la_v3_atk_", "la_v3_ben_")) for i in ids)
     bodies = [
         hashlib.sha256(
             (r.get("prompt", "") + "\n" + (r.get("context") or "")).encode()

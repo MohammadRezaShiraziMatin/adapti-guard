@@ -6,11 +6,9 @@ import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from adapti_guard.evaluation.attack_success import evaluate_episode
-from adapti_guard.evaluation.llm_judge import JudgeInput, JudgeVerdict, LLMJudge
-from adapti_guard.evaluation.target_model import GenerationRequest, GenerationResult, MockTargetModel
+from adapti_guard.evaluation.llm_judge import JudgeVerdict, LLMJudge
+from adapti_guard.evaluation.target_model import GenerationResult, MockTargetModel
 from adapti_guard.experiments.defense_baselines import get_defense_fn
 from adapti_guard.experiments.real_llm_pipeline import (
     EvaluationBackend,

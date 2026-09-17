@@ -20,9 +20,10 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.detectors import default_p3_detectors
 from adapti_guard.detectors.base import P1_SHA256, P2_SHA256, assert_pack_sha
@@ -53,19 +54,21 @@ from adapti_guard.experiments.p3_agentic_live import (
     assert_p2_pack_composition,
     prompt_template_hash,
     runtime_threshold_provenance,
-    stage_b_cartesian_schedule,
     tool_schema_hash,
 )
 from adapti_guard.experiments.p3_stage_c_q1 import (
     QUESTION_ID as Q1_QUESTION_ID,
+)
+from adapti_guard.experiments.p3_stage_c_q1 import (
     STAGE_B_OFFICIAL,
-    delta_vs_d0 as q1_delta_vs_d0,
     sign_agreement,
     sign_delta,
 )
+from adapti_guard.experiments.p3_stage_c_q1 import (
+    delta_vs_d0 as q1_delta_vs_d0,
+)
 from adapti_guard.experiments.p3_stage_c_q2_lock import (
     JUDGE_ID,
-    MAXIMUM_PERMITTED_BUDGET_USD,
     PRICING_VERIFIED_AT_UTC,
     T0_ID,
     T1_ID,
@@ -214,8 +217,8 @@ def model_selection_rationale() -> dict[str, Any]:
                 f"exact id {T1_ID}."
             ),
             "T2": (
-                "Gemma 3 cross-family diversity; exact id {T2_ID}."
-            ).format(T2_ID=T2_ID),
+                f"Gemma 3 cross-family diversity; exact id {T2_ID}."
+            ),
             "T3": (
                 f"Qwen3.5 MoE adjacent generation/size band; exact id {T3_ID}; "
                 "not a causal size claim."
@@ -1032,19 +1035,18 @@ def assert_stage_b_immutable(protocol: Mapping[str, Any] | None = None) -> dict[
 
 
 def validate_event_id_q2_uniqueness() -> dict[str, Any]:
-    samples = []
-    for slot in ("T1", "T2", "T3"):
-        samples.append(
-            make_security_event_id(
-                "p2a_atk_001",
-                3,
-                "create_record",
-                "invalid_tool_arguments",
-                detector_id="D0",
+    samples = [
+        make_security_event_id(
+            "p2a_atk_001",
+            3,
+            "create_record",
+            "invalid_tool_arguments",
+            detector_id="D0",
                 policy_id=PRIMARY_POLICY_STRATUM,
                 repetition_id=q2_event_scope_token(slot),
             )
-        )
+        for slot in ("T1", "T2", "T3")
+    ]
     # Distinct from Q1 R2 token
     r2 = make_security_event_id(
         "p2a_atk_001",
@@ -1076,9 +1078,9 @@ def validate_event_id_q2_uniqueness() -> dict[str, Any]:
 
 def validate_delta_helpers_on_t0() -> dict[str, Any]:
     rows = [
-        json.loads(l)
-        for l in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
-        if l.strip()
+        json.loads(line)
+        for line in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
+        if line.strip()
     ]
     out = {}
     for did in NON_D0_DETECTORS:
@@ -1363,7 +1365,7 @@ def write_q2_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
     val_export["gate_status"] = validation.get("gate_status")
     val_export["blockers"] = validation.get("blockers", [])
     val_export["protocol_sha256"] = protocol_sha
-    val_export["generated_at_utc"] = datetime.now(timezone.utc).strftime(
+    val_export["generated_at_utc"] = datetime.now(UTC).strftime(
         "%Y-%m-%dT%H:%M:%SZ"
     )
 
@@ -1488,7 +1490,7 @@ protocol_sha256: `{protocol_sha}`
         encoding="utf-8",
     )
 
-    mv = bundle["model_verification"]["records"]
+    bundle["model_verification"]["records"]
     paths["model_verification_md"].write_text(
         f"""# P3-Q2 Model Verification
 

@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.detectors.base import (
     FORBIDDEN_INPUT_KEYS,

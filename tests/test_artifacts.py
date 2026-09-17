@@ -40,7 +40,7 @@ def test_adaptive_artifact_schema_and_stream_consistency():
     assert [e["episode_id"] for e in adaptive] == list(range(1, 101))
 
     mismatches = 0
-    for s, a in zip(stream, adaptive):
+    for s, a in zip(stream, adaptive, strict=False):
         assert REQUIRED_FIELDS.issubset(a.keys())
         if (
             s["episode_id"] != a["episode_id"]

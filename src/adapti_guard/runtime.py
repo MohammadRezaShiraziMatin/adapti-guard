@@ -8,13 +8,13 @@ Active Phase 1 path: ``adapti_guard.core.core_pipeline.CoreDefensePipeline``.
 Do not treat ``AdaptiGuard.run`` outcomes as confirmatory security results.
 """
 
-from .detector.prompt_injection_detector import PromptInjectionDetector
-from .risk.risk_engine import RiskEngine
-from .policy.policy_engine import DefensePolicyEngine
-from .defense.action_layer import DefenseActionLayer
-from .evaluation.outcome_evaluator import OutcomeEvaluator
 from .adaptation.feedback_engine import FeedbackEngine
 from .adaptation.policy_update_engine import PolicyUpdateEngine
+from .defense.action_layer import DefenseActionLayer
+from .detector.prompt_injection_detector import PromptInjectionDetector
+from .evaluation.outcome_evaluator import OutcomeEvaluator
+from .policy.policy_engine import DefensePolicyEngine
+from .risk.risk_engine import RiskEngine
 
 
 class AdaptiGuard:

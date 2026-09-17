@@ -84,7 +84,7 @@ Binding YAML hashes and Target/Judge keys: [`docs/paper/workshop_vnext_fail/CONF
 
 | Path | SHA-256 | Used for official VNEXT pair? |
 | --- | --- | --- |
-| `configs/models.yaml` | `9fb2bcc603485ead28d8f10c8ed96915ed040716bae51d3f0ab30de35071fe46` | **Yes** (`target_2`, `judge_fallback`, `cache.enabled=false`) |
+| `configs/models.yaml` | `42f6ec0febc7ab03598320b58cc19bf0722d60f0a1bfe13d895e03c58a7cc5a7` | **Yes** (`target_2`, `judge_fallback`, `cache.enabled=false`) |
 | `configs/datasets.yaml` | `fd005720c44f7786a93202536bea4d5eb336d6c25ad313d156df402f7b5acaca` | No (path registry) |
 | `configs/models_local.yaml` | `cfcd748388a7ae771cf9c951d74211364c673262f06f633a0ace1a0de0ba5126` | No |
 | `configs/experiments/ablation_study.yaml` | `80791f5122bdfa8ae6b7b177d1f2de043255de8a261a75941e3f0ee418eaf0c5` | No |

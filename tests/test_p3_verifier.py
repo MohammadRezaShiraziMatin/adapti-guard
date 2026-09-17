@@ -75,7 +75,13 @@ def test_verifier_rejects_unknown_detector(valid_artifact: Path):
     row = json.loads(path.read_text(encoding="utf-8").splitlines()[0])
     row["detector_id"] = "D3"
     row["result"]["detector_id"] = "D3"
-    row["evaluation_id"] = row["evaluation_id"].replace("::D0::", "::D3::").replace("::D1::", "::D3::").replace("::D2::", "::D3::").replace("::D4::", "::D3::")
+    row["evaluation_id"] = (
+        row["evaluation_id"]
+        .replace("::D0::", "::D3::")
+        .replace("::D1::", "::D3::")
+        .replace("::D2::", "::D3::")
+        .replace("::D4::", "::D3::")
+    )
     # force
     parts = row["evaluation_id"].split("::")
     if len(parts) >= 3:

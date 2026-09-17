@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 import os
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from adapti_guard.evaluation.attack_success import (
     EvalEpisode,
@@ -19,7 +20,7 @@ from adapti_guard.evaluation.experiment_logging import (
     sha256_file,
     update_registry_row,
 )
-from adapti_guard.evaluation.llm_judge import LLMJudge, build_judge
+from adapti_guard.evaluation.llm_judge import build_judge
 from adapti_guard.evaluation.provenance import (
     ExperimentValidity,
     classify_real_llm_validity,
@@ -41,7 +42,6 @@ load_project_env()
 
 
 def _adapti_guard_defense_fn(defense_level: int = 1):
-    from adapti_guard.core.models import DefenseAction
     from adapti_guard.defense.action_layer import DefenseActionLayer
     from adapti_guard.detector.prompt_injection_detector import PromptInjectionDetector
     from adapti_guard.policy.policy_engine import DefensePolicyEngine

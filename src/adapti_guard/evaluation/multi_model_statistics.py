@@ -9,11 +9,9 @@ from typing import Any
 
 from adapti_guard.evaluation.statistics import (
     bootstrap_ci,
-    cohens_d,
     holm_correction,
     mcnemar_test,
     proportion_ci_wilson,
-    wilcoxon_signed_rank,
 )
 
 
@@ -266,7 +264,7 @@ def analyze_multi_model_results(
 
     if raw_p_values:
         holm = holm_correction(raw_p_values)
-        for label, h in zip(comparison_labels, holm):
+        for label, h in zip(comparison_labels, holm, strict=False):
             report.holm_corrected.append({
                 "comparison": label,
                 **h,

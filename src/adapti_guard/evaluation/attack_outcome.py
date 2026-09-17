@@ -46,7 +46,4 @@ def attack_succeeded(
         # Non-tool attacks are not neutralized by tool restriction alone.
         return True
 
-    if action == DefenseAction.BLOCK:
-        return False
-
-    return True
+    return action != DefenseAction.BLOCK

@@ -26,9 +26,9 @@ FROZEN_HASHES = {
     ROOT
     / "results/common_attack_stream.json": "d101f94d97e0a29e8b9f9cc4dacb92472e29cd9af403114cb09b8f1d50a06c47",
     ROOT
-    / "datasets/frozen/vnext_confirm_v1/dataset.jsonl": "523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518",
+    / "datasets/frozen/vnext_confirm_v1/dataset.jsonl": "523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518",  # noqa: E501  # YAML comment with long SHA-256 hash
     ROOT
-    / "datasets/frozen/phase1_confirm_v1/dataset.jsonl": "c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01",
+    / "datasets/frozen/phase1_confirm_v1/dataset.jsonl": "c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01",  # noqa: E501  # YAML comment with long SHA-256 hash
 }
 
 

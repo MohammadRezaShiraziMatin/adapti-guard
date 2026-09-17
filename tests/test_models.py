@@ -6,14 +6,14 @@ SRC = PROJECT_ROOT / "src"
 
 sys.path.insert(0, str(SRC))
 
-from adapti_guard.core import (
+from adapti_guard.core import (  # noqa: E402  # sys.path.insert required before import
     AttackerType,
     DefenseAction,
     DetectionResult,
     Interaction,
     RiskAssessment,
     RiskLevel,
-)
+)  # noqa: E402  # sys.path.insert required before import
 
 
 def test_detection_probability_is_bounded():

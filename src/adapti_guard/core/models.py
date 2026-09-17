@@ -1,22 +1,22 @@
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
+from enum import StrEnum
+from typing import Any
 
 
-class RiskLevel(str, Enum):
+class RiskLevel(StrEnum):
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
 
 
-class DefenseAction(str, Enum):
+class DefenseAction(StrEnum):
     NO_INTERVENTION = "A0"
     SANITIZE = "A1"
     TOOL_RESTRICTION = "A2"
     BLOCK = "A3"
 
 
-class AttackerType(str, Enum):
+class AttackerType(StrEnum):
     STATIC = "static"
     ADAPTIVE = "adaptive"
 
@@ -28,15 +28,15 @@ class Interaction:
     user_input: str
     external_context: str = ""
     tool_sensitive: bool = False
-    attack_family: Optional[str] = None
+    attack_family: str | None = None
     attacker_type: AttackerType = AttackerType.STATIC
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class DetectionResult:
     injection_probability: float
-    indicators: List[str] = field(default_factory=list)
+    indicators: list[str] = field(default_factory=list)
 
     @property
     def is_injection(self) -> bool:
@@ -56,8 +56,8 @@ class DetectionResult:
 class RiskAssessment:
     score: float
     level: RiskLevel
-    features: Dict[str, float] = field(default_factory=dict)
-    reasons: List[str] = field(default_factory=list)
+    features: dict[str, float] = field(default_factory=dict)
+    reasons: list[str] = field(default_factory=list)
 
     def __post_init__(self):
         self.score = max(0.0, min(1.0, self.score))
@@ -81,7 +81,7 @@ class AgentOutcome:
     false_positive: bool
     latency_ms: float
     model_calls: int = 1
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass

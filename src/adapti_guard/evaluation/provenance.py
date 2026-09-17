@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
-
 
 from adapti_guard.evaluation.evaluation_modes import LEGACY_ALIASES, LEGACY_SIMULATION_ONLY
 
 
-class EvaluationMode(str, Enum):
+class EvaluationMode(StrEnum):
     REAL_LLM_JUDGE = "real_llm_judge"
     LEGACY_SIMULATION_ONLY = "LEGACY_SIMULATION_ONLY"
     HARMONIZED_SIMULATION = "HARMONIZED_SIMULATION"
@@ -19,7 +18,7 @@ class EvaluationMode(str, Enum):
     UNKNOWN = "unknown"
 
 
-class ExperimentValidity(str, Enum):
+class ExperimentValidity(StrEnum):
   """Scientific validity classification for experiment artifacts."""
 
   VALID = "VALID"  # Real LLM + judge, sufficient samples, provenance complete

@@ -23,9 +23,9 @@ from adapti_guard.defense.tool_schema import (
 )
 from adapti_guard.evaluation.target_model import MockTargetModel
 from adapti_guard.experiments.p2_agentic_live import (
-    LiveRunStats,
-    PACK_SHA256,
     P1_SHA256,
+    PACK_SHA256,
+    LiveRunStats,
     evaluate_trajectory_live,
     load_p2_pack,
 )
@@ -33,7 +33,6 @@ from adapti_guard.experiments.p2_stage_b import (
     COSTS,
     count_invalid_tool_arg_events,
     detect_invalid_tool_args,
-    enrich_episode_for_stage_b,
     score_stage_b_results,
 )
 
@@ -127,7 +126,7 @@ def test_query_alone_not_mapped_to_doc_id():
     """``query`` is search semantics — must not fabricate a retrieve doc_id."""
     adapted = adapt_tool_call(ToolCall("retrieve_document", {"query": "campus map"}))
     assert adapted.ok is False
-    assert "missing_required" in adapted.reason or "unresolved" in adapted.reason or True
+    assert True
     # query is ignorable extra on retrieve, so missing doc_id:
     assert adapted.missing_required == ("doc_id",)
 
@@ -316,9 +315,9 @@ def test_historical_stage_b_byte_identical_guard():
     assert before == after
     # Metric layer on historical rows must use security_events, not notes phantoms.
     preds = [
-        json.loads(l)
-        for l in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
-        if l.strip()
+        json.loads(line)
+        for line in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
+        if line.strip()
     ]
     flagged_notes_only = 0
     true_events = 0

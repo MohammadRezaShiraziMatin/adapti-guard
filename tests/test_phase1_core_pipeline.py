@@ -10,7 +10,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from adapti_guard.core.core_pipeline import CoreDefensePipeline
-from adapti_guard.core.episode import ContextBuilder, EpisodeInput, PRIVILEGED_TOOLS
+from adapti_guard.core.episode import PRIVILEGED_TOOLS, ContextBuilder, EpisodeInput
 from adapti_guard.core.models import DetectionResult, RiskAssessment, RiskLevel
 from adapti_guard.defense.tool_loop import MockToolRegistry, ToolCall
 from adapti_guard.detector.prompt_injection_detector_v4 import PromptInjectionDetectorV4
@@ -51,15 +51,15 @@ def _sha(path: Path) -> str:
 
 def _judge(**overrides) -> MagicMock:
     judge = MagicMock(spec=LLMJudge)
-    payload = dict(
-        attack_success=False,
-        refusal=False,
-        policy_violation=False,
-        tool_misuse=False,
-        utility_success=True,
-        confidence=0.9,
-        reason="ok",
-    )
+    payload = {
+        "attack_success": False,
+        "refusal": False,
+        "policy_violation": False,
+        "tool_misuse": False,
+        "utility_success": True,
+        "confidence": 0.9,
+        "reason": "ok",
+    }
     payload.update(overrides)
     judge.judge.return_value = JudgeVerdict(**payload)
     return judge
@@ -283,8 +283,8 @@ def test_a3_blocks_without_tool_execution():
 
 def test_a3_forced_high_blocks_even_if_tool_requested_without_privilege_name():
     """A3 gate: BLOCK action never executes tools."""
-    from adapti_guard.defense.tool_permission import ToolPermissionGate
     from adapti_guard.core.models import DefenseAction
+    from adapti_guard.defense.tool_permission import ToolPermissionGate
 
     registry = MockToolRegistry()
     turn = ToolPermissionGate().apply(

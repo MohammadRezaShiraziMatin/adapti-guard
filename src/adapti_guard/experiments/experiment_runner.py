@@ -1,24 +1,24 @@
-from dataclasses import dataclass, asdict
 import json
 import platform
 import sys
-from datetime import datetime, timezone
+from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 
-from adapti_guard.attacker.adaptive_attacker import AdaptiveAttacker
-from adapti_guard.detector.prompt_injection_detector import (
-    PromptInjectionDetector,
-)
-from adapti_guard.risk.risk_engine import RiskEngine
-from adapti_guard.policy.policy_engine import DefensePolicyEngine
-from adapti_guard.defense.action_layer import DefenseActionLayer
-from adapti_guard.evaluation.attack_outcome import attack_succeeded
-from adapti_guard.evaluation.outcome_evaluator import OutcomeEvaluator
 from adapti_guard.adaptation.feedback_engine import FeedbackEngine
 from adapti_guard.adaptation.policy_update_engine import (
     PolicyState,
     PolicyUpdateEngine,
 )
+from adapti_guard.attacker.adaptive_attacker import AdaptiveAttacker
+from adapti_guard.defense.action_layer import DefenseActionLayer
+from adapti_guard.detector.prompt_injection_detector import (
+    PromptInjectionDetector,
+)
+from adapti_guard.evaluation.attack_outcome import attack_succeeded
+from adapti_guard.evaluation.outcome_evaluator import OutcomeEvaluator
+from adapti_guard.policy.policy_engine import DefensePolicyEngine
+from adapti_guard.risk.risk_engine import RiskEngine
 
 
 @dataclass
@@ -368,21 +368,9 @@ class ExperimentRunner:
         # ATTACK / LEGITIMATE OUTCOME
         # ========================================================
 
-        if attack_present:
-            attack_ok = attack_succeeded(
-                decision.action,
-                attack_family,
-                defense,
-            )
-        else:
-            attack_ok = False
+        attack_ok = attack_succeeded(decision.action, attack_family, defense) if attack_present else False
 
-        if legitimate_task:
-            legitimate_succeeded = (
-                decision.action.value in {"A0", "A1", "A2"}
-            )
-        else:
-            legitimate_succeeded = False
+        legitimate_succeeded = decision.action.value in {"A0", "A1", "A2"} if legitimate_task else False
 
         outcome = self.outcome_evaluator.evaluate(
             action=decision.action,
@@ -474,8 +462,7 @@ class ExperimentRunner:
 
         results = []
 
-        for episode_id in range(1, episodes + 1):
-            results.append(self.run_episode(episode_id))
+        results = [self.run_episode(episode_id) for episode_id in range(1, episodes + 1)]
 
         return results
 
@@ -493,7 +480,7 @@ class ExperimentRunner:
         )
 
         if output_path.exists() and not overwrite:
-            stamp = datetime.now(timezone.utc).strftime(
+            stamp = datetime.now(UTC).strftime(
                 "%Y%m%dT%H%M%SZ"
             )
             archived = output_path.with_name(
@@ -536,7 +523,7 @@ class ExperimentRunner:
         )
 
         if output_path.exists() and not overwrite:
-            stamp = datetime.now(timezone.utc).strftime(
+            stamp = datetime.now(UTC).strftime(
                 "%Y%m%dT%H%M%SZ"
             )
             archived = output_path.with_name(
@@ -548,7 +535,7 @@ class ExperimentRunner:
             "python_version": sys.version,
             "platform": platform.platform(),
             "timestamp_utc": datetime.now(
-                timezone.utc
+                UTC
             ).isoformat(),
             **manifest,
         }

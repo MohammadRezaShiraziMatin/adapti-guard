@@ -75,17 +75,15 @@ def test_utility_denominator_is_legitimate_only():
 
 
 def test_temporal_and_family_helpers():
-    episodes = []
-    for i in range(1, 101):
-        episodes.append(
-            {
-                "episode_id": i,
-                "attack_present": True,
-                "attack_success": i % 2 == 0,
-                "legitimate_success": False,
-                "security_score": 0.0 if i % 2 == 0 else 1.0,
-                "utility_score": 0.0,
-                "defense_cost": 0.1,
+    episodes = [
+        {
+            "episode_id": i,
+            "attack_present": True,
+            "attack_success": i % 2 == 0,
+            "legitimate_success": False,
+            "security_score": 0.0 if i % 2 == 0 else 1.0,
+            "utility_score": 0.0,
+            "defense_cost": 0.1,
                 "reward": 0.4,
                 "attack_family": [
                     "direct_injection",
@@ -95,7 +93,8 @@ def test_temporal_and_family_helpers():
                 ][(i - 1) % 4],
                 "detection_score": 0.9,
             }
-        )
+        for i in range(1, 101)
+    ]
     windows = temporal_windows(episodes)
     assert set(windows) == {"1-25", "26-50", "51-75", "76-100"}
     families = family_metrics(episodes)

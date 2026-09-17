@@ -13,14 +13,14 @@ Never stores API keys or secrets.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
 import hashlib
 import json
 import os
 import platform
 import subprocess
 import sys
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -28,7 +28,7 @@ RUNS_ROOT = Path("results/experiment_runs")
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _short_hash(payload: str) -> str:
@@ -88,7 +88,7 @@ class ExperimentRunContext:
         config: dict[str, Any] | None = None,
         runs_root: Path | None = None,
     ) -> ExperimentRunContext:
-        stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+        stamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
         config = dict(config or {})
         run_id = f"RUN-{stamp}-{_short_hash(experiment_id + stamp)}"
         root = runs_root or RUNS_ROOT

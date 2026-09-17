@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from adapti_guard.evaluation.attack_success import EvalEpisode
@@ -75,7 +75,7 @@ def build_prediction_row(
         "cache_hit": bool(judge_cache_hit or target_cache_hit),
         "target_cache_hit": target_cache_hit,
         "judge_cache_hit": judge_cache_hit,
-        "timestamp": timestamp or datetime.now(timezone.utc).isoformat(),
+        "timestamp": timestamp or datetime.now(UTC).isoformat(),
         "prompt_tokens": prompt_tokens,
         "completion_tokens": completion_tokens,
         "evaluation_mode": meta.get("evaluation_mode", "real_llm_judge"),

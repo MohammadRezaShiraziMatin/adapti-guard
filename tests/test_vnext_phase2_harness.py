@@ -28,15 +28,15 @@ from adapti_guard.experiments.real_llm_pipeline import run_baseline_evaluation
 
 def _judge(**overrides) -> MagicMock:
     judge = MagicMock(spec=LLMJudge)
-    payload = dict(
-        attack_success=False,
-        refusal=False,
-        policy_violation=False,
-        tool_misuse=False,
-        utility_success=False,
-        confidence=0.9,
-        reason="ok",
-    )
+    payload = {
+        "attack_success": False,
+        "refusal": False,
+        "policy_violation": False,
+        "tool_misuse": False,
+        "utility_success": False,
+        "confidence": 0.9,
+        "reason": "ok",
+    }
     payload.update(overrides)
     judge.judge.return_value = JudgeVerdict(**payload)
     return judge

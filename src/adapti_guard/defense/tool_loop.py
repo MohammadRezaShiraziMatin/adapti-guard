@@ -8,8 +8,9 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Mapping
+from typing import Any
 
 from adapti_guard.core.models import DefenseAction
 
@@ -103,9 +104,7 @@ def extract_tool_request(
 
 def tool_allowed(action: DefenseAction | str) -> bool:
     value = action.value if isinstance(action, DefenseAction) else str(action)
-    if value in {"A2", "A3"}:
-        return False
-    return True
+    return value not in {"A2", "A3"}
 
 
 def run_tool_turn(

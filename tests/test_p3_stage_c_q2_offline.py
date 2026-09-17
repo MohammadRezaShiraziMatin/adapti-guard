@@ -8,8 +8,16 @@ from pathlib import Path
 
 import pytest
 
+from adapti_guard.experiments.p2_agentic_live import (
+    LOCKED_BACKEND,
+    LOCKED_TARGET,
+    MAX_JUDGE_RETRIES,
+    MAX_TARGET_RETRIES,
+)
 from adapti_guard.experiments.p3_stage_c_q1 import (
     QUESTION_ID as Q1_QUESTION_ID,
+)
+from adapti_guard.experiments.p3_stage_c_q1 import (
     build_q1_protocol,
 )
 from adapti_guard.experiments.p3_stage_c_q2 import (
@@ -34,12 +42,6 @@ from adapti_guard.experiments.p3_stage_c_q2_lock import (
     q2_arm_schedule,
     q2_call_bounds,
     worst_case_cost_usd,
-)
-from adapti_guard.experiments.p2_agentic_live import (
-    LOCKED_BACKEND,
-    LOCKED_TARGET,
-    MAX_JUDGE_RETRIES,
-    MAX_TARGET_RETRIES,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -67,8 +69,8 @@ def test_provider_and_pricing_complete():
         b = pl["models"][s]
         assert b["verified"] is True
         assert b["pricing_unit"] == "USD_per_1M_tokens"
-        assert isinstance(b["input_price"], float) or isinstance(b["input_price"], int)
-        assert isinstance(b["output_price"], float) or isinstance(b["output_price"], int)
+        assert isinstance(b["input_price"], (float, int))
+        assert isinstance(b["output_price"], (float, int))
 
 
 def test_arm_and_call_counts_deterministic():

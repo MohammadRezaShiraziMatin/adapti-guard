@@ -34,16 +34,15 @@ def default_p3_detectors() -> dict[str, P3Detector]:
 
 
 def list_detector_catalog() -> list[dict]:
-    cats = []
-    for det in default_p3_detectors().values():
-        cats.append(
-            {
-                "detector_id": det.detector_id,
-                "version": det.version,
-                "config_hash": det.config_hash(),
-                "status": "OFFLINE_OPERATIONAL",
-            }
-        )
+    cats = [
+        {
+            "detector_id": det.detector_id,
+            "version": det.version,
+            "config_hash": det.config_hash(),
+            "status": "OFFLINE_OPERATIONAL",
+        }
+        for det in default_p3_detectors().values()
+    ]
     for did, meta in DEFERRED_DETECTORS.items():
         cats.append({"detector_id": did, **meta})
     return cats

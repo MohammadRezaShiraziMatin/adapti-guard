@@ -7,14 +7,11 @@ the Phase 1 core pipeline only. It does not retune the 0.25 / 0.60 bands.
 
 from __future__ import annotations
 
-import base64
 import re
 import unicodedata
 
 from adapti_guard.core.models import DetectionResult
 from adapti_guard.detector.prompt_injection_detector_v4 import (
-    EvidenceBundle,
-    PromptInjectionDetectorV4,
     _B64_BLOB,
     _CLASSIC_OVERRIDE,
     _E10_BENIGN,
@@ -25,6 +22,8 @@ from adapti_guard.detector.prompt_injection_detector_v4 import (
     _INDIRECT_CONTROL,
     _TOOL_MANIP,
     _ZW,
+    EvidenceBundle,
+    PromptInjectionDetectorV4,
     _search_any,
     _try_decode_b64,
     _try_decode_hex,
@@ -204,9 +203,7 @@ class EvidenceBundlePhase1(EvidenceBundle):
             self.e2_hierarchy or self.e4_tool or self.e9_obfuscation or self.decoded_payload or self.e5_exfil
         ):
             return True
-        if self.decoded_payload and self.e4_tool:
-            return True
-        return False
+        return bool(self.decoded_payload and self.e4_tool)
 
 
 class PromptInjectionDetectorPhase1(PromptInjectionDetectorV4):
@@ -266,14 +263,13 @@ class PromptInjectionDetectorPhase1(PromptInjectionDetectorV4):
             _PHASE1_TOOL_INVOKE, expanded_l
         )
         tool_out_n = normalize_text(tool_output or "").lower()
-        if tool_out_n:
-            if (
-                _search_any(_TOOL_MANIP, tool_out_n)
-                or _search_any(_INDIRECT_CONTROL, tool_out_n)
-                or _search_any(_PHASE1_TOOL_INVOKE, tool_out_n)
-            ):
-                ev.e4_tool = True
-                ev.e7_indirect = True
+        if tool_out_n and (
+            _search_any(_TOOL_MANIP, tool_out_n)
+            or _search_any(_INDIRECT_CONTROL, tool_out_n)
+            or _search_any(_PHASE1_TOOL_INVOKE, tool_out_n)
+        ):
+            ev.e4_tool = True
+            ev.e7_indirect = True
         # Exfil: secrets language, or tool-mail to authored exfil sink with tool/marker evidence.
         ev.e5_exfil = bool(_search_any(_EXFIL, expanded_l) and ev.exclusive_output) or (
             bool(re.search(r"@exfil\.invalid\b", expanded_l))

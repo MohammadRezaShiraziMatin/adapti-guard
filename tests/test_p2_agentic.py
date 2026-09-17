@@ -8,7 +8,6 @@ from copy import deepcopy
 from adapti_guard.experiments.p2_agentic import (
     OfflinePolicy,
     P2AgenticHarness,
-    SecurityEvent as P2SecurityEvent,
     TrajectorySpec,
     TurnSpec,
     example_smoke_trajectories,
@@ -16,6 +15,9 @@ from adapti_guard.experiments.p2_agentic import (
     run_offline_suite,
     trajectory_from_dict,
     write_run_artifacts,
+)
+from adapti_guard.experiments.p2_agentic import (
+    SecurityEvent as P2SecurityEvent,
 )
 
 
@@ -235,7 +237,7 @@ def test_deterministic_replay():
 def test_schema_validation_roundtrip(tmp_path):
     specs = example_smoke_trajectories()
     payload = run_offline_suite(specs, seed=7)
-    paths = write_run_artifacts(payload, tmp_path / "out")
+    write_run_artifacts(payload, tmp_path / "out")
     manifest = json.loads((tmp_path / "out" / "manifest.json").read_text())
     assert manifest["api_calls"] == 0
     assert manifest["scientific_evidence"] is False

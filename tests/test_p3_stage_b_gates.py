@@ -17,7 +17,6 @@ from adapti_guard.experiments.p3_agentic_live import (
     arm_level_disagreements,
     assert_p2_pack_composition,
     refuse_live_stage_b_without_approval,
-    score_p3_stage_b,
     stage_b_cartesian_schedule,
     write_p3_stage_b_artifact_bundle,
 )
@@ -40,8 +39,8 @@ def test_stage_b_cartesian_432():
     arms = stage_b_cartesian_schedule(rows)
     assert len(arms) == EXPECTED_N_ARMS_STAGE_B == 432
     assert len(set(arms)) == 432
-    assert set(a[1] for a in arms) == set(OPERATIONAL_DETECTORS)
-    assert set(a[2] for a in arms) == set(PRIMARY_POLICIES)
+    assert {a[1] for a in arms} == set(OPERATIONAL_DETECTORS)
+    assert {a[2] for a in arms} == set(PRIMARY_POLICIES)
     assert "D3" not in {a[1] for a in arms}
 
 

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 import hashlib
 import json
 import logging
@@ -11,6 +9,8 @@ import os
 import re
 import threading
 import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -770,7 +770,7 @@ class GeminiTargetModel(TargetModel):
                 self._pace_requests()
                 start = time.perf_counter()
                 contents = request.prompt
-                config: dict[str, Any] = {"max_output_tokens": int(max_tokens)}
+                {"max_output_tokens": int(max_tokens)}
                 # seed may be unsupported on some generate_content paths; omit if rejected.
                 try:
                     from google.genai import types as genai_types
@@ -999,7 +999,7 @@ class CerebrasTargetModel(TargetModel):
                         attempt + 1,
                         self.max_retries + 1,
                     )
-                    pass  # disabled retry sleep
+                    # disabled retry sleep
                     continue
                 break
 

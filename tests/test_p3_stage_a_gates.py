@@ -6,16 +6,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
-from adapti_guard.detectors.core_adapter import P3CoreDetectorAdapter
 from adapti_guard.detectors import default_p3_detectors
+from adapti_guard.detectors.core_adapter import P3CoreDetectorAdapter
 from adapti_guard.experiments.p3_agentic_live import (
     EXPECTED_N_ARMS,
     OPERATIONAL_DETECTORS,
     P3_SMOKE_TRAJECTORY_IDS,
     get_p3_defense_fn,
-    preflight_p3,
     stage_a_cartesian_schedule,
     verify_frozen_integrity,
 )
@@ -32,7 +29,7 @@ def test_frozen_integrity():
 def test_cartesian_60_arms():
     arms = stage_a_cartesian_schedule()
     assert len(arms) == EXPECTED_N_ARMS == 60
-    assert len({a for a in arms}) == 60
+    assert len(set(arms)) == 60
 
 
 def test_d3_not_operational():

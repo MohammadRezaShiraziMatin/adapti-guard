@@ -6,7 +6,8 @@ observable privilege / evidence indicators. Never reads gold labels.
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from adapti_guard.core.models import RiskAssessment, RiskLevel
 
@@ -97,10 +98,9 @@ class RiskEngineCore:
             reasons.append("evidence_privilege_floor_medium")
         if p < self.high_threshold and privileged_tool and (
             "E5_exfil" in indicators or ("E2_hierarchy" in indicators and "E4_tool" in indicators)
-        ):
-            if score >= self.medium_threshold:
-                score = max(score, self.high_threshold)
-                reasons.append("evidence_privilege_floor_high")
+        ) and score >= self.medium_threshold:
+            score = max(score, self.high_threshold)
+            reasons.append("evidence_privilege_floor_high")
 
         score = max(0.0, min(1.0, score))
         if score >= self.high_threshold:

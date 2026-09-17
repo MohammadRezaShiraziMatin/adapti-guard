@@ -8,10 +8,10 @@ Scientific contract:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import json
 import logging
 import re
+from dataclasses import dataclass
 from typing import Any
 
 from adapti_guard.evaluation.evaluation_modes import REAL_LLM_JUDGE

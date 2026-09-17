@@ -2,13 +2,13 @@
   "lock_id": "PHASE1-DETECTOR-LOCK-0.1",
   "locked_utc": "2026-09-14",
   "status": "LOCKED_BEFORE_INDEPENDENT_TEST",
-  "import_rename_note": "2026-09-15 portfolio-hygiene: sha256 values below are post `src.adapti_guard`→`adapti_guard` import rename (import lines only; detector/risk/policy logic unchanged). prior_sha256 retains the pre-rename hashes cited by Track B AUDIT (e02f3c64… for detector).",
+  "import_rename_note": "2026-09-15 portfolio-hygiene: sha256 values below are post `src.adapti_guard`\u2192`adapti_guard` import rename (import lines only; detector/risk/policy logic unchanged). prior_sha256 retains the pre-rename hashes cited by Track B AUDIT (e02f3c64\u2026 for detector).",
   "detector": {
     "class": "PromptInjectionDetectorPhase1",
     "version": "evidence_phase1.0",
     "source": "src/adapti_guard/detector/prompt_injection_detector_phase1.py",
-    "sha256": "4c4484db45861681a4f9bc073437034c571a5c544f575ee8b798204fba9f9459",
-    "prior_sha256": "e02f3c64aa563bccc815444f672bbced753d4685e7fbc16dc31a93bd41b189a3"
+    "sha256": "35764705a2d951fa0004a295e9972fa2e0465c87e586512de2f94069ae691cef",
+    "prior_sha256": "4c4484db45861681a4f9bc073437034c571a5c544f575ee8b798204fba9f9459"
   },
   "risk": {
     "class": "RiskEngineCore",

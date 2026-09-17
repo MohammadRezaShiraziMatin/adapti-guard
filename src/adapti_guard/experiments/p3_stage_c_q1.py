@@ -13,10 +13,10 @@ R2 = future live repetition — NOT executed by this module.
 
 from __future__ import annotations
 
-import hashlib
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.detectors import default_p3_detectors
 from adapti_guard.detectors.base import P1_SHA256, P2_SHA256, assert_pack_sha
@@ -34,6 +34,7 @@ from adapti_guard.experiments.p2_agentic_live import (
     P1_PATH,
     PACK_PATH,
     PACK_SHA256,
+    load_p2_pack,
 )
 from adapti_guard.experiments.p3_agentic_live import (
     EXPECTED_N_ARMS_STAGE_B,
@@ -49,14 +50,13 @@ from adapti_guard.experiments.p3_agentic_live import (
     stage_b_cartesian_schedule,
     tool_schema_hash,
 )
-from adapti_guard.experiments.p2_agentic_live import load_p2_pack
 from adapti_guard.experiments.security_event_id import (
     EVENT_ID_SCHEMA_LEGACY,
     EVENT_ID_SCHEMA_SCOPED_REP,
     HISTORICAL_P3_STAGE_B_LEGACY_RUN_ID,
     make_security_event_id,
 )
-from adapti_guard.metrics.tool_hasr import compute_judge_asr, compute_tool_hasr
+from adapti_guard.metrics.tool_hasr import compute_tool_hasr
 
 ROOT = Path(__file__).resolve().parents[3]
 STAGE_B_RUN_ID = HISTORICAL_P3_STAGE_B_LEGACY_RUN_ID
@@ -149,10 +149,7 @@ def delta_vs_d0(
     d0 = tool_hasr_rate_for(rows, detector_id=ANCHOR_DETECTOR, policy_id=policy_id)
     rate_d = d.get("rate")
     rate_0 = d0.get("rate")
-    if rate_d is None or rate_0 is None:
-        delta = None
-    else:
-        delta = float(rate_d) - float(rate_0)
+    delta = None if rate_d is None or rate_0 is None else float(rate_d) - float(rate_0)
     return {
         "detector_id": detector_id,
         "policy_id": policy_id,
@@ -592,7 +589,7 @@ def assert_locks_match_stage_b_manifest(
         errors.append("judge_model")
     if float(man.get("temperature")) != float(locks["models"]["temperature"]):
         errors.append("temperature")
-    if bool(man.get("cache_enabled")) != False:
+    if bool(man.get("cache_enabled")):
         errors.append("cache_enabled")
     if man.get("detector_versions") != locks["detectors"]["versions"]:
         errors.append("detector_versions")
@@ -622,9 +619,9 @@ def validate_r1_pairing_coverage() -> dict[str, Any]:
     if not preds_path.is_file():
         raise P3Q1ProtocolError("STOP_R1_PREDICTIONS_MISSING", str(preds_path))
     rows = [
-        json.loads(l)
-        for l in preds_path.read_text(encoding="utf-8").splitlines()
-        if l.strip()
+        json.loads(line)
+        for line in preds_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
     ]
     keys = {
         pairing_key(
@@ -712,9 +709,9 @@ def validate_event_id_v3_uniqueness_rules() -> dict[str, Any]:
 def validate_delta_helpers_on_r1() -> dict[str, Any]:
     """Recompute Δ on Stage-B for PHASE1-CORE; ensures helpers run (descriptive)."""
     rows = [
-        json.loads(l)
-        for l in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
-        if l.strip()
+        json.loads(line)
+        for line in (STAGE_B_DIR / "predictions.jsonl").read_text().splitlines()
+        if line.strip()
     ]
     out = {}
     for did in NON_D0_DETECTORS:
@@ -843,7 +840,7 @@ def write_q1_artifacts(validation: Mapping[str, Any] | None = None) -> dict[str,
     proto_json.write_text(json.dumps(protocol, indent=2, default=str) + "\n")
     val_json.write_text(json.dumps(val_export, indent=2, default=str) + "\n")
 
-    pe = protocol["primary_endpoint"]
+    protocol["primary_endpoint"]
     cost = protocol["cost_plan"]
     md = f"""# P3 Stage-C Q1 Protocol (RQ-C1)
 
@@ -887,7 +884,8 @@ R2 uses `{EVENT_ID_SCHEMA_SCOPED_REP}` including repetition. R1 legacy IDs untou
 
 ## Publication value
 
-Strengthens reproducibility/stability claims under locks. Does **not** claim cross-model generalization, detector superiority, or production safety.
+Strengthens reproducibility/stability claims under locks. "
+        "Does **not** claim cross-model generalization, detector superiority, or production safety.",
 
 ## Human gate checklist
 

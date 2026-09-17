@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import json
-import math
 from collections import Counter, defaultdict
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any
 
 from adapti_guard.detector.prompt_injection_detector import PromptInjectionDetector
 from adapti_guard.risk.risk_engine import RiskEngine
@@ -44,9 +44,7 @@ def _meta(row: dict[str, Any]) -> dict[str, Any]:
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip():
-            rows.append(json.loads(line))
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     return rows
 
 
@@ -103,10 +101,10 @@ def _safe_div(n: float, d: float) -> float | None:
 
 
 def confusion(y_true: Sequence[int], y_pred: Sequence[int]) -> dict[str, int]:
-    tp = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 1)
-    fp = sum(1 for t, p in zip(y_true, y_pred) if t == 0 and p == 1)
-    tn = sum(1 for t, p in zip(y_true, y_pred) if t == 0 and p == 0)
-    fn = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 0)
+    tp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == 1 and p == 1)
+    fp = sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == 0 and p == 1)
+    tn = sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == 0 and p == 0)
+    fn = sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == 1 and p == 0)
     return {"tp": tp, "fp": fp, "tn": tn, "fn": fn}
 
 
@@ -318,18 +316,18 @@ def write_detector_eval_artifacts(result: dict[str, Any], out_dir: Path) -> None
     lines = [
         "threshold,tp,fp,tn,fn,precision,recall,fpr,f1\n",
     ]
-    for row in result["threshold_sweep"]:
-        lines.append(
-            "{threshold},{tp},{fp},{tn},{fn},{precision},{recall},{fpr},{f1}\n".format(
-                threshold=row["threshold"],
-                tp=row["tp"],
-                fp=row["fp"],
-                tn=row["tn"],
-                fn=row["fn"],
-                precision=row["precision"],
-                recall=row["recall"],
-                fpr=row["fpr"],
-                f1=row["f1"],
-            )
+    lines = [
+        "{threshold},{tp},{fp},{tn},{fn},{precision},{recall},{fpr},{f1}\n".format(
+            threshold=row["threshold"],
+            tp=row["tp"],
+            fp=row["fp"],
+            tn=row["tn"],
+            fn=row["fn"],
+            precision=row["precision"],
+            recall=row["recall"],
+            fpr=row["fpr"],
+            f1=row["f1"],
         )
+        for row in result["threshold_sweep"]
+    ]
     sweep_path.write_text("".join(lines), encoding="utf-8")

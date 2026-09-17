@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import json
 import time
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -25,18 +25,18 @@ from adapti_guard.evaluation.multi_model_statistics import (
     analyze_multi_model_results,
     save_statistical_report,
 )
+from adapti_guard.evaluation.prediction_provenance import PROVENANCE_SCHEMA_VERSION
 from adapti_guard.evaluation.provenance import (
     ExperimentValidity,
     classify_real_llm_validity,
 )
-from adapti_guard.evaluation.prediction_provenance import PROVENANCE_SCHEMA_VERSION
 from adapti_guard.evaluation.target_model import load_model_config
 from adapti_guard.experiments.real_llm_pipeline import (
     DEFAULT_BASELINES,
+    UNIFIED_DATASET_DEFAULT,
     BaselineRunContext,
     EvaluationBackend,
     PipelineConfig,
-    UNIFIED_DATASET_DEFAULT,
     build_models,
     load_records,
     resolve_backend,
@@ -104,7 +104,7 @@ def run_multi_model_evaluation(config: MultiModelConfig) -> dict[str, Any]:
     config.output_dir.mkdir(parents=True, exist_ok=True)
 
     backend, block_reason = resolve_backend(config.backend)
-    timestamp = datetime.now(timezone.utc).isoformat()
+    timestamp = datetime.now(UTC).isoformat()
     effective_cache = resolve_cache_enabled(config)
 
     run_config = {

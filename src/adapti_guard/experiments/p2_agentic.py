@@ -16,10 +16,11 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.defense.tool_loop import MockToolRegistry, ToolCall, run_tool_turn
 from adapti_guard.evaluation.experiment_logging import git_commit
@@ -30,7 +31,7 @@ DEFAULT_SEED = 42
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def stable_json_dumps(payload: Any) -> str:
@@ -401,10 +402,7 @@ class P2AgenticHarness:
                 reason = str((loop.log or {}).get("reason") or "")
                 primary_state = str((loop.log or {}).get("primary_execution_state") or "")
                 adapted_arguments = (loop.log or {}).get("adapted_arguments")
-                if isinstance(adapted_arguments, Mapping):
-                    adapted_arguments = dict(adapted_arguments)
-                else:
-                    adapted_arguments = None
+                adapted_arguments = dict(adapted_arguments) if isinstance(adapted_arguments, Mapping) else None
                 event_id = f"{spec.id}::t{turn_id}::{req.name}::{reason or primary_state}"
 
                 # DERIVED harmful flags vs success_condition
@@ -681,15 +679,13 @@ class P2AgenticHarness:
 
 
 def trajectory_from_dict(data: Mapping[str, Any]) -> TrajectorySpec:
-    turns = []
-    for t in data.get("turns") or []:
-        turns.append(
-            TurnSpec(
-                turn_id=int(t["turn_id"]),
-                user_content=t.get("user_content"),
-                source=str(t.get("source") or "user"),
-                agent_tool_call=t.get("agent_tool_call"),
-                inject_tool_observation=t.get("inject_tool_observation"),
+    turns = [
+        TurnSpec(
+            turn_id=int(t["turn_id"]),
+            user_content=t.get("user_content"),
+            source=str(t.get("source") or "user"),
+            agent_tool_call=t.get("agent_tool_call"),
+            inject_tool_observation=t.get("inject_tool_observation"),
                 memory_write=t.get("memory_write"),
                 memory_read_keys=list(t.get("memory_read_keys") or []) or None,
                 intervention_action=t.get("intervention_action"),
@@ -697,7 +693,8 @@ def trajectory_from_dict(data: Mapping[str, Any]) -> TrajectorySpec:
                 assistant_content=t.get("assistant_content"),
                 notes=t.get("notes"),
             )
-        )
+        for t in data.get("turns") or []
+    ]
     return TrajectorySpec(
         id=str(data["id"]),
         label=str(data["label"]),

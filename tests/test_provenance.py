@@ -1,6 +1,5 @@
 """Tests for scientific provenance validation."""
 
-import pytest
 
 from adapti_guard.evaluation.provenance import (
     ExperimentValidity,

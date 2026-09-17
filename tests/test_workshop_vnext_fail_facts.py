@@ -8,7 +8,6 @@ from __future__ import annotations
 import runpy
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "docs" / "paper" / "workshop_vnext_fail" / "verify_manuscript_facts.py"
 

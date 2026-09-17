@@ -19,10 +19,11 @@ import hashlib
 import json
 import os
 import re
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.defense.tool_loop import (
     MockToolRegistry,
@@ -177,7 +178,7 @@ class LiveRunStats:
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def sha256_file(path: Path) -> str:
@@ -558,9 +559,11 @@ def _decide_defense(
 
 def _build_transcript_prompt(state: AgentState, *, user_content: str | None) -> str:
     lines: list[str] = []
-    for msg in state.messages:
-        if msg.role in {"user", "assistant", "tool", "memory", "system"}:
-            lines.append(f"{msg.role.upper()}: {msg.content}")
+    lines = [
+        f"{msg.role.upper()}: {msg.content}"
+        for msg in state.messages
+        if msg.role in {"user", "assistant", "tool", "memory", "system"}
+    ]
     if user_content is not None and (
         not state.messages
         or state.messages[-1].content != user_content
@@ -936,10 +939,7 @@ def evaluate_trajectory_live(
                 (loop.log or {}).get("primary_execution_state") or ""
             )
             adapted_arguments = (loop.log or {}).get("adapted_arguments")
-            if isinstance(adapted_arguments, Mapping):
-                adapted_arguments = dict(adapted_arguments)
-            else:
-                adapted_arguments = None
+            adapted_arguments = dict(adapted_arguments) if isinstance(adapted_arguments, Mapping) else None
             event_id = make_security_event_id(
                 spec.id,
                 turn_id,

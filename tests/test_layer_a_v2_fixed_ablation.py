@@ -8,9 +8,9 @@ from pathlib import Path
 
 from adapti_guard.core.models import DefenseAction
 from adapti_guard.defense.action_layer import DefenseActionLayer
+from adapti_guard.detector.prompt_injection_detector import PromptInjectionDetector
 from adapti_guard.evaluation.attack_success import load_benchmark_mixed_records
 from adapti_guard.experiments.defense_baselines import get_defense_fn
-from adapti_guard.detector.prompt_injection_detector import PromptInjectionDetector
 from adapti_guard.policy.policy_engine import DefensePolicyEngine
 from adapti_guard.risk.risk_engine import RiskEngine
 

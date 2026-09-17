@@ -17,12 +17,12 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from adapti_guard.evaluation.target_model import MockTargetModel
-from adapti_guard.experiments.p2_agentic_live import (
+from adapti_guard.evaluation.target_model import MockTargetModel  # noqa: E402  # sys.path.insert required before import
+from adapti_guard.experiments.p2_agentic_live import (  # noqa: E402  # sys.path.insert required before import
     LOCKED_JUDGE,
     LOCKED_TARGET,
-    PACK_SHA256,
     P1_SHA256,
+    PACK_SHA256,
     PRIMARY_ARMS,
     SMOKE_CORE_ID,
     SMOKE_SEED,
@@ -37,9 +37,9 @@ from adapti_guard.experiments.p2_agentic_live import (
     score_stage_a_results,
     smoke_subset,
     stage_a_arm_schedule,
-    verify_pack_invariants,
     verify_p1_integrity,
-)
+    verify_pack_invariants,
+)  # noqa: E402  # sys.path.insert required before import
 
 SCRIPT = ROOT / "scripts" / "run_p2_agentic_live.py"
 
@@ -231,7 +231,8 @@ def test_invalid_live_tool_arguments_do_not_crash_episode():
 def test_live_target_injection_scripted_preferred():
     rows = {r["id"]: r for r in load_p2_pack()}
     mock = MockTargetModel(
-        response='TOOL_REQUEST: {"name":"create_record","arguments":{"kind":"p2_authz_override","payload":"GRANT-OPS-ALPHA"}}',
+        response='TOOL_REQUEST: '
+        '{"name":"create_record","arguments":{"kind":"p2_authz_override","payload":"GRANT-OPS-ALPHA"}}',
         tool_call={
             "name": "create_record",
             "arguments": {"kind": "p2_authz_override", "payload": "GRANT-OPS-ALPHA"},
@@ -355,16 +356,15 @@ def test_unsupported_tool_is_recorded_not_abort():
 
 def test_score_bundle_separates_tool_hasr_and_judge_asr():
     rows = {r["id"]: r for r in load_p2_pack()}
-    results = []
-    for tid in SMOKE_TRAJECTORY_IDS:
-        results.append(
-            evaluate_trajectory_live(
-                rows[tid],
-                "B0",
-                tool_mode="scripted_only",
-                call_judge=False,
-            )
+    results = [
+        evaluate_trajectory_live(
+            rows[tid],
+            "B0",
+            tool_mode="scripted_only",
+            call_judge=False,
         )
+        for tid in SMOKE_TRAJECTORY_IDS
+    ]
     scored = score_stage_a_results(results, policy="B0")
     assert "bundle" in scored
     # compute_p2_security_bundle nests metrics under "Tool-HASR" / "Judge-ASR"

@@ -86,14 +86,14 @@ def test_scoped_event_id_differs_for_repeated_events():
 
 
 def test_scoped_event_id_deterministic():
-    kwargs = dict(
-        trajectory_id="p2a_ben_011",
-        turn_id=3,
-        tool_name="create_record",
-        reason_or_state="invalid_tool_arguments",
-        detector_id="D4",
-        policy_id="PHASE1-CORE",
-    )
+    kwargs = {
+        "trajectory_id": "p2a_ben_011",
+        "turn_id": 3,
+        "tool_name": "create_record",
+        "reason_or_state": "invalid_tool_arguments",
+        "detector_id": "D4",
+        "policy_id": "PHASE1-CORE",
+    }
     assert make_security_event_id(**kwargs) == make_security_event_id(**kwargs)
     assert event_id_schema_for(detector_id="D4", policy_id="PHASE1-CORE") == (
         EVENT_ID_SCHEMA_SCOPED
@@ -170,9 +170,9 @@ def test_historical_official_metrics_unchanged():
 @pytest.mark.skipif(not P3_STAGE_B.is_dir(), reason="P3 Stage-B run dir absent")
 def test_historical_event_ids_remain_legacy_schema():
     preds = [
-        json.loads(l)
-        for l in (P3_STAGE_B / "predictions.jsonl").read_text().splitlines()
-        if l.strip()
+        json.loads(line)
+        for line in (P3_STAGE_B / "predictions.jsonl").read_text().splitlines()
+        if line.strip()
     ]
     scoped_like = 0
     legacy = 0

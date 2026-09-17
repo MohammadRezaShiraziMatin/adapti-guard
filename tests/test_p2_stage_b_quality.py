@@ -15,23 +15,23 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from adapti_guard.experiments.p2_agentic import (
+from adapti_guard.experiments.p2_agentic import (  # noqa: E402  # sys.path.insert required before import
     OfflinePolicy,
     P2AgenticHarness,
     trajectory_from_dict,
-)
-from adapti_guard.experiments.p2_agentic_live import (
-    PACK_SHA256,
+)  # noqa: E402  # sys.path.insert required before import
+from adapti_guard.experiments.p2_agentic_live import (  # noqa: E402  # sys.path.insert required before import
     P1_SHA256,
+    PACK_SHA256,
     PRIMARY_ARMS,
     P2LiveGateError,
     evaluate_trajectory_live,
     load_p2_pack,
-)
-from adapti_guard.experiments.p2_stage_b import (
-    STAGE_B_EXPECTED_EPISODE_ARMS,
+)  # noqa: E402  # sys.path.insert required before import
+from adapti_guard.experiments.p2_stage_b import (  # noqa: E402  # sys.path.insert required before import
     OUTCOME_PREVENTED,
     OUTCOME_UNKNOWN,
+    STAGE_B_EXPECTED_EPISODE_ARMS,
     assert_episode_arm_coverage,
     assert_stage_b_pack_locked,
     assert_unique_output_dir,
@@ -54,7 +54,10 @@ from adapti_guard.experiments.p2_stage_b import (
     tool_schema_hash,
     write_stage_b_artifact_bundle,
 )
-from adapti_guard.metrics.tool_hasr import COSTS, disagreement_rows
+from adapti_guard.metrics.tool_hasr import (  # noqa: E402  # sys.path.insert required before import
+    COSTS,
+    disagreement_rows,
+)
 
 SCRIPT = ROOT / "scripts" / "run_p2_agentic_live.py"
 VERIFY = ROOT / "scripts" / "verify_p2_stage_b_artifacts.py"
@@ -180,7 +183,7 @@ def test_inventory_and_pack_lock():
 def test_stage_b_schedule_36x3():
     schedule = stage_b_arm_schedule()
     assert set(schedule) == set(PRIMARY_ARMS)
-    for _arm, ids in schedule.items():
+    for ids in schedule.values():
         assert len(ids) == 36
         assert len(set(ids)) == 36
     eids = expected_evaluation_ids("runX")

@@ -108,13 +108,13 @@ def test_invalid_tool_args_event_provenance():
     )
     assert turn.log["primary_execution_state"] == EXEC_INVALID_TOOL_ARGS
     assert "notes" not in (turn.log.get("stats_snapshot") or {})
-    assert CANONICAL_EXECUTION_STATES == {
+    assert {
         EXEC_EXECUTED,
         EXEC_POLICY_DENIED,
         EXEC_INVALID_TOOL_ARGS,
         EXEC_UNSUPPORTED_TOOL,
         EXEC_RUNTIME_ERROR,
-    }
+    } == CANONICAL_EXECUTION_STATES
     assert CANONICAL_EXECUTION_STATES.issubset(EXECUTION_STATES)
 
 
@@ -180,7 +180,7 @@ def test_layer_a_metrics_no_composite_score():
         benign_ids={"ben_001"},
         hard_negative_ids={"hn_001"},
     )
-    for _det_id, block in summary.items():
+    for block in summary.values():
         assert "attack_detection_rate" in block
         assert "benign_FPR" in block
         assert "hard_negative_FPR" in block

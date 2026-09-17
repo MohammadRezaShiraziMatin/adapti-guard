@@ -272,9 +272,7 @@ class EvidenceBundle:
             self.e7_indirect or self.e8_multi_turn or self.e4_tool or self.e3_goal_modification
         ):
             return True
-        if self.e1_agent_directed and self.exclusive_output:
-            return True
-        return False
+        return bool(self.e1_agent_directed and self.exclusive_output)
 
 
 class PromptInjectionDetectorV4:
@@ -326,12 +324,11 @@ class PromptInjectionDetectorV4:
         )
         ev.e4_tool = _search_any(_TOOL_MANIP, expanded_l)
         tool_out_n = normalize_text(tool_output or "").lower()
-        if tool_out_n:
-            if _search_any(_TOOL_MANIP, tool_out_n) or _search_any(
-                _INDIRECT_CONTROL, tool_out_n
-            ):
-                ev.e4_tool = True
-                ev.e7_indirect = True
+        if tool_out_n and (_search_any(_TOOL_MANIP, tool_out_n) or _search_any(
+            _INDIRECT_CONTROL, tool_out_n
+        )):
+            ev.e4_tool = True
+            ev.e7_indirect = True
         ev.e5_exfil = _search_any(_EXFIL, expanded_l) and ev.exclusive_output
         ev.e8_multi_turn = bool(
             re.search(r"\buser:", context_l) and re.search(r"\bassistant:", context_l)

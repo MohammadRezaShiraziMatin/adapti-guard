@@ -2,30 +2,25 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
-from datetime import datetime, timezone
-import hashlib
 import json
 import platform
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from adapti_guard.experiments.harmonized_runner import (
+    HARMONIZED_METHODS,
     METRIC_VERSION,
     RUNNER_VERSION,
-    HARMONIZED_METHODS,
-    PolicyMode,
     HarmonizedRunner,
+    PolicyMode,
     build_schedule_75_25,
     build_workload_schedule,
     episode_records,
-    extract_transition_statistics,
-    sha256_file,
     summarize_method,
 )
-
 
 EXPERIMENT_VERSION = "q1_sensitivity_v1"
 EPISODES = 100
@@ -244,7 +239,7 @@ def validate_sensitivity(
     checks["frozen_artifacts_unchanged"] = frozen["validity"] == "PASS"
 
     # Threshold: one factor changed per config vs baseline
-    baseline = threshold_payload["configurations"][0]["full_adaptive"]
+    threshold_payload["configurations"][0]["full_adaptive"]
     th_ok = True
     for cfg in threshold_payload["configurations"]:
         fa = cfg["full_adaptive"]
@@ -311,7 +306,7 @@ def classify_evidence(
     asrs = [c["full_adaptive"]["asr"] for c in configs]
     transitions = [c["full_adaptive"]["total_transitions"] for c in configs]
     threshold_sensitive = (
-        len(set(round(a, 4) for a in asrs)) > 1
+        len({round(a, 4) for a in asrs}) > 1
         or len(set(transitions)) > 1
     )
 
@@ -369,7 +364,7 @@ def build_manifest(
 ) -> dict[str, Any]:
     return {
         "experiment_version": EXPERIMENT_VERSION,
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "timestamp_utc": datetime.now(UTC).isoformat(),
         "git_commit": _git_commit(),
         "python_version": sys.version,
         "platform": platform.platform(),
@@ -395,7 +390,7 @@ def build_manifest(
 
 
 def log_event(log_path: Path, event: str, message: str) -> None:
-    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("a", encoding="utf-8") as handle:
         handle.write(f"{stamp} | {event} | {message}\n")

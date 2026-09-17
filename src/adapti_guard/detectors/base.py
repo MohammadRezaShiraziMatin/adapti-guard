@@ -10,9 +10,10 @@ import hashlib
 import json
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 # Locked frozen pack SHAs (must match P1/P2 freeze constants).
 P1_SHA256 = "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235"

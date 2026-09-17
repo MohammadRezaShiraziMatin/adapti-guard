@@ -6,12 +6,12 @@ Does not modify algorithms, metrics, or frozen result artifacts.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import hashlib
 import json
 import platform
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -42,7 +42,7 @@ RESEARCH_AUDIT_LOG = ANALYSIS_DIR / "LOGS" / "research_audit.log"
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def git_commit() -> str | None:
@@ -71,7 +71,7 @@ def archive_if_exists(path: Path) -> Path | None:
     """Non-destructive: archive existing file before overwrite."""
     if not path.exists():
         return None
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     archived = path.with_name(f"{path.stem}_{stamp}{path.suffix}")
     path.replace(archived)
     return archived

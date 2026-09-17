@@ -18,8 +18,9 @@ import hashlib
 import json
 import os
 from collections import Counter
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.evaluation.experiment_logging import git_commit
 from adapti_guard.evaluation.prediction_provenance import PROVENANCE_SCHEMA_VERSION
@@ -266,9 +267,7 @@ def preflight(*, require_key: bool = False) -> dict[str, Any]:
             except L1GateError as exc:
                 mismatches.append(str(exc.message))
 
-    for arm in DIAGNOSTIC_ONLY_ARMS:
-        if arm in PRIMARY_ARMS:
-            mismatches.append(f"oracle_in_primary:{arm}")
+    mismatches.extend(f"oracle_in_primary:{arm}" for arm in DIAGNOSTIC_ONLY_ARMS if arm in PRIMARY_ARMS)
 
     # Accidental fallback keys must not be selected as L1 target/judge.
     if LOCKED_TARGET_KEY in FORBIDDEN_CONFIG_KEYS or LOCKED_JUDGE_KEY in FORBIDDEN_CONFIG_KEYS:

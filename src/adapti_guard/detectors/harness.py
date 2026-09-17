@@ -7,8 +7,9 @@ schedules. No live LLM/API. Fail-closed on frozen pack SHA mismatch.
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.detectors import default_p3_detectors, list_detector_catalog
 from adapti_guard.detectors.base import (
@@ -27,7 +28,6 @@ from adapti_guard.detectors.base import (
 from adapti_guard.detectors.isolation import state_hash
 from adapti_guard.detectors.metrics import aggregate_episode_hits, detector_level_metrics
 from adapti_guard.detectors.protocol import ACTION_COSTS, P1_PATH, P2_PATH, config_bundle_hash
-
 
 # Downstream policy IDs used for scheduling only — thresholds/costs unchanged.
 DEFAULT_POLICY_IDS = ("STATIC", "CORE")
@@ -57,10 +57,7 @@ def make_evaluation_id(
 
 def result_core_dict(result: DetectorResult | Mapping[str, Any]) -> dict[str, Any]:
     """Deterministic core fields (excludes nondeterministic latency)."""
-    if isinstance(result, DetectorResult):
-        d = result.to_dict()
-    else:
-        d = dict(result)
+    d = result.to_dict() if isinstance(result, DetectorResult) else dict(result)
     return {
         "detector_id": d["detector_id"],
         "detector_hit": bool(d["detector_hit"]),
@@ -381,8 +378,7 @@ class OfflineDetectorHarness:
             rows = load_p1_frozen()
             sha = P1_SHA256
             contexts: list[EpisodeDetectionContext] = []
-            for r in rows[: max_trajectories or len(rows)]:
-                contexts.append(p1_row_to_context(r))
+            contexts = [p1_row_to_context(r) for r in rows[: max_trajectories or len(rows)]]
         elif pack == "P2":
             rows = load_p2_frozen()
             sha = P2_SHA256

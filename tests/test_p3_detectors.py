@@ -10,6 +10,7 @@ from typing import Any
 
 import pytest
 
+from adapti_guard.defense.tool_loop import MockToolRegistry
 from adapti_guard.detectors import (
     DEFERRED_DETECTORS,
     default_p3_detectors,
@@ -31,8 +32,6 @@ from adapti_guard.detectors.heuristic_detector import (
 )
 from adapti_guard.detectors.no_detection import NoDetectionDetector
 from adapti_guard.detectors.structured_context_detector import StructuredContextDetector
-from adapti_guard.defense.tool_loop import MockToolRegistry
-
 
 REQUIRED_RESULT_FIELDS = {
     "detector_id",
@@ -48,18 +47,18 @@ REQUIRED_RESULT_FIELDS = {
 
 
 def _ctx(**overrides: Any) -> EpisodeDetectionContext:
-    base = dict(
-        trajectory_id="traj_demo",
-        turn_id=0,
-        current_input="Please summarize the ops document.",
-        tool_name=None,
-        tool_arguments=None,
-        tool_output=None,
-        context=None,
-        state=None,
-        source_channel="user",
-        input_scope="current_turn",
-    )
+    base = {
+        "trajectory_id": "traj_demo",
+        "turn_id": 0,
+        "current_input": "Please summarize the ops document.",
+        "tool_name": None,
+        "tool_arguments": None,
+        "tool_output": None,
+        "context": None,
+        "state": None,
+        "source_channel": "user",
+        "input_scope": "current_turn",
+    }
     base.update(overrides)
     return EpisodeDetectionContext(**base)
 

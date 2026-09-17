@@ -43,9 +43,9 @@ HISTORICAL = {
     ROOT
     / "datasets/frozen/eval_v1/dataset.jsonl": "27b1733cb6678e6144687b60387b564bd248c89871042eef0ffb0e2ce4c54c24",
     ROOT
-    / "datasets/frozen/phase1_confirm_v1/dataset.jsonl": "c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01",
+    / "datasets/frozen/phase1_confirm_v1/dataset.jsonl": "c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01",  # noqa: E501  # YAML comment with long SHA-256 hash
     ROOT
-    / "datasets/frozen/vnext_confirm_v1/confirmation.jsonl": "523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518",
+    / "datasets/frozen/vnext_confirm_v1/confirmation.jsonl": "523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518",  # noqa: E501  # YAML comment with long SHA-256 hash
 }
 
 
@@ -175,7 +175,6 @@ def test_cli_script_exists_and_is_importable():
     script = ROOT / "scripts" / "run_p1_mechanism_l1.py"
     assert script.is_file()
     # Syntax / import surface without executing live path.
-    ns: dict = {}
     code = compile(script.read_text(encoding="utf-8"), str(script), "exec")
     # Do not exec full script (side-effect main). Just ensure module helpers import.
     from adapti_guard.experiments import p1_mechanism_l1 as mod

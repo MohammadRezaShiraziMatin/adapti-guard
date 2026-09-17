@@ -1,6 +1,4 @@
-from dataclasses import fields
 from .schema import StandardRecord
-
 
 REQUIRED_FIELDS = {
     "id",
@@ -14,9 +12,7 @@ def validate_record(record: StandardRecord):
 
     errors = []
 
-    for field in REQUIRED_FIELDS:
-        if not data.get(field):
-            errors.append(f"missing required field: {field}")
+    errors.extend(f"missing required field: {field}" for field in REQUIRED_FIELDS if not data.get(field))
 
     if record.split not in {
         "train",

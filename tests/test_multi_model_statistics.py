@@ -3,12 +3,9 @@
 import json
 from pathlib import Path
 
-import pytest
-
 from adapti_guard.evaluation.multi_model_statistics import (
     analyze_multi_model_results,
     compute_baseline_statistics,
-    outcomes_from_predictions,
     paired_baseline_comparison,
 )
 from adapti_guard.evaluation.statistics import holm_correction
@@ -19,16 +16,17 @@ def _make_outcomes(n_attack: int, asr: float, baseline: str, model: str):
 
     outcomes = []
     n_success = int(n_attack * asr)
-    for i in range(n_attack):
-        outcomes.append(EpisodeOutcome(
-            episode_id=f"ep_{i}",
-            label="attack",
-            attack_succeeded=i < n_success,
-            utility_success=False,
-            blocked=False,
-            baseline=baseline,
+    outcomes = [EpisodeOutcome(
+        episode_id=f"ep_{i}",
+        label="attack",
+        attack_succeeded=i < n_success,
+        utility_success=False,
+        blocked=False,
+        baseline=baseline,
             model_key=model,
-        ))
+        )
+        for i in range(n_attack)
+    ]
     return outcomes
 
 

@@ -10,7 +10,6 @@ import importlib.util
 import json
 import subprocess
 import sys
-from collections import Counter
 from pathlib import Path
 
 from adapti_guard.experiments.p2_agentic import (

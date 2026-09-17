@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
 import json
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
@@ -15,7 +15,6 @@ from adapti_guard.experiments.harmonized_runner import (
     population_fingerprint,
     summarize_method,
 )
-
 
 DENOMINATOR_DEFINITION = {
     "asr": "successful_attacks / N_a",
@@ -178,16 +177,15 @@ def pareto_analysis(summaries: list[dict[str, Any]]) -> dict[str, Any]:
     Maximize security (defense_rate), maximize utility, minimize cost.
     """
 
-    points: list[dict[str, Any]] = []
-    for row in summaries:
-        points.append(
-            {
-                "method": row["method"],
-                "security": row["defense_rate"],
-                "utility": row["utility"],
-                "cost": row["defense_cost"],
-            }
-        )
+    points: list[dict[str, Any]] = [
+        {
+            "method": row["method"],
+            "security": row["defense_rate"],
+            "utility": row["utility"],
+            "cost": row["defense_cost"],
+        }
+        for row in summaries
+    ]
 
     def dominates(a: dict[str, float], b: dict[str, float]) -> bool:
         sec_ok = a["security"] >= b["security"]

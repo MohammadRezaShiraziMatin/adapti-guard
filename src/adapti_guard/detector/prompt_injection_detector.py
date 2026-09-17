@@ -143,9 +143,8 @@ class PromptInjectionDetector:
             r"\bignoriere\s+(alle\s+)?vorherigen\b",
         ]
 
-        if any(re.search(p, text_lower) for p in override_patterns):
-            if "instruction_override" not in indicators:
-                indicators.append("instruction_override")
+        if any(re.search(p, text_lower) for p in override_patterns) and "instruction_override" not in indicators:
+            indicators.append("instruction_override")
 
         # ---------------------------------------------------------
         # Prompt / instruction extraction
@@ -159,9 +158,8 @@ class PromptInjectionDetector:
             r"\bzeige\s+mir\b.{0,80}\bprompt\b",
         ]
 
-        if any(re.search(p, text_lower) for p in extraction_patterns):
-            if "prompt_extraction" not in indicators:
-                indicators.append("prompt_extraction")
+        if any(re.search(p, text_lower) for p in extraction_patterns) and "prompt_extraction" not in indicators:
+            indicators.append("prompt_extraction")
 
         # ---------------------------------------------------------
         # Output-control manipulation
@@ -418,9 +416,8 @@ class PromptInjectionDetector:
             or (v17_output_context and v16_signal_count >= 2)
         )
 
-        if v17_attack:
-            if "contextual_attack" not in indicators:
-                indicators.append("contextual_attack")
+        if v17_attack and "contextual_attack" not in indicators:
+            indicators.append("contextual_attack")
 
         # ---------------------------------------------------------
         # Scoring
@@ -454,9 +451,11 @@ class PromptInjectionDetector:
             r"\bignora\s+(?:todo|todas\s+las\s+instrucciones)\b",
         ]
 
-        if any(re.search(x, text_lower) for x in v11_override_patterns):
-            if "ignore_previous_instructions" not in indicators:
-                indicators.append("ignore_previous_instructions")
+        if (
+            any(re.search(x, text_lower) for x in v11_override_patterns)
+            and "ignore_previous_instructions" not in indicators
+        ):
+            indicators.append("ignore_previous_instructions")
 
         # Role reassignment.
         v11_role_patterns = [
@@ -475,9 +474,8 @@ class PromptInjectionDetector:
             r"\bdu\s+bist\b",
         ]
 
-        if any(re.search(x, text_lower) for x in v11_role_patterns):
-            if "role_attack" not in indicators:
-                indicators.append("role_attack")
+        if any(re.search(x, text_lower) for x in v11_role_patterns) and "role_attack" not in indicators:
+            indicators.append("role_attack")
 
         # Output restriction / forced response format.
         v11_output_patterns = [
@@ -490,9 +488,8 @@ class PromptInjectionDetector:
             r"\bdo\s+not\s+respond\b.*\boutput\b",
         ]
 
-        if any(re.search(x, text_lower) for x in v11_output_patterns):
-            if "instruction_override" not in indicators:
-                indicators.append("instruction_override")
+        if any(re.search(x, text_lower) for x in v11_output_patterns) and "instruction_override" not in indicators:
+            indicators.append("instruction_override")
 
 
         # ---------------------------------------------------------
@@ -536,9 +533,8 @@ class PromptInjectionDetector:
             )
         )
 
-        if v12_role_reassignment and v12_task_present:
-            if "role_attack" not in indicators:
-                indicators.append("role_attack")
+        if v12_role_reassignment and v12_task_present and "role_attack" not in indicators:
+            indicators.append("role_attack")
 
         # Explicit forced-output behavior.
         v12_output_control = bool(
@@ -556,9 +552,8 @@ class PromptInjectionDetector:
             )
         )
 
-        if v12_output_control:
-            if "instruction_override" not in indicators:
-                indicators.append("instruction_override")
+        if v12_output_control and "instruction_override" not in indicators:
+            indicators.append("instruction_override")
 
         # Contextual extraction request.
         v12_extraction = bool(
@@ -571,9 +566,8 @@ class PromptInjectionDetector:
             )
         )
 
-        if v12_extraction:
-            if "prompt_extraction" not in indicators:
-                indicators.append("prompt_extraction")
+        if v12_extraction and "prompt_extraction" not in indicators:
+            indicators.append("prompt_extraction")
 
 
         # ---------------------------------------------------------
@@ -624,9 +618,7 @@ class PromptInjectionDetector:
 
         v13_hits = []
 
-        for pattern in v13_patterns:
-            if re.search(pattern, text_lower, re.DOTALL):
-                v13_hits.append(pattern)
+        v13_hits = [pattern for pattern in v13_patterns if re.search(pattern, text_lower, re.DOTALL)]
 
         if v13_hits:
             if "contextual_attack" not in indicators:
@@ -762,9 +754,8 @@ class PromptInjectionDetector:
         # ---------------------------------------------------------
         # Promote only strong contextual combinations.
         # ---------------------------------------------------------
-        if v18_strong_context:
-            if "contextual_attack" not in indicators:
-                indicators.append("contextual_attack")
+        if v18_strong_context and "contextual_attack" not in indicators:
+            indicators.append("contextual_attack")
 
 
         # =========================================================
@@ -869,9 +860,8 @@ class PromptInjectionDetector:
         # ---------------------------------------------------------
         # Promote only strong contextual combinations.
         # ---------------------------------------------------------
-        if v18_strong_context:
-            if "contextual_attack" not in indicators:
-                indicators.append("contextual_attack")
+        if v18_strong_context and "contextual_attack" not in indicators:
+            indicators.append("contextual_attack")
 
 
         # =========================================================
@@ -1301,10 +1291,7 @@ class PromptInjectionDetector:
 
             for indicator in effective_indicators:
 
-                if indicator == "ignore_previous_instructions":
-                    score += 0.45
-
-                elif indicator == "prompt_extraction":
+                if indicator == "ignore_previous_instructions" or indicator == "prompt_extraction":
                     score += 0.45
 
                 elif indicator == "jailbreak":

@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 import time
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.defense.tool_loop import (
     MockToolRegistry,
@@ -129,14 +130,7 @@ def episode_judge_failed(ep: EvalEpisode) -> bool:
     """True when ASR/utility must not be inferred from this episode."""
     if ep.metadata.get("judge_parse_error"):
         return True
-    if ep.judge_reason in (
-        "judge_api_error",
-        "judge_parse_error",
-        "target_api_error",
-        "no_judge_configured",
-    ):
-        return True
-    return False
+    return ep.judge_reason in ("judge_api_error", "judge_parse_error", "target_api_error", "no_judge_configured")
 
 
 def compute_real_metrics(episodes: Sequence[EvalEpisode]) -> RealEvalMetrics:

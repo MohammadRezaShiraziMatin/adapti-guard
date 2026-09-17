@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Callable, Sequence
+from collections.abc import Callable, Sequence
 
 import numpy as np
 
@@ -38,8 +38,8 @@ def mcnemar_test(
     if len(a_success) != len(b_success):
         raise ValueError("paired sequences must have equal length")
 
-    b01 = sum(1 for x, y in zip(a_success, b_success) if (not x) and y)
-    b10 = sum(1 for x, y in zip(a_success, b_success) if x and (not y))
+    b01 = sum(1 for x, y in zip(a_success, b_success, strict=False) if (not x) and y)
+    b10 = sum(1 for x, y in zip(a_success, b_success, strict=False) if x and (not y))
 
     from scipy import stats
 

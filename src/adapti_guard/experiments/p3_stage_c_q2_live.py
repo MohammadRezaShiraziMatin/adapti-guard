@@ -9,27 +9,27 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
-from adapti_guard.detectors.base import P1_SHA256, P2_SHA256, assert_unique_ids
+from adapti_guard.detectors.base import P1_SHA256, P2_SHA256
 from adapti_guard.evaluation.statistics import proportion_ci_wilson
 from adapti_guard.experiments.p2_agentic_live import (
     LOCKED_BACKEND,
-    LOCKED_JUDGE,
     LOCKED_SEED,
     LOCKED_TEMPERATURE,
-    LiveRunStats,
+    MAX_JUDGE_RETRIES,
+    MAX_TARGET_RETRIES,
     PACK_SHA256,
+    LiveRunStats,
     write_json,
 )
 from adapti_guard.experiments.p2_stage_b import count_invalid_tool_arg_events
 from adapti_guard.experiments.p3_agentic_live import (
-    ARTIFACT_ROOT,
     OPERATIONAL_DETECTORS,
     assert_p2_pack_composition,
-    build_p3_event_trace,
     score_p3_results,
     verify_frozen_integrity,
 )
@@ -52,6 +52,8 @@ from adapti_guard.experiments.p3_stage_c_q2 import (
 )
 from adapti_guard.experiments.p3_stage_c_q2_lock import (
     JUDGE_ID,
+    JUDGE_INPUT_TOKENS_MAX_PER_CALL,
+    JUDGE_OUTPUT_TOKENS_MAX_PER_CALL,
     MAXIMUM_PERMITTED_BUDGET_USD,
     PRICES_PER_1M_USD,
     T0_ID,
@@ -60,13 +62,10 @@ from adapti_guard.experiments.p3_stage_c_q2_lock import (
     T3_ID,
     TARGET_INPUT_TOKENS_MAX_PER_CALL,
     TARGET_OUTPUT_TOKENS_MAX_PER_CALL,
-    JUDGE_INPUT_TOKENS_MAX_PER_CALL,
-    JUDGE_OUTPUT_TOKENS_MAX_PER_CALL,
     build_target_lock_records,
     gate_status_from_locks,
     q2_arm_schedule,
 )
-from adapti_guard.experiments.p2_agentic_live import MAX_JUDGE_RETRIES, MAX_TARGET_RETRIES
 from adapti_guard.metrics.tool_hasr import compute_judge_asr, compute_p2_security_bundle
 
 SMOKE_ROOT = (
@@ -89,7 +88,7 @@ class P3Q2LiveGateError(RuntimeError):
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def load_json(path: Path) -> Any:
@@ -98,9 +97,7 @@ def load_json(path: Path) -> Any:
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip():
-            rows.append(json.loads(line))
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     return rows
 
 
@@ -313,9 +310,7 @@ def build_q2_schedule(pack_rows: Sequence[Mapping[str, Any]]) -> list[tuple[str,
     tids = list(inv["trajectory_ids"])
     schedule: list[tuple[str, str, str, str]] = []
     for slot in TARGET_SLOTS:
-        for tid in tids:
-            for did in OPERATIONAL_DETECTORS:
-                schedule.append((slot, tid, did, PRIMARY_POLICY_STRATUM))
+        schedule.extend((slot, tid, did, PRIMARY_POLICY_STRATUM) for tid in tids for did in OPERATIONAL_DETECTORS)
     if len(schedule) != EXPECTED_N_ARMS_Q2:
         raise P3Q2LiveGateError(
             "STOP_SCHEDULE_COUNT", f"got {len(schedule)} expected {EXPECTED_N_ARMS_Q2}"
@@ -809,9 +804,8 @@ def forensic_audit(
     planned = int(arms.get("planned") or EXPECTED_N_ARMS_Q2)
     completed = int(arms.get("completed") or 0)
     failed = int(arms.get("failed") or 0)
-    if completed + failed != planned and arms.get("status") != "BUDGET_HARD_STOP":
-        if completed != planned:
-            issues.append("ARM_COUNT_MISMATCH")
+    if completed + failed != planned and arms.get("status") != "BUDGET_HARD_STOP" and completed != planned:
+        issues.append("ARM_COUNT_MISMATCH")
 
     pred_hash = hashlib.sha256(
         (run_dir / "predictions.jsonl").read_bytes()

@@ -186,7 +186,7 @@ def test_harness_run_pack_p1_and_verify(tmp_path: Path):
     v = verify_p3_artifact_dir(out)
     assert v["ok"] is True
     # overwrite protection
-    with pytest.raises(Exception):
+    with pytest.raises(FileExistsError):
         h.run_pack(pack="P1", output_dir=out, max_trajectories=2)
 
 

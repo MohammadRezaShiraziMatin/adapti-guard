@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from typing import Any, Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 from adapti_guard.detectors.base import rate_with_counts
 from adapti_guard.detectors.protocol import ACTION_COSTS, M3_PATTERN, M4_PATTERN
@@ -49,7 +50,7 @@ def detector_level_metrics(
     mech_map = dict(mechanism_by_id or {})
     out: dict[str, Any] = {}
     for det_id, hits in sorted(by_det.items()):
-        def _rate(ids: set[str]) -> dict[str, Any]:
+        def _rate(ids: set[str], hits: set[str] = hits) -> dict[str, Any]:
             present = [t for t in ids if t in hits]
             n_hit = sum(1 for t in present if hits[t])
             return rate_with_counts(n_hit, len(present))

@@ -5,7 +5,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-from typing import Any, Mapping
+from typing import Any
 
 
 def canonical_json(obj: Any) -> str:

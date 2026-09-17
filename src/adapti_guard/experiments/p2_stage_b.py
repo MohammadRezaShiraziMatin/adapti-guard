@@ -18,9 +18,10 @@ import json
 import platform
 import sys
 from collections import Counter
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.evaluation.statistics import mcnemar_test, proportion_ci_wilson
 from adapti_guard.experiments.p2_agentic import P2_HARNESS_VERSION
@@ -38,13 +39,13 @@ from adapti_guard.experiments.p2_agentic_live import (
     N_BENIGN_TWIN,
     N_HARD_NEGATIVE,
     N_TOTAL,
+    P1_PATH,
+    P1_SHA256,
     PACK_DIR,
     PACK_ID,
     PACK_PATH,
     PACK_SHA256,
     PRIMARY_ARMS,
-    P1_SHA256,
-    P1_PATH,
     SUPPORTED_TOOLS,
     TOOL_REQUEST_SYSTEM_HINT,
     P2LiveGateError,
@@ -200,7 +201,7 @@ def stage_b_arm_schedule(
             "STOP_STAGE_B_SCHEDULE",
             f"expected {N_TOTAL} trajectories; got {len(ids)}",
         )
-    return {arm: ids for arm in PRIMARY_ARMS}
+    return dict.fromkeys(PRIMARY_ARMS, ids)
 
 
 def expected_evaluation_ids(
@@ -209,8 +210,7 @@ def expected_evaluation_ids(
     schedule = stage_b_arm_schedule(rows)
     out: list[str] = []
     for policy, tids in schedule.items():
-        for tid in tids:
-            out.append(make_evaluation_id(run_id, tid, policy))
+        out.extend(make_evaluation_id(run_id, tid, policy) for tid in tids)
     if len(out) != STAGE_B_EXPECTED_EPISODE_ARMS:
         raise P2LiveGateError(
             "STOP_STAGE_B_ARM_COUNT",
@@ -397,9 +397,7 @@ def extract_harmful_action_provenance(row: Mapping[str, Any]) -> dict[str, Any]:
     prevented = [e for e in events if e.get("harmful_action_prevented") is True]
     requested = []
     want = sc.get("tool") or sc.get("name")
-    for e in events:
-        if want and e.get("tool_name") == want:
-            requested.append(e)
+    requested.extend(e for e in events if want and e.get("tool_name") == want)
     first_harm = harmful_execs[0] if harmful_execs else None
     first_prev = prevented[0] if prevented else None
     chosen = first_harm or first_prev or (requested[-1] if requested else None)
@@ -456,7 +454,7 @@ def extract_multiturn_diagnostics(row: Mapping[str, Any]) -> dict[str, Any]:
         te = obs.get("tool_event") or {}
         args = te.get("tool_arguments") or {}
         if te.get("harmful_action") is True and te.get("tool_executed"):
-            for _k, v in written.items():
+            for v in written.values():
                 if v and v in json.dumps(args, sort_keys=True):
                     persistence["consume_in_harmful_args"] = True
     persistence["full_causal_chain"] = (
@@ -491,10 +489,15 @@ def extract_multiturn_diagnostics(row: Mapping[str, Any]) -> dict[str, Any]:
         obs = t.get("OBSERVED") or {}
         der = t.get("DERIVED") or {}
         te = obs.get("tool_event") or {}
-        if last_obs and te.get("harmful_action") is True and te.get("tool_executed"):
-            if str(last_obs) and str(last_obs) in json.dumps(te.get("tool_arguments") or {}):
-                chaining["prior_result_in_later_harmful_args"] = True
-                chaining["evidence"].append({"turn": t.get("turn_id"), "prior_obs": last_obs})
+        if (
+            last_obs
+            and te.get("harmful_action") is True
+            and te.get("tool_executed")
+            and str(last_obs)
+            and str(last_obs) in json.dumps(te.get("tool_arguments") or {})
+        ):
+            chaining["prior_result_in_later_harmful_args"] = True
+            chaining["evidence"].append({"turn": t.get("turn_id"), "prior_obs": last_obs})
         if te.get("tool_executed") and te.get("observation"):
             last_obs = te.get("observation")
         elif obs.get("injected_tool_observation"):
@@ -549,21 +552,20 @@ def build_event_trace(predictions: Sequence[Mapping[str, Any]]) -> list[dict[str
     events: list[dict[str, Any]] = []
     for row in predictions:
         eid = row.get("evaluation_id")
-        for e in row.get("security_events") or []:
-            events.append(
-                {
-                    "record_type": "security_event",
-                    "evaluation_id": eid,
-                    "trajectory_id": row.get("trajectory_id") or row.get("id"),
-                    "policy_id": row.get("policy_id") or row.get("policy_key"),
-                    **dict(e),
-                }
-            )
-        for t in row.get("turns") or []:
-            events.append(
-                {
-                    "record_type": "turn",
-                    "evaluation_id": eid,
+        events.extend(
+            {
+                "record_type": "security_event",
+                "evaluation_id": eid,
+                "trajectory_id": row.get("trajectory_id") or row.get("id"),
+                "policy_id": row.get("policy_id") or row.get("policy_key"),
+                **dict(e),
+            }
+            for e in row.get("security_events") or []
+        )
+        events.extend(
+            {
+                "record_type": "turn",
+                "evaluation_id": eid,
                     "trajectory_id": row.get("trajectory_id") or row.get("id"),
                     "policy_id": row.get("policy_id") or row.get("policy_key"),
                     "turn_id": t.get("turn_id"),
@@ -571,7 +573,8 @@ def build_event_trace(predictions: Sequence[Mapping[str, Any]]) -> list[dict[str
                     "OBSERVED": t.get("OBSERVED"),
                     "DERIVED": t.get("DERIVED"),
                 }
-            )
+            for t in row.get("turns") or []
+        )
     return events
 
 

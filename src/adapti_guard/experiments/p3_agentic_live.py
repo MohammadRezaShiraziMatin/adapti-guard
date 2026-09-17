@@ -14,9 +14,10 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from adapti_guard.detectors import DEFERRED_DETECTORS, default_p3_detectors, list_detector_catalog
 from adapti_guard.detectors.base import P1_SHA256, P2_SHA256, assert_pack_sha, assert_unique_ids
@@ -26,13 +27,14 @@ from adapti_guard.detectors.protocol import ACTION_COSTS, config_bundle_hash
 from adapti_guard.evaluation.experiment_logging import git_commit
 from adapti_guard.evaluation.prediction_provenance import PROVENANCE_SCHEMA_VERSION
 from adapti_guard.experiments.defense_baselines import (
-    get_defense_fn,
     make_b0_no_defense,
     make_core_defense,
     make_l1_fixed_sanitize,
 )
 from adapti_guard.experiments.p2_agentic_live import (
     ARTIFACT_ROOT as _P2_ARTIFACT_ROOT,  # noqa: F401 — imported for reference only
+)
+from adapti_guard.experiments.p2_agentic_live import (
     CONFIG_VERSION,
     LOCKED_BACKEND,
     LOCKED_JUDGE,
@@ -41,19 +43,19 @@ from adapti_guard.experiments.p2_agentic_live import (
     LOCKED_TARGET,
     LOCKED_TARGET_KEY,
     LOCKED_TEMPERATURE,
-    LiveRunStats,
-    P2LiveGateError,
+    P1_PATH,
     PACK_PATH,
     PACK_SHA256,
-    P1_PATH,
-    build_run_manifest as _p2_build_run_manifest,
+    LiveRunStats,
     evaluate_trajectory_live,
     load_p2_pack,
-    preflight as p2_preflight,
     score_stage_a_results,
     write_json,
 )
-from adapti_guard.metrics.tool_hasr import COSTS, compute_p2_security_bundle, disagreement_rows
+from adapti_guard.experiments.p2_agentic_live import (
+    preflight as p2_preflight,
+)
+from adapti_guard.metrics.tool_hasr import COSTS, compute_p2_security_bundle
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -163,7 +165,7 @@ class P3LiveGateError(RuntimeError):
 
 
 def utc_now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def tool_schema_hash() -> str:
@@ -208,9 +210,7 @@ def stage_a_cartesian_schedule() -> list[tuple[str, str, str]]:
     """Full trajectory × detector × policy product (max 60)."""
     arms: list[tuple[str, str, str]] = []
     for tid in P3_SMOKE_TRAJECTORY_IDS:
-        for did in OPERATIONAL_DETECTORS:
-            for pid in PRIMARY_POLICIES:
-                arms.append((tid, did, pid))
+        arms.extend((tid, did, pid) for did in OPERATIONAL_DETECTORS for pid in PRIMARY_POLICIES)
     if len(arms) != EXPECTED_N_ARMS:
         raise P3LiveGateError(
             "STOP_ARM_COUNT", f"expected {EXPECTED_N_ARMS} got {len(arms)}"
@@ -254,9 +254,7 @@ def stage_b_cartesian_schedule(
     inv = assert_p2_pack_composition(rows)
     arms: list[tuple[str, str, str]] = []
     for tid in inv["trajectory_ids"]:
-        for did in OPERATIONAL_DETECTORS:
-            for pid in PRIMARY_POLICIES:
-                arms.append((tid, did, pid))
+        arms.extend((tid, did, pid) for did in OPERATIONAL_DETECTORS for pid in PRIMARY_POLICIES)
     if len(arms) != EXPECTED_N_ARMS_STAGE_B:
         raise P3LiveGateError(
             "STOP_STAGE_B_ARM_COUNT",

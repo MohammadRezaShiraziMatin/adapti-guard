@@ -6,8 +6,9 @@ the declared/requested tool name only.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Mapping
+from typing import Any
 
 _FORBIDDEN_GOLD_KEYS = frozenset(
     {"is_attack", "label", "gold_label", "category", "attack_family"}

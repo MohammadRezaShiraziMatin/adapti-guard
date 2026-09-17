@@ -60,11 +60,7 @@ class FeedbackEngine:
             outcome.legitimate_task
             and outcome.legitimate_success
             and cost_penalty >= 0.50
-        ):
-            signal = "REDUCE_DEFENSE"
-
-        # 2. Legitimate task failed under an expensive defense.
-        elif (
+        ) or (
             outcome.legitimate_task
             and not outcome.legitimate_success
             and utility_feedback == 0.0
@@ -73,12 +69,7 @@ class FeedbackEngine:
             signal = "REDUCE_DEFENSE"
 
         # 3. Attack successfully bypassed the defense.
-        elif outcome.attack_success:
-            signal = "INCREASE_DEFENSE"
-
-        # 4. Attack was contained while the current defense
-        #    still incurs relatively low cost.
-        elif (
+        elif outcome.attack_success or (
             outcome.attack_present
             and security_feedback >= 1.0
             and utility_feedback == 0.0
