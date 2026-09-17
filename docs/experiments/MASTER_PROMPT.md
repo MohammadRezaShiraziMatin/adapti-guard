@@ -4,7 +4,7 @@ Token-efficient standing orders. **Read [`docs/paper/dual_track/DUAL_TRACK_STATU
 
 `.cursor/rules/adapti-guard.mdc` mirrors a compressed form of these rules. **This file is canonical** — if the mirror and this file ever disagree, fix the mirror.
 
-Human entry: [`docs/START_HERE.md`](../START_HERE.md).
+Human entry: [`docs/START_HERE.md`](../START_HERE.md). Cursor agent paste block: [`CURSOR_PROMPT_ENTRY.md`](CURSOR_PROMPT_ENTRY.md).
 
 ---
 

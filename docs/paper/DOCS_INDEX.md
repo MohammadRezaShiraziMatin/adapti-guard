@@ -19,6 +19,7 @@ Use these for current claims, merge advice, and workshop FAIL text.
 | [`dual_track/CLAIMS_DUAL_TRACK.md`](dual_track/CLAIMS_DUAL_TRACK.md) | Allowed / forbidden dual-track wording |
 | [`dual_track/RELEASE_NEXT_FA.md`](dual_track/RELEASE_NEXT_FA.md) | Matin next-step note + CLOSE / SKIP |
 | [`../experiments/MASTER_PROMPT.md`](../experiments/MASTER_PROMPT.md) | Durable supervisor constraints |
+| [`../experiments/CURSOR_PROMPT_ENTRY.md`](../experiments/CURSOR_PROMPT_ENTRY.md) | Paste block for new Cursor agents |
 | [`../experiments/RESEARCH_LOG.md`](../experiments/RESEARCH_LOG.md) | Dated diary (including 2026-09-14 dual-track) |
 
 Stubs remain at `docs/paper/DUAL_TRACK_STATUS.md` and `docs/paper/CLAIMS_DUAL_TRACK.md`.

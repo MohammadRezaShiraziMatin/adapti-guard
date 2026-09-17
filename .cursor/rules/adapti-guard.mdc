@@ -5,7 +5,7 @@ alwaysApply: true
 
 # AdaptiGuard standing orders
 
-Human entry: `docs/START_HERE.md`. **Canonical text:** `docs/experiments/MASTER_PROMPT.md` (10 invariants). Keep this file short; do not invent rules that contradict the canonical file.
+Human entry: `docs/START_HERE.md`. **Canonical text:** `docs/experiments/MASTER_PROMPT.md` (10 invariants). Agent launch: `docs/experiments/CURSOR_PROMPT_ENTRY.md` (IDE Agent preferred; one new cloud agent per task; never continue errored sessions). Keep this file short; do not invent rules that contradict the canonical file.
 
 Read `docs/paper/dual_track/DUAL_TRACK_STATUS.md` before claims, merge advice, or eval work.
 
