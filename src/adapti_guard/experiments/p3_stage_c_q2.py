@@ -901,8 +901,9 @@ def build_q2_protocol() -> dict[str, Any]:
             "live_execution_allowed_false",
         ],
         "human_gate": {
-            "status_token_ready": "P3_STAGE_C_Q2_GATE_READY",
+            "status_token_ready": "P3_Q2_GATE_READY",
             "status_token_incomplete": "P3_Q2_PROTOCOL_INCOMPLETE",
+            "status_token_budget_blocked": "P3_Q2_BUDGET_BOUND_BLOCKED",
             "checks": [
                 "Q2 question locked",
                 "target set locked",
@@ -1546,7 +1547,7 @@ BUDGET CHECK = {bp['budget_check']}
 
 Token ceilings: target/judge input 2048, output 512 (locked max_tokens).
 Retries included via attempts = 1 + MAX_*_RETRIES.
-Human must supply numeric `maximum_permitted_budget_usd` before GATE_READY.
+Human-approved `maximum_permitted_budget_usd = 10.0` (offline gate only; live still blocked until separate approval).
 """,
         encoding="utf-8",
     )

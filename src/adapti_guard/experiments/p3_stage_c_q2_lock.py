@@ -71,8 +71,12 @@ PRICES_PER_1M_USD: dict[str, dict[str, float]] = {
     JUDGE_ID: {"input": 0.36, "output": 0.40},
 }
 
-# Human budget must be filled explicitly; do not invent.
-MAXIMUM_PERMITTED_BUDGET_USD: float | None = None
+# Human-approved Q2 budget bound (numeric USD). Live eval still blocked until
+# explicit separate approval; this constant only clears the offline budget gate.
+MAXIMUM_PERMITTED_BUDGET_USD: float | None = 10.0
+BUDGET_APPROVED_BY = "human"
+BUDGET_APPROVED_VALUE_USD = 10.0
+BUDGET_APPROVED_AT_UTC = "2026-09-17T11:31:00Z"
 
 # Conservative token ceilings (offline, from pack content + locked max_tokens=512).
 TARGET_INPUT_TOKENS_MAX_PER_CALL = 2048
@@ -516,8 +520,9 @@ def gate_status_from_locks(
         status = "P3_Q2_BUDGET_FAIL"
         blockers.append("WORST_CASE_EXCEEDS_BUDGET")
     else:
-        status = "P3_Q2_MODEL_LOCK_READY"
-        # Full GATE_READY still requires human live approval separately.
+        # Offline protocol + model/pricing/budget gates clear.
+        # Live execution remains separately blocked (live_execution_allowed=False).
+        status = "P3_Q2_GATE_READY"
     return {
         "status": status,
         "blockers": blockers,
