@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-09-17",
+  "branch": "cursor/q2-publication-hardening-f6f3",
+  "head": "96e1282be649ffb154d5b80805038a77bfb5d7b3",
+  "Q2_HIGH_STATUS": "READY_WITH_MAJOR_REVISIONS",
+  "NEW_LIVE_EXPERIMENTS": 0,
+  "Q2_RERUN": false,
+  "API_CALLS": 0,
+  "LLM_CALLS": 0,
+  "NETWORK_CALLS": 0,
+  "LIVE_EVAL": false,
+  "P1_MODIFIED": false,
+  "P2_MODIFIED": false,
+  "Q2_EVIDENCE_MODIFIED": false,
+  "NOVELTY_STATUS": "PARTIAL_GAP",
+  "STAGE_B_TRACE_STATUS": "MISSING_LOCALLY",
+  "BIBLIOGRAPHY_STATUS": "PARTIAL",
+  "MANUSCRIPT_STATUS": "INTERNALLY_CONSISTENT_14_SECTIONS_TABLES_1_TO_6",
+  "REPRODUCIBILITY_STATUS": "PARTIAL",
+  "CENTRAL_CLAIM_STATUS": "PARTIALLY_SUPPORTED / PILOT-SCALE",
+  "VENUE_STATUS": "NOT_SELECTED",
+  "CRITICAL_ISSUES": [],
+  "MAJOR_ISSUES": [
+    "M1 Stage-B raw traces MISSING_LOCALLY (provenance hole for independent T0 recompute)",
+    "M2 Bibliography PARTIAL (21/21 identities VERIFIED; most venue/DOI UNVERIFIED; 2 operator-supplied not re-checked)"
+  ],
+  "MINOR_ISSUES": [
+    "m1 n=16 per cell pilot-scale",
+    "m2 Qwen-heavy target set",
+    "m3 Tool-HASR vs Judge-ASR disagreement not causally explained",
+    "m4 INVALID_TOOL_ARGS confounder retained not proven negligible",
+    "m5 No venue selected; deadlines/page limits UNVERIFIED"
+  ],
+  "FIXED_NOW": [
+    "14-section manuscript with Tables 1-6",
+    "Abstract pilot-scale without internal scientific_evidence=false jargon",
+    "Introduction five-beat structure",
+    "n=16 explicit limited precision/power",
+    "Qwen-heavy explicit",
+    "INVALID canonical execution-state category",
+    "Tool-HASR vs Judge-ASR distinct measurements",
+    "D3 deferred; C4 out of scope",
+    "External baselines methodological scope",
+    "Claim matrix SUPPORTED/PARTIALLY_SUPPORTED/NOT_ESTABLISHED",
+    "Reviewer A-D DOCUMENTATION_FIX/FUTURE_STUDY",
+    "Bibliography 21-row verification table",
+    "Reproducibility FROZEN/DERIVED/INTERPRETIVE",
+    "Forbidden-word assertions removed from live manuscript"
+  ],
+  "REMAINING_LIMITATIONS": [
+    "Stage-B raw traces MISSING_LOCALLY",
+    "Bibliography venues/DOI mostly UNVERIFIED",
+    "n=16 pilot-scale",
+    "Qwen-heavy target set",
+    "D3 deferred",
+    "C4 / open adaptive attacker out of scope",
+    "No matched external baseline",
+    "INVALID_TOOL_ARGS confounder",
+    "Tool-HASR vs Judge-ASR disagreement not causally explained"
+  ],
+  "frozen_hashes_rechecked": {
+    "P1": "1a0b0053c392e7b3e0727b92b4f088790abda001fd852ec1703c5ee0a67dd235",
+    "P2": "32b40e3bd3ffe6ce4f82b8b3cb863fe2df26f74a7bb8a49f2b00e2f9738d64dd",
+    "Q2_PRED": "2a2c2f314a9c397d570b743336bd3d835306620867c1d73936952bfb01886cc6",
+    "all_match": true
+  },
+  "authoritative_numbers": {
+    "arms": "432/432",
+    "spend_usd": 0.152885,
+    "sign_agreement": "9/9",
+    "tool_hasr_t1t3": "81/192",
+    "judge_asr_t1t3": "186/192",
+    "m3_t1t3": 108,
+    "m4_t1t3": 3,
+    "invalid_events_arms": "192/136",
+    "n_per_cell": 16
+  },
+  "FINAL_RECOMMENDATION": "Package is internally consistent and evidence-aligned at pilot scale. Remaining work is provenance (Stage-B traces) and bibliography/venue metadata, not new science. Keep READY_WITH_MAJOR_REVISIONS until Stage-B traces are packaged read-only or accepted as a documented hole, and venue/DOI verification is completed under a later human-authorized pass."
+}
