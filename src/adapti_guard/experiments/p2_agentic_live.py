@@ -708,13 +708,20 @@ def evaluate_trajectory_live(
     stats: LiveRunStats | None = None,
     defense_fn: Any | None = None,
     defense_state: Any | None = None,
+    detector_id: str | None = None,
 ) -> dict[str, Any]:
     """Evaluate one frozen P2 trajectory under a live-capable, injectable harness.
 
     Isolation: fresh ``AgentState``, ``MockToolRegistry``, and defense state per call.
     Authored ``intervention_action`` is ignored; ``get_defense_fn(policy_key)`` decides
     unless an explicit ``defense_fn`` override is supplied (P3 detector injection).
+
+    When ``detector_id`` is set (P3 path), security ``event_id`` values use the
+    scoped schema including detector×policy. Omit ``detector_id`` to keep the
+    legacy P2 event_id schema (historical Stage-B evidence unchanged).
     """
+    from adapti_guard.experiments.security_event_id import make_security_event_id
+
     run_stats = stats if stats is not None else LiveRunStats()
     spec = trajectory_from_dict(record)
     if defense_fn is None:
@@ -735,6 +742,9 @@ def evaluate_trajectory_live(
     }
     target_errors: list[str] = []
     last_assistant_text = ""
+    # Scoped event IDs only when detector dimension is present (P3).
+    _eid_det = detector_id
+    _eid_pol = policy_key if detector_id is not None else None
 
     for turn in spec.turns:
         state_before = state.snapshot()
@@ -920,7 +930,14 @@ def evaluate_trajectory_live(
                 adapted_arguments = dict(adapted_arguments)
             else:
                 adapted_arguments = None
-            event_id = f"{spec.id}::t{turn_id}::{requested.name}::{reason or primary_state}"
+            event_id = make_security_event_id(
+                spec.id,
+                turn_id,
+                requested.name,
+                reason or primary_state,
+                detector_id=_eid_det,
+                policy_id=_eid_pol,
+            )
 
             if primary_state == "UNSUPPORTED_TOOL" or reason == "unsupported_tool":
                 run_stats.n_unsupported_tool_stops += 1
@@ -1025,7 +1042,14 @@ def evaluate_trajectory_live(
                 run_stats.notes.append(
                     f"unsupported_tool:{spec.id}:t{turn_id}:{requested.name}"
                 )
-            event_id = f"{spec.id}::t{turn_id}::{requested.name}::turn_blocked"
+            event_id = make_security_event_id(
+                spec.id,
+                turn_id,
+                requested.name,
+                "turn_blocked",
+                detector_id=_eid_det,
+                policy_id=_eid_pol,
+            )
             event = SecurityEvent(
                 tool_name=requested.name,
                 tool_arguments=dict(requested.arguments),
