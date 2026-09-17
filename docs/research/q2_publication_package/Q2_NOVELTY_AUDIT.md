@@ -31,9 +31,9 @@ This is **one** methodological contribution with supporting measurements. It is 
 
 ## C. Specific novelty claim tested
 
-> Existing work does not clearly establish the exact controlled factorial attribution of detector identity versus a locked downstream intervention policy using Tool-HASR, with D0 as reference and directional consistency tested across independently selected target models.
+> Within the literature reviewed for this study, we did not identify prior work that evaluates this exact controlled detector-policy attribution design with cross-target directional consistency.
 
-**Verdict:** the surveyed set does not establish that exact factorial as a central measurement protocol. The claim is **supported as a partial gap**, not a global uniqueness proof.
+**Verdict:** the surveyed set does not establish that exact factorial as a central measurement protocol. The claim is **supported as a partial gap**, not a global uniqueness proof. No verified paper directly demonstrates the same combination of locked downstream intervention policy, detector identity as controlled factor, D0/no-detection reference, Tool-HASR or equivalent operational tool-execution outcome, detector-effect Δ attribution, and cross-target directional consistency.
 
 **Residual uncertainty (do not paper over):**
 1. Full texts of AgentDojo and ASB were not read end-to-end; whether a close cousin appears inside those full texts is not upgraded to a global "no overlap" claim.

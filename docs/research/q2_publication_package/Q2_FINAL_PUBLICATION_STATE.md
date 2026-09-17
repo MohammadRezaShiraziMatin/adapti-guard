@@ -61,7 +61,7 @@ None. No official Q2 number is contradicted; no frozen evidence modified; no uns
 
 ### MAJOR
 - M1. Stage-B raw traces MISSING_LOCALLY — provenance hole for independent T0 recompute.
-- M2. Bibliography PARTIAL — 21/21 identities IDENTITY_VERIFIED; most venue/DOI UNVERIFIED; AgentDojo/BIPIA operator-supplied not re-checked.
+- M2. Bibliography PARTIALLY_VERIFIED — 21/21 identities VERIFIED from arXiv API; 3/21 FULLY_VERIFIED (BIPIA, AgentDojo, InjecAgent with DOI from official source); 2/21 venue from official conference page; 1/21 from author page; 7/21 from arXiv comment; 8/21 preprint-only.
 
 ### MINOR
 - m1. n=16 per cell — pilot-scale; not fixable without a new run.
@@ -79,7 +79,7 @@ None. No official Q2 number is contradicted; no frozen evidence modified; no uns
 ## 8. Remaining limitations
 
 - Stage-B raw traces MISSING_LOCALLY.
-- Bibliography venues/DOI mostly UNVERIFIED.
+- Bibliography: 8/21 remain preprint-only (VENUE_UNVERIFIED); 7/21 venues from arXiv comment (not official proceedings page).
 - n=16 pilot-scale.
 - Qwen-heavy target set.
 - D3 deferred.

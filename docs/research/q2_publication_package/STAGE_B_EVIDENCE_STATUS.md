@@ -2,7 +2,7 @@
 
 **API_CALLS=0. LLM_CALLS=0. NETWORK_CALLS=0. LIVE_EVAL=false.**  
 **Q2_RERUN=false. P1_MODIFIED=false. P2_MODIFIED=false. Q2_TRACE_MODIFIED=false.**  
-**Search date:** 2026-09-17 (reconfirmed this supervisor pass). **No reconstruction of missing traces.** Git history contains Stage-B *code* (`7e40171`) and Q2 `predictions.jsonl`, but **no** `p3_stage_b_20260916T235438Z_7e401714/predictions.jsonl` object.
+**Search date:** 2026-09-17 (reconfirmed this closure pass). **No reconstruction of missing traces.** Git history contains Stage-B *code* (`7e40171`) and Q2 `predictions.jsonl`, but **no** `p3_stage_b_20260916T235438Z_7e401714/predictions.jsonl` object. Exhaustive search: workspace, git objects (0 hits for run dir), branches, tags, /opt/cursor, /tmp, /home/ubuntu.
 
 ## Binding distinction
 

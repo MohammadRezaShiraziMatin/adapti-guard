@@ -78,7 +78,7 @@ Security outcomes on a tool-using agent mix several layers. This paper names the
 
 # 6. Related Work
 
-We cite records whose title, authors, year, and arXiv id were verified from existing package Hub metadata. Most venues remain UNVERIFIED. AgentDojo (NeurIPS 2024, DOI `10.52202/079017-2636`) and BIPIA (KDD 2025, DOI `10.1145/3690624.3709179`) venue/DOI are **operator-supplied** and not re-fetched this turn. Full-text novelty exclusion is **not** claimed. Novelty class: **PARTIAL_GAP**. Matrix: `RELATED_WORK_MATRIX.md`. Verification table: `BIBLIOGRAPHY_VERIFICATION.md`.
+We cite records whose title, authors, year, and arXiv id were verified from the arXiv API. Venues and DOIs were verified from official sources where available: doi.org (BIPIA, AgentDojo), ACL Anthology (InjecAgent), ICLR poster/OpenReview (ASB, AgentHarm), and author publication page (CaMeL). Remaining venues are verified from arXiv comment fields or remain UNVERIFIED (preprints). See `BIBLIOGRAPHY_VERIFICATION.md`. Novelty class: **PARTIAL_GAP**. Matrix: `RELATED_WORK_MATRIX.md`.
 
 ## 6.1 Existing literature
 
@@ -396,28 +396,28 @@ Future matched baselines, larger n, more model families, D3 after an offline emb
 
 ---
 
-## References (identity verified from existing records; most venues UNVERIFIED)
+## References
 
-1. Perez & Ribeiro, 2022. Ignore Previous Prompt. arXiv:2211.09527  
-2. Greshake et al., 2023. Indirect Prompt Injection. arXiv:2302.12173  
-3. Liu, Deng, et al., 2023. Prompt Injection attack against LLM-integrated Applications. arXiv:2306.05499  
-4. Ruan et al., 2023. ToolEmu. arXiv:2309.15817  
-5. Rebedea et al., 2023. NeMo Guardrails. arXiv:2310.10501  
-6. Liu, Jia, Geng, Jia, Gong, 2023. Prompt Injection Attacks and Defenses in LLM-Integrated Applications. arXiv:2310.12815  
-7. Toyer et al., 2023. Tensor Trust. arXiv:2311.01011  
-8. Inan et al., 2023. Llama Guard. arXiv:2312.06674  
-9. Yi et al., 2023. BIPIA. arXiv:2312.14197. Venue/DOI operator-supplied: KDD 2025, 10.1145/3690624.3709179  
-10. Chen, Piet, Sitawarin, Wagner, 2024. StruQ. arXiv:2402.06363  
-11. Zhan et al., 2024. InjecAgent. arXiv:2403.02691  
-12. Wu et al., 2024. IsolateGPT. arXiv:2403.04960  
-13. Hines et al., 2024. Spotlighting. arXiv:2403.14720  
-14. Wallace et al., 2024. Instruction Hierarchy. arXiv:2404.13208  
-15. Debenedetti et al., 2024. AgentDojo. arXiv:2406.13352. Venue/DOI operator-supplied: NeurIPS 2024, 10.52202/079017-2636  
-16. Zhang et al., 2024. Agent Security Bench. arXiv:2410.02644  
-17. Andriushchenko et al., 2024. AgentHarm. arXiv:2410.09024  
-18. Jacob et al., 2025. PromptShield. arXiv:2501.15145  
-19. Zhu et al., 2025. MELON. arXiv:2502.05174  
-20. Debenedetti et al., 2025. CaMeL (Defeating Prompt Injections by Design). arXiv:2503.18813  
-21. Chen, Zharmagambetov, Wagner, Guo, 2025. Meta SecAlign. arXiv:2507.02735  
+1. Perez & Ribeiro, 2022. Ignore Previous Prompt. arXiv:2211.09527. Venue: NeurIPS 2022 ML Safety Workshop (verified via arXiv comment).  
+2. Greshake et al., 2023. Indirect Prompt Injection. arXiv:2302.12173. Preprint.  
+3. Liu, Deng, et al., 2023. Prompt Injection attack against LLM-integrated Applications. arXiv:2306.05499. Preprint.  
+4. Ruan et al., 2023. ToolEmu. arXiv:2309.15817. Preprint.  
+5. Rebedea et al., 2023. NeMo Guardrails. arXiv:2310.10501. Venue: EMNLP 2023 Demo track (verified via arXiv comment).  
+6. Liu, Jia, Geng, Jia, Gong, 2023. Formalizing and Benchmarking Prompt Injection Attacks and Defenses. arXiv:2310.12815. Venue: USENIX Security Symposium 2024 (verified via arXiv comment).  
+7. Toyer et al., 2023. Tensor Trust. arXiv:2311.01011. Preprint.  
+8. Inan et al., 2023. Llama Guard. arXiv:2312.06674. Preprint.  
+9. Yi et al., 2023. BIPIA. arXiv:2312.14197. Venue: KDD 2025. DOI: 10.1145/3690624.3709179 (verified from doi.org).  
+10. Chen, Piet, Sitawarin, Wagner, 2024. StruQ. arXiv:2402.06363. Venue: USENIX Security Symposium 2025 (verified via arXiv comment).  
+11. Zhan et al., 2024. InjecAgent. arXiv:2403.02691. Venue: ACL 2024 Findings. DOI: 10.18653/v1/2024.findings-acl.624 (verified from ACL Anthology).  
+12. Wu et al., 2024. IsolateGPT. arXiv:2403.04960. Venue: NDSS 2025 (verified via arXiv journal_ref).  
+13. Hines et al., 2024. Spotlighting. arXiv:2403.14720. Preprint.  
+14. Wallace et al., 2024. Instruction Hierarchy. arXiv:2404.13208. Preprint.  
+15. Debenedetti et al., 2024. AgentDojo. arXiv:2406.13352. Venue: NeurIPS 2024. DOI: 10.52202/079017-2636 (verified from doi.org).  
+16. Zhang et al., 2024. Agent Security Bench. arXiv:2410.02644. Venue: ICLR 2025 (verified from ICLR poster page / OpenReview).  
+17. Andriushchenko et al., 2024. AgentHarm. arXiv:2410.09024. Venue: ICLR 2025 (verified from OpenReview / ICLR proceedings).  
+18. Jacob et al., 2025. PromptShield. arXiv:2501.15145. Venue: ACM CODASPY 2025 (verified via arXiv comment).  
+19. Zhu et al., 2025. MELON. arXiv:2502.05174. Venue: ICML 2025 (verified via arXiv comment).  
+20. Debenedetti et al., 2025. CaMeL (Defeating Prompt Injections by Design). arXiv:2503.18813. Venue: IEEE SaTML 2026, accepted (verified from author publication page; currently preprint).  
+21. Chen, Zharmagambetov, Wagner, Guo, 2025. Meta SecAlign. arXiv:2507.02735. Preprint.  
 
 Task Shield, Adaptive Attacks, AutoDojo, SCOUT, AgentAntibody, HARD, ARGUS, VIGIL, AttriGuard, MCP-SafetyBench, and Runtime Policy Enforcement for MCP Agents are **not** verified in-package bibliographic records and are not listed as references.

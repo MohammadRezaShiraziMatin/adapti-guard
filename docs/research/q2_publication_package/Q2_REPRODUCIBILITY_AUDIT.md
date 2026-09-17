@@ -68,7 +68,7 @@ P1/P2/Q2 raw traces were **not modified** this pass. P1_MODIFIED=false. P2_MODIF
 | recorded Stage-B pred SHA | RECORDED, not re-hashed | `7b0b72d942dae988d87acf238424c9f2d331b62d5ec582c9ba7d9bfbb293c214` (pointer only) |
 | operator-stated Stage-B 124/192 | NOT_FOUND_ON_THIS_CHECKOUT | not used as locally verified manuscript rates |
 | matplotlib | **MISSING** | stdlib zlib PNG used instead (no network install) |
-| bibliography venues/DOI (most) | **UNVERIFIED** | AgentDojo/BIPIA operator-supplied, not re-fetched |
+| bibliography venues/DOI | **PARTIALLY_VERIFIED** | 21/21 identities from arXiv API; 3 FULLY_VERIFIED (DOI from official source); 2 from conference page; 1 from author page; 7 from arXiv comment; 8 preprint-only |
 | Q2 p-values | **MISSING** (not pre-registered) | not manufactured |
 
 **Official Stage-B reported result** (T0 PHASE1-CORE packaged in the Q2 live report) is distinct from **locally reproducible raw-trace availability** (MISSING_LOCALLY). Independent recomputation of T0 from locally available traces was **not performed**.
