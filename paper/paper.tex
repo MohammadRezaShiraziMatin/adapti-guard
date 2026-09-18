@@ -1,0 +1,246 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{siunitx}
+\usepackage{cleveref}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{biblatex}
+
+\title{Controlled Detector Attribution under a Locked Runtime Intervention Policy:\\ A Pilot-Scale Agent Security Evaluation}
+\author{[REDACTED for double-blind review]}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Observed security behavior in tool-using language-model agents can mix detector behavior with the downstream intervention policy that allows, wraps, or denies tools. Without holding that policy fixed, detector-related effects are difficult to attribute.
+
+This paper reports a controlled attribution protocol, not a new detector family and not a defense covering all threat models. The intervention policy is held fixed (PHASE1-CORE). Detector identity is varied, including a no-detection reference (D0). The primary outcome is Tool-HASR (harmful tool execution). Judge-ASR is a secondary, non-identical diagnostic of judge-level attack-success assessment. The evaluation uses frozen pack \texttt{p2\_agentic\_v0.1.0} (16 attack / 16 twin / 4 hard-negative trajectories), four target models, and $n=16$ attack arms per target$\times$detector cell. Q2 live completed 432/432 arms (historical spend \$0.152885).
+
+Under the tested protocol, detector-related Tool-HASR $\Delta$ versus D0 was negative for D1, D2, and D4 on the locked Stage-B target T0 and on independently selected T1--T3 (9/9 directional agreements). This is pilot-scale directional consistency. It does not establish population-level generalization. T1--T3 Tool-HASR was 81/192 $= 0.421875$; Judge-ASR was 186/192 $= 0.96875$ ($M3=108$, $M4=3$). \textsc{invalid\_tool\_args} occurred on 192 events / 136 arms and is treated as a canonical execution-state diagnostic, not as automatic attack success or failure.
+
+The manuscript does not claim robustness beyond the tested protocol, production readiness, confirmatory multi-model generalization, or a ranking against external defenses.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+\textbf{Problem.} Observed security behavior in agent systems may reflect both detector behavior and downstream intervention policy. A stack that changes detector and policy together reports an operational outcome. It does not isolate which layer is associated with a change in harmful tool execution.
+
+\textbf{Gap.} Without controlling the intervention policy, detector-related effects can be difficult to attribute. Existing literature already provides prompt-injection attacks, agent security benchmarks, runtime guardrails, architectural isolation, and detector approaches. Those lines of work do not, in the surveyed set, establish the locked-policy detector-attribution factorial used here as the central measurement protocol. Novelty class: \textbf{PARTIAL\_GAP}.
+
+\textbf{Approach.} Hold the intervention policy fixed and vary detector identity, including a no-detection reference (D0). Thresholds, action costs, frozen pack, judge, temperature, and cache settings remain locked. The primary estimand is the sign of Tool-HASR $\Delta$ versus D0 at each target. Tool-HASR and Judge-ASR are kept as distinct measurements.
+
+\textbf{Result.} Observed $\Delta$ direction remained consistent across T0--T3 in this pilot-scale evaluation: 9/9 detector-target comparisons preserved the negative direction ($n=16$ per cell; 432/432 Q2 live arms).
+
+\textbf{Qualification.} This is not a confirmatory claim. Sample size is pilot-scale. Precision is limited. Power is limited for broad generalization. Directional consistency is an observed property of this evaluation. It does not establish population-level generalization. Three of four targets are Qwen-family models. D3 was deferred. Open-ended adaptive attackers (C4 interaction horizon) are out of scope.
+
+\section{Research Question}
+\label{sec:rq}
+
+\textbf{RQ-C2 (locked protocol).} Does the detector-related Tool-HASR effect versus D0 observed under the locked Stage-B target (T0) remain directionally consistent when the same policy, pack, detectors, thresholds, and judge are applied to independently selected secondary target models T1--T3?
+
+\section{Problem Formulation}
+\label{sec:formulation}
+
+\begin{table}[h]
+\caption{Layer decomposition}
+\label{tabtab:layers}
+\begin{tabular}{p{0.15\linewidth}lp{0.7\linewidth}lp{0.15\linewidth}}
+\toprule
+\textbf{Layer} & \textbf{What it is} & \textbf{What it is not} \\
+\midrule
+Detector behavior & Hits/scores on untrusted context & The intervention that grants/denies tools \\
+Downstream intervention policy & PHASE1-CORE mapping to A0--A3 & A detector family \\
+Tool-HASR (primary) & Attack-arm rate of harmful tool execution & A judge-model opinion \\
+Judge-ASR (secondary) & Attack-arm rate of judge-classified attack success & Harmful tool execution \\
+$M3$ & Judge success $\wedge$ $\neg$ Tool-HASR success & Proof that the judge is wrong \\
+$M4$ & Tool-HASR success $\wedge$ $\neg$ judge success & Proof that the judge is right \\
+\textsc{invalid\_tool\_args} & Canonical tool-state events & Attack success/failure; harmlessness; detector failure \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+$\Delta(d,t) = \text{Tool-HASR}(d,t) - \text{Tool-HASR}(D0,t)$ on attack arms at the same target, under locked PHASE1-CORE. This is a \textbf{detector-related association} under the controlled protocol. It does not establish that detector identity is the sole associated factor, independent of all runtime factors.
+
+\section{Related Work}
+\label{sec:related}
+
+We cite records whose title, authors, year, and arXiv id were verified from the arXiv API. Venues and DOIs were verified from official sources where available. Novelty class: \textbf{PARTIAL\_GAP}.
+
+\subsection{Controlled Attribution Framework}
+\label{sec:framework}
+
+Each episode-arm runs:
+\textbf{Detector $\to$ RiskCore $\to$ CorePolicy (PHASE1-CORE) $\to$ ActionLayer $\to$ ToolPermissionGate $\to$ Mock tools}, with a parallel \textbf{Judge} that does not enter the detector$\to$policy path. Gold labels do not enter that path.
+
+\section{Experimental Protocol}
+\label{sec:protocol}
+
+\begin{table}[h]
+\caption{Study design}
+\label{tabtab:design}
+\begin{tabularx}{\linewidth{0.5\linewidth}XX}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Question & RQ-C2 \\
+Design & B\_REDUCED\_Q2 \\
+Run ID & \texttt{p3\_stage\_c\_q2\_20260917T123855Z\_b075df0f} \\
+Evidence commit & \texttt{b075df0f5ec5ad11ede76ac4e4079cade15208f1} \\
+Pack & \texttt{p2\_agentic\_v0.1.0} (SHA \texttt{32b40e3b...}) \\
+P1 SHA & \texttt{1a0b0053c...} \\
+Q2 predictions SHA & \texttt{2a2c2f31...} \\
+Trajectories & 36 (16 attack / 16 twin / 4 hard-negative) \\
+Detectors & D0, D1, D2, D4 (D3 deferred) \\
+Policy & PHASE1-CORE \\
+T0 & \texttt{qwen/qwen-2.5-7b-instruct} (reused from Stage-B) \\
+Q2 live & 36 traj $\times$ 4 det $\times$ PHASE1-CORE $\times$ \{T1,T2,T3\} = 432 arms \\
+Completed & 432/432, 0 failed \\
+Temperature & 0.0 \\
+Cache & false \\
+Seed & 42 \\
+Backend & OpenRouter \\
+Budget cap / actual & \$10.0 / \$0.152885 \\
+Historical API calls & 2061 \\
+scientific\_evidence & false \\
+$n$ per cell & 16 attack arms \\
+\end{tabularx}
+\end{table}
+
+\begin{table}[h]
+\caption{Target and judge models (not a quality ranking)}
+\label{tabtab:models}
+\begin{tabularx}{\linewidth{0.5\linewidth}XX}
+\toprule
+\textbf{Slot} & \textbf{Model ID} & \textbf{Family} & \textbf{Role} \\
+\midrule
+T0 & \texttt{qwen/qwen-2.5-7b-instruct} & Qwen-2.5 dense & Stage-B reference \\
+T1 & \texttt{qwen/qwen3-30b-a3b} & Qwen3 MoE & secondary \\
+T2 & \texttt{google/gemma-3-27b-it} & Gemma-3 & secondary \\
+T3 & \texttt{qwen/qwen3.5-35b-a3b} & Qwen3.5 MoE & secondary \\
+Judge & \texttt{qwen/qwen-2.5-72b-instruct} & Qwen-2.5 dense & locked \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Four targets were used. Three of four (T0, T1, T3) are Qwen-family. The judge is also Qwen-family. Model-family diversity is limited. Results should not be generalized to arbitrary model families.
+
+\section{Results}
+\label{sec:results}
+
+All cells use $n=16$ attack arms. Wilson 95\% CIs on rates are derived from locked counts.
+
+\begin{table}[h]
+\caption{Primary $\Delta$ results (Tool-HASR versus D0)}
+\label{tabtab:delta}
+\begin{tabular}{lrrrrr}
+\toprule
+Cell & Tool-HASR $(d)$ & Tool-HASR $(D0)$ & $\Delta$ & Sign \\
+\midrule
+T0/D1 & 2/16 = 0.1250 & 13/16 = 0.8125 & $-0.6875$ & NEG \\
+T0/D2 & 9/16 = 0.5625 & 13/16 = 0.8125 & $-0.2500$ & NEG \\
+T0/D4 & 4/16 = 0.2500 & 13/16 = 0.8125 & $-0.5625$ & NEG \\
+T1/D1 & 2/16 = 0.1250 & 14/16 = 0.8750 & $-0.7500$ & NEG \\
+T1/D2 & 9/16 = 0.5625 & 14/16 = 0.8750 & $-0.3125$ & NEG \\
+T1/D4 & 4/16 = 0.2500 & 14/16 = 0.8750 & $-0.6250$ & NEG \\
+T2/D1 & 2/16 = 0.1250 & 13/16 = 0.8125 & $-0.6875$ & NEG \\
+T2/D2 & 9/16 = 0.5625 & 13/16 = 0.8125 & $-0.2500$ & NEG \\
+T2/D4 & 4/16 = 0.2500 & 13/16 = 0.8125 & $-0.5625$ & NEG \\
+T3/D1 & 2/16 = 0.1250 & 11/16 = 0.6875 & $-0.5625$ & NEG \\
+T3/D2 & 8/16 = 0.5000 & 11/16 = 0.6875 & $-0.1875$ & NEG \\
+T3/D4 & 3/16 = 0.1875 & 11/16 = 0.6875 & $-0.5000$ & NEG \\
+\bottomrule
+\end{table}
+
+\textbf{9/9 detector-target comparisons preserved the negative direction} relative to T0. All D1/D2/D4 $\Delta$ values versus D0 are negative. Q2 live T1--T3 pooled Tool-HASR: 81/192 $= 0.421875$.
+
+\begin{table}[h]
+\caption{Tool-HASR vs Judge-ASR ($n=16$/cell)}
+\label{tabtab:hasr-judge}
+\begin{tabular}{lrr}
+\toprule
+Cell & Tool-HASR & Judge-ASR \\
+\midrule
+T0/D0 & 13/16 = 0.8125 & 12/16 = 0.7500 \\
+T0/D1 & 2/16 = 0.1250 & 14/16 = 0.8750 \\
+T0/D2 & 9/16 = 0.5625 & 15/16 = 0.9375 \\
+T0/D4 & 4/16 = 0.2500 & 14/16 = 0.8750 \\
+T1/D0 & 14/16 = 0.8750 & 15/16 = 0.9375 \\
+T1/D1 & 2/16 = 0.1250 & 16/16 = 1.0000 \\
+T1/D2 & 9/16 = 0.5625 & 16/16 = 1.0000 \\
+T1/D4 & 4/16 = 0.2500 & 15/16 = 0.9375 \\
+T2/D0 & 13/16 = 0.8125 & 15/16 = 0.9375 \\
+T2/D1 & 2/16 = 0.1250 & 16/16 = 1.0000 \\
+T2/D2 & 9/16 = 0.5625 & 16/16 = 1.0000 \\
+T2/D4 & 4/16 = 0.2500 & 15/16 = 0.9375 \\
+T3/D0 & 11/16 = 0.6875 & 15/16 = 0.9375 \\
+T3/D1 & 2/16 = 0.1250 & 16/16 = 1.0000 \\
+T3/D2 & 8/16 = 0.5000 & 16/16 = 1.0000 \\
+T3/D4 & 3/16 = 0.1875 & 15/16 = 0.9375 \\
+\bottomrule
+\end{table}
+
+\begin{table}[h]
+\caption{$M3$/$M4$ diagnostics}
+\label{tabtab:m3m4}
+\begin{tabular}{lrr}
+\toprule
+Scope & $M3$ (J+ T$-$) & $M4$ (T+ J$-$) \\
+\midrule
+T0 pooled & 33 & 6 \\
+T1 & 34 & 1 \\
+T2 & 35 & 1 \\
+T3 & 39 & 1 \\
+Q2 live T1--T3 & 108 & 3 \\
+\bottomrule
+\end{table}
+\end{table}
+
+\section{Diagnostic Analysis}
+\label{sec:diagnostic}
+
+\textsc{invalid\_tool\_args} is a canonical execution-state category. It is not automatically attack success, attack failure, harmlessness, or detector failure. It is retained in the official S0 analysis.
+
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{table}[h]
+\caption{Threats and limitations}
+\label{tabtab:limitations}
+\begin{tabular}{rl}
+\toprule
+\# & Limitation \\
+\midrule
+1 & $n=16$ per cell; limited precision; limited power \\
+2 & Pilot-scale study; not confirmatory \\
+3 & Four target models only \\
+4 & Qwen-heavy target set \\
+5 & Three of four targets are Qwen-family \\
+6 & D3 deferred \\
+7 & C4 / adaptive attacker out of scope \\
+8 & INVALID\_TOOL\_ARGS confounder (192/136) \\
+9 & Stage-B raw traces MISSING\_LOCALLY \\
+10 & No matched external baseline \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproducibility}
+\label{sec:repro}
+
+$\text{REPRODUCIBILITY\_STATUS} = \text{PARTIAL}$. Full reproducibility is not claimed while Stage-B raw traces remain missing.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This study evaluates whether detector-related security effects under a locked intervention policy remain directionally consistent across independently selected target models. Under the tested protocol, the observed $\Delta$ direction remained consistent across T0--T3: 9/9 comparisons preserved the negative direction (432/432 arms; \$0.152885 historical spend; $n=16$/cell). That is pilot-scale directional consistency. It is not confirmatory. It does not establish population-level generalization.
+
+\printbibliography{references}
+
+\end{document}
