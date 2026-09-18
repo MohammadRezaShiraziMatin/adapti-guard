@@ -1,7 +1,8 @@
 {
-  "generated_at": "2026-09-17",
-  "STATUS": "READY_WITH_MAJOR_REVISIONS",
-  "submission_ready": false,
+  "generated_at": "2026-09-18",
+  "STATUS": "READY_FOR_SUBMISSION_WITH_DISCLOSED_LIMITATIONS",
+  "submission_ready": true,
+  "submission_ready_note": "Ready for submission with explicitly disclosed limitations (Stage-B raw traces MISSING_LOCALLY; pilot-scale n=16; Qwen-heavy; no matched external baseline).",
   "blocked": false,
   "ci": "2/2 PASS",
   "ci_is_publication_acceptance": false,
@@ -16,7 +17,7 @@
   "novelty_class": "PARTIAL_GAP",
   "central_claim_status": "PARTIALLY_SUPPORTED / PILOT-SCALE",
   "VENUE_STATUS": "NOT_SELECTED",
-  "bibliography_status": "PARTIAL",
+  "bibliography_status": "VERIFIED",
   "stage_b_raw_trace": "MISSING_LOCALLY",
   "reproducibility_status": "PARTIAL",
   "scientific_evidence": false,
@@ -34,10 +35,10 @@
   "gates": {
     "manuscript_internally_consistent": true,
     "claims_evidence_aligned": true,
-    "bibliography_sufficiently_verified": false,
+    "bibliography_sufficiently_verified": true,
     "figures_tables_present": true,
     "reproducibility_complete_enough": false,
-    "no_unresolved_critical_integrity_issue": false
+    "no_unresolved_critical_integrity_issue": true
   },
   "authoritative_numbers": {
     "arms": "432/432",

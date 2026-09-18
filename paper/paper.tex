@@ -6,10 +6,11 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage{siunitx}
-\usepackage{cleveref}
 \usepackage{microtype}
 \usepackage{hyperref}
+\usepackage{cleveref}
 \usepackage{biblatex}
+\addbibresource{references.bib}
 
 \title{Controlled Detector Attribution under a Locked Runtime Intervention Policy:\\ A Pilot-Scale Agent Security Evaluation}
 \author{[REDACTED for double-blind review]}
@@ -51,7 +52,7 @@ The manuscript does not claim robustness beyond the tested protocol, production 
 \begin{table}[h]
 \caption{Layer decomposition}
 \label{tabtab:layers}
-\begin{tabular}{p{0.15\linewidth}lp{0.7\linewidth}lp{0.15\linewidth}}
+\begin{tabular}{p{0.15\linewidth} l p{0.7\linewidth}}
 \toprule
 \textbf{Layer} & \textbf{What it is} & \textbf{What it is not} \\
 \midrule
@@ -116,7 +117,7 @@ $n$ per cell & 16 attack arms \\
 \begin{table}[h]
 \caption{Target and judge models (not a quality ranking)}
 \label{tabtab:models}
-\begin{tabularx}{\linewidth}{XX}
+\begin{tabularx}{\linewidth}{l X l l}
 \toprule
 \textbf{Slot} & \textbf{Model ID} & \textbf{Family} & \textbf{Role} \\
 \midrule
@@ -160,6 +161,13 @@ T3/D4 & 3/16 = 0.1875 & 11/16 = 0.6875 & $-0.5000$ & NEG \\
 \end{table}
 
 \textbf{9/9 detector-target comparisons preserved the negative direction} relative to T0. All D1/D2/D4 $\Delta$ values versus D0 are negative. Q2 live T1--T3 pooled Tool-HASR: 81/192 $= 0.421875$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/figure3_delta_across_targets.png}
+\caption{$\Delta$ Tool-HASR relative to D0 across T0--T3. $n=16$ attack arms/cell. D0 is the reference ($\Delta=0$ by definition). Pilot-scale directional consistency; not a ranking; no significance encoding.}
+\label{fig:delta}
+\end{figure}
 
 \begin{table}[h]
 \caption{Tool-HASR vs Judge-ASR ($n=16$/cell)}
@@ -208,6 +216,20 @@ Q2 live T1--T3 & 108 & 3 \\
 \label{sec:diagnostic}
 
 \textsc{invalid\_tool\_args} is a canonical execution-state category. It is not automatically attack success, attack failure, harmlessness, or detector failure. It is retained in the official S0 analysis.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/figure4_toolhasr_vs_judgeasr.png}
+\caption{Tool-HASR versus Judge-ASR with $M3$/$M4$ diagnostic interpretation. Pooled attack $n=64$/target ($16\times4$). Related but non-identical endpoints; neither metric is declared invalid; $n=16$/cell; not a ranking.}
+\label{fig:hasr-judge}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/figure5_invalid_tool_args.png}
+\caption{\textsc{invalid\_tool\_args} diagnostic, T1--T3. $n=432$ arms. S0 denominator unchanged. Diagnostic execution-state category; frequent (192 events / 136 arms); not discarded; not Tool-HASR success; not proven negligible; not a ranking.}
+\label{fig:invalid}
+\end{figure}
 
 \section{Limitations}
 \label{sec:limitations}
@@ -258,6 +280,7 @@ An LLM judge (\texttt{qwen/qwen-2.5-72b-instruct}) was used for post-hoc scoring
 
 This research studies prompt injection attacks for defensive purposes. Experiments were conducted in a sandboxed environment with mock tools. No real users, production systems, or production APIs were targeted. Adversarial payloads are disclosed for scientific reproducibility. Misuse is the responsibility of the actor. The authors acknowledge dual-use risk; findings are intended to support defensive applications. No human subjects were involved; no IRB review was required.
 
+\nocite{*}
 \printbibliography{references}
 
 \end{document}
