@@ -396,6 +396,20 @@ Future matched baselines, larger n, more model families, D3 after an offline emb
 
 ---
 
+## Open Science
+
+Experimental code and Q2 evaluation predictions are available in the project repository. Stage-B raw traces (`predictions.jsonl`, `metrics.json`, `manifest.json` for run `p3_stage_b_20260916T235438Z_7e401714`) are MISSING_LOCALLY; only the SHA pointer and packaged metrics are available. `REPRODUCIBILITY_STATUS = PARTIAL`. Full Stage-B replication requires access to the original run directory, which is not present in the current checkout. An anonymous artifact package was prepared for double-blind review. Reproducibility instructions are provided in the repository README.
+
+## LLM Usage
+
+An LLM judge (`qwen/qwen-2.5-72b-instruct`) was used for post-hoc scoring only; it did not influence experimental design or data collection. Historical API calls: 2061. Total cost: $0.152885. Provider: OpenRouter. Temperature: 0.0. Seed: 42. No LLM was used for manuscript writing.
+
+## Ethics and Dual-Use
+
+This research studies prompt injection attacks for defensive purposes. Experiments were conducted in a sandboxed environment with mock tools. No real users, production systems, or production APIs were targeted. Adversarial payloads are disclosed for scientific reproducibility. Misuse is the responsibility of the actor. The authors acknowledge dual-use risk; findings are intended to support defensive applications. No human subjects were involved; no IRB review was required.
+
+---
+
 ## References
 
 1. Perez & Ribeiro, 2022. Ignore Previous Prompt. arXiv:2211.09527. Venue: NeurIPS 2022 ML Safety Workshop (arXiv comment).  

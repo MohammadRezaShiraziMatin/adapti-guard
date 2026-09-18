@@ -85,7 +85,7 @@ Each episode-arm runs:
 \begin{table}[h]
 \caption{Study design}
 \label{tabtab:design}
-\begin{tabularx}{\linewidth{0.5\linewidth}XX}
+\begin{tabularx}{\linewidth}{XX}
 \toprule
 \textbf{Field} & \textbf{Value} \\
 \midrule
@@ -116,7 +116,7 @@ $n$ per cell & 16 attack arms \\
 \begin{table}[h]
 \caption{Target and judge models (not a quality ranking)}
 \label{tabtab:models}
-\begin{tabularx}{\linewidth{0.5\linewidth}XX}
+\begin{tabularx}{\linewidth}{XX}
 \toprule
 \textbf{Slot} & \textbf{Model ID} & \textbf{Family} & \textbf{Role} \\
 \midrule
@@ -156,6 +156,7 @@ T3/D1 & 2/16 = 0.1250 & 11/16 = 0.6875 & $-0.5625$ & NEG \\
 T3/D2 & 8/16 = 0.5000 & 11/16 = 0.6875 & $-0.1875$ & NEG \\
 T3/D4 & 3/16 = 0.1875 & 11/16 = 0.6875 & $-0.5000$ & NEG \\
 \bottomrule
+\end{tabular}
 \end{table}
 
 \textbf{9/9 detector-target comparisons preserved the negative direction} relative to T0. All D1/D2/D4 $\Delta$ values versus D0 are negative. Q2 live T1--T3 pooled Tool-HASR: 81/192 $= 0.421875$.
@@ -184,6 +185,7 @@ T3/D1 & 2/16 = 0.1250 & 16/16 = 1.0000 \\
 T3/D2 & 8/16 = 0.5000 & 16/16 = 1.0000 \\
 T3/D4 & 3/16 = 0.1875 & 15/16 = 0.9375 \\
 \bottomrule
+\end{tabular}
 \end{table}
 
 \begin{table}[h]
@@ -199,7 +201,7 @@ T2 & 35 & 1 \\
 T3 & 39 & 1 \\
 Q2 live T1--T3 & 108 & 3 \\
 \bottomrule
-\end{table}
+\end{tabular}
 \end{table}
 
 \section{Diagnostic Analysis}
@@ -240,6 +242,21 @@ $\text{REPRODUCIBILITY\_STATUS} = \text{PARTIAL}$. Full reproducibility is not c
 \label{sec:conclusion}
 
 This study evaluates whether detector-related security effects under a locked intervention policy remain directionally consistent across independently selected target models. Under the tested protocol, the observed $\Delta$ direction remained consistent across T0--T3: 9/9 comparisons preserved the negative direction (432/432 arms; \$0.152885 historical spend; $n=16$/cell). That is pilot-scale directional consistency. It is not confirmatory. It does not establish population-level generalization.
+
+\section{Open Science}
+\label{sec:openscience}
+
+Experimental code and Q2 evaluation predictions are available in the project repository. Stage-B raw traces (\texttt{predictions.jsonl}, \texttt{metrics.json}, \texttt{manifest.json} for run \texttt{p3\_stage\_b\_20260916T235438Z\_7e401714}) are \textsc{missing\_locally}; only the SHA pointer and packaged metrics are available. Reproducibility status is \textsc{partial}. Full Stage-B replication requires access to the original run directory, which is not present in the current checkout. An anonymous artifact package was prepared for double-blind review. Reproducibility instructions are provided in the repository documentation.
+
+\section{LLM Usage}
+\label{sec:llmusage}
+
+An LLM judge (\texttt{qwen/qwen-2.5-72b-instruct}) was used for post-hoc scoring only; it did not influence experimental design or data collection. Historical API calls: 2061. Total cost: \$0.152885. Provider: OpenRouter. Temperature: 0.0. Seed: 42. No LLM was used for manuscript writing.
+
+\section{Ethics and Dual-Use}
+\label{sec:ethics}
+
+This research studies prompt injection attacks for defensive purposes. Experiments were conducted in a sandboxed environment with mock tools. No real users, production systems, or production APIs were targeted. Adversarial payloads are disclosed for scientific reproducibility. Misuse is the responsibility of the actor. The authors acknowledge dual-use risk; findings are intended to support defensive applications. No human subjects were involved; no IRB review was required.
 
 \printbibliography{references}
 
