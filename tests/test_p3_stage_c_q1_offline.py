@@ -44,6 +44,8 @@ def test_protocol_schema_complete():
     assert p["primary_endpoint"]["not_raw_hasr_alone"] is True
 
 
+@pytest.mark.stage_b
+@pytest.mark.skipif(not STAGE_B_DIR.is_dir(), reason="Stage-B raw traces not present locally (MISSING_LOCALLY)")
 def test_locks_match_stage_b():
     assert_locks_match_stage_b_manifest()
 
@@ -119,6 +121,8 @@ def test_invalid_args_not_hasr_failure_in_policy():
     assert len(p["invalid_tool_args_policy"]["sensitivity_analyses_preregistered"]) >= 3
 
 
+@pytest.mark.stage_b
+@pytest.mark.skipif(not STAGE_B_DIR.is_dir(), reason="Stage-B raw traces not present locally (MISSING_LOCALLY)")
 def test_full_offline_validation_gate_ready():
     report = run_offline_validation()
     assert report["gate_status"] == "P3_STAGE_C_Q1_GATE_READY"
@@ -127,6 +131,8 @@ def test_full_offline_validation_gate_ready():
     assert report["blockers"] == []
 
 
+@pytest.mark.stage_b
+@pytest.mark.skipif(not STAGE_B_DIR.is_dir(), reason="Stage-B raw traces not present locally (MISSING_LOCALLY)")
 def test_write_artifacts(tmp_path, monkeypatch):
     # write_q1_artifacts uses fixed /opt/cursor/artifacts — call real path once in gate run
     paths = write_q1_artifacts()
