@@ -1,6 +1,6 @@
 # Q2 High Final Audit
 
-**Single comprehensive publication-hardening pass.**
+**Single publication-hardening pass.**
 **Date:** 2026-09-17
 **Branch:** `cursor/q2-publication-hardening-f6f3` · **Head:** `96e1282be649ffb154d5b80805038a77fb5d7b3`
 **API_CALLS=0 · LLM_CALLS=0 · NETWORK_CALLS=0 · LIVE_EVAL=false · Q2_RERUN=false.**
