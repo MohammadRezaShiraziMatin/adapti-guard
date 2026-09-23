@@ -92,6 +92,8 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 ## Phase 3 — Controlled evidence (**not done**; human budget required)
 
+**Pre-registration scaffold (docs only):** [`DECISION_LOCK_Q1_P3_ARMS.md`](DECISION_LOCK_Q1_P3_ARMS.md)
+
 **Goal:** Optional, pre-registered live runs that **add** evidence — they do **not** rewrite Track A FAIL or merge tracks in claims.
 
 ** Preconditions:**

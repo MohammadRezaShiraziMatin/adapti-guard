@@ -161,6 +161,130 @@ def delta_hat_ci_bootstrap_from_mcnemar_contingency(
     }
 
 
+def mcnemar_exact_p_value(b10: int, b01: int) -> float:
+    """Two-sided exact McNemar p-value from discordant counts (scipy binomtest)."""
+    if b10 < 0 or b01 < 0:
+        raise ValueError("discordant counts must be non-negative")
+    if b10 + b01 == 0:
+        return 1.0
+    from scipy import stats
+
+    result = stats.binomtest(b01, n=b01 + b10, p=0.5, alternative="two-sided")
+    return float(result.pvalue)
+
+
+def track_a_mcnemar_power_sensitivity(
+    n_attack: int,
+    *,
+    msid: float = 0.20,
+    alpha: float = 0.05,
+    b01_assumed: int = 0,
+    observed_b10: int | None = None,
+    alternative_delta: float = 0.20,
+) -> dict[str, float | int | str | list | dict]:
+    """Offline sensitivity / power for VNEXT-style McNemar on fixed n_attack.
+
+    **Assumption (documented):** b01 fixed at ``b01_assumed`` (Track A observed 0).
+    For each b10, delta_hat = (b10 - b01) / n_attack and McNemar exact p uses only
+    discordant pairs (b10 + b01).
+
+    **Alternative for power:** independent episodes, each contributes to b10 with
+    probability theta = ``alternative_delta`` when b01=0 (simplified binomial on n_attack).
+    This is a planning scaffold, not a re-analysis of episode-level correlation.
+    """
+    if n_attack <= 0:
+        raise ValueError("n_attack must be positive")
+    if b01_assumed < 0 or b01_assumed > n_attack:
+        raise ValueError("invalid b01_assumed")
+
+    from scipy import stats
+
+    grid: list[dict[str, float | int | bool]] = []
+    min_b10_sig: int | None = None
+    min_b10_msid: int | None = None
+    for b10 in range(0, n_attack - b01_assumed + 1):
+        p_val = mcnemar_exact_p_value(b10, b01_assumed)
+        delta = delta_hat_from_mcnemar_contingency(b10, b01_assumed, n_attack)
+        sig = p_val < alpha
+        msid_met = delta >= msid
+        if sig and min_b10_sig is None:
+            min_b10_sig = b10
+        if msid_met and min_b10_msid is None:
+            min_b10_msid = b10
+        grid.append(
+            {
+                "b10": b10,
+                "b01": b01_assumed,
+                "delta_hat": round(delta, 6),
+                "mcnemar_p": round(p_val, 6),
+                "significant_at_alpha": sig,
+                "msid_met": msid_met,
+            }
+        )
+
+    def _power_at_theta(theta: float) -> float:
+        if b01_assumed != 0:
+            raise NotImplementedError("power helper implemented for b01=0 only")
+        power = 0.0
+        for k in range(0, n_attack + 1):
+            p_k = float(stats.binom.pmf(k, n_attack, theta))
+            if k + b01_assumed > n_attack:
+                continue
+            if k == 0 and b01_assumed == 0:
+                reject = False
+            else:
+                reject = mcnemar_exact_p_value(k, b01_assumed) < alpha
+            if reject:
+                power += p_k
+        return power
+
+    observed = {}
+    if observed_b10 is not None:
+        observed = {
+            "b10": observed_b10,
+            "b01": b01_assumed,
+            "delta_hat": round(
+                delta_hat_from_mcnemar_contingency(observed_b10, b01_assumed, n_attack),
+                6,
+            ),
+            "mcnemar_p": round(mcnemar_exact_p_value(observed_b10, b01_assumed), 6),
+            "significant_at_alpha": mcnemar_exact_p_value(observed_b10, b01_assumed) < alpha,
+            "msid_met": delta_hat_from_mcnemar_contingency(
+                observed_b10, b01_assumed, n_attack
+            )
+            >= msid,
+        }
+
+    return {
+        "label": "offline_power_sensitivity_not_in_original_AUDIT",
+        "n_attack": n_attack,
+        "alpha_two_sided": alpha,
+        "msid_delta": msid,
+        "assumptions": {
+            "b01_fixed": b01_assumed,
+            "power_model": (
+                "Binomial(n_attack, theta) for b10 counts with b01=0; "
+                "McNemar exact on discordant pairs; independent episode scaffold"
+            ),
+        },
+        "thresholds_b01_fixed": {
+            "min_b10_significant": min_b10_sig,
+            "min_b10_msid_point": min_b10_msid,
+            "note": (
+                "min_b10_msid uses point delta_hat >= msid; co-primary utility gate "
+                "not modeled here"
+            ),
+        },
+        "power_mcnemar_significance": {
+            f"theta_{alternative_delta}": round(_power_at_theta(alternative_delta), 6),
+            "theta_alternative_delta": alternative_delta,
+        },
+        "observed_track_a": observed,
+        "sensitivity_grid_sample": grid[:: max(1, len(grid) // 15)],
+        "full_grid_length": len(grid),
+    }
+
+
 def proportion_ci_wilson(
     successes: int,
     n: int,

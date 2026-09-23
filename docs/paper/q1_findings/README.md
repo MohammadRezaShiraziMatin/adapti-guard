@@ -38,6 +38,7 @@
 | [`BUILD_PDF.md`](BUILD_PDF.md) | Local pandoc PDF build from `MANUSCRIPT.md` |
 | [`QUALITY_GAPS.md`](QUALITY_GAPS.md) | Findings vs main bar; Phase 3 value (honest) |
 | [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) | Offline Track A δ̂ 95% CI (not in AUDIT) |
+| [`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json) | Offline McNemar power / sensitivity (n=61) |
 
 ---
 

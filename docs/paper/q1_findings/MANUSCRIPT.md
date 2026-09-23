@@ -227,7 +227,7 @@ Sourced from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md) an
 | Limitation | P2 disposition | Honest reporting |
 | --- | --- | --- |
 | Track A **FAIL** immutable | immutable | Confirmed negative; no FAIL→PASS |
-| Small **n=61** per track | Future Work (V2); docs-fixed prose | Power/generalization limits; V2 not in this cycle |
+| Small **n=61** per track | Future Work (V2); offline power artifact | See power paragraph below; V2 not in this cycle |
 | Track A δ̂ **95% CI absent** in AUDIT | docs-fixed + offline artifact | Point δ̂ in AUDIT; CI from [`recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) only |
 | **Heuristic detector**; no AgentDojo-class loops | Future Work | Single-turn confirmatory scope |
 | **No external SOTA baselines** | Future Work; P3-if-budget | Compare locked arms only |
@@ -240,7 +240,9 @@ Sourced from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md) an
 | Single Target/Judge pair | docs-fixed | No multi-model robustness claim |
 | Authored synthetic packs | docs-fixed | Not production RAG/agents |
 
-**Phase 3:** No new live AUDIT folders are claimed in this draft. Optional budgeted runs would add **separate** immutable artifacts—not amend Track A FAIL numbers.
+**Sample size / power (Track A, offline).** Under documented simplifications (`b01=0`, McNemar exact, binomial scaffold for planning), n=61 would yield **~99%** power to detect a **true** per-episode b10 rate of **MSID=0.20** at α=0.05 ([`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json)). Observed **b10=5** requires **≥6** discordant wins for significance and **≥13** for point δ̂≥0.20 at `b01=0`; the offline δ̂ 95% CI upper bound (**0.1639**, from [`vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json)) stays below MSID. **Interpretation:** Track A **FAIL** is consistent with a **small estimated effect** and pre-registered gates—not primarily “n=61 could never detect MSID-sized effects” under this model. Generalization beyond n=61 remains limited.
+
+**Phase 3:** No new live AUDIT folders are claimed. Optional arms per [`DECISION_LOCK_Q1_P3_ARMS.md`](../../experiments/DECISION_LOCK_Q1_P3_ARMS.md) require human budget.
 
 ---
 

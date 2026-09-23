@@ -10,9 +10,11 @@
 
 | Item | Status |
 | --- | --- |
-| Track A δ̂ **95% CI** | **Recomputed offline** from McNemar integers (b10=5, b01=0, n=61) via [`scripts/recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) → [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json). **Not** in original AUDIT. |
+| Track A δ̂ **95% CI** | [`recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) → [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) (**not** in AUDIT) |
+| Track A **McNemar power / sensitivity** | [`recompute_vnext_mcnemar_power.py`](../../scripts/recompute_vnext_mcnemar_power.py) → [`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json) |
 | Estimand / methods clarity | [`MANUSCRIPT.md`](MANUSCRIPT.md) §2 / §5.4 |
-| Remaining blockers | This file |
+| Phase 3 arm gates (docs only) | [`DECISION_LOCK_Q1_P3_ARMS.md`](../../experiments/DECISION_LOCK_Q1_P3_ARMS.md) — **no runs** |
+| Remaining blockers | Below; need **budget** for live arms |
 
 ---
 
@@ -22,7 +24,7 @@
 | --- | --- | --- | --- |
 | **Negative result honesty** | Strong — pre-registered FAIL inspectable | Needs novelty beyond “we ran eval” | **Met for eval contribution** |
 | **Dual-track reporting** | Strong — separate packs, non-reversal | Often expected clear single RQ | **Met with discipline** |
-| **Sample size** | n=61 per track | Often larger or multi-seed | **Weak** — power for small δ |
+| **Sample size** | n=61 per track | Often larger or multi-seed | **Weak for generalization**; offline power ~**99%** at true δ=MSID under b01=0 scaffold — observed δ far below MSID |
 | **Detector** | Heuristic evidence-gated | Learned / calibrated / multi-model | **Weak** |
 | **Environment** | Single-turn authored packs | AgentDojo-class tool loops | **Not run** (Future Work) |
 | **Baselines** | B0 + locked treatments | External SOTA arms | **Not run** (Future Work) |
@@ -38,7 +40,7 @@
 | Blocker | Disposition | Main-track impact |
 | --- | --- | --- |
 | Track A FAIL immutable | immutable | Cannot sell as win |
-| n=61 | Future Work / P3 | Power / generalization |
+| n=61 | Future Work / P3; power artifact | Generalization; not “underpowered for MSID” under simplified model |
 | No AgentDojo / multi-step | Future Work | Agent claims blocked |
 | No external SOTA baselines | P3-if-budget | Comparison gap |
 | Heuristic detector | Future Work | Credibility gap vs learned guards |
