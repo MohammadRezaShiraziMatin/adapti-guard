@@ -17,7 +17,7 @@ It is **not** a redo of the **workshop five-phase quality path**. That path is *
 | Roadmap | Purpose | Status on tip `main` |
 | --- | --- | --- |
 | [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) | Publisher/process unlock: hygiene, D-22 **names**, manuscript polish, repro checklist, workshop submit **checklist** (no upload) | **P1–P5 done** (merged via PR #73 → tip `e4870b9`) |
-| **This file (Q1 four phases)** | Evidence-design gaps, optional controlled live work **after human budget**, and a findings manuscript **beyond** the short `workshop_vnext_fail` packet | **P1 in progress** (claim ceiling + blocker matrix; Matin-approved start) |
+| **This file (Q1 four phases)** | Evidence-design gaps, optional controlled live work **after human budget**, and a findings manuscript **beyond** the short `workshop_vnext_fail` packet | **P1–P2 done** on PR #74; **P3–P4 pending** ([`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md)) |
 
 Do not mark `QUALITY_ROADMAP_5PHASE.md` incomplete. Treat it as **DONE** for workshop packet readiness; use this doc for **Q1 scope** only.
 
@@ -60,47 +60,37 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 ---
 
-## Phase 1 — Claim ceiling + blocker matrix (**this PR**)
+## Phase 1 — Claim ceiling + blocker matrix (**done**, PR #74)
 
 **Goal:** Align contributors on Q1 scope, claim ceiling, and documented blockers before any evidence-design or live work.
 
+**Deliverables:** This roadmap · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) · pointers in [`STATUS.md`](STATUS.md) / [`START_HERE.md`](../START_HERE.md).
+
+**Exit criteria:** Met — matrix live; science bytes unchanged; workshop quality path **done** on `e4870b9`.
+
+**API budget:** 0
+
+---
+
+## Phase 2 — Evidence-design locks (**done**, PR #74; API=0)
+
+**Goal:** Close **design** gaps for a defensible Q1 methods/limitations section — without inventing numbers or running live eval.
+
 **Deliverables:**
 
-- This roadmap (`Q1_ROADMAP_4PHASE.md`)
-- [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md)
-- Light pointers in [`STATUS.md`](STATUS.md) and [`START_HERE.md`](../START_HERE.md)
+- [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) (decision ID **Q1-P2**)
+- Confirmatory V2 **Future Work** for this cycle; paper = Track A (n=61 FAIL) + Track B (scoped) only
+- D-22 **+1 → `PRIVILEGE_EXFIL`** rule for *future* V2 (25/base; no pack build now)
+- Track A δ̂ **95% CI BLOCKING GAP** locked in prose (no invented CI)
+- Must-have vs Future Work table; blocker matrix **P2 disposition** column
 
-**Exit criteria:**
-
-- Blocker matrix reviewed by Matin; severity and “honest alternative if unfixed” accepted as the working truth table
-- No change to frozen science bytes or AUDIT numbers
-- Workshop quality path remains marked **done** on `e4870b9` lineage
+**Exit criteria:** Met — every matrix row tagged **immutable** | **docs-fixed** | **P3-if-budget** | **Future Work** per Q1-P2 §E.
 
 **API budget:** 0
 
 ---
 
-## Phase 2 — Evidence-design locks (docs; API=0)
-
-**Goal:** Close **design** gaps that block a defensible Q1 methods/results section — without inventing numbers or running live eval.
-
-**Deliverables (examples; exact filenames may split across PRs):**
-
-- **D-22 remainder:** Document Researcher rule for `151 mod 6 = 1` allocation (+1 cell) **or** explicitly defer to Future Work with honest limitations ([`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md))
-- **SAP / confirmatory V2:** Statistical analysis plan outline for a *future* pack — episode bodies and allocation **not** locked until separate human decisions
-- **Track A δ̂ 95% CI gap:** Document as **BLOCKING GAP** (missing in VNEXT AUDIT); plan to derive from frozen contingency **only** via approved offline recomputation in a dedicated PR — **never fabricate** in manuscript text
-- **Must-have vs Future Work** table: external SOTA baselines, AgentDojo-class multi-step tool loops, multi-turn live episodes, `p1_mechanism_v1.0.0` live eval (`live_evaluated=false`)
-
-**Exit criteria:**
-
-- Every item in [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) tagged either **fixed in docs**, **scheduled Phase 3**, or **honest Future Work**
-- No new metrics presented as if already measured
-
-**API budget:** 0
-
----
-
-## Phase 3 — Controlled evidence (human budget required)
+## Phase 3 — Controlled evidence (**pending**; human budget required)
 
 **Goal:** Optional, pre-registered live runs that **add** evidence — they do **not** rewrite Track A FAIL or merge tracks in claims.
 
@@ -113,7 +103,7 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 **In scope (examples only — each needs its own lock doc before run):**
 
 - External baseline arm under same protocol (if feasible under budget)
-- Confirmatory V2 pack build + eval (after P2 allocation/SAP locks)
+- Confirmatory V2 pack build + eval (only **after** future authorization beyond this Q1 cycle; Q1-P2 §A–B)
 - `p1_mechanism_v1.0.0` live eval (still `live_evaluated=false` on tip)
 
 **Out of scope:**
@@ -130,7 +120,7 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 ---
 
-## Phase 4 — Findings / Q1 manuscript + artifact
+## Phase 4 — Findings / Q1 manuscript + artifact (**pending**)
 
 **Goal:** Manuscript and artifact **beyond** the short [`workshop_vnext_fail`](../paper/workshop_vnext_fail/README.md) packet — dual-track findings, limitations, and optional Phase 3 supplements.
 
@@ -154,7 +144,7 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 1. [`docs/START_HERE.md`](../START_HERE.md)  
 2. [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) (**done** — workshop path)  
-3. **This file** + [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md)  
+3. **This file** + [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) + [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md)  
 4. [`STATUS.md`](STATUS.md)  
 5. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)  
 6. [`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md)
