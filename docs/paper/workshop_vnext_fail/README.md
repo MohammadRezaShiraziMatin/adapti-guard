@@ -23,10 +23,11 @@ This directory is an English workshop-style manuscript package. It does **not** 
 4. **Citation.** [`CITATION.md`](CITATION.md) (software + negative-result preprint). Root [`CITATION.cff`](../../../CITATION.cff) is the GitHub citation file.
 5. **Configs snapshot.** [`CONFIGS_SNAPSHOT.md`](CONFIGS_SNAPSHOT.md) lists YAML hashes and the Target/Judge/cache contract.
 6. **PR index.** [`PR_STACK.md`](PR_STACK.md) — open PRs 23–41 with roles and **CLOSE / SKIP**. **Do not merge.**
-7. **Submission packet (human).** [`SUBMISSION_PACKET.md`](SUBMISSION_PACKET.md) — one-page HONEST NEGATIVE RESULT cover letter, camera-ready map, title options, forbidden claims, reviewer artifact paths. **Not a venue submit.**
-8. **Persian next-step note.** [`SUBMIT_NEXT_FA.md`](SUBMIT_NEXT_FA.md) — for Matin: merge order, pick venue, approve submit.
-9. **Reproducibility (offline, API=0).** [`docs/experiments/REPRODUCIBILITY_PACKAGE.md`](../../experiments/REPRODUCIBILITY_PACKAGE.md) — frozen SHAs, AUDIT paths, `verify_manuscript_facts.py`, pytest list. Hashes: [`APPENDIX_HASHES.md`](APPENDIX_HASHES.md).
-10. **DONE checklist.** [`DONE_CHECKLIST.md`](DONE_CHECKLIST.md). Diary: [`docs/experiments/RESEARCH_LOG.md`](../../experiments/RESEARCH_LOG.md).
+7. **Submission packet (human).** [`SUBMISSION_PACKET.md`](SUBMISSION_PACKET.md) — cover letter, camera-ready map, title options, forbidden claims. **Not a venue submit.**
+8. **Submission checklist (Phase 5).** [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) — DONE / READY / HUMAN_ONLY / BLOCKED per item; venue TBD.
+9. **Persian next-step note.** [`SUBMIT_NEXT_FA.md`](SUBMIT_NEXT_FA.md) — for Matin: merge order, pick venue, approve submit.
+10. **Reproducibility (offline, API=0).** [`docs/experiments/REPRODUCIBILITY_PACKAGE.md`](../../experiments/REPRODUCIBILITY_PACKAGE.md) — frozen SHAs, AUDIT paths, `verify_manuscript_facts.py`, pytest list. Hashes: [`APPENDIX_HASHES.md`](APPENDIX_HASHES.md).
+11. **DONE checklist (legacy closeout).** [`DONE_CHECKLIST.md`](DONE_CHECKLIST.md). Diary: [`docs/experiments/RESEARCH_LOG.md`](../../experiments/RESEARCH_LOG.md).
 
 ## Canonical FAIL facts (do not invent or alter)
 

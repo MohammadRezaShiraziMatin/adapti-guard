@@ -4,6 +4,8 @@
 
 This file is a **human** camera-ready / cover packet for a workshop or evaluation track. Agents do not merge PRs, do not pick a venue, and do not upload the manuscript. LLM API for eval = **0**.
 
+**Item-by-item readiness:** [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) (DONE / READY / HUMAN_ONLY / BLOCKED).
+
 | Field | Binding value |
 | --- | --- |
 | Framing | **HONEST NEGATIVE RESULT** |

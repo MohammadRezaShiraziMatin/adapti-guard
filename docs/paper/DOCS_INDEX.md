@@ -39,6 +39,7 @@ Track A negative-result package. Numbers must match the VNEXT AUDIT. Not a venue
 | [`workshop_vnext_fail/CITATION.md`](workshop_vnext_fail/CITATION.md) | Citation for the FAIL packet |
 | [`workshop_vnext_fail/PR_STACK.md`](workshop_vnext_fail/PR_STACK.md) | PR roles + CLOSE / SKIP (no merge) |
 | [`workshop_vnext_fail/SUBMISSION_PACKET.md`](workshop_vnext_fail/SUBMISSION_PACKET.md) | Human cover letter (not an upload) |
+| [`workshop_vnext_fail/SUBMISSION_CHECKLIST.md`](workshop_vnext_fail/SUBMISSION_CHECKLIST.md) | Phase 5 submit readiness (DONE/READY/HUMAN_ONLY/BLOCKED) |
 | [`workshop_vnext_fail/SUBMIT_NEXT_FA.md`](workshop_vnext_fail/SUBMIT_NEXT_FA.md) | Track A Persian submit note |
 | [`workshop_vnext_fail/DONE_CHECKLIST.md`](workshop_vnext_fail/DONE_CHECKLIST.md) | Agent-closable workshop items |
 | [`workshop_vnext_fail/verify_manuscript_facts.py`](workshop_vnext_fail/verify_manuscript_facts.py) | Offline fact verifier |

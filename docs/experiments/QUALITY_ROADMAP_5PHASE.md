@@ -59,11 +59,22 @@ This roadmap separates **process unlocks** (what contributors may do on tip with
 
 ---
 
-## P5 — Workshop submit checklist (no external upload) (**next**)
+## P5 — Workshop submit checklist (no external upload) (**done**, PR #73)
 
 **Unlocks:** Human checklist: merge order (`PR_STACK.md`), packet completeness, citation/hashes, **explicit** “human submits venue” steps — documentation only.
 
-**Locks kept:** Agents do not submit to arXiv/workshop; Track A FAIL narrative unchanged.
+**Deliverables:** [`docs/paper/workshop_vnext_fail/SUBMISSION_CHECKLIST.md`](../paper/workshop_vnext_fail/SUBMISSION_CHECKLIST.md) · links from [`SUBMISSION_PACKET.md`](../paper/workshop_vnext_fail/SUBMISSION_PACKET.md) and workshop README.
+
+**Locks kept:** Agents do not submit to arXiv/workshop; Track A FAIL narrative unchanged. No venue marked DONE.
+
+---
+
+## After P5 (human)
+
+1. Review and **merge PR #73** (docs quality path).  
+2. **Choose venue** and compile camera-ready from [`MANUSCRIPT.md`](../paper/workshop_vnext_fail/MANUSCRIPT.md).  
+3. **Submit** via venue portal (HUMAN_ONLY).  
+4. Optional: merge historical stack [#23–#44](../paper/workshop_vnext_fail/PR_STACK.md) per Matin’s merge strategy.
 
 ---
 
@@ -74,4 +85,5 @@ This roadmap separates **process unlocks** (what contributors may do on tip with
 3. [`docs/paper/CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md)  
 4. [`docs/paper/workshop_vnext_fail/MANUSCRIPT.md`](../paper/workshop_vnext_fail/MANUSCRIPT.md)  
 5. [`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md)  
-6. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)
+6. [`docs/paper/workshop_vnext_fail/SUBMISSION_CHECKLIST.md`](../paper/workshop_vnext_fail/SUBMISSION_CHECKLIST.md)  
+7. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)
