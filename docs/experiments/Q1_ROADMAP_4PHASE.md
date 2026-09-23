@@ -1,0 +1,162 @@
+# Q1 readiness roadmap — four phases (findings ladder)
+
+**Author / owner:** Seyed Mohammadreza Shirazi Matin  
+**Tip baseline (this PR branched from):** `main` @ `e4870b9cc03a344835f341bfd61aa83d2bdf2bff` (2026-09-23)  
+**Mode:** Documentation and planning only. **API=0** by default. Agents do **not** merge, submit venues, or run live LLM eval.
+
+**Blocker inventory:** [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md)
+
+---
+
+## What this is (and is not)
+
+This roadmap is the **Q1 / findings ladder**: how to move from today’s locked dual-track evidence toward a **Q1-oriented manuscript and artifact** without rewriting science or pretending a FAIL became a PASS.
+
+It is **not** a redo of the **workshop five-phase quality path**. That path is **complete** on the `e4870b9` lineage:
+
+| Roadmap | Purpose | Status on tip `main` |
+| --- | --- | --- |
+| [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) | Publisher/process unlock: hygiene, D-22 **names**, manuscript polish, repro checklist, workshop submit **checklist** (no upload) | **P1–P5 done** (merged via PR #73 → tip `e4870b9`) |
+| **This file (Q1 four phases)** | Evidence-design gaps, optional controlled live work **after human budget**, and a findings manuscript **beyond** the short `workshop_vnext_fail` packet | **P1 in progress** (claim ceiling + blocker matrix; Matin-approved start) |
+
+Do not mark `QUALITY_ROADMAP_5PHASE.md` incomplete. Treat it as **DONE** for workshop packet readiness; use this doc for **Q1 scope** only.
+
+---
+
+## Science locks (unchanged in every Q1 phase)
+
+| Lock | Rule |
+| --- | --- |
+| Track A VNEXT | **FAIL** immutable — pack `vnext_confirm_v1.0`, SHA-256 `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518`; AUDIT `experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/` |
+| Track B Phase-1 LIVE | **SUPPORTED_IMPROVEMENT** scoped on `phase1_confirm_v1`; **does not reverse** Track A |
+| Frozen / AUDIT | No edits to `datasets/frozen/**` or `experiments/real_llm_eval/**` AUDIT, verdict, or quoted numbers |
+| Metrics | No invented statistics; cite frozen AUDIT or mark **BLOCKING GAP** |
+| Live LLM | **API=0** until explicit human budget sign-off |
+| Agents | No merge, no venue upload, no retune-to-win |
+
+---
+
+## Honest claim ceiling (Q1 narrative bound)
+
+What the repository **can** support today without new live eval or fabricated numbers:
+
+1. **Dual-track evaluation methodology** — separate confirmatory tracks, hash-locked packs, Target ≠ Judge, utility gates, and explicit forbidden claim lists ([`CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md), [`DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)).
+2. **Confirmed negative on Track A** — VNEXT adaptive cost-aware runtime under locked protocol **does not** meet the pre-registered win criteria (FAIL; McNemar not significant; MSID not met; utility ineligible).
+3. **Scoped Phase-1 improvement on Track B** — PHASE1-CORE vs B0 on a **different** pack with pre-registered Phase-1 MSID and utility eligibility; **not** a VNEXT PASS and **not** solve-PI / SOTA.
+
+**Explicitly forbidden** in Q1 prose (even as “future promise” dressed as fact): solve prompt injection, SOTA, production-ready, FAIL→PASS, “VNEXT works,” one unlabeled table mixing Track A ASR with Track B harmful-action rates, simulation or oracle layers as confirmatory wins.
+
+There is **no guarantee** that a Q1 venue accepts this story, that all blockers clear, or that optional Phase 3 evidence runs. This roadmap describes **preparation**, not acceptance.
+
+---
+
+## API budget gate (all phases)
+
+| Gate | Rule |
+| --- | --- |
+| Default | **API=0** — design docs, offline verification, manuscript drafting |
+| Phase 3 only | Controlled live eval **after** human budget sign-off ([`LIVE_EVALUATION_GATE.md`](../research/LIVE_EVALUATION_GATE.md)); Target ≠ Judge; no retune-to-win; no N or pack changes without new human lock |
+| Phase 4 submit | **Human-only** portal upload; agents never submit |
+
+---
+
+## Phase 1 — Claim ceiling + blocker matrix (**this PR**)
+
+**Goal:** Align contributors on Q1 scope, claim ceiling, and documented blockers before any evidence-design or live work.
+
+**Deliverables:**
+
+- This roadmap (`Q1_ROADMAP_4PHASE.md`)
+- [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md)
+- Light pointers in [`STATUS.md`](STATUS.md) and [`START_HERE.md`](../START_HERE.md)
+
+**Exit criteria:**
+
+- Blocker matrix reviewed by Matin; severity and “honest alternative if unfixed” accepted as the working truth table
+- No change to frozen science bytes or AUDIT numbers
+- Workshop quality path remains marked **done** on `e4870b9` lineage
+
+**API budget:** 0
+
+---
+
+## Phase 2 — Evidence-design locks (docs; API=0)
+
+**Goal:** Close **design** gaps that block a defensible Q1 methods/results section — without inventing numbers or running live eval.
+
+**Deliverables (examples; exact filenames may split across PRs):**
+
+- **D-22 remainder:** Document Researcher rule for `151 mod 6 = 1` allocation (+1 cell) **or** explicitly defer to Future Work with honest limitations ([`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md))
+- **SAP / confirmatory V2:** Statistical analysis plan outline for a *future* pack — episode bodies and allocation **not** locked until separate human decisions
+- **Track A δ̂ 95% CI gap:** Document as **BLOCKING GAP** (missing in VNEXT AUDIT); plan to derive from frozen contingency **only** via approved offline recomputation in a dedicated PR — **never fabricate** in manuscript text
+- **Must-have vs Future Work** table: external SOTA baselines, AgentDojo-class multi-step tool loops, multi-turn live episodes, `p1_mechanism_v1.0.0` live eval (`live_evaluated=false`)
+
+**Exit criteria:**
+
+- Every item in [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) tagged either **fixed in docs**, **scheduled Phase 3**, or **honest Future Work**
+- No new metrics presented as if already measured
+
+**API budget:** 0
+
+---
+
+## Phase 3 — Controlled evidence (human budget required)
+
+**Goal:** Optional, pre-registered live runs that **add** evidence — they do **not** rewrite Track A FAIL or merge tracks in claims.
+
+** Preconditions:**
+
+- Human budget sign-off and gate checklist satisfied
+- Frozen pack SHA locks unchanged unless a **new** freeze PR and decision record exist
+- Target ≠ Judge; treatment arms labeled; no detector retune after seeing confirmatory outcomes
+
+**In scope (examples only — each needs its own lock doc before run):**
+
+- External baseline arm under same protocol (if feasible under budget)
+- Confirmatory V2 pack build + eval (after P2 allocation/SAP locks)
+- `p1_mechanism_v1.0.0` live eval (still `live_evaluated=false` on tip)
+
+**Out of scope:**
+
+- “Run until p&lt;0.05” on Track A VNEXT
+- Presenting simulation or Layer A oracle ASR as confirmatory defense success
+
+**Exit criteria:**
+
+- New AUDIT folders immutable once written; claims updated only via dual-track checklists
+- Results reported with track labels; no FAIL→PASS narrative
+
+**API budget:** Human-approved only
+
+---
+
+## Phase 4 — Findings / Q1 manuscript + artifact
+
+**Goal:** Manuscript and artifact **beyond** the short [`workshop_vnext_fail`](../paper/workshop_vnext_fail/README.md) packet — dual-track findings, limitations, and optional Phase 3 supplements.
+
+**Deliverables:**
+
+- Q1 manuscript draft (venue TBD)
+- Citation/hash appendix aligned with [`REPRODUCIBILITY_PACKAGE.md`](REPRODUCIBILITY_PACKAGE.md)
+- Explicit limitations section sourced from blocker matrix
+
+**Exit criteria:**
+
+- Claims pass [`CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md) review
+- Camera-ready build from human-chosen venue template
+- **Submit:** HUMAN_ONLY
+
+**API budget:** 0 for writing; prior Phase 3 spend accounted separately
+
+---
+
+## Read order (Q1 contributor)
+
+1. [`docs/START_HERE.md`](../START_HERE.md)  
+2. [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) (**done** — workshop path)  
+3. **This file** + [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md)  
+4. [`STATUS.md`](STATUS.md)  
+5. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)  
+6. [`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md)
+
+**Navigation:** [`STATUS.md`](STATUS.md) · [`docs/experiments/README.md`](README.md)

@@ -1,6 +1,6 @@
 # Experiments — tip status (docs)
 
-**Updated:** 2026-09-23 (process unlock on tip `main`, SHA `30ddc75`)  
+**Updated:** 2026-09-23 (tip `main`, SHA `e4870b9`; Q1 Phase 1 docs in progress on branch)  
 **Mode:** Documentation and decision locks only. **API=0.** Agents do not merge.
 
 ---
@@ -9,7 +9,9 @@
 
 Raise **publisher readiness** and remove **process/admin bottlenecks** via honest docs — not by changing frozen science or rerunning live eval.
 
-Active quality work follows [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md). **PR #73:** **P1–P5 complete** (5-phase docs quality path on tip).
+**Workshop quality path (done):** [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) **P1–P5 complete** on tip `e4870b9` (PR #73 merged to `main`).
+
+**Q1 findings ladder (active):** Matin-approved **Q1 Phase 1** — claim ceiling + blocker matrix: [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md). This is **not** a redo of the five-phase workshop packet path.
 
 ---
 
@@ -60,7 +62,7 @@ Checklist: [`docs/paper/workshop_vnext_fail/SUBMISSION_CHECKLIST.md`](../paper/w
 
 ## Next (human only)
 
-1. **Merge PR #73** to `main` (review first).  
-2. **Choose venue** (TBD) and **submit** camera-ready — agents do not upload.  
+1. Review **Q1 Phase 1** docs PR (roadmap + blocker matrix).  
+2. **Choose venue** (TBD) for workshop packet and/or Q1 manuscript — **submit** camera-ready; agents do not upload.  
 3. Optional: historical PR stack merge per [`PR_STACK.md`](../paper/workshop_vnext_fail/PR_STACK.md).  
-4. **Budget sign-off** before any future live eval (`API=0` until then).
+4. **Budget sign-off** before any Q1 Phase 3 live eval (`API=0` until then).
