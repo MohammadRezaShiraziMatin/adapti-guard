@@ -9,7 +9,7 @@
 
 Raise **publisher readiness** and remove **process/admin bottlenecks** via honest docs — not by changing frozen science or rerunning live eval.
 
-Active quality work follows [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md). **This PR completes P1 + P2 (docs).**
+Active quality work follows [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md). **PR #73:** P1 + P2 + **P3 (manuscript claims polish) complete.**
 
 ---
 
@@ -20,7 +20,7 @@ Active quality work follows [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE
 | **A — VNEXT** | **FAIL** (immutable) | `vnext_confirm_v1.0`, SHA `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518`; AUDIT `experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/` |
 | **B — Phase-1 LIVE** | **SUPPORTED_IMPROVEMENT** (scoped) | `phase1_confirm_v1`, SHA `c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01`; AUDIT `experiments/real_llm_eval/PHASE1_CONFIRM/phase1_confirm_20260914T213022Z_a2681e92/` |
 
-Track B **does not** reverse Track A. Wording: [`docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`](../paper/dual_track/CLAIMS_DUAL_TRACK.md).
+Track B **does not** reverse Track A. Wording: [`docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`](../paper/dual_track/CLAIMS_DUAL_TRACK.md) · one-liners [`docs/paper/CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md).
 
 Do not edit `datasets/frozen/**` or `experiments/real_llm_eval/**` AUDIT/verdict/numbers.
 
@@ -46,8 +46,12 @@ This quality PR is a **single docs-only branch off tip `main`**, separate from t
 
 ---
 
-## Next after this PR
+## Manuscript / claims (P3 done)
 
-**Phase 3** (roadmap): manuscript claims polish under `docs/paper/` — still no live eval, no frozen edits, no FAIL reversal.
+Workshop FAIL text: [`docs/paper/workshop_vnext_fail/MANUSCRIPT.md`](../paper/workshop_vnext_fail/MANUSCRIPT.md). Human cover: [`SUBMISSION_PACKET.md`](../paper/workshop_vnext_fail/SUBMISSION_PACKET.md). Author: **Seyed Mohammadreza Shirazi Matin**.
+
+## Next (roadmap)
+
+**Phase 4:** artifact and reproducibility docs (`REPRODUCIBILITY_PACKAGE.md`, hash tables, offline verify steps) — no live eval, no frozen edits.
 
 Human-only gates unchanged: venue submit, live LLM budget, merge to `main`.

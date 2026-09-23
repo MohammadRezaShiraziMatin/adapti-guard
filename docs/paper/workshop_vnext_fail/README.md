@@ -17,7 +17,7 @@ This directory is an English workshop-style manuscript package. It does **not** 
 
 ## How to read this package
 
-1. **Claims first.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) maps every allowed manuscript claim to `docs/paper/CLAIMS_CHECKLIST_LAYER_A.md` and `docs/experiments/protocols/VNEXT_PROTOCOL.md`. Forbidden claims are listed there; do not paraphrase them into allowed claims.
+1. **Claims first.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) (Track A + Layer A) · dual-track one-liners [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Track B allowed/forbidden [`../dual_track/CLAIMS_DUAL_TRACK.md`](../dual_track/CLAIMS_DUAL_TRACK.md). Do not paraphrase forbidden rows into allowed claims. Track B **does not** reverse this FAIL packet.
 2. **Manuscript.** [`MANUSCRIPT.md`](MANUSCRIPT.md) is the workshop/preprint text (abstract through reproducibility).
 3. **Hashes.** [`APPENDIX_HASHES.md`](APPENDIX_HASHES.md) points at frozen packs and the VNEXT_CONFIRM AUDIT path.
 4. **Citation.** [`CITATION.md`](CITATION.md) (software + negative-result preprint). Root [`CITATION.cff`](../../../CITATION.cff) is the GitHub citation file.
@@ -50,7 +50,8 @@ This directory is an English workshop-style manuscript package. It does **not** 
 
 - Does not claim a defense win, SOTA detector, or production-ready system.
 - Does not treat Layer A `B3_V4` as confirmed.
-- Does not mix historical simulation ASR in `docs/paper/04_results.md` with judge ASR.
+- Does not mix historical simulation ASR in `docs/paper/04_results.md` with judge ASR or cite simulation ASR=0 as “solved.”
+- Does not use Track B Phase-1 LIVE results to reverse or soften VNEXT FAIL in this manuscript.
 - Does not rewrite the simulation body of `docs/paper/04_results.md` (pointer only).
 - Does not reopen Layer A TEST `47b975f7…` or change `VNEXT-MSID-0.1`.
 

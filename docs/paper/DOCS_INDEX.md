@@ -17,6 +17,7 @@ Use these for current claims, merge advice, and workshop FAIL text.
 | [`../START_HERE.md`](../START_HERE.md) | Read order + tree |
 | [`dual_track/DUAL_TRACK_STATUS.md`](dual_track/DUAL_TRACK_STATUS.md) | Track A FAIL vs Track B scoped LIVE |
 | [`dual_track/CLAIMS_DUAL_TRACK.md`](dual_track/CLAIMS_DUAL_TRACK.md) | Allowed / forbidden dual-track wording |
+| [`CLAIMS_CHECKLIST.md`](CLAIMS_CHECKLIST.md) | Dual-track + workshop forbidden/allowed one-liners |
 | [`dual_track/RELEASE_NEXT_FA.md`](dual_track/RELEASE_NEXT_FA.md) | Matin next-step note + CLOSE / SKIP |
 | [`../experiments/MASTER_PROMPT.md`](../experiments/MASTER_PROMPT.md) | Durable supervisor constraints |
 | [`../experiments/RESEARCH_LOG.md`](../experiments/RESEARCH_LOG.md) | Dated diary (including 2026-09-14 dual-track) |

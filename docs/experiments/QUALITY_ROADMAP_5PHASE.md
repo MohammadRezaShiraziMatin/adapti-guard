@@ -21,17 +21,15 @@ This roadmap separates **process unlocks** (what contributors may do on tip with
 
 ---
 
-## P1 — Hygiene and truth docs (this PR)
+## P1 — Hygiene and truth docs (**done**, PR #73)
 
 **Unlocks:** Refresh navigation (`START_HERE`, experiment status), publish this roadmap, resolve doc conflict markers if present (tip truth: dual-track FAIL + Track B scoped improvement).
 
-**Does not unlock:** New frozen bytes, live eval, claim reversal, or Phase-2 harness implementation.
-
-**Deliverables:** `QUALITY_ROADMAP_5PHASE.md`, `STATUS.md`, minimal `START_HERE` pointer, D-22 name lock (P2 doc).
+**Deliverables:** `QUALITY_ROADMAP_5PHASE.md`, `STATUS.md`, minimal `START_HERE` pointer.
 
 ---
 
-## P2 — D-22 taxonomy decision lock (names only; with P1 in same PR)
+## P2 — D-22 taxonomy decision lock (names only; **done**, PR #73)
 
 **Unlocks:** Lock **six** Confirmatory V2 `family_id` strings aligned to Track A frozen pack `datasets/frozen/vnext_confirm_v1` (see `DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`).
 
@@ -41,15 +39,17 @@ This roadmap separates **process unlocks** (what contributors may do on tip with
 
 ---
 
-## P3 — Manuscript claims polish
+## P3 — Manuscript claims polish (**done**, PR #73)
 
 **Unlocks:** Wording pass on workshop/dual-track manuscript docs under `docs/paper/` — allowed/forbidden claims, cross-links, publisher-facing consistency with `CLAIMS_DUAL_TRACK.md`.
+
+**Deliverables:** `docs/paper/CLAIMS_CHECKLIST.md`; tightened `workshop_vnext_fail/MANUSCRIPT.md`, README, `04_results.md` banners; submission packet Track B boundary.
 
 **Locks kept:** All AUDIT numbers and FAIL/SUPPORTED_IMPROVEMENT outcomes unchanged.
 
 ---
 
-## P4 — Artifact and reproducibility
+## P4 — Artifact and reproducibility (**next**)
 
 **Unlocks:** Repro checklists, hash citation tables, offline verification steps (no LLM), alignment of `REPRODUCIBILITY_PACKAGE.md` with tip tree.
 
@@ -65,9 +65,11 @@ This roadmap separates **process unlocks** (what contributors may do on tip with
 
 ---
 
-## Read order after P1
+## Read order (publisher)
 
 1. [`docs/START_HERE.md`](../START_HERE.md)  
 2. [`STATUS.md`](STATUS.md) (this folder)  
-3. [`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md)  
-4. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)
+3. [`docs/paper/CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md)  
+4. [`docs/paper/workshop_vnext_fail/MANUSCRIPT.md`](../paper/workshop_vnext_fail/MANUSCRIPT.md)  
+5. [`DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md`](DECISION_LOCK_D22_CONFIRMATORY_V2_TAXONOMY.md)  
+6. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](../paper/dual_track/DUAL_TRACK_STATUS.md)

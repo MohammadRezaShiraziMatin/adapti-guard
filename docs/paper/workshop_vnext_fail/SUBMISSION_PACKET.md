@@ -68,6 +68,9 @@ is the evaluation protocol, not a confirmed defense.
 
 What we do not ask. Credit for a useful runtime intervention; SOTA;
 production-ready status; or a camera-ready “AdaptiGuard works” narrative.
+A separate Track B Phase-1 confirmatory result (SUPPORTED_IMPROVEMENT on
+`phase1_confirm_v1`) does not belong in this cover letter and does not
+reverse VNEXT FAIL.
 
 We have not retuned thresholds, increased N, edited frozen packs, or
 changed the MSID after unblinding. This cover letter does not itself
