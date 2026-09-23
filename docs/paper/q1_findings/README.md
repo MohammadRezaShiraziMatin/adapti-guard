@@ -28,7 +28,10 @@
 | --- | --- |
 | [`MANUSCRIPT.md`](MANUSCRIPT.md) | Findings draft (~8–12 page markdown structure) |
 | [`CLAIMS_MAP.md`](CLAIMS_MAP.md) | Allowed / forbidden one-liners for this manuscript |
-| [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) | Human pre-submit checklist (no DONE on upload) |
+| [`SUBMISSION_PACKET.md`](SUBMISSION_PACKET.md) | Cover letter bullets, title options, section map, HUMAN_ONLY submit |
+| [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) | Human pre-submit checklist (upload **NOT DONE**) |
+| [`FIGURES.md`](FIGURES.md) | Dual-track mermaid + claim-ceiling caption text |
+| [`references.bib`](references.bib) | Related-work BibTeX stubs |
 
 ---
 

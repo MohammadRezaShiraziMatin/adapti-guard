@@ -132,6 +132,8 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 | [`MANUSCRIPT.md`](../paper/q1_findings/MANUSCRIPT.md) | Findings-length English draft |
 | [`CLAIMS_MAP.md`](../paper/q1_findings/CLAIMS_MAP.md) | Allowed/forbidden one-liners |
 | [`SUBMISSION_CHECKLIST.md`](../paper/q1_findings/SUBMISSION_CHECKLIST.md) | Venue TBD; **no DONE on upload** |
+| [`SUBMISSION_PACKET.md`](../paper/q1_findings/SUBMISSION_PACKET.md) | Cover packet (FAIL-first dual-track) |
+| [`FIGURES.md`](../paper/q1_findings/FIGURES.md) · [`references.bib`](../paper/q1_findings/references.bib) | Camera-ready polish (PR #74) |
 | Hash appendix pointer | [`workshop_vnext_fail/APPENDIX_HASHES.md`](../paper/workshop_vnext_fail/APPENDIX_HASHES.md) + [`REPRODUCIBILITY_PACKAGE.md`](REPRODUCIBILITY_PACKAGE.md) |
 
 **Exit criteria (remaining):**
@@ -141,6 +143,8 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 - **Submit:** HUMAN_ONLY — not executed by agents
 
 **Phase 3 note:** Controlled live evidence is **still pending budget**. This Phase 4 draft does **not** claim Phase 3 complete.
+
+**P4 polish (PR #74):** submission packet, BibTeX stubs, figure captions—ready for **human** camera-ready conversion; venue upload remains **HUMAN_ONLY / NOT DONE**.
 
 **API budget:** 0 for writing
 

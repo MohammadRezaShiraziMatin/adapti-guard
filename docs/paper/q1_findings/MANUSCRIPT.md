@@ -9,7 +9,7 @@ AI Security · LLM-agent defense evaluation
 
 **Status banner.** Track A VNEXT confirmation = **FAIL** (immutable). Track B Phase-1 LIVE = **SUPPORTED_IMPROVEMENT** (scoped; **does not reverse** Track A). This draft does **not** claim prompt injection is solved, SOTA defense, or production readiness.
 
-**Claims map.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · Dual-track [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Q1 scope [`../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md)
+**Claims map.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · Dual-track [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Q1 scope [`../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · Human cover packet [`SUBMISSION_PACKET.md`](SUBMISSION_PACKET.md) · Figures [`FIGURES.md`](FIGURES.md)
 
 **Evidence base (this Q1 cycle):** Track A n=61 FAIL + Track B n=61 scoped improvement only. Confirmatory V2, external SOTA baselines, AgentDojo-class loops, and mechanism-pack live eval = **Future Work** (optional Phase 3 after human budget).
 
@@ -263,19 +263,22 @@ Under pre-registered rules on `vnext_confirm_v1.0`, **VNEXT-ADAPT does not confi
 
 ---
 
-## References (stubs — expand for camera-ready)
+## References
 
-- Chen, S., et al. StruQ / SecAlign (2024).
-- Debenedetti, E., et al. AgentDojo (NeurIPS D&B, 2024).
-- Greshake, K., et al. Indirect prompt injection (2023).
-- Inan, H., et al. Llama Guard (2023).
-- Liu, Y., et al. LLM-integrated prompt injection (2023).
-- McNemar, Q. *Psychometrika* (1947).
-- OWASP LLM Top 10 (LLM01).
-- Perez, F., and Ribeiro, I. (2022).
-- Rebedea, T., et al. NeMo Guardrails (2023).
-- Wallace, E., et al. Instruction hierarchy (2024).
-- Yi, J., et al. BIPIA (2023).
-- Zhan, Q., et al. InjecAgent (2024).
+BibTeX keys for camera-ready compile: [`references.bib`](references.bib). Related-work pointers (not primary evidence):
+
+- `perez2022ignore` — direct prompt injection attacks.
+- `greshake2023not` — indirect injection in LLM-integrated apps.
+- `liu2023prompt` — LLM-integrated application attacks.
+- `owasp2023llm` — OWASP LLM Top 10 (LLM01).
+- `debenedetti2024agentdojo` — AgentDojo agent benchmark (**not** our leaderboard entry).
+- `zhan2024injecagent` — InjecAgent tool-agent injections.
+- `yi2023bipia` — BIPIA indirect injection benchmark.
+- `inan2023llama` — Llama Guard input-output safeguard.
+- `rebedea2023nemo` — NeMo Guardrails toolkit.
+- `chen2024struq` — StruQ structured queries (training-time channel separation).
+- `chen2024secalign` — SecAlign preference optimization defense.
+- `wallace2024instruction` — instruction hierarchy training.
+- `mcnemar1947note` — paired proportions test.
 
 **Primary evidence:** frozen packs and `AUDIT.md` paths in [`APPENDIX_HASHES.md`](../workshop_vnext_fail/APPENDIX_HASHES.md), not this bibliography alone.
