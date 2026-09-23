@@ -49,14 +49,15 @@ Verify: `sha256sum datasets/frozen/vnext_confirm_v1/dataset.jsonl` (and Phase-1 
 ```bash
 python3 docs/paper/q1_findings/verify_q1_findings_facts.py
 python3 docs/paper/workshop_vnext_fail/verify_manuscript_facts.py
-python3 -m pytest tests/test_q1_findings_facts.py tests/test_vnext_delta_ci_offline.py tests/test_vnext_mcnemar_power_offline.py -q
+python3 scripts/run_q1_p3_1_confirm.py --defense-smoke
+python3 -m pytest tests/test_q1_findings_facts.py tests/test_vnext_delta_ci_offline.py tests/test_vnext_mcnemar_power_offline.py tests/test_q1_p3_1_baseline_smoke.py -q
 ```
 
 ---
 
 ## Requires human API budget (not done on this branch)
 
-- Phase 3 arms per [`DECISION_LOCK_Q1_P3_ARMS.md`](../../experiments/DECISION_LOCK_Q1_P3_ARMS.md)
+- Phase 3 arms per [`DECISION_LOCK_Q1_P3_ARMS.md`](../../experiments/DECISION_LOCK_Q1_P3_ARMS.md) · P3-1 runner ready-when-budget [`DECISION_LOCK_Q1_P3_1_BASELINE.md`](../../experiments/DECISION_LOCK_Q1_P3_1_BASELINE.md)
 - Any new live eval → **new** AUDIT folder; never rewrite Track A FAIL numbers
 
 **Hub:** [`docs/experiments/REPRODUCIBILITY_PACKAGE.md`](../../experiments/REPRODUCIBILITY_PACKAGE.md) · hashes [`../workshop_vnext_fail/APPENDIX_HASHES.md`](../workshop_vnext_fail/APPENDIX_HASHES.md)

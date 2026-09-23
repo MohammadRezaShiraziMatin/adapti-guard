@@ -88,6 +88,34 @@ Same as [`DECISION_LOCK_Q1_P3_ARMS.md`](DECISION_LOCK_Q1_P3_ARMS.md) § Stop rul
 
 ---
 
+## Engineering readiness (READY-WHEN-BUDGET; still NOT AUTHORIZED TO RUN)
+
+| Item | Status |
+| --- | --- |
+| Treatment factory | **`STATIC-A3`** registered in `get_defense_fn` / `BASELINE_FACTORIES` (`make_l3_fixed_block`) |
+| Reference arm list | `configs/phase1_confirm_live_lock.json` → `reference_arms` includes `STATIC-A3` |
+| Offline runner | [`scripts/run_q1_p3_1_confirm.py`](../../scripts/run_q1_p3_1_confirm.py) |
+| Default pack (design) | `phase1_confirm_v1` SHA `c789811a07d3ed06e1c77d8a45eda6172f480226e006d84fa28386a982536d01` |
+| Live artifact root | `experiments/real_llm_eval/Q1_P3_1/<run_id>/` (separate from immutable `PHASE1_CONFIRM/` history) |
+
+**Commands (no API unless live line + Matin sign-off):**
+
+```bash
+# Preflight — hash/locks only; no Target/Judge calls
+python3 scripts/run_q1_p3_1_confirm.py --preflight-only
+
+# Defense smoke — full pack, defense forward pass only; no network
+python3 scripts/run_q1_p3_1_confirm.py --defense-smoke
+
+# LIVE — NOT AUTHORIZED until DECISION_LOCK pre-run block signed + USD cap
+# python3 scripts/run_q1_p3_1_confirm.py --require-key \
+#   --output experiments/real_llm_eval/Q1_P3_1/<run_id>
+```
+
+**Gap (honest):** Track A pack (`vnext_confirm_v1.0`) path uses VNEXT confirm runner — not wired in `run_q1_p3_1_confirm.py` today; Matin must choose pack before live. Scoring for live P3-1 uses B0 vs `STATIC-A3` McNemar cells in that script.
+
+---
+
 ## API / authorization
 
 | Field | Value |

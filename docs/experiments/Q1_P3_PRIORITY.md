@@ -12,8 +12,8 @@
 | Rank | ID | Arm | When to run |
 | --- | --- | --- | --- |
 | 1 | **P3-1** | External baseline (same protocol) | **First** if budget is small — design [`DECISION_LOCK_Q1_P3_1_BASELINE.md`](DECISION_LOCK_Q1_P3_1_BASELINE.md) |
-| 2 | **P3-5** | Mechanism live (`p1_mechanism_v1.0.0`) | After P3-1 or in parallel if budget allows |
-| 3 | **P3-3/4** | Multi-model robustness (merged) | After explicit human lock for model IDs |
+| 2 | **P3-5** | Mechanism live (`p1_mechanism_v1.0.0`) | [`DECISION_LOCK_Q1_P3_5_MECHANISM.md`](DECISION_LOCK_Q1_P3_5_MECHANISM.md) |
+| 3 | **P3-3/4** | Multi-model robustness (merged) | [`DECISION_LOCK_Q1_P3_3_MULTIMODEL.md`](DECISION_LOCK_Q1_P3_3_MULTIMODEL.md) |
 | 4 | **P3-2** | Confirmatory V2 + larger n | **Last** / heaviest |
 
 ---

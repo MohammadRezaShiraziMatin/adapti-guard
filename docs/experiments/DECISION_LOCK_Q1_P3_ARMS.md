@@ -67,6 +67,8 @@ When budget is constrained, execute or fund arms in this order. Full one-pager: 
 
 ## P3-5 — `p1_mechanism_v1.0.0` live eval (optional; **priority 2**)
 
+**Design packet:** [`DECISION_LOCK_Q1_P3_5_MECHANISM.md`](DECISION_LOCK_Q1_P3_5_MECHANISM.md) — **NOT AUTHORIZED TO RUN**.
+
 **May run only after:** [`LIVE_EVALUATION_GATE.md`](../research/LIVE_EVALUATION_GATE.md) + budget + pack SHA verified on execution branch.
 
 | Item | Lock |
@@ -80,6 +82,8 @@ When budget is constrained, execute or fund arms in this order. Full one-pager: 
 ---
 
 ## P3-3/4 — Multi-model robustness (optional; **priority 3**; **merged arm**)
+
+**Scaffold:** [`DECISION_LOCK_Q1_P3_3_MULTIMODEL.md`](DECISION_LOCK_Q1_P3_3_MULTIMODEL.md) — model IDs **HUMAN TBD**; default 7b≠72b until superseded.
 
 **May run only after:** Human budget + **new human lock document** listing approved Target and Judge model IDs (providers, versions) + gate checklist.
 
