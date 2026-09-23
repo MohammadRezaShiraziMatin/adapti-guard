@@ -11,7 +11,7 @@ Raise **publisher readiness** and remove **process/admin bottlenecks** via hones
 
 **Workshop quality path (done):** [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) **P1–P5 complete** on tip `e4870b9` (PR #73 merged to `main`).
 
-**Q1 findings ladder (active, PR #74):** **P1–P2 complete** on branch — roadmap, blocker matrix, evidence-design lock: [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md). **P3–P4 pending.** Not a redo of the workshop five-phase path.
+**Q1 findings ladder (active, PR #74):** **P1–P2 complete**; **P4 draft** [`docs/paper/q1_findings/`](../paper/q1_findings/README.md); **P3 not done** (budget). Roadmap · matrix · Q1-P2: [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md). Not a redo of the workshop five-phase path.
 
 ---
 
@@ -62,7 +62,7 @@ Checklist: [`docs/paper/workshop_vnext_fail/SUBMISSION_CHECKLIST.md`](../paper/w
 
 ## Next (human only)
 
-1. Review **Q1 P1–P2** on PR #74 (roadmap, matrix, Q1-P2 lock).  
+1. Review **Q1 P1–P2 + P4 draft** on PR #74 (`q1_findings/` manuscript).  
 2. **Choose venue** (TBD) for workshop packet and/or Q1 manuscript — **submit** camera-ready; agents do not upload.  
 3. Optional: historical PR stack merge per [`PR_STACK.md`](../paper/workshop_vnext_fail/PR_STACK.md).  
 4. **Budget sign-off** before any Q1 Phase 3 live eval (`API=0` until then).

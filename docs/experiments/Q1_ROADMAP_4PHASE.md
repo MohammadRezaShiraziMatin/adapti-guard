@@ -17,7 +17,7 @@ It is **not** a redo of the **workshop five-phase quality path**. That path is *
 | Roadmap | Purpose | Status on tip `main` |
 | --- | --- | --- |
 | [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) | Publisher/process unlock: hygiene, D-22 **names**, manuscript polish, repro checklist, workshop submit **checklist** (no upload) | **P1–P5 done** (merged via PR #73 → tip `e4870b9`) |
-| **This file (Q1 four phases)** | Evidence-design gaps, optional controlled live work **after human budget**, and a findings manuscript **beyond** the short `workshop_vnext_fail` packet | **P1–P2 done** on PR #74; **P3–P4 pending** ([`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md)) |
+| **This file (Q1 four phases)** | Evidence-design gaps, optional controlled live work **after human budget**, and a findings manuscript **beyond** the short `workshop_vnext_fail` packet | **P1–P2 done**; **P4 draft in progress** ([`docs/paper/q1_findings/`](../paper/q1_findings/README.md)); **P3 pending budget** ([`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md)) |
 
 Do not mark `QUALITY_ROADMAP_5PHASE.md` incomplete. Treat it as **DONE** for workshop packet readiness; use this doc for **Q1 scope** only.
 
@@ -90,7 +90,7 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 ---
 
-## Phase 3 — Controlled evidence (**pending**; human budget required)
+## Phase 3 — Controlled evidence (**not done**; human budget required)
 
 **Goal:** Optional, pre-registered live runs that **add** evidence — they do **not** rewrite Track A FAIL or merge tracks in claims.
 
@@ -120,23 +120,29 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 ---
 
-## Phase 4 — Findings / Q1 manuscript + artifact (**pending**)
+## Phase 4 — Findings / Q1 manuscript + artifact (**draft on PR #74**)
 
-**Goal:** Manuscript and artifact **beyond** the short [`workshop_vnext_fail`](../paper/workshop_vnext_fail/README.md) packet — dual-track findings, limitations, and optional Phase 3 supplements.
+**Goal:** Manuscript and artifact **beyond** the short [`workshop_vnext_fail`](../paper/workshop_vnext_fail/README.md) packet — dual-track findings, limitations, and (if ever run) Phase 3 supplements as separate AUDIT citations.
 
-**Deliverables:**
+**Deliverables (folder):** [`docs/paper/q1_findings/`](../paper/q1_findings/README.md)
 
-- Q1 manuscript draft (venue TBD)
-- Citation/hash appendix aligned with [`REPRODUCIBILITY_PACKAGE.md`](REPRODUCIBILITY_PACKAGE.md)
-- Explicit limitations section sourced from blocker matrix
+| File | Status |
+| --- | --- |
+| [`README.md`](../paper/q1_findings/README.md) | Hub + claim ceiling |
+| [`MANUSCRIPT.md`](../paper/q1_findings/MANUSCRIPT.md) | Findings-length English draft |
+| [`CLAIMS_MAP.md`](../paper/q1_findings/CLAIMS_MAP.md) | Allowed/forbidden one-liners |
+| [`SUBMISSION_CHECKLIST.md`](../paper/q1_findings/SUBMISSION_CHECKLIST.md) | Venue TBD; **no DONE on upload** |
+| Hash appendix pointer | [`workshop_vnext_fail/APPENDIX_HASHES.md`](../paper/workshop_vnext_fail/APPENDIX_HASHES.md) + [`REPRODUCIBILITY_PACKAGE.md`](REPRODUCIBILITY_PACKAGE.md) |
 
-**Exit criteria:**
+**Exit criteria (remaining):**
 
-- Claims pass [`CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md) review
-- Camera-ready build from human-chosen venue template
-- **Submit:** HUMAN_ONLY
+- Matin review of draft against [`CLAIMS_CHECKLIST.md`](../paper/CLAIMS_CHECKLIST.md)
+- Camera-ready conversion (human; venue TBD)
+- **Submit:** HUMAN_ONLY — not executed by agents
 
-**API budget:** 0 for writing; prior Phase 3 spend accounted separately
+**Phase 3 note:** Controlled live evidence is **still pending budget**. This Phase 4 draft does **not** claim Phase 3 complete.
+
+**API budget:** 0 for writing
 
 ---
 

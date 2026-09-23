@@ -7,7 +7,7 @@ Short read order for a new contributor or reviewer. Documentation only. **No mer
 ## Read in this order
 
 1. **This file** — dual-track honesty, tree, and where to go next.
-2. [`docs/experiments/QUALITY_ROADMAP_5PHASE.md`](experiments/QUALITY_ROADMAP_5PHASE.md) — five-phase quality plan (**P1–P5 done** on tip `e4870b9`); [`docs/experiments/STATUS.md`](experiments/STATUS.md) — tip intent and D-22 lock pointer. **Q1 findings ladder:** [`Q1_ROADMAP_4PHASE.md`](experiments/Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](experiments/Q1_BLOCKER_MATRIX.md) · P2 evidence-design lock [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md).
+2. [`docs/experiments/QUALITY_ROADMAP_5PHASE.md`](experiments/QUALITY_ROADMAP_5PHASE.md) — five-phase quality plan (**P1–P5 done** on tip `e4870b9`); [`docs/experiments/STATUS.md`](experiments/STATUS.md) — tip intent and D-22 lock pointer. **Q1 findings ladder:** [`Q1_ROADMAP_4PHASE.md`](experiments/Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](experiments/Q1_BLOCKER_MATRIX.md) · P2 lock [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · **P4 draft** [`paper/q1_findings/`](paper/q1_findings/README.md) (P3 live = budget pending).
 3. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](paper/dual_track/DUAL_TRACK_STATUS.md) — Track A vs Track B in one page.
 4. [`docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`](paper/dual_track/CLAIMS_DUAL_TRACK.md) — allowed / forbidden wording.
 5. [`docs/paper/workshop_vnext_fail/PR_STACK.md`](paper/workshop_vnext_fail/PR_STACK.md) — open PR roles; **CLOSE / SKIP**; human merge only.
