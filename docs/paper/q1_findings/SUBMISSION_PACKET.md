@@ -4,7 +4,7 @@
 
 Human camera-ready / cover packet for a **findings-length** paper (venue **TBD**). Agents do not merge PRs, pick venues, or upload PDFs. **API=0** for eval.
 
-**Checklist:** [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) · **Figures:** [`FIGURES.md`](FIGURES.md) · **BibTeX:** [`references.bib`](references.bib) · **Venue planning:** [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md)
+**Checklist:** [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) · **Figures:** [`FIGURES.md`](FIGURES.md) · **BibTeX:** [`references.bib`](references.bib) · **Venue planning:** [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) · **arXiv (HUMAN_ONLY):** [`ARXIV_PACKET.md`](ARXIV_PACKET.md) · **PDF build:** [`BUILD_PDF.md`](BUILD_PDF.md)
 
 | Field | Binding value |
 | --- | --- |

@@ -24,6 +24,8 @@ Agents: **do not** merge PRs, upload to OpenReview/EasyChair/arXiv, or run live 
 | Cover packet [`SUBMISSION_PACKET.md`](SUBMISSION_PACKET.md) | Human review | **READY** (PR #74) |
 | Figures / captions [`FIGURES.md`](FIGURES.md) | Human export | **READY** (mermaid + ASCII) |
 | BibTeX stubs [`references.bib`](references.bib) | Human verify | **READY** (verify OWASP note if needed) |
+| arXiv packet [`ARXIV_PACKET.md`](ARXIV_PACKET.md) + [`ARXIV_ABSTRACT.txt`](ARXIV_ABSTRACT.txt) | Human upload | **READY** (docs); arXiv portal **NOT DONE** |
+| PDF build [`BUILD_PDF.md`](BUILD_PDF.md) | Human local | **READY** (instructions) |
 | Optional P3 supplements | Human | **N/A until budget** — Phase 3 **not done** |
 
 ---
@@ -46,7 +48,7 @@ Agents: **do not** merge PRs, upload to OpenReview/EasyChair/arXiv, or run live 
 | --- | --- | --- |
 | Portal upload | **HUMAN_ONLY** | **NOT DONE** |
 | Mark “submitted” in git | **HUMAN_ONLY** | **NOT DONE** |
-| arXiv deposit | **HUMAN_ONLY** | **NOT DONE** |
+| arXiv deposit | **HUMAN_ONLY** ([`ARXIV_PACKET.md`](ARXIV_PACKET.md)) | **NOT DONE** — do not mark uploaded in git |
 
 ---
 

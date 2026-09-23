@@ -33,6 +33,9 @@
 | [`FIGURES.md`](FIGURES.md) | Dual-track mermaid + claim-ceiling caption text |
 | [`references.bib`](references.bib) | Related-work BibTeX stubs |
 | [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) | Planning-only venue fit (no agent submit) |
+| [`ARXIV_PACKET.md`](ARXIV_PACKET.md) | arXiv HUMAN_ONLY steps (upload **NOT DONE** in repo) |
+| [`ARXIV_ABSTRACT.txt`](ARXIV_ABSTRACT.txt) | Plain-text abstract for arXiv form |
+| [`BUILD_PDF.md`](BUILD_PDF.md) | Local pandoc PDF build from `MANUSCRIPT.md` |
 
 ---
 
