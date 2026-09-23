@@ -2,14 +2,17 @@
 
 Short read order for a new contributor or reviewer. Documentation only. **No merge. No venue submit. No live LLM. No retune.**
 
+**Tip / process unlock (2026-09-23):** Docs-only quality work on `main` (baseline ~`30ddc75`) is allowed to reduce admin bottlenecks and improve publisher readiness. That does **not** relax science locks below (frozen packs, AUDIT numbers, Track A FAIL, default **API=0**).
+
 ## Read in this order
 
 1. **This file** — dual-track honesty, tree, and where to go next.
-2. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](paper/dual_track/DUAL_TRACK_STATUS.md) — Track A vs Track B in one page.
-3. [`docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`](paper/dual_track/CLAIMS_DUAL_TRACK.md) — allowed / forbidden wording.
-4. [`docs/paper/workshop_vnext_fail/PR_STACK.md`](paper/workshop_vnext_fail/PR_STACK.md) — open PR roles; **CLOSE / SKIP**; human merge only.
-5. [`docs/paper/dual_track/RELEASE_NEXT_FA.md`](paper/dual_track/RELEASE_NEXT_FA.md) — next steps for Matin (Persian).
-6. [`docs/experiments/MASTER_PROMPT.md`](experiments/MASTER_PROMPT.md) — standing orders for agents.
+2. [`docs/experiments/QUALITY_ROADMAP_5PHASE.md`](experiments/QUALITY_ROADMAP_5PHASE.md) — five-phase quality plan (P1–P5); [`docs/experiments/STATUS.md`](experiments/STATUS.md) — tip intent and D-22 lock pointer.
+3. [`docs/paper/dual_track/DUAL_TRACK_STATUS.md`](paper/dual_track/DUAL_TRACK_STATUS.md) — Track A vs Track B in one page.
+4. [`docs/paper/dual_track/CLAIMS_DUAL_TRACK.md`](paper/dual_track/CLAIMS_DUAL_TRACK.md) — allowed / forbidden wording.
+5. [`docs/paper/workshop_vnext_fail/PR_STACK.md`](paper/workshop_vnext_fail/PR_STACK.md) — open PR roles; **CLOSE / SKIP**; human merge only.
+6. [`docs/paper/dual_track/RELEASE_NEXT_FA.md`](paper/dual_track/RELEASE_NEXT_FA.md) — next steps for Matin (Persian).
+7. [`docs/experiments/MASTER_PROMPT.md`](experiments/MASTER_PROMPT.md) — standing orders for agents.
 
 Workshop / negative-result packet (Track A FAIL manuscript, not a venue upload): [`docs/paper/workshop_vnext_fail/`](paper/workshop_vnext_fail/README.md).
 
@@ -51,6 +54,8 @@ Canonical AUDIT pointers (do not rewrite in place):
       workshop_vnext_fail/       # Track A packet (folder name frozen for citations)
       phase1/                    # Phase-1 scientific docs (not live AUDIT)
     experiments/
+      QUALITY_ROADMAP_5PHASE.md    # process unlock vs science locks
+      STATUS.md                   # tip status + D-22 pointer
       MASTER_PROMPT.md
       RESEARCH_LOG.md
       protocols/                 # VNEXT + Phase-2 protocol (Phase-2 unevaluated)
