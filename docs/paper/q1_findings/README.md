@@ -36,6 +36,8 @@
 | [`ARXIV_PACKET.md`](ARXIV_PACKET.md) | arXiv HUMAN_ONLY steps (upload **NOT DONE** in repo) |
 | [`ARXIV_ABSTRACT.txt`](ARXIV_ABSTRACT.txt) | Plain-text abstract for arXiv form |
 | [`BUILD_PDF.md`](BUILD_PDF.md) | Local pandoc PDF build from `MANUSCRIPT.md` |
+| [`QUALITY_GAPS.md`](QUALITY_GAPS.md) | Findings vs main bar; Phase 3 value (honest) |
+| [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) | Offline Track A δ̂ 95% CI (not in AUDIT) |
 
 ---
 

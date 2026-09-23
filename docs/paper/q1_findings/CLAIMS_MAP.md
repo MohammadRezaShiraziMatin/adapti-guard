@@ -14,7 +14,7 @@
 | Q1-A1 | Track A VNEXT on `vnext_confirm_v1.0` is **FAIL**; qualified win (H1) = **NO**. |
 | Q1-A2 | Track A: B0 ASR **0.9508** vs VNEXT-ADAPT **0.8689** (61+61); McNemar b10=5, b01=0, p=**0.0625** — **not** significant at α=0.05. |
 | Q1-A3 | Track A: δ̂=**0.0820** &lt; MSID **0.20**; U=**0.9344** &lt; **0.95**; fail reasons `s5_mcnemar_not_significant`, `msid_not_met`, `s4_utility_ineligible`. |
-| Q1-A4 | Track A: δ̂ **95% CI is not reported** in official AUDIT — cite point δ̂ only or mark **BLOCKING GAP**; do not invent an interval. |
+| Q1-A4 | Track A: point δ̂=**0.0820** in AUDIT; **95% CI \[0.0164, 0.1639\]** only from offline artifact [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) — **not** in original AUDIT; label recomputed. |
 | Q1-A5 | Track A: all five b10 events are `correct_block` (A3); **53** attacks remain `insufficient_intervention`. |
 | Q1-B1 | Track B PHASE1-CORE vs B0 on `phase1_confirm_v1` is **SUPPORTED_IMPROVEMENT** (scoped); treatment ≠ VNEXT-ADAPT. |
 | Q1-B2 | Track B: B0 ASR **1.0000**, CORE **0.5574**, δ̂=**0.4426**, 95% CI **[0.2757, 0.6096]**, p=**1.49012e-08**, b10/b01=**27/0**, U=**0.9672131147540983**. |

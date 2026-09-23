@@ -44,7 +44,7 @@ This findings manuscript extends the shorter workshop negative-result packet ([`
 2. **Confirmed negative** for VNEXT adaptive intervention under `VNEXT-MSID-0.1`.
 3. **Scoped positive** for Phase-1 CORE on an independent pack—reported without reversing Track A.
 4. Layer A **diagnostic** closure: detector v4 lift without adaptive win.
-5. Limitations and **Future Work** map aligned to Q1 blockers (small n, heuristic detector, no AgentDojo/SOTA baselines, δ̂ CI gap on Track A).
+5. Limitations and **Future Work** map aligned to Q1 blockers ([`QUALITY_GAPS.md`](QUALITY_GAPS.md); Track A δ̂ CI now offline-only).
 
 **Non-claims.** We do not solve prompt injection, claim SOTA, or recommend production deployment. Phase 3 optional live arms (V2 pack, baselines, mechanism benchmark) are **not** part of this manuscript’s evidence base unless Matin later adds immutable AUDIT folders after budget sign-off.
 
@@ -52,15 +52,17 @@ This findings manuscript extends the shorter workshop negative-result packet ([`
 
 ## 2. Related Work
 
-**Prompt injection.** Direct and indirect injection are documented by Perez and Ribeiro (2022), Greshake et al. (2023), and application-level threat models (Liu et al., 2023; OWASP LLM01).
+**Prompt injection.** Direct and indirect injection are documented by `perez2022ignore`, `greshake2023not`, and application-level threat models (`liu2023prompt`; `owasp2023llm` LLM01).
 
-**Agent and tool benchmarks.** AgentDojo (Debenedetti et al., 2024), InjecAgent (Zhan et al., 2024), and BIPIA (Yi et al., 2023) evaluate tool-using agents under adversarial content in rich environments. **This work is not an AgentDojo leaderboard entry** and must not be cited as one; our primary harness is episode-level Target+Judge scoring on frozen authored packs with declared tool success conditions.
+**Agent and tool benchmarks.** `debenedetti2024agentdojo`, `zhan2024injecagent`, and `yi2023bipia` evaluate tool-using agents under adversarial content in rich environments. **This work is not an AgentDojo leaderboard entry** and must not be cited as one; our primary harness is episode-level Target+Judge scoring on frozen authored packs with declared tool success conditions. That gap limits external comparability and is explicit in [`QUALITY_GAPS.md`](QUALITY_GAPS.md).
 
-**Static and training-time defenses.** Llama Guard (Inan et al., 2023), guardrails (Rebedea et al., 2023), StruQ / SecAlign (Chen et al., 2024), and instruction hierarchy training (Wallace et al., 2024) change models or add classifiers. We study **runtime discrete actions** after a heuristic score, with explicit utility gates—complementary, not directly comparable without a shared locked protocol.
+**Static and training-time defenses.** `inan2023llama`, `rebedea2023nemo`, `chen2024struq`, `chen2024secalign`, and `wallace2024instruction` change models, add classifiers, or separate instruction channels at training time. We study **runtime discrete actions** after a heuristic score, with explicit utility gates—complementary, not commensurate without a shared locked protocol and baseline arms (Future Work).
 
-**Adaptive defense vs adaptive offense.** PAIR/GCG-style attacks adapt the **offense**. Adaptive **defense** under cost and utility constraints is less often subjected to pre-registered MSID + McNemar + utility co-primary testing. This paper foregrounds that **confirmatory hygiene**.
+**Evaluation estimands vs block-rate headlines.** Prior lines often report block rate, heuristic match, or single ASR deltas without (i) an independent judge, (ii) a defense-attributed McNemar cell definition, or (iii) a co-primary utility gate. Our pre-registered object is **defense-attributed** discordant success (taxonomy in \(\mathcal{W}\)), not mixed ASR alone. `mcnemar1947note` paired testing applies to discordant cells; our **MSID** rule additionally judges whether \(\hat\delta=(b_{10}-b_{01})/n_{\text{attack}}\) is scientifically large enough to matter—a stricter claim than \(p<0.05\) alone.
 
-**Negative results and dual-track reporting.** Reporting FAIL alongside a scoped improvement on a **different** pack prevents a common failure mode: upgrading a Phase-1 arm into a reversal of an earlier FAIL. We treat dual-track separation as a **scientific reporting** requirement, not an administrative detail.
+**Adaptive defense vs adaptive offense.** PAIR/GCG-style attacks adapt the **offense**. Adaptive **defense** under cost and utility constraints is less often subjected to pre-registered MSID + McNemar + utility co-primary testing. This paper foregrounds that **confirmatory hygiene** and reports a **confirmed negative** on Track A under those rules.
+
+**Negative results and dual-track reporting.** Reporting FAIL alongside a scoped improvement on a **different** pack prevents upgrading Phase-1 into a reversal of VNEXT FAIL. Dual-track separation is a **scientific reporting** requirement ([`CLAIMS_MAP.md`](CLAIMS_MAP.md)).
 
 ---
 
@@ -128,11 +130,19 @@ Frozen Layer A v3 TEST 40+40 — CLOSED; informs mechanism narrative; **not** co
 - Phase-1 MSID and utility rules per Phase-1 protocol / AUDIT
 - **Outcome: SUPPORTED_IMPROVEMENT (scoped)** — see §6.2
 
-### 5.4 Statistics
+### 5.4 Statistics and estimands
 
-- McNemar exact (intervention-mediated cells) per track separately
-- Wilson / bootstrap CIs where reported in AUDIT for **proportions** (ASR, U)
-- **Track A paired δ̂:** point estimate δ̂=0.0820 in AUDIT; **95% CI for δ̂ is not reported in official VNEXT AUDIT** — treat as **BLOCKING GAP**; do not fabricate (Q1-P2 §C). Optional future offline recompute from (b10, b01, n) requires a separate approved PR.
+**Primary estimand (Track A confirmatory).** Let \(y_i^{(0)}, y_i^{(1)} \in \{0,1\}\) be B0 and treatment attack-success indicators for scorable attack episode \(i\). Discordant defense-attributed cells \((b_{10}, b_{01})\) count episodes with taxonomy in \(\mathcal{W}=\{\texttt{correct\_block}, \texttt{correct\_tool\_deny}\}\) per protocol addendum—not target refusals. The locked effect size is
+
+\[
+\hat\delta = \frac{b_{10} - b_{01}}{n_{\text{attack}}}.
+\]
+
+This equals the per-episode mean of contributions \(+1\) (b10), \(-1\) (b01), and \(0\) (concordant). It is **not** the naive difference of marginal ASR proportions unless all discordance is defense-attributed.
+
+**Inference.** McNemar exact on \((b_{10}, b_{01})\) per track; Wilson intervals in AUDIT for marginal ASR and utility; bootstrap (`n_{\text{bootstrap}}=5000`, `seed=42`) for proportions where AUDIT reports them.
+
+**Track A \(\hat\delta\) uncertainty (offline, not in original AUDIT).** Official `AUDIT.md` reports the point \(\hat\delta=0.0820\) only. A **post-hoc offline** 95% CI is computed from frozen integers \(b_{10}=5\), \(b_{01}=0\), \(n_{\text{attack}}=61\) using the same bootstrap-on-contributions method as `adapti_guard.evaluation.statistics.delta_hat_ci_bootstrap_from_mcnemar_contingency` (see [`scripts/recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) and artifact [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json), `inputs_sha256` `1de3f14d…`). **Do not** claim this interval appeared in the 2026-09-14 AUDIT folder.
 
 ### 5.5 Future Work (not executed this cycle)
 
@@ -159,7 +169,7 @@ Wilson intervals for ASR/U as in workshop AUDIT table (e.g. B0 ASR [0.865, 0.983
 
 **Effect vs MSID:** δ̂ = (b10−b01)/n = **0.0820** &lt; MSID **0.20** → useful-intervention claim **fails**.
 
-**δ̂ uncertainty:** Official AUDIT does **not** include a 95% confidence interval for δ̂. Manuscript text must **not** invent one. Label: **BLOCKING GAP** until an approved offline recompute artifact exists.
+**δ̂ uncertainty (recomputed offline):** Original AUDIT has **no** δ̂ CI. From frozen McNemar counts, bootstrap percentile CI (**95%**, `n_bootstrap=5000`, `seed=42`): **\[0.0164, 0.1639\]** (artifact [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json); method `bootstrap_percentile_episode_contributions`). The upper bound remains **below MSID 0.20**, consistent with `msid_not_met`—this does **not** upgrade McNemar significance (\(p=0.0625\)).
 
 **Utility:** U=**0.9344** &lt; **0.95** (false blocks = 1) → utility-ineligible.
 
@@ -218,7 +228,7 @@ Sourced from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md) an
 | --- | --- | --- |
 | Track A **FAIL** immutable | immutable | Confirmed negative; no FAIL→PASS |
 | Small **n=61** per track | Future Work (V2); docs-fixed prose | Power/generalization limits; V2 not in this cycle |
-| Track A δ̂ **95% CI absent** in AUDIT | docs-fixed (gap labeled) | Point δ̂ only; **BLOCKING GAP** |
+| Track A δ̂ **95% CI absent** in AUDIT | docs-fixed + offline artifact | Point δ̂ in AUDIT; CI from [`recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) only |
 | **Heuristic detector**; no AgentDojo-class loops | Future Work | Single-turn confirmatory scope |
 | **No external SOTA baselines** | Future Work; P3-if-budget | Compare locked arms only |
 | **Simulation ≠ confirmatory live** | docs-fixed | Do not cite `04_results.md` sim ASR as judge wins |

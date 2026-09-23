@@ -144,7 +144,7 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 **Phase 3 note:** Controlled live evidence is **still pending budget**. This Phase 4 draft does **not** claim Phase 3 complete.
 
-**P4 polish (PR #74):** submission packet, BibTeX stubs, figure captions—ready for **human** camera-ready conversion; venue upload remains **HUMAN_ONLY / NOT DONE**.
+**P4 polish (PR #74):** manuscript packet + **scientific quality** (offline Track A δ̂ CI script/artifact, [`QUALITY_GAPS.md`](../paper/q1_findings/QUALITY_GAPS.md), estimand/related-work pass). Venue/arXiv wrappers exist but do not substitute for evidence. **P3 not done.**
 
 **API budget:** 0 for writing
 

@@ -1,0 +1,73 @@
+# Quality gaps — Q1 findings vs venue bar (honest)
+
+**Author:** Seyed Mohammadreza Shirazi Matin  
+**Date:** ~2026-09-23  
+**Evidence:** Frozen AUDIT only + offline recomputes explicitly labeled. **API=0.**
+
+---
+
+## What improved on PR #74 (scientific, not packaging)
+
+| Item | Status |
+| --- | --- |
+| Track A δ̂ **95% CI** | **Recomputed offline** from McNemar integers (b10=5, b01=0, n=61) via [`scripts/recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) → [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json). **Not** in original AUDIT. |
+| Estimand / methods clarity | [`MANUSCRIPT.md`](MANUSCRIPT.md) §2 / §5.4 |
+| Remaining blockers | This file |
+
+---
+
+## Findings-track vs main-track ceiling (current cycle)
+
+| Dimension | Findings / workshop-style fit | Main-track Q1 bar (typical) | Today |
+| --- | --- | --- | --- |
+| **Negative result honesty** | Strong — pre-registered FAIL inspectable | Needs novelty beyond “we ran eval” | **Met for eval contribution** |
+| **Dual-track reporting** | Strong — separate packs, non-reversal | Often expected clear single RQ | **Met with discipline** |
+| **Sample size** | n=61 per track | Often larger or multi-seed | **Weak** — power for small δ |
+| **Detector** | Heuristic evidence-gated | Learned / calibrated / multi-model | **Weak** |
+| **Environment** | Single-turn authored packs | AgentDojo-class tool loops | **Not run** (Future Work) |
+| **Baselines** | B0 + locked treatments | External SOTA arms | **Not run** (Future Work) |
+| **Effect CI (Track A δ̂)** | Now documented offline | Often in primary AUDIT | **Partially closed** (offline artifact) |
+| **Track B generalization** | Scoped one pack | Cross-model / cross-benchmark | **Weak** |
+
+**Honest ceiling:** A **Findings**, **evaluation**, or **negative-result workshop** narrative is proportionate. A **main-track “new defense”** claim is **not** supported. See [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) — do not rush ICLR 2027 **main**.
+
+---
+
+## Remaining blockers (from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md))
+
+| Blocker | Disposition | Main-track impact |
+| --- | --- | --- |
+| Track A FAIL immutable | immutable | Cannot sell as win |
+| n=61 | Future Work / P3 | Power / generalization |
+| No AgentDojo / multi-step | Future Work | Agent claims blocked |
+| No external SOTA baselines | P3-if-budget | Comparison gap |
+| Heuristic detector | Future Work | Credibility gap vs learned guards |
+| Simulation ≠ confirmatory | docs-fixed | Must not cite sim as live |
+| Confirmatory V2 | Future Work (Q1-P2) | No larger n in this cycle |
+| p1_mechanism live | P3-if-budget | Mechanism benchmark unrated live |
+
+---
+
+## What Phase 3 would buy (optional; **not done**)
+
+Only after **human budget** + gates — each arm needs its own lock; **Track A FAIL numbers stay immutable**.
+
+| Phase 3 arm | Scientific value | Does **not** substitute for |
+| --- | --- | --- |
+| External baseline under same protocol | Commensurable comparison | Honest Track A FAIL |
+| Confirmatory V2 pack + live | Larger n, D-22 families | Retconning VNEXT MSID on old pack |
+| `p1_mechanism_v1.0.0` live | Mechanism-surface evidence | AgentDojo leaderboard |
+| Multi-model Target/Judge sweep | Robustness | Single-pair overclaim |
+
+**No guarantee** Phase 3 moves a paper from Findings to main accept.
+
+---
+
+## Recommended narrative emphasis (quality over wrappers)
+
+1. **Estimand-first** — defense-attributed McNemar cells, utility co-primary, δ̂ definition.
+2. **FAIL-first** — Track A before Track B; CI for δ̂ labeled offline recompute.
+3. **Limitations as results** — small n, heuristic detector, frozen synthetic packs.
+4. **Defer packaging** — arXiv/venue docs exist but do not substitute for evidence.
+
+**Navigation:** [`MANUSCRIPT.md`](MANUSCRIPT.md) · [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · [`Q1_ROADMAP_4PHASE.md`](../../experiments/Q1_ROADMAP_4PHASE.md)

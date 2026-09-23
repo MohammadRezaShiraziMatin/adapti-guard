@@ -113,6 +113,54 @@ def holm_correction(p_values: Sequence[float]) -> list[dict[str, float]]:
     return adjusted
 
 
+def delta_hat_from_mcnemar_contingency(b10: int, b01: int, n_attack: int) -> float:
+    """Point estimand delta_hat = (b10 - b01) / n_attack (VNEXT confirmatory convention)."""
+    if n_attack <= 0:
+        return 0.0
+    return (b10 - b01) / n_attack
+
+
+def delta_hat_ci_bootstrap_from_mcnemar_contingency(
+    b10: int,
+    b01: int,
+    n_attack: int,
+    *,
+    n_bootstrap: int = 5000,
+    ci: float = 0.95,
+    seed: int = 42,
+) -> dict[str, float | int | str | dict[str, int]]:
+    """Bootstrap percentile CI for delta_hat from McNemar counts only.
+
+    Each of n_attack episodes contributes +1 (b10), -1 (b01), or 0 (concordant) to the
+    numerator of delta_hat; the statistic is the mean of those contributions, i.e.
+    (b10 - b01) / n_attack. Matches ``bootstrap_ci`` usage elsewhere (n_bootstrap=5000,
+    seed=42) in VNEXT scoring.
+    """
+    if n_attack <= 0:
+        raise ValueError("n_attack must be positive")
+    if b10 < 0 or b01 < 0 or b10 + b01 > n_attack:
+        raise ValueError("invalid McNemar contingency for n_attack")
+    concordant = n_attack - b10 - b01
+    contributions = [1.0] * b10 + [-1.0] * b01 + [0.0] * concordant
+    point, lower, upper = bootstrap_ci(
+        contributions,
+        n_bootstrap=n_bootstrap,
+        ci=ci,
+        seed=seed,
+        stat=np.mean,
+    )
+    return {
+        "delta_hat": point,
+        "ci_lower": lower,
+        "ci_upper": upper,
+        "ci_level": ci,
+        "method": "bootstrap_percentile_episode_contributions",
+        "n_bootstrap": n_bootstrap,
+        "seed": seed,
+        "inputs": {"b10": b10, "b01": b01, "n_attack": n_attack},
+    }
+
+
 def proportion_ci_wilson(
     successes: int,
     n: int,

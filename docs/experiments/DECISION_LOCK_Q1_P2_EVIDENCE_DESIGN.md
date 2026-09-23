@@ -60,7 +60,7 @@
 | Cite point **δ̂ = 0.0820** from AUDIT | Invent or imply a CI not present in AUDIT |
 | State explicitly that **95% CI is not reported** in `VNEXT_CONFIRM/20260914-133147/AUDIT.md` | Present interval estimates without an approved recompute artifact |
 
-**Later path (optional; not this PR):** A **dedicated offline recompute PR** may derive CI from frozen contingency (**b10=5**, **b01=0**, **n=61**) with a checked-in script — **only after Matin approves that PR**. Until then, prose follows the table above.
+**Offline CI (PR #74 lineage):** [`scripts/recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) + [`artifacts/vnext_delta_ci_offline.json`](../paper/q1_findings/artifacts/vnext_delta_ci_offline.json) — bootstrap on per-episode contributions (`n_bootstrap=5000`, `seed=42`). **Not** in original AUDIT; cite as recomputed only.
 
 ---
 
