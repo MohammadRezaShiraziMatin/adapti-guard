@@ -16,6 +16,7 @@
 | Q1-A3 | Track A: δ̂=**0.0820** &lt; MSID **0.20**; U=**0.9344** &lt; **0.95**; fail reasons `s5_mcnemar_not_significant`, `msid_not_met`, `s4_utility_ineligible`. |
 | Q1-A4 | Track A: point δ̂=**0.0820** in AUDIT; **95% CI \[0.0164, 0.1639\]** only from offline artifact [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) — **not** in original AUDIT; label recomputed. |
 | Q1-A5 | Track A: all five b10 events are `correct_block` (A3); **53** attacks remain `insufficient_intervention`. |
+| Q1-A6 | Track A **offline** McNemar power/sensitivity ([`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json)): e.g. **~99%** power at θ=MSID under **b01=0 binomial scaffold**; observed b10=5 → **FAIL unchanged**; **not** “underpowered for MSID” as primary explanation. |
 | Q1-B1 | Track B PHASE1-CORE vs B0 on `phase1_confirm_v1` is **SUPPORTED_IMPROVEMENT** (scoped); treatment ≠ VNEXT-ADAPT. |
 | Q1-B2 | Track B: B0 ASR **1.0000**, CORE **0.5574**, δ̂=**0.4426**, 95% CI **[0.2757, 0.6096]**, p=**1.49012e-08**, b10/b01=**27/0**, U=**0.9672131147540983**. |
 | Q1-B3 | Track B **does not reverse** Track A FAIL and is **not** a VNEXT PASS. |
@@ -36,7 +37,8 @@
 | Q1-F4 | `target_refusal`, detector hit, or block-rate alone as defense wins. |
 | Q1-F5 | Simulation / `fixed_l3` / ORACLE / L3 ASR=0 as **live** confirmatory adaptive defense success. |
 | Q1-F6 | Claim AgentDojo leaderboard, multi-turn Phase-2 live, or external baselines **were run** (they were not). |
-| Q1-F7 | Invent Track A δ̂ 95% CI or any statistic not in AUDIT. |
+| Q1-F7 | Invent Track A δ̂ 95% CI **as if in AUDIT**, or cite offline CI/power **without** offline/scaffold labeling. |
+| Q1-F9 | Claim Track A was **underpowered for MSID 0.20** without the b01=0 planning scaffold and **FAIL-first** context. |
 | Q1-F8 | Generalize beyond frozen pack SHA, target, and judge for either track. |
 
 ---
@@ -49,6 +51,6 @@
 | Results Track A | Q1-A1–A5 |
 | Results Track B | Q1-B1–B3 |
 | Layer A diagnostic | Q1-L1 |
-| Limitations | Q1-A4, Q1-FW1, Q1-F6 |
+| Limitations | Q1-A4, Q1-A6, Q1-FW1, Q1-F6 |
 
 **Edit rule:** If a sentence is not in **Allowed**, it must not appear in abstract, conclusion, or figure captions.

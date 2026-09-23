@@ -14,6 +14,7 @@
 | Track A **McNemar power / sensitivity** | [`recompute_vnext_mcnemar_power.py`](../../scripts/recompute_vnext_mcnemar_power.py) → [`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json) |
 | Estimand / methods clarity | [`MANUSCRIPT.md`](MANUSCRIPT.md) §2 / §5.4 |
 | Phase 3 arm gates (docs only) | [`DECISION_LOCK_Q1_P3_ARMS.md`](../../experiments/DECISION_LOCK_Q1_P3_ARMS.md) — **no runs** |
+| Claim/number gate | [`verify_q1_findings_facts.py`](verify_q1_findings_facts.py) + [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) |
 | Remaining blockers | Below; need **budget** for live arms |
 
 ---

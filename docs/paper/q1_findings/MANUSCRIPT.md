@@ -9,7 +9,7 @@ AI Security · LLM-agent defense evaluation
 
 **Status banner.** Track A VNEXT confirmation = **FAIL** (immutable). Track B Phase-1 LIVE = **SUPPORTED_IMPROVEMENT** (scoped; **does not reverse** Track A). This draft does **not** claim prompt injection is solved, SOTA defense, or production readiness.
 
-**Claims map.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · Dual-track [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Q1 scope [`../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · Human cover packet [`SUBMISSION_PACKET.md`](SUBMISSION_PACKET.md) · Figures [`FIGURES.md`](FIGURES.md)
+**Claims map.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · **Contribution ceiling** [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) · Dual-track [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Q1 scope [`../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · Repro [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · Verifier [`verify_q1_findings_facts.py`](verify_q1_findings_facts.py)
 
 **Evidence base (this Q1 cycle):** Track A n=61 FAIL + Track B n=61 scoped improvement only. Confirmatory V2, external SOTA baselines, AgentDojo-class loops, and mechanism-pack live eval = **Future Work** (optional Phase 3 after human budget).
 
@@ -21,7 +21,7 @@ Runtime middleware for LLM agents maps detector scores to discrete actions (sani
 
 We report a **dual-track** confirmatory evaluation on two disjoint frozen packs and treatments. **Track A (VNEXT):** on `vnext_confirm_v1.0` (61 attack + 61 benign), VNEXT-ADAPT vs B0 **FAILS** the pre-registered qualified win: McNemar b10=5, b01=0, p=0.0625 (not significant at α=0.05); δ̂=0.0820 below MSID 0.20; utility U=0.9344 below gate 0.95. **Track B (Phase-1):** on a separate pack `phase1_confirm_v1`, PHASE1-CORE vs B0 shows **SUPPORTED_IMPROVEMENT** under Phase-1 MSID with utility eligible (δ̂=0.4426, 95% CI [0.2757, 0.6096] per AUDIT)—a **scoped** result on a different treatment and corpus; it is **not** a VNEXT pass and **does not overturn** Track A FAIL.
 
-A **closed Layer A diagnostic** (40+40 TEST) shows detector lift without a significant adaptive ASR reduction (McNemar p=0.125). The contribution is an honest **evaluation methodology** and frozen negative/positive pair under explicit claim boundaries—not a fielded guard.
+A **closed Layer A diagnostic** (40+40 TEST) shows detector lift without a significant adaptive ASR reduction (McNemar p=0.125). The contribution is a **dual-track evaluation protocol** and frozen **confirmed negative plus scoped Phase-1 track** under explicit claim boundaries ([`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md))—not a fielded guard or SOTA defense.
 
 ---
 
@@ -31,7 +31,7 @@ Prompt injection and instruction override remain central risks for LLM-integrate
 
 Three evaluation mistakes recur in security reporting: (1) crediting **detector lift** as intervention success; (2) counting **target refusals** as defense wins in paired tests; (3) reporting ASR drops without a **utility co-primary** gate. AdaptiGuard is a testbed that makes those distinctions explicit via an intervention taxonomy and independent LLM judge.
 
-This findings manuscript extends the shorter workshop negative-result packet ([`workshop_vnext_fail/MANUSCRIPT.md`](../workshop_vnext_fail/MANUSCRIPT.md)) by presenting **both confirmatory live tracks** with equal methodological visibility, while forbidding a merged “AdaptiGuard works” headline.
+This findings manuscript extends the shorter workshop negative-result packet ([`workshop_vnext_fail/MANUSCRIPT.md`](../workshop_vnext_fail/MANUSCRIPT.md)) by presenting **both confirmatory live tracks** with equal methodological visibility, while forbidding a merged “AdaptiGuard works” headline. Scope is capped in [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md).
 
 **Research questions (confirmatory, pre-registered per track).**
 
@@ -259,6 +259,7 @@ Documenting a **confirmed negative** (Track A) alongside a **bounded positive** 
 Offline checks:
 
 ```bash
+python3 docs/paper/q1_findings/verify_q1_findings_facts.py
 python3 docs/paper/workshop_vnext_fail/verify_manuscript_facts.py
 ```
 
