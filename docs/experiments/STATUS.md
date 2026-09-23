@@ -11,7 +11,7 @@ Raise **publisher readiness** and remove **process/admin bottlenecks** via hones
 
 **Workshop quality path (done):** [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) **P1–P5 complete** on tip `e4870b9` (PR #73 merged to `main`).
 
-**Q1 findings ladder (active, PR #74):** **P1–P2 complete**; **P4 packet ready for human review** ([`docs/paper/q1_findings/`](../paper/q1_findings/README.md) — manuscript, cover packet, bib, figures); **P3 not done** (budget). Roadmap · matrix · Q1-P2: [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md). Not a redo of the workshop five-phase path.
+**Q1 findings ladder (active, PR #74):** **P1–P2 complete**; **P4 packet ready for human review** ([`docs/paper/q1_findings/`](../paper/q1_findings/README.md) — manuscript, cover packet, bib, figures, [`VENUE_SHORTLIST.md`](../paper/q1_findings/VENUE_SHORTLIST.md)); **P3 not done** (budget). Roadmap · matrix · Q1-P2: [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md). Not a redo of the workshop five-phase path.
 
 ---
 

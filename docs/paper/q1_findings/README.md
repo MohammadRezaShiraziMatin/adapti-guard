@@ -32,6 +32,7 @@
 | [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) | Human pre-submit checklist (upload **NOT DONE**) |
 | [`FIGURES.md`](FIGURES.md) | Dual-track mermaid + claim-ceiling caption text |
 | [`references.bib`](references.bib) | Related-work BibTeX stubs |
+| [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) | Planning-only venue fit (no agent submit) |
 
 ---
 

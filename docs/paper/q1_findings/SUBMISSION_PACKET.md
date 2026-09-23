@@ -4,7 +4,7 @@
 
 Human camera-ready / cover packet for a **findings-length** paper (venue **TBD**). Agents do not merge PRs, pick venues, or upload PDFs. **API=0** for eval.
 
-**Checklist:** [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) · **Figures:** [`FIGURES.md`](FIGURES.md) · **BibTeX:** [`references.bib`](references.bib)
+**Checklist:** [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) · **Figures:** [`FIGURES.md`](FIGURES.md) · **BibTeX:** [`references.bib`](references.bib) · **Venue planning:** [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md)
 
 | Field | Binding value |
 | --- | --- |
@@ -78,7 +78,7 @@ Copy and adapt; **lead with Track A FAIL**, then Track B scoped result, then met
 
 ## 4. HUMAN_ONLY submit steps (not executed in-repo)
 
-1. Pick venue / CFP (**TBD**).
+1. Pick venue / CFP — see [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) (verify deadlines on official sites; **do not** rush ICLR 2027 main).
 2. Matin review: [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) + [`CLAIMS_MAP.md`](CLAIMS_MAP.md).
 3. Convert markdown → venue LaTeX/Word; include Figure 1 from mermaid export.
 4. `\bibliography{references}` or paste from [`references.bib`](references.bib); verify OWASP release note if needed.
