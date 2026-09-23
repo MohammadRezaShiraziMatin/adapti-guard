@@ -6,7 +6,7 @@
 **Author:** Seyed Mohammadreza Shirazi Matin  
 **Mode:** Documentation only. **API=0** until explicit human budget. **No** merge, venue upload, or AUDIT edits from agents.
 
-**Companion:** [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · [`Q1_P3_PRIORITY.md`](Q1_P3_PRIORITY.md) · [`LIVE_EVALUATION_GATE.md`](../research/LIVE_EVALUATION_GATE.md)
+**Companion:** [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · [`Q1_P3_PRIORITY.md`](Q1_P3_PRIORITY.md) · [`P3_AGENTS_CONSOLIDATED.md`](P3_AGENTS_CONSOLIDATED.md) · [`LIVE_EVALUATION_GATE.md`](../research/LIVE_EVALUATION_GATE.md)
 
 ---
 

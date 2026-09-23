@@ -11,6 +11,8 @@ Raise **publisher readiness** and remove **process/admin bottlenecks** via hones
 
 **Workshop quality path (done):** [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md) **P1–P5 complete** on tip `e4870b9` (PR #73 merged to `main`).
 
+**P3 parallel agents (merged):** [`P3_AGENTS_CONSOLIDATED.md`](P3_AGENTS_CONSOLIDATED.md) — single status for P3-1/5/3-4/2; branch tip `4f4f0ff` vs `main` `e4870b9`.
+
 **Q1 findings ladder (active, PR #74):** **P1–P2 complete**; **P4 quality** (δ̂ CI + McNemar power artifacts, [`QUALITY_GAPS.md`](../paper/q1_findings/QUALITY_GAPS.md)); **P3 gates + اولویت بودجه** docs-only [`DECISION_LOCK_Q1_P3_ARMS.md`](DECISION_LOCK_Q1_P3_ARMS.md) · [`Q1_P3_PRIORITY.md`](Q1_P3_PRIORITY.md) (P3-1→P3-5→P3-3/4→P3-2); **P3-1 baseline** [`DECISION_LOCK_Q1_P3_1_BASELINE.md`](DECISION_LOCK_Q1_P3_1_BASELINE.md) (runner smoke ready) · **P3-5** [`DECISION_LOCK_Q1_P3_5_MECHANISM.md`](DECISION_LOCK_Q1_P3_5_MECHANISM.md) · **P3-3/4** [`DECISION_LOCK_Q1_P3_3_MULTIMODEL.md`](DECISION_LOCK_Q1_P3_3_MULTIMODEL.md) — **API=0، اجرای live مجاز نیست**; **merge human-only**. Roadmap · matrix · Q1-P2: [`Q1_ROADMAP_4PHASE.md`](Q1_ROADMAP_4PHASE.md) · [`Q1_BLOCKER_MATRIX.md`](Q1_BLOCKER_MATRIX.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md). Not a redo of the workshop five-phase path.
 
 ---
