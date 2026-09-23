@@ -51,7 +51,9 @@ When budget is constrained, execute or fund arms in this order. Full one-pager: 
 
 ## P3-1 — External baseline (optional; **priority 1**)
 
-**May run only after:** Human budget + written arm spec (baseline method id, config SHA, treatment name) + gate checklist.
+**Design packet (pre-run):** [`DECISION_LOCK_Q1_P3_1_BASELINE.md`](DECISION_LOCK_Q1_P3_1_BASELINE.md) · candidates [`P3_1_BASELINE_CANDIDATES.md`](P3_1_BASELINE_CANDIDATES.md) — **NOT AUTHORIZED TO RUN** until Matin budget + signed pre-run fields.
+
+**May run only after:** Human budget + completed Q1-P3-1 lock checklist + gate checklist.
 
 | Item | Lock |
 | --- | --- |

@@ -146,7 +146,7 @@ This equals the per-episode mean of contributions \(+1\) (b10), \(-1\) (b01), an
 
 ### 5.5 Future Work (not executed this cycle)
 
-Per [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md): Confirmatory V2 episodes/allocation/SAP/pack; AgentDojo-class loops; external SOTA baselines; `p1_mechanism_v1.0.0` live (`live_evaluated=false`). D-22 six `family_id` names locked for **future** V2 metadata; +1 remainder rule → `PRIVILEGE_EXFIL` when V2 is authorized.
+Per [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md): Confirmatory V2 episodes/allocation/SAP/pack; AgentDojo-class loops; `p1_mechanism_v1.0.0` live (`live_evaluated=false`). D-22 six `family_id` names locked for **future** V2 metadata; +1 remainder rule → `PRIVILEGE_EXFIL` when V2 is authorized. Optional Phase 3 **priority 1** ([`Q1_P3_PRIORITY.md`](../../experiments/Q1_P3_PRIORITY.md)): commensurate **external baseline** comparison on the same episode IDs ([`DECISION_LOCK_Q1_P3_1_BASELINE.md`](../../experiments/DECISION_LOCK_Q1_P3_1_BASELINE.md)) — **not executed**; **not** an AdaptiGuard superiority or SOTA claim; Track A FAIL unchanged.
 
 ---
 
