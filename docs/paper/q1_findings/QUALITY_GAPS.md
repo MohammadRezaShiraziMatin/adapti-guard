@@ -53,14 +53,14 @@
 
 ## What Phase 3 would buy (optional; **not done**)
 
-Only after **human budget** + gates — each arm needs its own lock; **Track A FAIL numbers stay immutable**.
+Only after **human budget** + gates — **API=0** until Matin signs cap; **no runs authorized** by docs alone. **Track A FAIL numbers stay immutable.** Priority lock: [`DECISION_LOCK_Q1_P3_ARMS.md`](../../experiments/DECISION_LOCK_Q1_P3_ARMS.md) · [`Q1_P3_PRIORITY.md`](../../experiments/Q1_P3_PRIORITY.md).
 
-| Phase 3 arm | Scientific value | Does **not** substitute for |
-| --- | --- | --- |
-| External baseline under same protocol | Commensurable comparison | Honest Track A FAIL |
-| Confirmatory V2 pack + live | Larger n, D-22 families | Retconning VNEXT MSID on old pack |
-| `p1_mechanism_v1.0.0` live | Mechanism-surface evidence | AgentDojo leaderboard |
-| Multi-model Target/Judge sweep | Robustness | Single-pair overclaim |
+| Priority | ID | Phase 3 arm | Scientific value | Does **not** substitute for |
+| --- | --- | --- | --- | --- |
+| 1 | **P3-1** | External baseline (same protocol) | Commensurate comparison vs external defense on **same episode IDs** — not superiority | Honest Track A FAIL |
+| 2 | **P3-5** | `p1_mechanism_v1.0.0` live | Mechanism-surface **attribution** (`live_evaluated=false` today) | AgentDojo; Track A/B tables |
+| 3 | **P3-3/4** | Multi-model robustness (**merged** arm) | Target/Judge variants under **one** pre-locked design | Single-pair overclaim; run without new model-ID lock |
+| 4 | **P3-2** | Confirmatory V2 pack + live | Larger n, D-22 families (**last** / heaviest) | Retconning VNEXT MSID on old pack; V2 without freeze/SAP authorization |
 
 **No guarantee** Phase 3 moves a paper from Findings to main accept.
 

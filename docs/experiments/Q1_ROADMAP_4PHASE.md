@@ -92,21 +92,22 @@ There is **no guarantee** that a Q1 venue accepts this story, that all blockers 
 
 ## Phase 3 — Controlled evidence (**not done**; human budget required)
 
-**Pre-registration scaffold (docs only):** [`DECISION_LOCK_Q1_P3_ARMS.md`](DECISION_LOCK_Q1_P3_ARMS.md)
+**Pre-registration scaffold (docs only):** [`DECISION_LOCK_Q1_P3_ARMS.md`](DECISION_LOCK_Q1_P3_ARMS.md) · **priority table:** [`Q1_P3_PRIORITY.md`](Q1_P3_PRIORITY.md)
 
-**Goal:** Optional, pre-registered live runs that **add** evidence — they do **not** rewrite Track A FAIL or merge tracks in claims.
+**Goal:** Optional, pre-registered live runs that **add** evidence — they do **not** rewrite Track A FAIL or merge tracks in claims. **No Q1 acceptance guarantee.** **API=0**; approved USD **TBD — Matin**; **no runs authorized** by roadmap text alone.
+
+**Budget-limited priority (Matin-approved framing):**
+
+1. **P3-1** External baseline (same protocol) — **first** if small budget; goal = commensurate comparison on same episode IDs, **not** AdaptiGuard superiority.
+2. **P3-5** Mechanism live (`p1_mechanism_v1.0.0`) — attribution; `live_evaluated=false` today; not AgentDojo.
+3. **P3-3/4** Multi-model robustness — **one merged arm**; requires **new human lock** for model IDs before run (default remains qwen-7b ≠ qwen-72b).
+4. **P3-2** Confirmatory V2 + larger n — **last** / heaviest; Q1-P2 Future Work until separate authorization; this doc does not authorize V2 bytes/live alone.
 
 ** Preconditions:**
 
 - Human budget sign-off and gate checklist satisfied
 - Frozen pack SHA locks unchanged unless a **new** freeze PR and decision record exist
 - Target ≠ Judge; treatment arms labeled; no detector retune after seeing confirmatory outcomes
-
-**In scope (examples only — each needs its own lock doc before run):**
-
-- External baseline arm under same protocol (if feasible under budget)
-- Confirmatory V2 pack build + eval (only **after** future authorization beyond this Q1 cycle; Q1-P2 §A–B)
-- `p1_mechanism_v1.0.0` live eval (still `live_evaluated=false` on tip)
 
 **Out of scope:**
 
