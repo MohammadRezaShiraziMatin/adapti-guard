@@ -21,6 +21,7 @@ Use these for current claims, merge advice, and workshop FAIL text.
 | [`dual_track/RELEASE_NEXT_FA.md`](dual_track/RELEASE_NEXT_FA.md) | Matin next-step note + CLOSE / SKIP |
 | [`../experiments/MASTER_PROMPT.md`](../experiments/MASTER_PROMPT.md) | Durable supervisor constraints |
 | [`../experiments/RESEARCH_LOG.md`](../experiments/RESEARCH_LOG.md) | Dated diary (including 2026-09-14 dual-track) |
+| [`../experiments/REPRODUCIBILITY_PACKAGE.md`](../experiments/REPRODUCIBILITY_PACKAGE.md) | Offline repro hub (frozen SHAs, AUDIT, verify commands) |
 
 Stubs remain at `docs/paper/DUAL_TRACK_STATUS.md` and `docs/paper/CLAIMS_DUAL_TRACK.md`.
 

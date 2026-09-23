@@ -253,6 +253,8 @@ python3 -m pytest tests/test_workshop_vnext_fail_facts.py \
 
 Full hash tables: [`APPENDIX_HASHES.md`](APPENDIX_HASHES.md). Config snapshot: [`CONFIGS_SNAPSHOT.md`](CONFIGS_SNAPSHOT.md).
 
+**Canonical offline repro hub:** [`docs/experiments/REPRODUCIBILITY_PACKAGE.md`](../../experiments/REPRODUCIBILITY_PACKAGE.md) (dual-track frozen SHAs, AUDIT paths, full pytest set, **API=0**).
+
 ---
 
 ## 6. Merge-order reminder from [`PR_STACK.md`](PR_STACK.md) (human executes)

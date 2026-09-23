@@ -9,7 +9,7 @@
 
 Raise **publisher readiness** and remove **process/admin bottlenecks** via honest docs — not by changing frozen science or rerunning live eval.
 
-Active quality work follows [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md). **PR #73:** P1 + P2 + **P3 (manuscript claims polish) complete.**
+Active quality work follows [`QUALITY_ROADMAP_5PHASE.md`](QUALITY_ROADMAP_5PHASE.md). **PR #73:** P1–**P4 complete** (repro package aligned to tip).
 
 ---
 
@@ -50,8 +50,12 @@ This quality PR is a **single docs-only branch off tip `main`**, separate from t
 
 Workshop FAIL text: [`docs/paper/workshop_vnext_fail/MANUSCRIPT.md`](../paper/workshop_vnext_fail/MANUSCRIPT.md). Human cover: [`SUBMISSION_PACKET.md`](../paper/workshop_vnext_fail/SUBMISSION_PACKET.md). Author: **Seyed Mohammadreza Shirazi Matin**.
 
+## Reproducibility (P4 done)
+
+Hub: [`REPRODUCIBILITY_PACKAGE.md`](REPRODUCIBILITY_PACKAGE.md) · hashes [`APPENDIX_HASHES.md`](../paper/workshop_vnext_fail/APPENDIX_HASHES.md) · offline: `verify_manuscript_facts.py` + pytest (no OpenRouter).
+
 ## Next (roadmap)
 
-**Phase 4:** artifact and reproducibility docs (`REPRODUCIBILITY_PACKAGE.md`, hash tables, offline verify steps) — no live eval, no frozen edits.
+**Phase 5:** workshop submit checklist (human merge order, packet completeness, **no agent venue upload**).
 
 Human-only gates unchanged: venue submit, live LLM budget, merge to `main`.

@@ -49,15 +49,17 @@ This roadmap separates **process unlocks** (what contributors may do on tip with
 
 ---
 
-## P4 — Artifact and reproducibility (**next**)
+## P4 — Artifact and reproducibility (**done**, PR #73)
 
 **Unlocks:** Repro checklists, hash citation tables, offline verification steps (no LLM), alignment of `REPRODUCIBILITY_PACKAGE.md` with tip tree.
 
-**Locks kept:** No regeneration of eval outputs; simulation ≠ confirmatory live claims.
+**Deliverables:** Refreshed [`REPRODUCIBILITY_PACKAGE.md`](REPRODUCIBILITY_PACKAGE.md); `APPENDIX_HASHES.md` dual-track + P1 mechanism rows; workshop README / `SUBMISSION_PACKET` pointers; `START_HERE` repro link.
+
+**Locks kept:** No regeneration of eval outputs; simulation ≠ confirmatory live claims; SHAs cited only from existing freeze/AUDIT docs.
 
 ---
 
-## P5 — Workshop submit checklist (no external upload)
+## P5 — Workshop submit checklist (no external upload) (**next**)
 
 **Unlocks:** Human checklist: merge order (`PR_STACK.md`), packet completeness, citation/hashes, **explicit** “human submits venue” steps — documentation only.
 
