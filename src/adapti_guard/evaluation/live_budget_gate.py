@@ -1,9 +1,61 @@
-"""Budget / request gate for live eval (accounting only; does not call APIs)."""
+"""Budget / request gate for live eval (fail-closed USD cap; no live calls in unit tests)."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
+from adapti_guard.evaluation.attack_success import estimate_api_cost_usd
 from adapti_guard.evaluation.target_model import GenerationRequest, GenerationResult, TargetModel
+
+# Phase 7 pilot hard ceiling (configuration may set ledger.max_usd to this value).
+PILOT_HARD_CAP_USD = 1.0
+
+
+def estimate_request_cost_usd(
+    request: GenerationRequest,
+    *,
+    provider: str = "openrouter",
+    default_max_tokens: int = 512,
+) -> float | None:
+    """Conservative pre-call estimate (max completion tokens). None => UNKNOWN."""
+    prompt_text = (request.system_prompt or "") + (request.prompt or "")
+    if not prompt_text.strip():
+        return None
+    prompt_tokens = max(1, len(prompt_text) // 4)
+    completion_tokens = request.max_tokens or default_max_tokens
+    if completion_tokens <= 0:
+        return None
+    inner = getattr(request, "_budget_default_max_tokens", None)
+    if isinstance(inner, int) and inner > 0 and not request.max_tokens:
+        completion_tokens = inner
+    est = estimate_api_cost_usd(
+        prompt_tokens=prompt_tokens,
+        completion_tokens=int(completion_tokens),
+        provider=provider,
+    )
+    return float(est["estimated_usd"])
+
+
+def cost_from_generation_result(
+    result: GenerationResult,
+    request: GenerationRequest,
+    *,
+    provider: str,
+    default_max_tokens: int = 512,
+) -> float | None:
+    usage = result.usage or {}
+    pt = usage.get("prompt_tokens")
+    ct = usage.get("completion_tokens")
+    if pt is not None and ct is not None:
+        return float(
+            estimate_api_cost_usd(
+                prompt_tokens=int(pt),
+                completion_tokens=int(ct),
+                provider=provider,
+            )["estimated_usd"]
+        )
+    return estimate_request_cost_usd(
+        request, provider=provider, default_max_tokens=default_max_tokens
+    )
 
 
 @dataclass
@@ -11,7 +63,8 @@ class BudgetLedger:
     max_requests: int | None = None
     max_usd: float | None = None
     requests_used: int = 0
-    estimated_cost_usd: float | None = None  # None => UNKNOWN
+    spent_usd: float = 0.0
+    estimated_cost_usd: float | None = None  # legacy mirror of spent_usd when known
     hard_stop: bool = True
 
     def check_allowed(self, *, additional_requests: int = 1) -> tuple[bool, str]:
@@ -19,14 +72,31 @@ class BudgetLedger:
             if self.requests_used + additional_requests > self.max_requests:
                 return False, "budget_failure: max_requests exceeded"
         if self.max_usd is not None and self.estimated_cost_usd is not None:
-            if self.estimated_cost_usd > self.max_usd:
+            if self.spent_usd > self.max_usd:
                 return False, "budget_failure: max_usd exceeded"
         return True, "ok"
 
+    def check_spend_allowed(self, additional_usd: float | None) -> tuple[bool, str]:
+        """Cumulative USD gate. UNKNOWN additional_usd blocks when max_usd is set."""
+        if self.max_usd is None:
+            return True, "ok"
+        if additional_usd is None:
+            return False, "budget_failure: cost UNKNOWN blocked under max_usd"
+        if additional_usd < 0:
+            return False, "budget_failure: invalid negative cost estimate"
+        if self.spent_usd + additional_usd > self.max_usd:
+            return False, "budget_failure: max_usd exceeded"
+        return True, "ok"
+
     def record_requests(self, count: int, *, retry_count: int = 0) -> None:
-        """Count includes retries (each HTTP attempt counts)."""
         total = max(0, count) + max(0, retry_count)
         self.requests_used += total
+
+    def record_spend_usd(self, amount: float) -> None:
+        if amount < 0:
+            amount = 0.0
+        self.spent_usd += amount
+        self.estimated_cost_usd = self.spent_usd
 
     def record_cost_unknown(self) -> None:
         self.estimated_cost_usd = None
@@ -36,13 +106,16 @@ class BudgetLedger:
             "max_requests": self.max_requests,
             "max_usd": self.max_usd,
             "requests_used": self.requests_used,
-            "estimated_cost": self.estimated_cost_usd if self.estimated_cost_usd is not None else "UNKNOWN",
+            "spent_usd": self.spent_usd,
+            "estimated_cost": self.spent_usd if self.max_usd is not None else (
+                self.estimated_cost_usd if self.estimated_cost_usd is not None else "UNKNOWN"
+            ),
             "hard_stop": self.hard_stop,
         }
 
 
 class BudgetGatedTargetModel(TargetModel):
-    """Wrap TargetModel: authorization-adjacent request accounting (fail closed)."""
+    """Wrap TargetModel: request + USD accounting before provider call (fail closed)."""
 
     def __init__(
         self,
@@ -50,26 +123,58 @@ class BudgetGatedTargetModel(TargetModel):
         ledger: BudgetLedger,
         *,
         provider: str = "unknown",
+        default_max_tokens: int = 512,
     ) -> None:
         self._inner = inner
         self._ledger = ledger
         self.provider = provider
+        self._default_max_tokens = default_max_tokens
 
     def generate(self, request: GenerationRequest) -> GenerationResult:
         max_attempts = int(getattr(self._inner, "max_retries", 0)) + 1
         allowed, reason = self._ledger.check_allowed(additional_requests=max_attempts)
         if not allowed and self._ledger.hard_stop:
-            return GenerationResult(
-                text="",
-                model_id=request.model_id or getattr(self._inner, "model_id", ""),
-                latency_ms=0.0,
-                error=reason,
-                raw={"failure_kind": "budget_exhausted", "http_attempts": 0},
-            )
+            return self._budget_error(request, reason)
+
+        per_attempt = estimate_request_cost_usd(
+            request,
+            provider=self.provider,
+            default_max_tokens=self._default_max_tokens,
+        )
+        if self._ledger.max_usd is not None:
+            worst_case = None if per_attempt is None else per_attempt * max_attempts
+            ok, usd_reason = self._ledger.check_spend_allowed(worst_case)
+            if not ok and self._ledger.hard_stop:
+                return self._budget_error(request, usd_reason)
+
         result = self._inner.generate(request)
         attempts = 1
         if result.raw and isinstance(result.raw.get("http_attempts"), int):
             attempts = max(1, int(result.raw["http_attempts"]))
+
         if not result.cache_hit:
             self._ledger.record_requests(1, retry_count=max(0, attempts - 1))
+            if self._ledger.max_usd is not None:
+                actual = cost_from_generation_result(
+                    result,
+                    request,
+                    provider=self.provider,
+                    default_max_tokens=self._default_max_tokens,
+                )
+                if actual is None:
+                    self._ledger.record_cost_unknown()
+                else:
+                    # Charge worst-case attempts for retry safety (each attempt billed at estimate).
+                    charge = per_attempt * attempts if per_attempt is not None else actual
+                    self._ledger.record_spend_usd(charge)
+
         return result
+
+    def _budget_error(self, request: GenerationRequest, reason: str) -> GenerationResult:
+        return GenerationResult(
+            text="",
+            model_id=request.model_id or getattr(self._inner, "model_id", ""),
+            latency_ms=0.0,
+            error=reason,
+            raw={"failure_kind": "budget_exhausted", "http_attempts": 0},
+        )
