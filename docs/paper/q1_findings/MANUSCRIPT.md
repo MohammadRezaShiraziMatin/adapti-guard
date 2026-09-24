@@ -64,6 +64,8 @@ This findings manuscript extends the shorter workshop negative-result packet ([`
 
 **Negative results and dual-track reporting.** Reporting FAIL alongside a scoped improvement on a **different** pack prevents upgrading Phase-1 into a reversal of VNEXT FAIL. Dual-track separation is a **scientific reporting** requirement ([`CLAIMS_MAP.md`](CLAIMS_MAP.md)).
 
+**Extension literature (scaffold only).** Layer 1 candidate slots for multi-turn / adaptive / agentic Related Work live under [`../../research/LITERATURE_BASE.md`](../../research/LITERATURE_BASE.md) with gap-audit template [`../../research/LITERATURE_GAP_AUDIT_MT_AA_AGENTIC.md`](../../research/LITERATURE_GAP_AUDIT_MT_AA_AGENTIC.md). Slots remain **PENDING** until `source_verified`; this paragraph is **not** a claim that those works were audited or that multi-turn / AgentDojo live eval was run ([`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md) §4.1).
+
 ---
 
 ## 3. Threat Model
@@ -241,6 +243,7 @@ Sourced from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md) an
 | **Overclaim** (refusal, L3 oracle, ASR=0 sim) | docs-fixed | Taxonomy + CLAIMS_MAP |
 | Single Target/Judge pair (**R=1**) | docs-fixed | No multi-model / multi-seed robustness; frontier four not confirmatory |
 | Authored synthetic packs (**English-only**) | docs-fixed | Authored RAG-shaped ≠ live retriever; not multilingual; not NIST live |
+| Layer 1 literature slots **PENDING** | docs-fixed | Scaffold only ([`LITERATURE_BASE.md`](../../research/LITERATURE_BASE.md)); no unverified cites |
 
 **Sample size / power (Track A, offline).** Under documented simplifications (`b01=0`, McNemar exact, binomial scaffold for planning), n=61 would yield **~99%** power to detect a **true** per-episode b10 rate of **MSID=0.20** at α=0.05 ([`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json)). Observed **b10=5** requires **≥6** discordant wins for significance and **≥13** for point δ̂≥0.20 at `b01=0`; the offline δ̂ 95% CI upper bound (**0.1639**, from [`vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json)) stays below MSID. **Interpretation:** Track A **FAIL** is consistent with a **small estimated effect** and pre-registered gates—not primarily “n=61 could never detect MSID-sized effects” under this model. Generalization beyond n=61 remains limited.
 

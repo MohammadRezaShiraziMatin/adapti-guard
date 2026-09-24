@@ -7,7 +7,7 @@
 
 **Purpose:** Keep AdaptiGuard as a coherent, reproducible, extensible **empirical study** whose *current* evidence base stays Findings/workshop-defensible, while naming **gated** confirmatory extensions that a later Journal/Q1 main path may require—**without** claiming those extensions are done and **without** artificially enlarging Scope.
 
-**Companions:** [`MANUSCRIPT.md`](MANUSCRIPT.md) · [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) · [`QUALITY_GAPS.md`](QUALITY_GAPS.md) · [`DECISION_LOCK_FINDINGS_VENUE.md`](DECISION_LOCK_FINDINGS_VENUE.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md)
+**Companions:** [`MANUSCRIPT.md`](MANUSCRIPT.md) · [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) · [`QUALITY_GAPS.md`](QUALITY_GAPS.md) · [`DECISION_LOCK_FINDINGS_VENUE.md`](DECISION_LOCK_FINDINGS_VENUE.md) · [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · Literature Layer 1 scaffold [`../../research/LITERATURE_BASE.md`](../../research/LITERATURE_BASE.md) (Future Work prep — **not** done evidence)
 
 ---
 
@@ -77,6 +77,16 @@ Extensions may be added later as **new** immutable AUDIT folders under human bud
 
 **Priority / budget:** optional Phase 3 order in [`Q1_P3_PRIORITY.md`](../../experiments/Q1_P3_PRIORITY.md). **API=0** until Matin signs a spend cap. No guarantee any extension moves Findings → Journal main accept.
 
+### 4.1 Literature Layer 1 (prep only — not evidence)
+
+| Doc | Role |
+| --- | --- |
+| [`LITERATURE_BASE.md`](../../research/LITERATURE_BASE.md) | Layer 0 retained + Layer 1 candidate slots (**PENDING**) |
+| [`LITERATURE_GAP_AUDIT_MT_AA_AGENTIC.md`](../../research/LITERATURE_GAP_AUDIT_MT_AA_AGENTIC.md) | Nine-field audit template; `source_verified` required before cite |
+| [`UNIFIED_RESEARCH_FRAMEWORK.md`](../../research/UNIFIED_RESEARCH_FRAMEWORK.md) | Design stack + evidence tiers; extensions **designed** / Future Work |
+
+Do **not** treat PENDING slots, gap hypotheses, or framework overlays as live-evaluated multi-turn / AgentDojo / adaptive-attacker results. Cite manuscript Related Work only after `source_verified: true`.
+
 ---
 
 ## 5. Claim discipline (binding)
@@ -85,6 +95,6 @@ Extensions may be added later as **new** immutable AUDIT folders under human bud
 2. Never pool Track A and Track B ASR in one unlabeled table.
 3. Label offline CI/power as offline; never invent AUDIT numbers.
 4. Future Work rows are **gates**, not DONE checkmarks.
-5. Forbidden paraphrases: [`CLAIMS_MAP.md`](CLAIMS_MAP.md) **Forbidden** table (incl. frontier targets, NIST/AgentDojo live, live adaptive attacker, live retriever, multilingual, R>1).
+5. Forbidden paraphrases: [`CLAIMS_MAP.md`](CLAIMS_MAP.md) **Forbidden** table (incl. frontier targets, NIST/AgentDojo live, live adaptive attacker, live retriever, multilingual, R>1, unverified literature slots).
 
-**Navigation:** [`MANUSCRIPT.md`](MANUSCRIPT.md) §5.5 / §8 · [`QUALITY_GAPS.md`](QUALITY_GAPS.md) · [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md)
+**Navigation:** [`MANUSCRIPT.md`](MANUSCRIPT.md) §5.5 / §8 · [`QUALITY_GAPS.md`](QUALITY_GAPS.md) · [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · [`../../research/LITERATURE_BASE.md`](../../research/LITERATURE_BASE.md)
