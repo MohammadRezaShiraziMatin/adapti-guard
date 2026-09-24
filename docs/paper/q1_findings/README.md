@@ -42,6 +42,10 @@
 | [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) | Offline Track A δ̂ 95% CI (not in AUDIT) |
 | [`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json) | Offline McNemar power / sensitivity (n=61) |
 | [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) | What the paper is / is not (abstract-safe) |
+| [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md) | Q1 Journal empirical frame: frozen core + gated Future Work (not done) |
+| [`../../research/LITERATURE_BASE.md`](../../research/LITERATURE_BASE.md) | Literature Layer 1 scaffold (**PENDING** slots; Future Work prep) |
+| [`../../research/LITERATURE_GAP_AUDIT_MT_AA_AGENTIC.md`](../../research/LITERATURE_GAP_AUDIT_MT_AA_AGENTIC.md) | MT/adaptive/agentic gap audit template (`source_verified` gate) |
+| [`../../research/UNIFIED_RESEARCH_FRAMEWORK.md`](../../research/UNIFIED_RESEARCH_FRAMEWORK.md) | Unified design stack + evidence tiers (not live-eval claims) |
 | [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) | SHAs, AUDIT paths, offline scripts, API budget boundary |
 | [`verify_q1_findings_facts.py`](verify_q1_findings_facts.py) | Claim/number gate (exit 0 = PASS) |
 

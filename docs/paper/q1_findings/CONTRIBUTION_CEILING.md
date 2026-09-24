@@ -21,7 +21,7 @@
 - An **AgentDojo** (or similar) leaderboard result or multi-step agent benchmark win
 - A **production-ready product** or deployment recommendation
 - A **FAIL→PASS** narrative for VNEXT or a single unlabeled “AdaptiGuard works” headline
-- **Confirmatory V2**, external baseline live arms, or mechanism-pack live results (Future Work / Phase 3 budget)
+- **Confirmatory V2**, external baseline live arms, mechanism-pack live, stateful multi-turn live, AgentDojo live, live adaptive attacker / live retriever, multilingual, multi-seed **R>1**, or the four named frontier targets as confirmatory evidence (gated Future Work only — [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md))
 
 ---
 
