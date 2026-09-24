@@ -1,9 +1,15 @@
 {
-  "phase7_live_authorization": "BLOCKED",
-  "live_execution_gate": "BLOCKED",
-  "authorization_state": "BLOCKED",
+  "phase7_live_authorization": "AUTHORIZATION_PENDING",
+  "live_execution_gate": "PHASE7_LIVE_BLOCKED",
+  "authorization_state": "AUTHORIZATION_PENDING",
   "contract_schema_complete": true,
   "authorization_complete": false,
-  "errors": [],
+  "errors": [
+    "authorization_id pending",
+    "allowed_condition_ids empty",
+    "explicit_authorization_for_live_execution not true",
+    "api_live_execution_confirmed not true (API=0 default)",
+    "approver sign-off pending"
+  ],
   "api_spend_permitted": false
 }

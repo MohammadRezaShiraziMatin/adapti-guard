@@ -32,6 +32,13 @@ PILOT_METRICS = Path(
 PILOT_HASH = "93a0a5e2765981e954d5846849daea476fe4802e80eeee031cb443e79f7eddc9"
 
 
+def _b2_preflight_auth() -> dict:
+    """Repo YAML stays BLOCKED; preflight unit tests inject B2 condition allowance."""
+    auth = dict(load_authorization_yaml())
+    auth["allowed_condition_ids"] = ["LIVE-PRO-PI-B2-ADAPTIVE"]
+    return auth
+
+
 def _legacy_defense(**_kwargs):
     return DefenseAction.TOOL_RESTRICTION, {}
 
@@ -49,7 +56,9 @@ def test_max_episodes_under_cap_is_two():
 
 
 def test_hypothetical_n2_preflight_passes_budget():
-    pf = assess_b2_campaign_preflight(campaign_id="AUDIT-N2", campaign_size=2)
+    pf = assess_b2_campaign_preflight(
+        campaign_id="AUDIT-N2", campaign_size=2, auth_yaml=_b2_preflight_auth()
+    )
     assert pf.budget["campaign_worst_requests"] == 8
     assert pf.blockers == ()
     assert len(pf.seeds) == 2
@@ -122,13 +131,17 @@ def test_yaml_n_episodes_conflicts_single_invocation_cap():
 
 
 def test_case_a_n1_preflight():
-    pf = assess_b2_campaign_preflight(campaign_id="N1", campaign_size=1)
+    pf = assess_b2_campaign_preflight(
+        campaign_id="N1", campaign_size=1, auth_yaml=_b2_preflight_auth()
+    )
     assert campaign_worst_case_requests(1) == 4
     assert pf.blockers == ()
 
 
 def test_case_b_n2_preflight():
-    pf = assess_b2_campaign_preflight(campaign_id="N2", campaign_size=2)
+    pf = assess_b2_campaign_preflight(
+        campaign_id="N2", campaign_size=2, auth_yaml=_b2_preflight_auth()
+    )
     assert campaign_worst_case_requests(2) == 8
     assert pf.blockers == ()
 

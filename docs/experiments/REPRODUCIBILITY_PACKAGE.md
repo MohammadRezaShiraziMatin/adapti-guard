@@ -37,7 +37,7 @@ Machine-readable: sibling `verdict.json`, `comparison.json` (Track A), arm metri
 | Judge | `judge_fallback` → `qwen/qwen-2.5-72b-instruct` |
 | Target ≠ Judge | Required on confirmatory live runs |
 | Cache | `configs/models.yaml` → `cache.enabled = false` |
-| YAML hash | `configs/models.yaml` SHA-256 `3e7b33d8b1001f0f86abf74b4d8c1558751275835c10a69152f1f7b386cc58b4` |
+| YAML hash | `configs/models.yaml` SHA-256 `0092aa4111d900cd2aeac9b4de8d088e3b7fa353cdb272223f3c2e3a43a5e022` |
 
 Full YAML table: [`CONFIGS_SNAPSHOT.md`](../paper/workshop_vnext_fail/CONFIGS_SNAPSHOT.md).
 
@@ -121,7 +121,7 @@ Binding YAML hashes and Target/Judge keys: [`docs/paper/workshop_vnext_fail/CONF
 
 | Path | SHA-256 | Used for official VNEXT pair? |
 | --- | --- | --- |
-| `configs/models.yaml` | `3e7b33d8b1001f0f86abf74b4d8c1558751275835c10a69152f1f7b386cc58b4` | **Yes** (`target_2`, `judge_fallback`, `cache.enabled=false`) |
+| `configs/models.yaml` | `0092aa4111d900cd2aeac9b4de8d088e3b7fa353cdb272223f3c2e3a43a5e022` | **Yes** (`target_2`, `judge_fallback`, `cache.enabled=false`) |
 | `configs/datasets.yaml` | `fd005720c44f7786a93202536bea4d5eb336d6c25ad313d156df402f7b5acaca` | No (path registry) |
 | `configs/models_local.yaml` | `cfcd748388a7ae771cf9c951d74211364c673262f06f633a0ace1a0de0ba5126` | No |
 | `configs/experiments/ablation_study.yaml` | `80791f5122bdfa8ae6b7b177d1f2de043255de8a261a75941e3f0ee418eaf0c5` | No |

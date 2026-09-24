@@ -13,7 +13,7 @@ sha256sum configs/models.yaml configs/datasets.yaml configs/models_local.yaml \
 
 ## Binding eval-contract keys (`configs/models.yaml`)
 
-SHA-256 `3e7b33d8b1001f0f86abf74b4d8c1558751275835c10a69152f1f7b386cc58b4`
+SHA-256 `0092aa4111d900cd2aeac9b4de8d088e3b7fa353cdb272223f3c2e3a43a5e022`
 
 | Key | Required value | Observed on this tree |
 | --- | --- | --- |
