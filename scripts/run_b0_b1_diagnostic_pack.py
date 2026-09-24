@@ -63,6 +63,10 @@ def run_diagnostic(
     benign_n: int,
     seed: int,
     max_usd: float,
+    target_config_key: str = TARGET_KEY,
+    target_provider: str = "openrouter",
+    ledger: BudgetLedger | None = None,
+    skip_preflight: bool = False,
 ) -> dict:
     load_project_env()
     if not __import__("os").environ.get("OPENROUTER_API_KEY"):
@@ -70,7 +74,7 @@ def run_diagnostic(
 
     n_per_arm = attack_n + benign_n
     n_total = n_per_arm * 2
-    ok, worst_usd, worst_req = preflight_worst_case_usd(n_total, max_usd)
+    ok, worst_usd, worst_req = (True, 0.0, n_total * 2) if skip_preflight else preflight_worst_case_usd(n_total, max_usd)
     run_dir = output_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     log_md = run_dir / "RUN_LOG.md"
@@ -80,7 +84,7 @@ def run_diagnostic(
         f"- label: {DIAG_LABEL}\n"
         f"- created: {_utc()}\n"
         f"- pack: {PACK} attack_n={attack_n} benign_n={benign_n} seed={seed}\n"
-        f"- target_config: {TARGET_KEY} judge_config: {JUDGE_KEY} backend: auto\n"
+        f"- target_config: {target_config_key} judge_config: {JUDGE_KEY} backend: auto\n"
         f"- preflight worst_case_requests: {worst_req} worst_case_usd_est: {worst_usd:.6f} cap: {max_usd}\n"
         f"- preflight: {'PASS' if ok else 'FAIL'}\n"
         f"- order: B0 all episodes then B1 all episodes\n\n",
@@ -89,7 +93,8 @@ def run_diagnostic(
     if not ok:
         return {"status": "STOPPED", "reason": "preflight_exceeds_cap", "worst_usd": worst_usd, "run_dir": str(run_dir)}
 
-    ledger = BudgetLedger(max_usd=max_usd, max_requests=worst_req + 20, hard_stop=True)
+    if ledger is None:
+        ledger = BudgetLedger(max_usd=max_usd, max_requests=worst_req + 20, hard_stop=True)
     backend, block = resolve_backend(EvaluationBackend.AUTO)
     if block:
         return {"status": "STOPPED", "reason": block, "run_dir": str(run_dir)}
@@ -97,7 +102,7 @@ def run_diagnostic(
     config = PipelineConfig(
         experiment_id=run_id,
         output_dir=run_dir,
-        target_config_key=TARGET_KEY,
+        target_config_key=target_config_key,
         judge_config_key=JUDGE_KEY,
         backend=backend,
         baselines=["B0", "B1"],
@@ -108,10 +113,10 @@ def run_diagnostic(
         benchmark_dir=PACK,
     )
     records, meta = load_records(config)
-    target_id = model_id_for_config_key(TARGET_KEY, Path(config.models_config))
+    target_id = model_id_for_config_key(target_config_key, Path(config.models_config))
     judge_id = model_id_for_config_key(JUDGE_KEY, Path(config.models_config))
 
-    target = build_target_model(TARGET_KEY, config_path=config.models_config, cache_enabled=False)
+    target = build_target_model(target_config_key, config_path=config.models_config, cache_enabled=False)
     target.max_retries = 0
     judge_inner = build_target_model(JUDGE_KEY, config_path=config.models_config, cache_enabled=False)
     judge_inner.max_retries = 0
@@ -123,7 +128,7 @@ def run_diagnostic(
         cache_enabled=False,
         use_fallback=False,
     )
-    gated_t = BudgetGatedTargetModel(target, ledger, provider="openrouter")
+    gated_t = BudgetGatedTargetModel(target, ledger, provider=target_provider)
     inner_j = getattr(judge, "_primary", None) or getattr(judge, "model", None)
     if inner_j is not None:
         inner_j.max_retries = 0
@@ -134,7 +139,7 @@ def run_diagnostic(
     ctx = BaselineRunContext(
         experiment_id=run_id,
         model_id=target_id,
-        model_config_key=TARGET_KEY,
+        model_config_key=target_config_key,
         git_commit=git_commit(),
         seed=seed,
         dataset_hash=str(meta.get("dataset_hash", "")),
