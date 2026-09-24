@@ -152,6 +152,9 @@ def _mcnemar_b0_b1(b0_path: Path, b1_path: Path) -> dict:
 
 
 def _find_b0_predictions(target_dir: Path) -> Path | None:
+    direct = target_dir / "B0" / "B0_predictions.jsonl"
+    if direct.is_file():
+        return direct
     hits = list(target_dir.glob("*/B0/B0_predictions.jsonl"))
     return hits[0] if hits else None
 
