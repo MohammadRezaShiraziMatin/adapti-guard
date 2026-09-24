@@ -32,7 +32,7 @@
 | **Effect CI (Track A δ̂)** | Now documented offline | Often in primary AUDIT | **Partially closed** (offline artifact) |
 | **Track B generalization** | Scoped one pack | Cross-model / cross-benchmark | **Weak** |
 
-**Honest ceiling:** A **Findings**, **evaluation**, or **negative-result workshop** narrative is proportionate. A **main-track “new defense”** claim is **not** supported. See [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) — do not rush ICLR 2027 **main**.
+**Honest ceiling:** A **Findings**, **evaluation**, or **negative-result workshop** narrative is proportionate. A **main-track “new defense”** claim is **not** supported. See [`VENUE_SHORTLIST.md`](VENUE_SHORTLIST.md) — do not rush ICLR 2027 **main**. Journal/Q1 main extensions (multi-turn, AgentDojo-class, baselines, multi-model, etc.) are **gated Future Work** only: [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md) — do not mark them done.
 
 ---
 

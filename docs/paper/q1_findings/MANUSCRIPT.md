@@ -9,7 +9,7 @@ AI Security · LLM-agent defense evaluation
 
 **Status banner.** Track A VNEXT confirmation = **FAIL** (immutable). Track B Phase-1 LIVE = **SUPPORTED_IMPROVEMENT** (scoped; **does not reverse** Track A). This draft does **not** claim prompt injection is solved, SOTA defense, or production readiness.
 
-**Claims map.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · **Contribution ceiling** [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) · Dual-track [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Q1 scope [`../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · Repro [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · Verifier [`verify_q1_findings_facts.py`](verify_q1_findings_facts.py)
+**Claims map.** [`CLAIMS_MAP.md`](CLAIMS_MAP.md) · **Contribution ceiling** [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) · **Extension frame** [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md) · Dual-track [`../CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Q1 scope [`../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) · Repro [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · Verifier [`verify_q1_findings_facts.py`](verify_q1_findings_facts.py)
 
 **Evidence base (this Q1 cycle):** Track A n=61 FAIL + Track B n=61 scoped improvement only. Confirmatory V2, external SOTA baselines, AgentDojo-class loops, and mechanism-pack live eval = **Future Work** (optional Phase 3 after human budget).
 
@@ -146,7 +146,7 @@ This equals the per-episode mean of contributions \(+1\) (b10), \(-1\) (b01), an
 
 ### 5.5 Future Work (not executed this cycle)
 
-Per [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md): Confirmatory V2 episodes/allocation/SAP/pack; AgentDojo-class loops; `p1_mechanism_v1.0.0` live (`live_evaluated=false`). D-22 six `family_id` names locked for **future** V2 metadata; +1 remainder rule → `PRIVILEGE_EXFIL` when V2 is authorized. Optional Phase 3 **priority 1** ([`Q1_P3_PRIORITY.md`](../../experiments/Q1_P3_PRIORITY.md)): commensurate **external baseline** comparison on the same episode IDs ([`DECISION_LOCK_Q1_P3_1_BASELINE.md`](../../experiments/DECISION_LOCK_Q1_P3_1_BASELINE.md); offline runner smoke only) — **not executed live**; **not** superiority or SOTA; Track A FAIL unchanged. P3-5 mechanism · P3-3/4 multi-model: design locks only ([`DECISION_LOCK_Q1_P3_5_MECHANISM.md`](../../experiments/DECISION_LOCK_Q1_P3_5_MECHANISM.md), [`DECISION_LOCK_Q1_P3_3_MULTIMODEL.md`](../../experiments/DECISION_LOCK_Q1_P3_3_MULTIMODEL.md)).
+Per [`DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md`](../../experiments/DECISION_LOCK_Q1_P2_EVIDENCE_DESIGN.md) and the extension frame [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md): Confirmatory V2 episodes/allocation/SAP/pack; **stateful multi-turn** live (Phase-2 protocol unevaluated); AgentDojo-class loops; `p1_mechanism_v1.0.0` live (`live_evaluated=false`); live retrieval (authored RAG-shaped packs ≠ live retriever); live defense-aware adaptive attacker (sim-only today); multilingual corpora (English-only confirmatory packs); multi-seed **R>1** (confirmatory live is **R=1**). D-22 six `family_id` names locked for **future** V2 metadata; +1 remainder rule → `PRIVILEGE_EXFIL` when V2 is authorized. Optional Phase 3 **priority 1** ([`Q1_P3_PRIORITY.md`](../../experiments/Q1_P3_PRIORITY.md)): commensurate **external baseline** comparison on the same episode IDs ([`DECISION_LOCK_Q1_P3_1_BASELINE.md`](../../experiments/DECISION_LOCK_Q1_P3_1_BASELINE.md); offline runner smoke only) — **not executed live**; **not** superiority or SOTA; Track A FAIL unchanged. P3-5 mechanism · P3-3/4 multi-model: design locks only ([`DECISION_LOCK_Q1_P3_5_MECHANISM.md`](../../experiments/DECISION_LOCK_Q1_P3_5_MECHANISM.md), [`DECISION_LOCK_Q1_P3_3_MULTIMODEL.md`](../../experiments/DECISION_LOCK_Q1_P3_3_MULTIMODEL.md)). Named frontier targets (Qwen3-30B-A3B-Instruct-2507, Gemma4 26B A4B, GPT-5, Claude Sonnet 4) and NIST-style live eval are **not** confirmatory evidence this cycle—gated Future Work only; do not treat config placeholders as runs.
 
 ---
 
@@ -229,7 +229,9 @@ Sourced from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md) an
 | Track A **FAIL** immutable | immutable | Confirmed negative; no FAIL→PASS |
 | Small **n=61** per track | Future Work (V2); offline power artifact | See power paragraph below; V2 not in this cycle |
 | Track A δ̂ **95% CI absent** in AUDIT | docs-fixed + offline artifact | Point δ̂ in AUDIT; CI from [`recompute_vnext_delta_ci.py`](../../scripts/recompute_vnext_delta_ci.py) only |
-| **Heuristic detector**; no AgentDojo-class loops | Future Work | Single-turn confirmatory scope |
+| **Heuristic detector**; no AgentDojo-class loops | Future Work | Single-turn confirmatory scope; not AgentDojo live |
+| **No stateful multi-turn live** | Future Work (Phase-2) | Protocol unevaluated; not claimed done |
+| **Adaptive attacker sim-only** | Future Work | Not live defense-aware red team |
 | **No external SOTA baselines** | Future Work; P3-if-budget | Compare locked arms only |
 | **Simulation ≠ confirmatory live** | docs-fixed | Do not cite `04_results.md` sim ASR as judge wins |
 | **Dual-track mixup** risk | docs-fixed | Separate sections/tables always |
@@ -237,8 +239,8 @@ Sourced from [`Q1_BLOCKER_MATRIX.md`](../../experiments/Q1_BLOCKER_MATRIX.md) an
 | **`p1_mechanism_v1.0.0` not live-evaluated** | Future Work; P3-if-budget | Spec/freeze SHA only |
 | **Venue TBD** | P4 human | No submission DONE in repo |
 | **Overclaim** (refusal, L3 oracle, ASR=0 sim) | docs-fixed | Taxonomy + CLAIMS_MAP |
-| Single Target/Judge pair | docs-fixed | No multi-model robustness claim |
-| Authored synthetic packs | docs-fixed | Not production RAG/agents |
+| Single Target/Judge pair (**R=1**) | docs-fixed | No multi-model / multi-seed robustness; frontier four not confirmatory |
+| Authored synthetic packs (**English-only**) | docs-fixed | Authored RAG-shaped ≠ live retriever; not multilingual; not NIST live |
 
 **Sample size / power (Track A, offline).** Under documented simplifications (`b01=0`, McNemar exact, binomial scaffold for planning), n=61 would yield **~99%** power to detect a **true** per-episode b10 rate of **MSID=0.20** at α=0.05 ([`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json)). Observed **b10=5** requires **≥6** discordant wins for significance and **≥13** for point δ̂≥0.20 at `b01=0`; the offline δ̂ 95% CI upper bound (**0.1639**, from [`vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json)) stays below MSID. **Interpretation:** Track A **FAIL** is consistent with a **small estimated effect** and pre-registered gates—not primarily “n=61 could never detect MSID-sized effects” under this model. Generalization beyond n=61 remains limited.
 

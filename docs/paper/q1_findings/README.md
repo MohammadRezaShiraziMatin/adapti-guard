@@ -42,6 +42,7 @@
 | [`artifacts/vnext_delta_ci_offline.json`](artifacts/vnext_delta_ci_offline.json) | Offline Track A δ̂ 95% CI (not in AUDIT) |
 | [`artifacts/vnext_track_a_power_sensitivity.json`](artifacts/vnext_track_a_power_sensitivity.json) | Offline McNemar power / sensitivity (n=61) |
 | [`CONTRIBUTION_CEILING.md`](CONTRIBUTION_CEILING.md) | What the paper is / is not (abstract-safe) |
+| [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md) | Q1 Journal empirical frame: frozen core + gated Future Work (not done) |
 | [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) | SHAs, AUDIT paths, offline scripts, API budget boundary |
 | [`verify_q1_findings_facts.py`](verify_q1_findings_facts.py) | Claim/number gate (exit 0 = PASS) |
 

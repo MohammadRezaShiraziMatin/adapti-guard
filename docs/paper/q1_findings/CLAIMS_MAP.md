@@ -3,7 +3,7 @@
 **Authority:** Frozen `AUDIT.md` / `verdict.json` beat this file.  
 **Align with:** [`docs/paper/CLAIMS_CHECKLIST.md`](../CLAIMS_CHECKLIST.md) · Track detail [`dual_track/CLAIMS_DUAL_TRACK.md`](../dual_track/CLAIMS_DUAL_TRACK.md) · Workshop Track A map [`workshop_vnext_fail/CLAIMS_MAP.md`](../workshop_vnext_fail/CLAIMS_MAP.md)
 
-**Scope:** This manuscript reports **Track A (VNEXT FAIL)**, **Track B (Phase-1 scoped improvement)**, and **Layer A diagnostic** in **separate labeled sections**. Confirmatory V2 and optional P3 arms are **Future Work** only.
+**Scope:** This manuscript reports **Track A (VNEXT FAIL)**, **Track B (Phase-1 scoped improvement)**, and **Layer A diagnostic** in **separate labeled sections**. Confirmatory V2 and optional P3 arms are **Future Work** only. Extension gates (multi-turn, AgentDojo-class, baselines, multi-model, etc.): [`Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md`](Q1_JOURNAL_EMPIRICAL_EXTENSION_FRAME.md) — **not** claimed done.
 
 ---
 
@@ -23,7 +23,7 @@
 | Q1-L1 | Layer A (CLOSED): v4 TEST recall **0.675**, AUROC **0.705**; B3_V4 McNemar p=**0.125** — **not** a demonstrated ASR reduction. |
 | Q1-M1 | Target `qwen/qwen-2.5-7b-instruct` ≠ Judge `qwen/qwen-2.5-72b-instruct` on confirmatory live tracks. |
 | Q1-M2 | Reusable artifact: hash-locked protocol, intervention taxonomy, utility gate — **not** a shipped product. |
-| Q1-FW1 | Confirmatory V2 pack/live, AgentDojo-class loops, external SOTA baselines, `p1_mechanism_v1.0.0` live — **Future Work** (Q1-P2); optional P3 after budget. |
+| Q1-FW1 | Confirmatory V2 pack/live, AgentDojo-class loops, external SOTA baselines, `p1_mechanism_v1.0.0` live, stateful multi-turn, live adaptive attacker, live retriever, multilingual, R>1 — **Future Work** (Q1-P2 / extension frame); optional P3 after budget. |
 
 ---
 
@@ -40,6 +40,9 @@
 | Q1-F7 | Invent Track A δ̂ 95% CI **as if in AUDIT**, or cite offline CI/power **without** offline/scaffold labeling. |
 | Q1-F9 | Claim Track A was **underpowered for MSID 0.20** without the b01=0 planning scaffold and **FAIL-first** context. |
 | Q1-F8 | Generalize beyond frozen pack SHA, target, and judge for either track. |
+| Q1-F10 | Claim **live** defense-aware adaptive attacker, **live** retriever/RAG, or NIST live eval (authored/sim only this cycle). |
+| Q1-F11 | Claim multilingual coverage or multi-seed (**R>1**) robustness (confirmatory packs English-only; live **R=1**). |
+| Q1-F12 | Treat Qwen3-30B-A3B-Instruct-2507, Gemma4 26B A4B, GPT-5, or Claude Sonnet 4 as **confirmatory** Target/Judge results this cycle. |
 
 ---
 
@@ -51,6 +54,6 @@
 | Results Track A | Q1-A1–A5 |
 | Results Track B | Q1-B1–B3 |
 | Layer A diagnostic | Q1-L1 |
-| Limitations | Q1-A4, Q1-A6, Q1-FW1, Q1-F6 |
+| Limitations | Q1-A4, Q1-A6, Q1-FW1, Q1-F6, Q1-F10–F12 |
 
 **Edit rule:** If a sentence is not in **Allowed**, it must not appear in abstract, conclusion, or figure captions.
