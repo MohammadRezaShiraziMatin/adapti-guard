@@ -1,0 +1,57 @@
+# Canonical Phase 7 extension wiring (design). No API execution from this file.
+schema_version: 1
+canonical_executors:
+  offline: adapti_guard.evaluation.offline_experiment_runner.run_offline
+  confirmatory_historical: adapti_guard.experiments.real_llm_pipeline.run_real_llm_pipeline
+  live_extension: adapti_guard.evaluation.live_extension_wiring.run_live_condition
+  live_plan: adapti_guard.evaluation.live_extension_wiring.plan_live_execution
+conditions:
+  COND-E1-STATEFUL-OFFLINE:
+    offline_executor: offline
+    live_executor: live_extension
+    live_ready: false
+    live_blocker: authorization_pending
+    components:
+      attack: component_resolver.resolve_attack
+      defense: component_resolver.resolve_defense
+      episode: stateful_episode.StatefulEpisodeRunner
+      target_live: target_model.build_target_model
+      judge_live: llm_judge.build_judge
+    note: "Live uses same StatefulEpisodeRunner; TargetModel replaces mock callable"
+
+  COND-E2-ADAPTIVE-OFFLINE:
+    offline_executor: offline
+    live_executor: live_extension
+    live_ready: false
+    live_blocker: authorization_pending
+    components:
+      attack: adaptive_attacker.AdaptiveAttacker
+      defense: component_resolver.resolve_defense
+      episode: adaptive_episode.AdaptiveEpisodeRunner
+      target_live: target_model.build_target_model
+      judge_live: llm_judge.build_judge
+
+  COND-E3-AGENT-OFFLINE:
+    offline_executor: offline
+    live_executor: live_extension
+    live_ready: false
+    live_blocker: authorization_pending
+    components:
+      attack: component_resolver.resolve_attack
+      environment: agent_environment.AgentEnvironment
+      target_live: target_model.build_target_model
+    note: "Live agentic may still use MockToolRegistry unless protocol amends"
+
+  COND-EXT6-BASELINE:
+    offline_executor: none
+    live_executor: live_extension
+    live_ready: false
+    live_blocker: external_baselines_design_only
+    components:
+      registry: baselines.external_baseline_protocol.ExternalBaselineRegistry
+
+  COND-PHASE7-CAMPAIGN:
+    offline_executor: none
+    live_executor: live_extension
+    live_ready: false
+    live_blocker: live_budget_authorization

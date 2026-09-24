@@ -162,7 +162,7 @@ class OpenRouterTargetModel(TargetModel):
                         "completion_tokens": response.usage.completion_tokens,
                         "total_tokens": response.usage.total_tokens,
                     }
-                raw = {"id": response.id, "model": response.model}
+                raw = {"id": response.id, "model": response.model, "http_attempts": attempt + 1}
                 result = GenerationResult(
                     text=text,
                     model_id=model,
@@ -190,6 +190,7 @@ class OpenRouterTargetModel(TargetModel):
             latency_ms=0.0,
             cache_hit=False,
             error=last_error or "unknown_error",
+            raw={"http_attempts": self.max_retries + 1},
         )
 
 
