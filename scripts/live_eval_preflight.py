@@ -69,7 +69,17 @@ def main() -> int:
     else:
         checks["budget_contract"] = "PENDING"
 
+    checks["live_ready_yaml"] = str(auth_yaml.get("live_ready", "MISSING"))
+    out_dir = auth_yaml.get("output_directory")
+    if out_dir and not str(out_dir).startswith("PENDING"):
+        checks["output_directory"] = "PASS"
+    elif out_dir:
+        checks["output_directory"] = "PENDING"
+    else:
+        checks["output_directory"] = "FAIL:missing"
     checks["output_path_root"] = "PASS" if DEFAULT_LIVE_RUN_ROOT.parent.is_dir() else "FAIL"
+    hint = auth_yaml.get("canonical_output_directory_hint")
+    checks["output_directory_hint"] = "PASS" if hint else "MISSING"
     checks["code_commit"] = git_commit() or "UNKNOWN"
 
     blocked = checks.get("authorization_gate") != "LIVE_AUTHORIZED" or not auth_ok

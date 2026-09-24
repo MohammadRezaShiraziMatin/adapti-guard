@@ -60,6 +60,8 @@ def _contract_schema_complete(auth: dict) -> tuple[bool, list[str]]:
         "execution_window",
         "explicit_authorization_for_live_execution",
         "api_live_execution_confirmed",
+        "live_ready",
+        "output_directory",
     ):
         if key not in auth:
             missing.append(f"missing schema field: {key}")

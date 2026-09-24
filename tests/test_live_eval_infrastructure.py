@@ -66,6 +66,11 @@ def test_target_ne_judge_block():
         assert_target_ne_judge("same", "same", pending_ok=False)
 
 
+def test_gemini_legacy_keys_rejected_same_model():
+    with pytest.raises(TargetJudgeGuardError):
+        validate_target_judge_keys("gemini_target", "gemini_judge")
+
+
 def test_validate_target_judge_keys_ok():
     info = validate_target_judge_keys("model_b", "judge_primary")
     assert info["target_model_id"] != info["judge_model_id"]

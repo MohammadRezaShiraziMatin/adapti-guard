@@ -4,6 +4,9 @@ authorization_id: PENDING_HUMAN_SIGNOFF
 approval_status: AUTHORIZATION_PENDING
 status: AUTHORIZATION_PENDING
 api_spend_permitted: false
+live_ready: false
+output_directory: PENDING_OUTPUT_DIRECTORY
+canonical_output_directory_hint: experiments/real_llm_eval/P1_MECHANISM_L1
 gate_id: LIVE-EVAL-GATE-0.1
 protocol_id: LIVE_EVALUATION_PROTOCOL.md
 explicit_authorization_for_live_execution: false

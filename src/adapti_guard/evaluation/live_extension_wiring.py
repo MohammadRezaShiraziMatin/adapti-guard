@@ -189,6 +189,69 @@ def _run_stateful_episode(
     )
 
 
+def build_judge_evidence_record(
+    *,
+    execution_mode: ExecutionMode,
+    target_model_id: str,
+    judge_model_id: str,
+    judge_config_key: str,
+    authorization_allows_spend: bool,
+) -> dict[str, Any]:
+    """Static judge contract record — no LLM invocation (NOT_RUN until authorized)."""
+    if execution_mode == "OFFLINE_MOCK":
+        reason = "phase7_live_blocked_offline_mock"
+    elif not authorization_allows_spend:
+        reason = "authorization_incomplete"
+    else:
+        reason = "judge_llm_not_invoked_pre_authorization_audit"
+    return {
+        "status": "NOT_RUN",
+        "execution_status": "NOT_RUN",
+        "reason": reason,
+        "target_model_id": target_model_id,
+        "judge_model_id": judge_model_id,
+        "judge_config_key": judge_config_key,
+        "resolver": "adapti_guard.evaluation.live_model_resolver.resolve_judge",
+        "pipeline": "adapti_guard.evaluation.llm_judge.build_judge",
+        "target_raw_immutable": True,
+        "parse_failure": None,
+        "provider_failure": None,
+    }
+
+
+def _run_agent_episode(
+    *,
+    target_model: Any,
+    model_id: str,
+    seed: int,
+) -> dict[str, Any]:
+    from adapti_guard.defense.tool_loop import ToolCall
+    from adapti_guard.evaluation.agent_environment import EXECUTION_MODE, AgentEnvironment
+    from adapti_guard.evaluation.provider_errors import classify_generation_result
+    from adapti_guard.evaluation.target_model import GenerationRequest
+
+    env = AgentEnvironment(seed=seed)
+    tool_req = ToolCall(name="send_email", arguments={"to": "a", "body": "b"})
+    step = env.step(tool_req, DefenseAction.NO_INTERVENTION)
+    target_result = target_model.generate(GenerationRequest(prompt="tool_step", model_id=model_id))
+    return {
+        "episode_type": "agent",
+        "execution_mode": EXECUTION_MODE,
+        "environment_execution_mode": env.execution_mode,
+        "target_generation": classify_generation_result(target_result),
+        "target_text": target_result.text,
+        "tool_request": {"name": tool_req.name, "arguments": dict(tool_req.arguments)},
+        "agent_step": {
+            "step": step.step,
+            "defense_action": step.defense_action,
+            "tool_executed": step.tool_executed,
+            "privileged_executed": step.privileged_executed,
+            "state_hash": step.state_hash,
+        },
+        "tool_log": list(env.state.tool_log),
+    }
+
+
 def _run_adaptive_episode(
     *,
     target_model: Any,
@@ -311,11 +374,34 @@ def run_live_condition(
             "turns": [asdict(t) for t in episode_result.turns],
             "config_hash": episode_result.config_hash,
         }
+    elif condition_id == "COND-E3-AGENT-OFFLINE":
+        agent_payload = _run_agent_episode(target_model=target_model, model_id=model_id, seed=seed)
+        raw_payload = {
+            "condition_id": condition_id,
+            "seed": seed,
+            "trial": trial,
+            **agent_payload,
+        }
+    elif condition_id == "COND-EXT6-BASELINE":
+        raise LiveExtensionBlockedError(
+            "configuration_failure: COND-EXT6-BASELINE external_baselines_design_only — use offline protocol registry"
+        )
     else:
         raise LiveExtensionBlockedError(f"resolution_failure: condition {condition_id} not wired for canonical live runner")
 
     raw_path = write_raw_evidence(out_root, "episode_raw.json", raw_payload)
     raw_paths.append(str(raw_path))
+
+    auth_ok, _auth_reason = authorization_allows_live_spend()
+    judge_raw = build_judge_evidence_record(
+        execution_mode=execution_mode,
+        target_model_id=model_id,
+        judge_model_id=judge_model_id,
+        judge_config_key=judge_config_key,
+        authorization_allows_spend=auth_ok,
+    )
+    judge_path = write_raw_evidence(out_root, "judge_raw.json", judge_raw)
+    raw_paths.append(str(judge_path))
 
     trace_record = {
         **base_trace_fields(
@@ -346,8 +432,10 @@ def run_live_condition(
         "asr": "DEFERRED",
         "defense_rate": "DEFERRED",
         "utility": "DEFERRED",
+        "judge_status": judge_raw["status"],
         "note": "derived from raw evidence only after judge pass — not computed in infra dry path",
         "requests_used": ledger.requests_used,
+        "raw_evidence_order": raw_paths,
     }
     derived_path = derived_dir / "metrics.json"
     write_json(derived_path, derived_metrics)
