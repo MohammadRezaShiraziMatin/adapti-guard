@@ -98,6 +98,13 @@ conditions:
     live_blocker: authorization_pending
     note: "2×2 matrix: adaptive_defense_feedback × make_b1_rule_based(0.25)"
 
+  B2-ADAPTIVE-B3:
+    live_executor: live_extension
+    offline_executor: offline
+    live_ready: false
+    live_blocker: authorization_pending
+    note: "Q1 primary causal: adaptive_defense_feedback × make_q1_pre_target_adaptive_b3"
+
   COND-E3-AGENT-OFFLINE:
     offline_executor: offline
     live_executor: live_extension
