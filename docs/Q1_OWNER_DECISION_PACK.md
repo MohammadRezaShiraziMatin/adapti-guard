@@ -1,7 +1,18 @@
 # Q1 Owner Decision Pack (protocol closure)
 
-**HEAD at pack creation:** `dfa1ec7` · **Execution:** forbidden until OWNER_SIGN_OFF  
+**HEAD at pack creation:** `dfa1ec7` · **Intake @ HEAD:** `a10fb0e` (no owner sign-off received) · **Execution:** forbidden until all D01–D19 `OWNER_DECIDED`  
 **Integrity:** `models.yaml` `37174858…` · dataset `523c8818…` · panel `50e2e2e5…`
+
+## Owner decision intake (explicit status — not locks)
+
+| ID | Status |
+|----|--------|
+| D01–D10 | NEEDS_OWNER_DECISION |
+| D11 J1/J2 IDs | UNVERIFIED |
+| D12 model IDs (Gemma 3 27B, GPT-5.4, Claude Sonnet 5) | UNVERIFIED |
+| D13–D19 | NEEDS_OWNER_DECISION |
+
+Partial repo evidence only (not owner decisions): 3/4 primary OpenRouter ids in `models_q1_eval_panel.yaml` (qwen, mistral, llama).
 
 ## Dependency graph
 
