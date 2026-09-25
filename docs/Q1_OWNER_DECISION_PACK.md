@@ -1,6 +1,6 @@
 # Q1 Owner Decision Pack — P0 proposals (documentation only)
 
-**HEAD:** `266504a` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
+**HEAD:** `207a168` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
 **Status:** `PROPOSAL DOCUMENTATION` — **Proposal ≠ Owner Decision.** All **Owner Decision** fields remain **EMPTY**.
 
 ## Canonical decision map
