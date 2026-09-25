@@ -1,6 +1,6 @@
 # Q1 Owner Decision Pack — Decision-Ready Matrix
 
-**HEAD:** `91c07b4` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
+**HEAD:** `a368e7f` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`
 **Owner Decision:** all P0 fields **EMPTY** · Proposal ≠ Owner Decision · Agent must not lock decisions.
 
 ## Freeze readiness (gate)
@@ -28,7 +28,7 @@
 | W1 | Causal B2 A0 vs B1 in repo | **PASS** | `b2_matrix_contract`: `B2-ADAPTIVE-A0` / `B2-ADAPTIVE-B1`, `build_pre_target_defense`, `AdaptiveAttacker`, `max_turns=3`; `B0 vs B2` = contextual only in proposals |
 | W2 | Episode unit; no pooled McNemar without estimand | **PASS** (proposal) | Unit = episode per attack×target×arm; 6-test Holm example = 2 comparisons × 3 targets — **OWNER** must lock family |
 | W3 | H1 vs test sidedness | **UNRESOLVED** | `mcnemar_test` two-sided; directional H1 in proposal — **OWNER** picks Option A or B (below) |
-| W4 | J2 subset + κ | **P0 BLOCKER** (conditional) | Contract `kappa_subset: NEEDS_DECISION`; no J2 manifest; archive κ≥0.6 **not** in Q1 contract — if owner adopts κ GO, subset cannot be `none` |
+| W4 | J2 subset + κ | **P0 BLOCKER** (conditional) | κ **optional**; **no-κ path** decision-ready; **κ path BLOCKED** until frozen deterministic subset manifest + SHA; no Q1 subset manifest in repo |
 | W5 | Blocked vs judge-fail | **PASS** (semantics) | B2 all-blocked → scorable fail (`b2_adaptive_contract`); `episode_judge_failed` excludes judge fails — sensitivity rule **OWNER** |
 | W6 | B0 repeat in Q1 contract | **PASS** (absent) | No replicate arm registered — optional trade-off only |
 | W7 | B1 result neutrality | **PASS** | No pre-coded null/significance in contract |
@@ -51,10 +51,11 @@
 | B0/B1 **target+judge** calls/ep (worst) | 2 | 732 calls/arm → **1464** total |
 | B2 **target+judge** calls/ep (worst) | `max_turns+1` (=4) | **1464** total |
 | **Worst-case API calls** (primary matrix) | `2×(B0+B1)+4×B2` per target slice | **2928** |
+| **Causal B2** (`B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B1`) | `61 × T × 2 arms` | **732** episodes (candidate; not owner-locked) |
 | Historical reference `qwen-2.5-7b` | Not in episode formula unless Owner adds | **0** (default) |
-| J2 validation calls | D13 subset only | **UNRESOLVED** |
+| J2 validation calls | D13 subset only | **UNRESOLVED** (no manifest) |
 
-**Budget:** phase rule ≤ **$2** (MT1 reference). `hard_cap_usd` / `attack_episodes`: **EMPTY**. OpenRouter list prices (metadata, 2026-09-25): verified IDs below. **BUDGET FEASIBILITY = BLOCKED** for full 6×61×3 matrix at worst-case calls with closed models (GPT-5.4 / Claude 4.6 pricing >> open models); feasible only with Owner-chosen caps/subset — not agent-selected.
+**Budget:** MT1 reference cites ≤ **$2/phase** — contract `hard_cap_usd`: **`NEEDS_DECISION`** (not Owner-locked). `attack_episodes`: **`NEEDS_DECISION`**. Target list prices: verified IDs in panel table (OR public metadata where noted; not all in MT2 snapshot). **BUDGET FEASIBILITY = BLOCKED** for full 6×61×3 matrix at worst-case calls with closed models; feasible only with Owner-chosen caps/subset — not agent-selected.
 
 ---
 
@@ -71,12 +72,12 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | GPT-5.4 | `openai/gpt-5.4` | primary candidate (closed) | openai | OR API | p `2.5e-6` / c `1.5e-5` | call/token/budget gate only | **EMPTY** | VERIFIED |
 | Claude Sonnet 4.6 | `anthropic/claude-sonnet-4.6` | primary candidate (closed) | anthropic | OR API | p `3e-6` / c `1.5e-5` | call/token/budget gate only | **EMPTY** | VERIFIED |
 | Qwen 2.5 7B Instruct | `qwen/qwen-2.5-7b-instruct` | **historical / AUDIT reference** | qwen | `models.yaml` target_2, MT1 r1 | p `1e-7` / c `2e-7` | not in primary matrix unless Owner adds | **EMPTY** | VERIFIED |
-| J1 | `x-ai/grok-4.7` | judge candidate | xai | prior OR metadata + MT2 N/A | **UNRESOLVED** (no snapshot row; re-verify at lock) | ledger + subset | **EMPTY** | CANDIDATE |
-| J2 | `z-ai/glm-4.7` | judge candidate | z-ai | **no repository ID** | **UNRESOLVED** | validation subset (D13) | **EMPTY** | **UNVERIFIED** |
+| J1 | `x-ai/grok-4.7` | judge candidate | xai | OpenRouter public model metadata API; `candidate_panel_reconciliation` in `configs/models_q1_eval_panel.yaml`; **not** in `mt2_openrouter_catalog_snapshot.json` | OR public metadata (not MT2 snapshot); list price not copied in this pack | ledger + subset | **EMPTY** | **VERIFIED** |
+| J2 | `z-ai/glm-4.7` | judge candidate | z-ai | OpenRouter public model metadata API; yaml `repository_verification: openrouter_models_api_metadata` (verification commit `4839981`); **not** in MT2 snapshot | OR public metadata (not MT2 snapshot); list price not copied in this pack | validation subset (D13) | **EMPTY** | **VERIFIED** |
 
 **Removed from candidate primary (vs legacy contract panel):** `mistralai/mistral-small-3.2-24b-instruct` — legacy row remains in `models:` until Owner propagation.
 
-**Judge independence audit (offline):** J1 `x-ai/grok-4.7` — **not** in primary target list → no ID overlap. J2 `z-ai/glm-4.7` — not in primary list; **ID UNVERIFIED** in repo. Primary `deepseek/deepseek-v3.2` — **no** DeepSeek judge in current candidate judges (`deepseek-v4-flash` **removed** from Q1 candidate; legacy `q1_judge_*` rows still `NEEDS_DECISION`). `openai/gpt-oss-120b` — **MT2 only** (`models_mt2.yaml`), not Q1 candidate judge. **Legacy contract execution keys:** Mistral + Gemma 3 27B placeholder — **not** in 6-target candidate table (historical panel compatibility only).
+**Judge independence audit (offline):** J1 `x-ai/grok-4.7` — **not** in primary target list → no exact ID overlap. J2 `z-ai/glm-4.7` — **VERIFIED**, not in primary list → no exact ID overlap. Primary `deepseek/deepseek-v3.2` — **no** DeepSeek judge in current candidate judges (`deepseek-v4-flash` **removed** from Q1 candidate; legacy `q1_judge_*` rows still `NEEDS_DECISION`). `openai/gpt-oss-120b` — **MT2 only** (`models_mt2.yaml`), not Q1 candidate judge. **Legacy contract execution keys:** Mistral + Gemma 3 27B placeholder — **not** in 6-target candidate table (historical panel compatibility only).
 
 **Closed-model integrity:** same attack protocol / endpoint / scoring; only `resource guard` (episode/call/turn caps, ledger) — no model-specific payload or temperature changes without preregistration (D15).
 
@@ -98,13 +99,45 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | Blocked before target | `b2_adaptive_contract` | scorable, `attack_succeeded=false` |
 | Judge failure | `episode_judge_failed` | excluded from ASR |
 
-**Episodes (derived, not locked):** `61 × T × 3` = **1098** when `T=6`. **Worst-case requests (primary matrix):** **2928** (see table above).
+**Episodes (derived, not locked):** `61 × T × 3` = **1098** when `T=6`. **Causal B2 only:** `61 × 6 × 2` = **732** episodes. **Worst-case requests (primary 3-arm matrix):** **2928** (unchanged; see table above).
 
 **Token accounting:** Repository preflight = `estimate_request_cost_usd` (`len(prompt)//4`, `max_tokens` default **512** from panel) + `estimate_api_cost_usd` (**generic** openrouter $/M rates, not per-model OR list). **No** stored per-attack prompt token manifest for Q1 pack → **exact target/judge input tokens = UNRESOLVED**. Output cap evidence: panel `max_tokens: 512`. **No 500K token assumption.**
 
-**Per-model OR pricing (snapshot `mt2_openrouter_catalog_snapshot.json`):** Qwen, Gemma-4-31b-it, Llama only. GPT-5.4, Claude 4.6, DeepSeek V3.2, Grok, GLM → **UNRESOLVED in snapshot** (feasibility cost **UNRESOLVED** per model except snapshot trio uses snapshot `pricing` fields).
+**Per-model OR pricing (snapshot `mt2_openrouter_catalog_snapshot.json`):** Qwen, Gemma-4-31b-it, Llama only. GPT-5.4, Claude 4.6, DeepSeek V3.2, Grok, GLM → pricing from **current OpenRouter public metadata** at ID verification time — **not** from MT2 snapshot (target table lists snapshot/OR fields where already recorded).
 
-**Full-matrix worst-case vs `$2/phase`:** MT1 docs cite **$2.00** phase cap; `BudgetLedger` + `BudgetGatedTargetModel` enforce `max_usd` pre-call (`check_spend_allowed`, UNKNOWN cost blocks). Code constant `PILOT_HARD_CAP_USD=1.0` is pilot default — **not** Q1 owner lock. With **1098 episodes** and closed-model list pricing unverified offline here → **BUDGET FEASIBILITY = BLOCKED** for full 6-target matrix at `$2` without Owner episode/call caps. **Do not** auto-reduce `N`.
+**Planning cost proxy (not realized spend):** offline worst-case planning estimate for full 6-target causal matrix ≈ **$7.91** USD uses token proxy + OR metadata — **not** a billed result; **eval spend = $0**.
+
+**Full-matrix worst-case vs `$2/phase`:** `hard_cap_usd` = **`NEEDS_DECISION`**; `BudgetLedger` + `BudgetGatedTargetModel` enforce `max_usd` pre-call when live. Code constant `PILOT_HARD_CAP_USD=1.0` is pilot default — **not** Q1 owner lock. **BUDGET FEASIBILITY = BLOCKED** for full 6-target matrix at `$2` without Owner episode/call caps. **Do not** auto-reduce `N`.
+
+---
+
+## Statistical planning power (offline · `a368e7f`)
+
+Source: `docs/experiments/protocols/VNEXT_POWER_MEMO.md` §5; `mcnemar_exact_power_vnext_planning()` / `holm_mcnemar_family_power_planning()` in `src/adapti_guard/evaluation/statistics.py` (commit `a368e7f`). **No live eval.**
+
+| Quantity | Value |
+|---|---|
+| `n_attack` | 61 |
+| Test | paired **exact McNemar**, **two-sided** |
+| α | 0.05 |
+| Planning | `p10 = 0.25`, `p01 = 0.05`, `δ = 0.20` (MSID planning; VNEXT memo) |
+| **Per-comparison power** | **0.80516** |
+| Multiplicity (proposal) | **6** per-target comparisons + **Holm** (`holm_correction()`) |
+| **Family-wise power** | **`UNRESOLVED`** |
+
+**Why family-wise is UNRESOLVED:** (1) **Family estimand** (e.g. any-target vs all-targets vs per-target only) is **Owner Decision** (D03). (2) **Cross-target dependence** — same 61 attack IDs on 6 targets — is **not** identified from frozen data; do not assume independence without Owner acceptance.
+
+**`0.80516` is per-comparison power only — not family-wise power.** **`n = 61` does not prove family-wise sufficiency** under Holm across six tests.
+
+**Scenario bounds (extra assumptions only — not scientific conclusions):**
+
+| Scenario | Metric | Value |
+|---|---|---|
+| Independence across 6 tests (MC, 20k replicates, seed 42) | P(≥1 Holm reject) | ≈ **0.992** |
+| Independence (same MC) | P(all 6 Holm reject) | ≈ **0.221** |
+| Perfect positive correlation bound (shared discordant draw) | P(≥1 Holm reject) | ≈ **0.562** |
+
+Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0` binomial scaffold) as the primary planning power for this family.
 
 **Legacy vs candidate:** `configs/q1_evaluation_contract.yaml` `primary_targets` = **4 execution keys** (Mistral, Gemma 3 27B placeholder, Qwen, Llama). `candidate_panel_reconciliation` = **6** targets — **documentation only** until Owner propagation; avoids premature lock.
 
@@ -136,9 +169,9 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 
 | Field | Content |
 |---|---|
-| **Evidence** | `mcnemar_exact`, `holm_correction`; matrix conditions A0/B1 |
-| **Supported Choices** | Per-target pairs; proposal: B0–B1, **B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B1** (causal), B0–B2 contextual; Holm on declared family (e.g. 6 tests) |
-| **Scientific Implication** | W1/W2; no pooled targets without estimand |
+| **Evidence** | `mcnemar_exact`, `holm_correction`; matrix conditions A0/B1; offline power § above (`per_comparison_power = 0.80516`; family-wise **UNRESOLVED**) |
+| **Supported Choices** | Per-target pairs; proposal: B0–B1, **B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B1** (causal), B0–B2 contextual; Holm on declared family (e.g. 6 tests) — **family estimand Owner must lock** |
+| **Scientific Implication** | W1/W2; no pooled targets without estimand; `n=61` supports **single-comparison** 80% planning only |
 | **Owner Decision** | **EMPTY** |
 | **Status** | `NEEDS_OWNER_DECISION` · W3 **UNRESOLVED** until sidedness chosen |
 
@@ -192,13 +225,13 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | **Owner Decision** | **EMPTY** |
 | **Status** | `CLAIM-GATED` |
 
-### D09 — SAP
+### D09 — SAP (judge failure / abstention)
 
 | Field | Content |
 |---|---|
-| **Evidence** | `mcnemar_test`, bootstrap CI, `episode_judge_failed` |
-| **Supported Choices** | W5 blocked=scorable fail; judge-fail exclude + owner sensitivity; α/Holm → **D03**; retry → **D15** |
-| **Scientific Implication** | Must align W3 sidedness |
+| **Evidence** | `mcnemar_test`, bootstrap CI; `episode_judge_failed()` in `attack_success.py` excludes `judge_api_error`, `judge_parse_error`, `target_api_error`, `no_judge_configured`, `metadata.judge_parse_error` from ASR/utility — **does not** impute ASR=0 or ASR=1; W5: `blocked_by_defense` ≠ judge failure |
+| **Supported Choices** | W5 blocked=scorable defense outcome; judge-fail **exclude** (implemented); **Owner sensitivity** for exclusions/timeouts/abstention; α/Holm → **D03**; retry → **D15**; J1/J2 disagreement → contract `disagreement_adjudication: NEEDS_DECISION` |
+| **Scientific Implication** | Must align W3 sidedness; timeout handling **not** fully locked in Q1 contract; abstention policy **unspecified**; sensitivity analysis **not** preregistered |
 | **Owner Decision** | **EMPTY** |
 | **Status** | `NEEDS_OWNER_DECISION` |
 
@@ -226,21 +259,21 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 
 | Field | Content |
 |---|---|
-| **Evidence** | Candidate J1/J2 verified on OpenRouter; MT2 judges remain **separate protocol** |
-| **Supported Choices (Q1)** | J1 `x-ai/grok-4.7` (candidate); J2 `z-ai/glm-4.7` (candidate, repo UNVERIFIED) |
-| **Scientific Implication** | W4 κ + subset; no Grok/GLM in primary targets (if IDs verified at lock) |
+| **Evidence** | J1/J2 **VERIFIED** (OpenRouter public metadata + `models_q1_eval_panel.yaml`; J2 yaml trace commit `4839981`); MT2 judges remain **separate protocol** |
+| **Supported Choices (Q1)** | J1 `x-ai/grok-4.7`; J2 `z-ai/glm-4.7` — candidate only until Owner propagation |
+| **Scientific Implication** | W4 κ + D13 subset; no Grok/GLM exact ID in primary targets |
 | **Owner Decision** | **EMPTY** |
-| **Status** | `NEEDS_OWNER_DECISION` · κ/subset **UNRESOLVED** |
+| **Status** | `NEEDS_OWNER_DECISION` · κ optional; subset manifest **absent** |
 
-### D13 — Subsets
+### D13 — Subsets (J2 scope)
 
 | Field | Content |
 |---|---|
-| **Evidence** | No Q1 subset manifest in repo |
-| **Supported Choices** | `none` or frozen path+SHA |
-| **Scientific Implication** | J2 scope; ≥20% units if κ validation required |
+| **Evidence** | **No** Q1 subset manifest in repo; contract `supplementary.subset`: `path`/`sha256` **`NEEDS_DECISION`**; `selection_rule: predefined_before_results` |
+| **Supported Choices** | **no-κ path:** J2 validation optional / no κ claim — decision-ready; **κ path:** frozen deterministic subset + SHA before results — **BLOCKED** until manifest exists; or explicit `none` if Owner waives κ |
+| **Scientific Implication** | J2 `z-ai/glm-4.7` secondary only; ≥20% coverage **only if** Owner adopts κ validation (not computable without manifest); blinded freeze **intent** in contract — **not** implemented for Q1 pack |
 | **Owner Decision** | **EMPTY** |
-| **Status** | `NEEDS_OWNER_DECISION` · **P0 BLOCKER** if κ GO without manifest |
+| **Status** | `NEEDS_OWNER_DECISION` · **P0 BLOCKER** if κ GO without manifest (W4) |
 
 ### D14 — Leakage / contamination
 
@@ -275,8 +308,8 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | 5 | Judge failure silent exclusion | **UNRESOLVED** (sensitivity OWNER) |
 | 6 | Blocked = unscorable | **PASS** (W5 evidence) |
 | 7 | Budget cap + unresolved workload | **UNRESOLVED** (`BUDGET FEASIBILITY`) |
-| 8 | Gemma slot + no exact ID | **BLOCKED** |
-| 9 | J1/J2 + unverified IDs | **BLOCKED** |
+| 8 | Gemma slot + no exact ID | **BLOCKED** (legacy contract Gemma 3 27B placeholder vs candidate `gemma-4-31b-it` VERIFIED) |
+| 9 | J1/J2 + unverified IDs | **PASS** (candidate IDs VERIFIED; contract `j1_j2_ids` still `NEEDS_DECISION`) |
 | 10 | Owner EMPTY + freeze true | **PASS** (`p0_freeze_ready=false`) |
 
 ---
@@ -288,7 +321,7 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | Contract | `c48697979654265cc25304b8afd102c2aa2f88e76b3a14bcf3281b5b67e29cc1` |
 | Dataset | `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518` |
 | `models.yaml` (VNEXT binding) | `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3` |
-| Panel | `50e2e2e5c56358db02d19e1691b9994426b9334539e7f98a05ff32803ec7badf` |
+| Panel | `49ab168ef305544d3ad3bc3724aaeb015817d7db45d5b7147e46a7dfb64fddab` (`models_q1_eval_panel.yaml` @ doc sync) |
 | Subset | `NEEDS_DECISION` |
 | Code commit | owner records at run time |
 | Raw → stats → manuscript | not produced (no live run) |
