@@ -5,7 +5,7 @@ Snapshot of committed YAML used by Layer A intervention and the official VNEXT c
 Recompute:
 
 ```bash
-sha256sum configs/models.yaml configs/mt2_panel.yaml configs/datasets.yaml configs/models_local.yaml \
+sha256sum configs/models.yaml configs/datasets.yaml configs/models_local.yaml \
   configs/experiments/ablation_study.yaml configs/experiments/long_term_adaptation.yaml
 ```
 
@@ -13,7 +13,7 @@ sha256sum configs/models.yaml configs/mt2_panel.yaml configs/datasets.yaml confi
 
 ## Binding eval-contract keys (`configs/models.yaml`)
 
-SHA-256 `061078c8971ba276442e66b27fe02462ddee970a198beb84510215b7eac3fbb1`
+SHA-256 `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3`
 
 | Key | Required value | Observed on this tree |
 | --- | --- | --- |
@@ -30,17 +30,6 @@ Official VNEXT run (`experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/man
 
 API keys come from `OPENROUTER_API_KEY` in the environment. They are not in git. Offline checks must not call OpenRouter.
 
-### MT2 confirmatory panel (additive; does not replace VNEXT binding above)
-
-| Path | SHA-256 | Role |
-| --- | --- | --- |
-| `configs/mt2_panel.yaml` | `6f8b4c8cc0a46fc23df418ab565f174baaf998e70782d8901c58fc2abb3e31c5` | Six-target + judge panel contract |
-| `docs/PROTOCOL_MT2.md` | (markdown) | Human-readable MT2 panel table |
-
-Offline validation: `python3 -m pytest tests/test_mt2_panel_config.py`.
-
----
-
 ## Other committed configs (not the confirmatory contract)
 
 These files exist in the repo. They did **not** select the VNEXT Target/Judge pair.
@@ -52,6 +41,11 @@ These files exist in the repo. They did **not** select the VNEXT Target/Judge pa
 | `configs/experiments/ablation_study.yaml` | `80791f5122bdfa8ae6b7b177d1f2de043255de8a261a75941e3f0ee418eaf0c5` | Historical ablation YAML |
 | `configs/experiments/long_term_adaptation.yaml` | `96c36db643192e6261ccfe702b4d5c2d610463be8063ffb9f370aa8e91080da5` | Historical long-run YAML |
 | `configs/evaluation/README.md` | (markdown pointer) | Points at `docs/STATISTICAL_PROTOCOL.md` |
+| `configs/models_mt2.yaml` | (see `sha256sum`) | MT2 confirmatory model registry (not VNEXT binding) |
+| `configs/mt2_panel.yaml` | (see `sha256sum`) | MT2 six-target + judge contract |
+| `configs/mt2_openrouter_catalog_snapshot.json` | (see `sha256sum`) | OpenRouter metadata snapshot for nine MT2 IDs |
+
+MT2 offline validation: `python3 -m pytest tests/test_mt2_panel_config.py`. Does **not** alter the VNEXT `target_2` / `judge_fallback` binding above.
 
 ---
 

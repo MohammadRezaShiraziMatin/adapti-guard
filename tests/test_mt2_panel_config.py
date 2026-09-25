@@ -22,15 +22,25 @@ def test_mt2_openai_target_uses_substitute_judges():
     assert j["rule"] == "openai_target_vendor_substitute"
     assert j["primary_config_key"] == "mt2_judge_primary_openai_target_substitute"
     assert j["secondary_config_key"] == "mt2_judge_secondary_openai_target_substitute"
-    assert model_id_for_config_key(j["primary_config_key"]) == "deepseek/deepseek-chat-v3-0324"
-    assert model_id_for_config_key(j["secondary_config_key"]) == "amazon/nova-lite-v1"
+    from adapti_guard.evaluation.mt2_panel import DEFAULT_MODELS_PATH
+
+    assert (
+        model_id_for_config_key(j["primary_config_key"], DEFAULT_MODELS_PATH)
+        == "deepseek/deepseek-chat-v3-0324"
+    )
+    assert model_id_for_config_key(j["secondary_config_key"], DEFAULT_MODELS_PATH) == "amazon/nova-lite-v1"
 
 
 def test_mt2_default_judges_for_non_openai_target():
     j = resolve_mt2_judges_for_target("mt2_target_qwen3_30b_a3b")
     assert j["rule"] == "default"
-    assert model_id_for_config_key(j["primary_config_key"]) == "openai/gpt-oss-120b"
-    assert model_id_for_config_key(j["secondary_config_key"]) == "deepseek/deepseek-chat-v3-0324"
+    from adapti_guard.evaluation.mt2_panel import DEFAULT_MODELS_PATH
+
+    assert model_id_for_config_key(j["primary_config_key"], DEFAULT_MODELS_PATH) == "openai/gpt-oss-120b"
+    assert (
+        model_id_for_config_key(j["secondary_config_key"], DEFAULT_MODELS_PATH)
+        == "deepseek/deepseek-chat-v3-0324"
+    )
 
 
 def test_mt2_historical_keys_unchanged():
@@ -43,12 +53,12 @@ def test_mt2_validate_rejects_family_collision(tmp_path):
     import yaml
     from pathlib import Path
 
-    models = yaml.safe_load(Path("configs/models.yaml").read_text())
+    models = yaml.safe_load(Path("configs/models_mt2.yaml").read_text())
     panel = yaml.safe_load(Path("configs/mt2_panel.yaml").read_text())
     bad_models = dict(models)
     bad_models["models"]["mt2_judge_primary"]["vendor_family"] = "qwen"
     bad_models["models"]["mt2_judge_primary"]["model"] = "qwen/qwen3-30b-a3b"
-    mp = tmp_path / "models.yaml"
+    mp = tmp_path / "models_mt2.yaml"
     pp = tmp_path / "panel.yaml"
     mp.write_text(yaml.dump(bad_models))
     pp.write_text(yaml.dump(panel))

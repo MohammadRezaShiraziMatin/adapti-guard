@@ -6,8 +6,8 @@
 
 | Role | Config contract | Model registry |
 |------|-----------------|----------------|
-| Target panel (6) | `configs/mt2_panel.yaml` → `target_panel.keys` | `configs/models.yaml` `mt2_target_*` |
-| Judge panel | `configs/mt2_panel.yaml` → `judge_panel` | `configs/models.yaml` `mt2_judge_*` |
+| Target panel (6) | `configs/mt2_panel.yaml` → `target_panel.keys` | `configs/models_mt2.yaml` `mt2_target_*` |
+| Judge panel | `configs/mt2_panel.yaml` → `judge_panel` | `configs/models_mt2.yaml` `mt2_judge_*` |
 | Validation | `adapti_guard.evaluation.mt2_panel.validate_mt2_panel` | offline only |
 
 OpenRouter IDs verified **2026-09-25** via `GET https://openrouter.ai/api/v1/models` (metadata only).
@@ -38,4 +38,4 @@ Pricing ($/M): primary OSS 0.15 / 0.60; DeepSeek 0.25 / 1.00; Nova Lite 0.06 / 0
 
 ## Historical keys
 
-MT1/DIAG/VNEXT keys (`target_2`, `judge_fallback`, `model_a`, …) are **unchanged** in `configs/models.yaml`.
+MT1/DIAG/VNEXT keys (`target_2`, `judge_fallback`, `model_a`, …) remain in `configs/models.yaml` (VNEXT SHA unchanged). MT2 keys live only in `configs/models_mt2.yaml`.

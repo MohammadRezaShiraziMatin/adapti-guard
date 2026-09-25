@@ -1,6 +1,8 @@
 """MT2 confirmatory target/judge panel — offline config validation only."""
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 from typing import Any
 
@@ -9,7 +11,7 @@ import yaml
 from adapti_guard.evaluation.live_model_resolver import TargetJudgeGuardError, model_id_for_config_key
 from adapti_guard.evaluation.target_model import load_model_config
 
-DEFAULT_MODELS_PATH = Path("configs/models.yaml")
+DEFAULT_MODELS_PATH = Path("configs/models_mt2.yaml")
 DEFAULT_PANEL_PATH = Path("configs/mt2_panel.yaml")
 
 MT2_TARGET_KEY_PREFIX = "mt2_target_"
@@ -22,6 +24,31 @@ class MT2PanelConfigError(Exception):
 def load_mt2_panel_contract(path: str | Path = DEFAULT_PANEL_PATH) -> dict[str, Any]:
     with Path(path).open("r", encoding="utf-8") as handle:
         return yaml.safe_load(handle)
+
+
+def _load_openrouter_catalog_verification(contract: dict[str, Any]) -> dict[str, Any]:
+    snap_path = Path(str(contract.get("openrouter_catalog_snapshot_path", "")))
+    expected_sha = str(contract.get("openrouter_catalog_snapshot_sha256", ""))
+    if not snap_path.is_file():
+        raise MT2PanelConfigError(f"missing OpenRouter catalog snapshot: {snap_path}")
+    raw = snap_path.read_bytes()
+    actual_sha = hashlib.sha256(raw).hexdigest()
+    if expected_sha and actual_sha != expected_sha:
+        raise MT2PanelConfigError(
+            f"catalog snapshot SHA mismatch: expected {expected_sha}, got {actual_sha}"
+        )
+    payload = json.loads(raw.decode("utf-8"))
+    models = payload.get("models") or {}
+    verification: dict[str, Any] = {}
+    for model_id, entry in models.items():
+        pr = entry.get("pricing") or {}
+        verification[model_id] = {
+            "listed": True,
+            "context_length": entry.get("context_length"),
+            "pricing_prompt_per_token": pr.get("prompt"),
+            "pricing_completion_per_token": pr.get("completion"),
+        }
+    return verification
 
 
 def _vendor_family_for_key(config_key: str, models: dict[str, Any]) -> str:
@@ -90,13 +117,13 @@ def validate_mt2_panel(
     if len(target_keys) != 6:
         raise MT2PanelConfigError(f"expected 6 MT2 targets, got {len(target_keys)}")
 
-    verification = contract.get("openrouter_verification", {}).get("models", {})
+    verification = _load_openrouter_catalog_verification(contract)
     target_families: set[str] = set()
     target_report: list[dict[str, Any]] = []
 
     for key in target_keys:
         if key not in models:
-            raise MT2PanelConfigError(f"missing models.yaml entry: {key}")
+            raise MT2PanelConfigError(f"missing MT2 models entry: {key}")
         model_id = model_id_for_config_key(key, models_path)
         if model_id not in verification or not verification[model_id].get("listed"):
             raise MT2PanelConfigError(f"target {key} model {model_id} not listed in panel verification")
@@ -138,7 +165,7 @@ def validate_mt2_panel(
 
     mt2_section = cfg.get("mt2_panel") or {}
     if list(mt2_section.get("target_keys", [])) != target_keys:
-        raise MT2PanelConfigError("models.yaml mt2_panel.target_keys out of sync with mt2_panel.yaml")
+        raise MT2PanelConfigError("models_mt2.yaml mt2_panel.target_keys out of sync with mt2_panel.yaml")
 
     return {
         "status": "valid",
