@@ -436,3 +436,33 @@ No runner wiring until execution gate satisfied.
 All must be **LOCKED** (not NEEDS_DECISION): D01–D19 fields + runner mapping + preflight + Phase7 authorization.
 
 **Current:** **BLOCKED** — owner sign-off required.
+
+---
+
+## Signable Owner Decision Record (HEAD `3669509`)
+
+**Owner sign-off field:** _empty until human fills `OWNER_DECISION` column and commits / signs._
+
+| ID | Current Status | Owner Decision | Evidence (repo) | Dependency | Lockable? |
+|----|----------------|----------------|-----------------|------------|-----------|
+| D01 | NEEDS_OWNER_DECISION | — | Q1 contract has no RQ/H; VNEXT RQ separate (`VNEXT_PROTOCOL.md` §2) | — | No |
+| D02 | NEEDS_OWNER_DECISION | — | `endpoints.primary_security`; B2 `EPISODE_SUCCESS_RULE` (`b2_adaptive_contract.py`); `compute_real_metrics` | D01 | No |
+| D03 | NEEDS_OWNER_DECISION | — | `holm_correction` (`statistics.py`); comparisons not preregistered | D01,D02 | No |
+| D04 | NEEDS_OWNER_DECISION | — | `B1`/`STATIC-A3`/`STATIC-A1` (`defense_baselines.py`); DIAG used `B1` | D03 | No |
+| D05 | NEEDS_OWNER_DECISION | — | `LIVE_WIRING_MAX_TURNS=3`; condition IDs in `b2_adaptive_contract` / `b2_matrix_contract`; `AdaptiveAttacker` vs `FixedSequenceAttacker` | D03,D04 | No |
+| D06 | NEEDS_OWNER_DECISION | — | 61 benign in pack; attack budget 732 only; options A/B/C not chosen | D02 | No |
+| D07 | NEEDS_OWNER_DECISION | — | No Q1 ablation arms; escalation/RiskCore in code only | D05 | No |
+| D08 | NEEDS_OWNER_DECISION | — | τ=0.25 in `make_b1_rule_based` / `B1_RULE_THRESHOLD` (if D04=`B1`) | D04 | No |
+| D09 | NEEDS_OWNER_DECISION | — | `mcnemar_test`, `holm_correction`, `delta_hat_*`, Wilson/bootstrap helpers | D02,D03 | No |
+| D10 | NEEDS_OWNER_DECISION | — | 61+61 pack; 4 primary slots; hosted nondeterminism | D06,D12,D18 | No |
+| D11 | UNVERIFIED | — | J1/J2 slots `NEEDS_DECISION` in panel; no Grok; DeepSeek v3-0324 only (different product name) | D13 | No |
+| D12 | UNVERIFIED | — | 3 repo IDs: qwen/mistral/llama in panel; Gemma 3 27B / GPT-5.4 / Claude Sonnet 5 not verified; **not** `gemma-4-31b-it` | D13 | No |
+| D13 | NEEDS_OWNER_DECISION | — | No supplementary/J2 subset manifest in `datasets/frozen/` | D06,D11 | No |
+| D14 | NEEDS_OWNER_DECISION | — | Label-blind defense (`real_llm_pipeline`); VNEXT leakage patterns | D11 | No |
+| D15 | NEEDS_OWNER_DECISION | — | Panel temp=0.0 where set; MT1 `max_retries=0` pattern | D12 | No |
+| D16 | NEEDS_OWNER_DECISION | — | Pack order seed 61; runner order not Q1-locked | D05 | No |
+| D17 | NEEDS_OWNER_DECISION | — | `BudgetLedger`; hard_cap $3 in contract; reporting fields not locked | D06 | No |
+| D18 | NEEDS_OWNER_DECISION | — | `agent-injection-bench` absent from repo | D10 | No |
+| D19 | NEEDS_OWNER_DECISION | — | VNEXT taxonomy ref; no Q1 failure table spec | D09,D11 | No |
+
+**Freeze rule:** all rows `Lockable?` → Yes only after `Owner Decision` filled and propagated to `q1_evaluation_contract.yaml` / verified panel rows.
