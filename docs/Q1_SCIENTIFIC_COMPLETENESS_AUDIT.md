@@ -6,4 +6,4 @@
 See contract `scientific_design` for machine-readable SUPPORTED / MISSING / NEEDS_DECISION flags.  
 Owner decisions from prior checklist remain open; this audit does not resolve them.
 
-**Readiness:** Contract is **structurally** present (dataset N, arms, 732 attack budget, repro chain, budget cap) but **not** scientifically complete for confirmatory claims until `NEEDS_DECISION` / `MISSING` items are owner-locked.
+**Readiness:** Contract is **structurally** present (dataset N, arms, episode-budget formula, repro chain, budget ledger hook) but **not** scientifically complete until owner locks episode budget, `hard_cap_usd`, and other `NEEDS_DECISION` / `MISSING` items.

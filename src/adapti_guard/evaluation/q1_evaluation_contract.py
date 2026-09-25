@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +13,7 @@ DEFAULT_CONTRACT_PATH = Path("configs/q1_evaluation_contract.yaml")
 DEFAULT_PANEL_PATH = Path("configs/models_q1_eval_panel.yaml")
 VNEXT_DATASET_SHA = "523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518"
 VNEXT_MODELS_YAML_SHA = "37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3"
+EPISODE_BUDGET_FORMULA = "n_attack * n_primary_targets * n_arms"
 
 
 class Q1ContractError(Exception):
@@ -27,6 +27,15 @@ def load_q1_contract(path: str | Path = DEFAULT_CONTRACT_PATH) -> dict[str, Any]
 
 def contract_sha256(path: str | Path = DEFAULT_CONTRACT_PATH) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def derived_primary_attack_episodes(contract: dict[str, Any]) -> int:
+    ds = contract.get("dataset") or {}
+    n_attack = int(ds.get("n_attack", 0))
+    prim = contract.get("primary_targets") or {}
+    n_targets = len(list(prim.get("config_keys", [])))
+    n_arms = len(contract.get("arms") or {})
+    return n_attack * n_targets * n_arms
 
 
 def validate_q1_evaluation_contract(
@@ -69,12 +78,25 @@ def validate_q1_evaluation_contract(
         raise Q1ContractError(f"B2 max_turns must match LIVE_WIRING_MAX_TURNS={LIVE_WIRING_MAX_TURNS}")
 
     peb = contract.get("primary_episode_budget") or {}
-    if int(peb.get("attack_episodes", 0)) != 732:
-        raise Q1ContractError("primary attack episode budget must be 732")
+    if str(peb.get("formula")) != EPISODE_BUDGET_FORMULA:
+        raise Q1ContractError(f"primary_episode_budget.formula must be {EPISODE_BUDGET_FORMULA!r}")
+    derived_attack = derived_primary_attack_episodes(contract)
+    declared_attack = peb.get("attack_episodes")
+    if str(declared_attack) != "NEEDS_DECISION":
+        if int(declared_attack) != derived_attack:
+            raise Q1ContractError(
+                f"attack_episodes {declared_attack} != derived {derived_attack} from formula"
+            )
 
     budget = contract.get("budget") or {}
-    if float(budget.get("hard_cap_usd", 0)) != 3.0:
-        raise Q1ContractError("hard_cap_usd must be 3.00")
+    cap = budget.get("hard_cap_usd")
+    if str(cap) != "NEEDS_DECISION":
+        try:
+            cap_f = float(cap)
+        except (TypeError, ValueError):
+            raise Q1ContractError("hard_cap_usd must be NEEDS_DECISION or a positive number")
+        if cap_f <= 0:
+            raise Q1ContractError("hard_cap_usd must be positive when set")
     if budget.get("hard_stop") is not True:
         raise Q1ContractError("budget hard_stop must be true")
 
@@ -105,17 +127,27 @@ def validate_q1_evaluation_contract(
         needs.append("arms.B2.live_condition_id")
     if str(supp.get("subset", {}).get("path")) == "NEEDS_DECISION":
         needs.append("supplementary.frozen_subset")
+    if str(peb.get("attack_episodes")) == "NEEDS_DECISION":
+        needs.append("primary_episode_budget.attack_episodes")
+    if str(cap) == "NEEDS_DECISION":
+        needs.append("budget.hard_cap_usd")
     if str(contract.get("statistics", {}).get("multiple_comparison")) == "NEEDS_DECISION":
         needs.append("statistics.multiple_comparison")
     needs.extend(blocked)
 
+    sci = contract.get("scientific_design") or {}
+    execution_gate = str(sci.get("execution_gate", "BLOCKED"))
+
     return {
         "status": "valid_offline" if not needs else "valid_offline_with_blockers",
+        "execution_gate": execution_gate,
         "contract_sha256": contract_sha256(contract_path),
         "dataset_sha256": actual_ds_sha,
         "models_yaml_sha256": VNEXT_MODELS_YAML_SHA,
         "panel_keys_pending_verification": blocked,
         "needs_decision": sorted(set(needs)),
-        "primary_attack_episodes": 732,
-        "budget_cap_usd": 3.0,
+        "derived_attack_episodes": derived_attack,
+        "attack_episodes_declared": declared_attack,
+        "episode_budget_formula": EPISODE_BUDGET_FORMULA,
+        "budget_cap_usd": cap,
     }

@@ -1,108 +1,125 @@
-# Q1 Owner Decision Pack — final fill-in sheet
+# Q1 Owner Decision Pack
 
-**HEAD:** `779660f` (update on commit) · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
-**Agent rule:** Evidence and supported choices only. Do not treat repository values as owner lock. Owner fills blank fields below.
+**HEAD:** `8ac16ae` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
+Proposals below are `PROPOSED — REQUIRES OWNER APPROVAL` unless marked otherwise. **Proposal ≠ Owner Decision.**
 
-**Immutable (not modified in this workflow):** `configs/models.yaml` · `datasets/frozen/vnext_confirm_v1/dataset.jsonl` · frozen/VNEXT/historical results
+## Canonical decision map (single source per topic)
+
+| Topic | Canonical ID | Other sections |
+|---|---|---|
+| α, Holm family, multiplicity correction | **D03** | D09 references D03 only |
+| Retry policy | **D15** | D09 references D15 only |
+| Episode order / randomization | **D15** | D16 references D15 only |
+| Primary target models (OpenRouter IDs) | **D11** | — |
+| Q1 judges J1/J2 + protocol | **D12** | MT2 judges listed as separate protocol evidence only |
+| Primary attack episode count N | **Owner + contract** `primary_episode_budget.attack_episodes` | Derived: `n_attack × n_primary_targets × n_arms` |
+| Live budget cap | **Owner + contract** `budget.hard_cap_usd` | No agent default |
+
+**D11 semantics:** primary **target** panel slots only.  
+**D12 semantics:** Q1 **judge** panel (J1 primary, J2 agreement) + optional cross-reference to MT2 judge registry (different protocol).
 
 ---
 
-# P0 — Owner decisions (12 blocking items)
+# P0 — Owner decisions (12 items)
 
 ## D01 — Research Questions
-
-**Repository evidence:** No Q1 RQ/H text in contract (`scientific_design.research_questions: NEEDS_DECISION`). Arms B0/B1/B2 in `configs/q1_evaluation_contract.yaml`. VNEXT RQs are separate (`docs/experiments/protocols/VNEXT_PROTOCOL.md`).
 
 **Owner Decision required:**
 - RQ1:
 - H0:
 - H1:
 
+```text
+Evidence: No Q1 RQ in contract. Arms B0/B1/B2; judge-labeled attack_success_rate path.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) RQ on B0 vs B1/B2 attack success on vnext_confirm_v1 attacks.
+Owner Approval Required: APPROVE / REJECT / replace in fields above.
+```
+
 ---
 
 ## D02 — Endpoint / Estimand / Unit
-
-**Repository evidence:** Contract `endpoints.primary_security: attack_success_rate`; `attack_benign_split: separate_endpoints`. B2 `episode_judgment: final_turn_only` (`b2_adaptive_contract.EPISODE_SUCCESS_RULE`). Unit hints: B0/B1 single-turn episode; B2 final executed turn (`scientific_design.unit_of_analysis` in contract).
 
 **Owner Decision required:**
 - Primary endpoint:
 - Estimand:
 - Unit of analysis:
 
+```text
+Evidence: attack_success_rate; B2 final_turn_only; McNemar δ̂ helper in statistics.py.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) judge ASR; δ̂=(b10−b01)/n_attack; episode per (attack_id, target, arm).
+Owner Approval Required: APPROVE / REJECT.
+```
+
 ---
 
-## D03 — Primary Comparisons / α / Holm
-
-**Repository evidence:** Three arms → candidate pairs: B0–B1, B0–B2, B1–B2. Test helper: `mcnemar_exact` (`statistics.paired_attack_test` in contract). Multiplicity helper: `holm_correction` in `src/adapti_guard/evaluation/statistics.py`. Family not preregistered in Q1 contract.
-
-**Supported choices (repo only):** Comparisons — any subset of `{B0 vs B1, B0 vs B2, B1 vs B2}` (owner lists which are primary). Test — `mcnemar_exact`. Correction — `Holm-Bonferroni` via `holm_correction` (family definition is owner choice).
+## D03 — Primary Comparisons / α / Holm *(canonical for α & multiplicity)*
 
 **Owner Decision required:**
 - Primary comparison #1:
 - Primary comparison #2:
-- Primary comparison #3: *(leave blank if fewer than three)*
+- Primary comparison #3:
 - α:
 - Multiple-comparison family:
 - Correction:
+
+```text
+Evidence: Pairwise B0–B1, B0–B2, B1–B2 possible; mcnemar_exact + holm_correction in repo.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) B0–B1 and B0–B2 only; α=0.05 two-sided; Holm over those two tests.
+Owner Approval Required: APPROVE / REJECT.
+```
 
 ---
 
 ## D04 — B1
 
-**Repository evidence:** `BASELINE_FACTORIES` in `src/adapti_guard/experiments/defense_baselines.py`; contract `arms.B1` `NEEDS_DECISION`.
+**Owner Decision required:** `B1` / `STATIC-A3` / `STATIC-A1`
 
-**Supported choices (repo only):** exactly one of:
-- `B1` → `make_b1_rule_based` (τ=0.25 in `b2_matrix_contract.B1_RULE_THRESHOLD` when used from matrix)
-- `STATIC-A3` → `make_l3_fixed_block`
-- `STATIC-A1` → `make_l1_fixed_sanitize`
-
-**Owner Decision required:** *(one of: `B1` / `STATIC-A3` / `STATIC-A1`)*
+```text
+Evidence: make_b1_rule_based vs STATIC-A3/A1 in defense_baselines.py.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) B1 rule-based.
+Owner Approval Required: APPROVE / select alternate supported key.
+```
 
 ---
 
 ## D05 — B2
-
-**Repository evidence:** `B2_LIVE_CONDITION_IDS` in `b2_adaptive_contract.py`; `attack_mode_for_condition_id` in `b2_attack_mode_contract.py`; contract `max_turns: 3`, `episode_judgment: final_turn_only`.
-
-**Supported choices (repo only):**
-
-| condition_id (pick one) | attacker mode (repo mapping) |
-|---|---|
-| `B2-FIXED-A0`, `B2-FIXED-B1`, `B2-FIXED` | `FixedSequenceAttacker` (`fixed_sequence`) |
-| `B2-ADAPTIVE-A0`, `B2-ADAPTIVE-B1`, `B2-ADAPTIVE`, `LIVE-PRO-PI-B2-ADAPTIVE`, `COND-E2-ADAPTIVE-OFFLINE` | `AdaptiveAttacker` (`adaptive_defense_feedback`) |
-
-**Evaluation design (owner picks one scope):**
-- `defense-only` — single `condition_id` for Q1 arm B2
-- `matrix` — full 2×2 attack-mode matrix as separate registered design (repo supports matrix cells; not default in Q1 contract)
 
 **Owner Decision required:**
 - condition_id:
 - attacker mode: `FixedSequenceAttacker` / `AdaptiveAttacker`
 - evaluation design: `defense-only` / `matrix`
 
+```text
+Evidence: B2_LIVE_CONDITION_IDS; attack_mode_for_condition_id (fixed vs adaptive).
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) B2-ADAPTIVE-B1, AdaptiveAttacker, defense-only.
+Owner Approval Required: APPROVE / REJECT.
+```
+
 ---
 
 ## D09 — Statistical Analysis Plan
 
-**Repository evidence:** Contract `statistics.paired_attack_test: mcnemar_exact`; `alpha`, `holm_family`, `effect_size`, `ci_method`, `ties_missing_judge_fail`: `NEEDS_DECISION`. Code: `mcnemar_test`, `holm_correction`, `delta_hat_from_mcnemar_contingency`, Wilson/bootstrap CI in `statistics.py`. VNEXT locked α=0.05 is reference only — not Q1 owner decision.
-
 **Owner Decision required:**
 - statistical test:
-- α:
-- CI:
 - effect size / estimand:
+- CI:
 - missing outcome:
 - judge failure:
-- retry:
 - exclusion:
 - ties:
-- multiplicity:
+- α / multiplicity / correction: *(see **D03** — do not duplicate)*
+
+- retry: *(see **D15** — do not duplicate)*
+
+```text
+Evidence: mcnemar_test, bootstrap CI, Wilson in statistics.py.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) mcnemar_exact; δ̂ and bootstrap CI; unscorable exclusions; ties discordant-only; α/Holm per D03; retry per D15.
+Owner Approval Required: APPROVE / REJECT.
+```
 
 ---
 
 ## D10 — Claims
-
-**Repository evidence:** Pack 61 attack + 61 benign; primary attack budget 732 (61×4×3); supplementary `merge_with_primary_comparisons: false`; `claims_generalization: NEEDS_DECISION`.
 
 **Owner Decision required:**
 - primary claim:
@@ -112,60 +129,79 @@
 - generalization boundary:
 - explicit limitations:
 
----
-
-## D11 — Target Model Panel
-
-**Repository evidence:** `configs/models_q1_eval_panel.yaml`, contract `primary_targets.config_keys`.
-
-| Slot | Repository ID | Status | Owner Decision |
-|---|---|---|---|
-| Qwen | `qwen/qwen3-30b-a3b` | REPO-VERIFIED | LOCK / REJECT |
-| Mistral | `mistralai/mistral-small-3.2-24b-instruct` | REPO-VERIFIED | LOCK / REJECT |
-| Llama | `meta-llama/llama-3.3-70b-instruct` | REPO-VERIFIED | LOCK / REJECT |
-| Gemma 3 27B | *(none in repo)* | UNVERIFIED | LOCK / REJECT — if LOCK, owner supplies exact OpenRouter ID on next line |
-
-**Owner Decision required (Gemma exact ID, only if LOCK):**
-- Gemma 3 27B OpenRouter model id:
-
-*(Do not substitute `google/gemma-4-31b-it` without explicit owner ID.)*
+```text
+Evidence: 61 attacks frozen pack; 4 primary keys; supplementary not pooled.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) scoped McNemar/ASR claims only; no SOTA/production claim.
+Owner Approval Required: APPROVE / REJECT.
+```
 
 ---
 
-## D12 — Judges
+## D11 — Target Model Panel *(targets only)*
 
-**Repository evidence:** Panel + contract `judges.*.openrouter_model_id: NEEDS_DECISION`. Archive blindness template: `docs/archive/q1/JUDGE_PROTOCOL.md` (legacy judge models — not Q1 IDs).
+**Supported repository choices** (OpenRouter IDs verified in `configs/mt2_openrouter_catalog_snapshot.json` and/or `models_q1_eval_panel.yaml`):
 
-| Judge | Exact ID | Verification | Owner Decision |
+| Slot | Exact ID | Source | Owner Decision |
 |---|---|---|---|
-| J1 DeepSeek V4 Flash | *(none in repo)* | UNVERIFIED | LOCK / REJECT |
-| J2 Grok 4.7 | *(none in repo)* | UNVERIFIED | LOCK / REJECT |
+| Qwen 3 30B A3B | `qwen/qwen3-30b-a3b` | panel + catalog snapshot | LOCK / REJECT |
+| Mistral Small 3.2 24B Instruct | `mistralai/mistral-small-3.2-24b-instruct` | panel + catalog snapshot | LOCK / REJECT |
+| Llama 3.3 70B Instruct | `meta-llama/llama-3.3-70b-instruct` | panel + catalog snapshot | LOCK / REJECT |
 
-**Owner Decision required (exact OpenRouter id, only if LOCK):**
-- J1 model id:
-- J2 model id:
+**Not in supported choices** (no exact Gemma 3 27B ID in repo or catalog snapshot): Gemma 3 27B slot — owner may REJECT slot or supply a verified ID outside this list after independent check.
+
+**Owner Decision required:**
+- Qwen: LOCK / REJECT
+- Mistral: LOCK / REJECT
+- Llama: LOCK / REJECT
+- Gemma 3 27B: LOCK / REJECT — if LOCK, exact OpenRouter id:
+
+---
+
+## D12 — Judges *(Q1 J1/J2; MT2 separate protocol)*
+
+### Q1 judge slots (this protocol)
+
+**Supported repository choices:** none for product labels “DeepSeek V4 Flash” / “Grok 4.7” — no matching exact IDs in Q1 panel or MT2 catalog snapshot.
+
+**Owner Decision required:**
+- J1: LOCK / REJECT — if LOCK, exact OpenRouter id:
+- J2: LOCK / REJECT — if LOCK, exact OpenRouter id:
 - blindness:
 - independence:
 - disagreement:
 - adjudication:
 
+### MT2 confirmatory protocol (`docs/PROTOCOL_MT2.md`, `configs/models_mt2.yaml`) — **not** Q1 J1/J2
+
+Supported repository choices (catalog snapshot + MT2 registry; do not auto-lock for Q1):
+
+| Role | Exact ID | Config key |
+|---|---|---|
+| MT2 primary judge | `openai/gpt-oss-120b` | `mt2_judge_primary` |
+| MT2 secondary judge | `deepseek/deepseek-chat-v3-0324` | `mt2_judge_secondary` |
+
+```text
+Evidence: MT2 uses separate panel contract; forbidden_shared_vendor_between_target_and_judge in mt2_panel.yaml.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) Q1 blindness per docs/archive/q1/JUDGE_PROTOCOL.md when J1/J2 IDs are owner-supplied.
+Owner Approval Required: APPROVE / REJECT.
+```
+
 ---
 
 ## D13 — Subsets
-
-**Repository evidence:** Contract `supplementary_targets.subset` path/sha `NEEDS_DECISION`; J2 `frozen_subset_only`; no Q1 subset manifest verified in repo. Full pack: `datasets/frozen/vnext_confirm_v1/dataset.jsonl` SHA `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518`.
 
 **Owner Decision required:**
 - supplementary subset: `path + SHA` / `none`
 - J2 validation subset: `path + SHA` / `none`
 
+```text
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) none / none until frozen manifests exist.
+Owner Approval Required: APPROVE / REJECT.
+```
+
 ---
 
 ## D14 — Leakage / Contamination
-
-**Repository evidence:** Non-oracle arms label-blind in `real_llm_pipeline.py`; contract `label_blind_defense: SUPPORTED`; archive judge input restrictions in `docs/archive/q1/JUDGE_PROTOCOL.md`.
-
-**Supported controls (repo):** Defense path without gold label (non-oracle); judge must not receive baseline ID, defense action, blocked flag, detector scores (archive template).
 
 **Owner Decision required:**
 - defense blindness:
@@ -174,11 +210,15 @@
 - dataset leakage policy:
 - contamination exclusion policy:
 
+```text
+Evidence: label-blind non-oracle arms in real_llm_pipeline.py; archive judge blindness.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) minimal policies aligned with repo controls.
+Owner Approval Required: APPROVE / REJECT.
+```
+
 ---
 
-## D15 — Runtime
-
-**Repository evidence:** Panel verified targets `temperature: 0.0`, `max_tokens: 512`; contract `budget.hard_cap_usd: 3.0`; live paths set `max_retries=0` in `live_extension_wiring.py` / `live_b0_report.py`; `OpenRouterTargetModel` default `max_retries: 3` in `target_model.py` if not overridden.
+## D15 — Runtime *(canonical retry + ordering)*
 
 **Owner Decision required:**
 - temperature:
@@ -192,27 +232,42 @@
 - ordering:
 - randomization:
 
----
+```text
+Evidence: panel temp 0.0, max_tokens 512; live max_retries=0; budget.hard_cap_usd NEEDS_DECISION in contract.
+Proposal: (PROPOSED — REQUIRES OWNER APPROVAL) lock temp 0.0, max_tokens 512, retry 0 live; ordering fixed manifest; randomization none unless D16 claim.
+Owner Approval Required: APPROVE / REJECT.
+```
 
-# P1 — Claim-gated (not part of P0 freeze blockers)
+### Episode budget & cap *(contract fields)*
 
-| ID | Status |
-|---|---|
-| D06 Utility / benign | CLAIM-GATED / OWNER DECISION REQUIRED |
-| D08 B1 threshold sensitivity | CLAIM-GATED / OWNER DECISION REQUIRED |
-| D16 Order / randomization | CLAIM-GATED / OWNER DECISION REQUIRED |
-| D17 Cost reporting | CLAIM-GATED / OWNER DECISION REQUIRED |
-| D19 Failure analysis | CLAIM-GATED / OWNER DECISION REQUIRED |
+**Owner Decision required:**
+- `primary_episode_budget.attack_episodes`: *(numeric or confirm derived)*
+- `budget.hard_cap_usd`:
 
-# P2 — Deferred
-
-| ID | Status |
-|---|---|
-| D07 Ablation | DEFERRED |
-| D18 External benchmark | DEFERRED |
+```text
+Evidence: formula n_attack * n_primary_targets * n_arms; derived currently 732 if 61×4×3 unchanged. No sufficiency claim for budget.
+Owner Approval Required: owner sets both values in contract at propagation step.
+```
 
 ---
 
-## After owner fill
+# P1 — Claim-gated
 
-When all P0 fields above contain non-placeholder values, commit this file → separate step: validate → propagate to `configs/q1_evaluation_contract.yaml` and `configs/models_q1_eval_panel.yaml` only. No freeze in this document alone.
+| ID | Status |
+|---|---|
+| D06 | CLAIM-GATED / OWNER DECISION REQUIRED |
+| D08 | CLAIM-GATED / OWNER DECISION REQUIRED |
+| D16 | CLAIM-GATED — references **D15** ordering/randomization |
+| D17 | CLAIM-GATED / OWNER DECISION REQUIRED |
+| D19 | CLAIM-GATED / OWNER DECISION REQUIRED |
+
+# P2 — Owner decision required (not agent-deferred)
+
+| ID | Status |
+|---|---|
+| D07 Ablation | NEEDS_OWNER_DECISION |
+| D18 External benchmark | NEEDS_OWNER_DECISION |
+
+---
+
+After owner fill → validate → propagate to `configs/q1_evaluation_contract.yaml` and `configs/models_q1_eval_panel.yaml` only.

@@ -62,12 +62,12 @@ judges:
     scope: frozen_subset_only  # same subset as supplementary gate; sha MUST match subset.sha256
 
 primary_episode_budget:
-  attack_episodes: 732  # 61 * 4 targets * 3 arms
+  attack_episodes: NEEDS_DECISION  # owner locks N; derived = n_attack * n_primary_targets * n_arms
   formula: "n_attack * n_primary_targets * n_arms"
-  benign_episodes: NEEDS_DECISION  # symmetric 732 if full benign matrix — confirm owner intent
+  benign_episodes: NEEDS_DECISION
 
 budget:
-  hard_cap_usd: 3.0
+  hard_cap_usd: NEEDS_DECISION
   ledger_class: adapti_guard.evaluation.live_budget_gate.BudgetLedger
   gated_target_class: adapti_guard.evaluation.live_budget_gate.BudgetGatedTargetModel
   hard_stop: true
@@ -113,7 +113,7 @@ scientific_design:
     p0_freeze_ready: false
     p0_blockers: [D01, D02, D03, D04, D05, D09, D10, D11, D12, D13, D14, D15]
     p1_claim_dependent: [D06, D08, D16, D17, D19]
-    p2_deferred_non_blocking: [D07, D18]
+    p2_owner_decision_required: [D07, D18]
   owner_decision_intake:
     recorded_at_utc: "2026-09-25T12:23:00Z"
     head: a94547c
@@ -124,7 +124,7 @@ scientific_design:
     D04: {tier: P0, status: NEEDS_OWNER_DECISION}
     D05: {tier: P0, status: NEEDS_OWNER_DECISION}
     D06: {tier: P1, status: NEEDS_OWNER_DECISION}
-    D07: {tier: P2, status: DEFERRED}
+    D07: {tier: P2, status: NEEDS_OWNER_DECISION}
     D08: {tier: P1, status: NEEDS_OWNER_DECISION}
     D09: {tier: P0, status: NEEDS_OWNER_DECISION}
     D10: {tier: P0, status: NEEDS_OWNER_DECISION}
@@ -135,7 +135,7 @@ scientific_design:
     D15: {tier: P0, status: NEEDS_OWNER_DECISION}
     D16: {tier: P1, status: NEEDS_OWNER_DECISION}
     D17: {tier: P1, status: NEEDS_OWNER_DECISION}
-    D18: {tier: P2, status: DEFERRED}
+    D18: {tier: P2, status: NEEDS_OWNER_DECISION}
     D19: {tier: P1, status: NEEDS_OWNER_DECISION}
   research_questions: NEEDS_DECISION  # no Q1-specific RQ/H text pre-registered in contract
   hypotheses: NEEDS_DECISION
@@ -181,7 +181,7 @@ scientific_design:
     top_p_seed_retry_timeout: NEEDS_DECISION  # per-target execution manifest
   order_randomization: NEEDS_DECISION
   cost_latency:
-    budget_cap: SUPPORTED  # $3 hard_cap_usd + BudgetLedger
+    budget_cap: NEEDS_DECISION  # BudgetLedger mechanism SUPPORTED; hard_cap_usd owner-locked
     report_token_calls_latency_tradeoff: NEEDS_DECISION
   external_validation:
     vnext_pack_alone: NEEDS_DECISION  # generalization scope
