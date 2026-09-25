@@ -108,7 +108,8 @@ Full table: [`CONFIGS_SNAPSHOT.md`](CONFIGS_SNAPSHOT.md).
 
 | Path | SHA-256 |
 | --- | --- |
-| `configs/models.yaml` | `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3` |
+| `configs/models.yaml` | `061078c8971ba276442e66b27fe02462ddee970a198beb84510215b7eac3fbb1` |
+| `configs/mt2_panel.yaml` | `6f8b4c8cc0a46fc23df418ab565f174baaf998e70782d8901c58fc2abb3e31c5` |
 | `configs/datasets.yaml` | `fd005720c44f7786a93202536bea4d5eb336d6c25ad313d156df402f7b5acaca` |
 
 `cache.enabled` must be `false`. Target `target_2` must differ from Judge `judge_fallback`.

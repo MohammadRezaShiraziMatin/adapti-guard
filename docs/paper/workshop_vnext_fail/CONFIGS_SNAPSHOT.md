@@ -5,7 +5,7 @@ Snapshot of committed YAML used by Layer A intervention and the official VNEXT c
 Recompute:
 
 ```bash
-sha256sum configs/models.yaml configs/datasets.yaml configs/models_local.yaml \
+sha256sum configs/models.yaml configs/mt2_panel.yaml configs/datasets.yaml configs/models_local.yaml \
   configs/experiments/ablation_study.yaml configs/experiments/long_term_adaptation.yaml
 ```
 
@@ -13,7 +13,7 @@ sha256sum configs/models.yaml configs/datasets.yaml configs/models_local.yaml \
 
 ## Binding eval-contract keys (`configs/models.yaml`)
 
-SHA-256 `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3`
+SHA-256 `061078c8971ba276442e66b27fe02462ddee970a198beb84510215b7eac3fbb1`
 
 | Key | Required value | Observed on this tree |
 | --- | --- | --- |
@@ -29,6 +29,15 @@ SHA-256 `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3`
 Official VNEXT run (`experiments/real_llm_eval/VNEXT_CONFIRM/20260914-133147/manifest.json`): `target_config_key=target_2`, `judge_config_key=judge_fallback`, `cache_enabled=false`, `seed=42`.
 
 API keys come from `OPENROUTER_API_KEY` in the environment. They are not in git. Offline checks must not call OpenRouter.
+
+### MT2 confirmatory panel (additive; does not replace VNEXT binding above)
+
+| Path | SHA-256 | Role |
+| --- | --- | --- |
+| `configs/mt2_panel.yaml` | `6f8b4c8cc0a46fc23df418ab565f174baaf998e70782d8901c58fc2abb3e31c5` | Six-target + judge panel contract |
+| `docs/PROTOCOL_MT2.md` | (markdown) | Human-readable MT2 panel table |
+
+Offline validation: `python3 -m pytest tests/test_mt2_panel_config.py`.
 
 ---
 
