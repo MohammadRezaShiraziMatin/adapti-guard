@@ -102,3 +102,60 @@ reproducibility_chain:
 
 legacy_binding_untouched:
   configs_models_yaml_vnext_sha256: "37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3"
+
+# Scientific design registry (audit @ HEAD 97dd2d7). Values: SUPPORTED | MISSING | NEEDS_DECISION
+scientific_design:
+  audit_doc: docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md
+  research_questions: NEEDS_DECISION  # no Q1-specific RQ/H text pre-registered in contract
+  hypotheses: NEEDS_DECISION
+  primary_endpoint:
+    security: SUPPORTED  # attack_success_rate on gold attacks (endpoints.primary_security)
+    utility_gate: NEEDS_DECISION  # VNEXT uses U>=0.95 co-primary; Q1 not locked
+  unit_of_analysis:
+    B0_B1: SUPPORTED  # single-turn episode (real_llm_pipeline.evaluate_episode)
+    B2: SUPPORTED  # episode; success = final executed turn (b2_adaptive_contract EPISODE_SUCCESS_RULE)
+    turn_level_primary: MISSING
+  primary_comparisons: NEEDS_DECISION  # candidate pairs B0-B1, B0-B2, B1-B2 — family not preregistered
+  baselines_external_literature: NEEDS_DECISION  # B0/B1/B2 only in contract; no SPOTLIGHT/etc. unless owner adds
+  ablations: MISSING  # no Q1 ablation arms (escalation, RiskCore, intervention) registered
+  adaptive_attacker:
+    B2_stack_has_adaptive_attacker: SUPPORTED  # AdaptiveAttacker in b2_adaptive_contract / b2_attack_mode_contract
+    B2_stack_has_fixed_sequence_attacker: SUPPORTED  # FixedSequenceAttacker
+    Q1_B2_binds_attack_mode: NEEDS_DECISION  # fixed vs adaptive_defense_feedback per condition_id
+    Q1_B2_binds_defense_only: NEEDS_DECISION  # defense arm vs attack-mode 2×2
+  benign_utility:
+    n_benign_pack: SUPPORTED  # 61 in frozen pack
+    benign_matrix_n: NEEDS_DECISION
+    fpr_definition: SUPPORTED  # blocked on benign / compute_real_metrics
+    utility_metric: SUPPORTED  # utility_success on benign
+    utility_tier: NEEDS_DECISION  # primary vs secondary vs gate-only
+  threshold_sensitivity: MISSING  # no Q1 preregistered sweep; B1_RULE_THRESHOLD=0.25 in b2_matrix only
+  statistical_analysis_plan:
+    mcnemar: SUPPORTED
+    alpha: NEEDS_DECISION
+    holm_family: NEEDS_DECISION
+    effect_size_estimand: NEEDS_DECISION
+    ci_method: NEEDS_DECISION
+    ties_missing_judge_fail: NEEDS_DECISION  # see VNEXT §12 patterns; not copied into Q1
+  judge_protocol:
+    j1_j2_ids: NEEDS_DECISION
+    blindness_ref: SUPPORTED  # docs/archive/q1/JUDGE_PROTOCOL.md (stub points here)
+    disagreement_adjudication: NEEDS_DECISION
+    kappa_subset: NEEDS_DECISION  # J2 subset sha linked to supplementary.subset
+  leakage_contamination:
+    label_blind_defense: SUPPORTED  # real_llm_pipeline non-oracle arms
+    gold_label_judge_leakage_rule: NEEDS_DECISION  # Q1 judge input contract not duplicated
+  stochasticity:
+    temperature_locked_where_set: SUPPORTED  # panel rows temp 0.0
+    top_p_seed_retry_timeout: NEEDS_DECISION  # per-target execution manifest
+  order_randomization: NEEDS_DECISION
+  cost_latency:
+    budget_cap: SUPPORTED  # $3 hard_cap_usd + BudgetLedger
+    report_token_calls_latency_tradeoff: NEEDS_DECISION
+  external_validation:
+    vnext_pack_alone: NEEDS_DECISION  # generalization scope
+    agent_injection_bench: MISSING  # not referenced in repo
+  failure_analysis:
+    taxonomy_ref: SUPPORTED  # VNEXT outcome taxonomy via endpoints.success_definition_ref
+    q1_failure_report_spec: MISSING
+  claims_generalization: NEEDS_DECISION

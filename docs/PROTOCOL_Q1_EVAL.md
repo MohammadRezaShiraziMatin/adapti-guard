@@ -8,3 +8,5 @@ Does **not** replace VNEXT `target_2`/`judge_fallback` binding in `configs/model
 Dataset: `vnext_confirm_v1` (61+61, SHA `523c8818…`). Primary attack matrix: **732** episodes (61×4×3). Budget hard cap **$3.00** via `BudgetLedger`.
 
 Items marked `NEEDS_DECISION` in YAML require owner lock before live authorization.
+
+Scientific design audit: `docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md` and `scientific_design:` in the contract YAML.
