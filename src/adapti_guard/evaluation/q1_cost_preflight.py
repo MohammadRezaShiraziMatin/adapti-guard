@@ -9,6 +9,11 @@ from typing import Any
 import yaml
 
 from adapti_guard.evaluation.b2_adaptive_contract import LIVE_WIRING_MAX_TURNS
+from adapti_guard.evaluation.openrouter_panel_pricing import (
+    ModelPrice,
+    OpenRouterPricingError,
+    prices_from_panel_dict,
+)
 
 DEFAULT_PANEL_PATH = Path("configs/models_q1_eval_panel.yaml")
 DEFAULT_DATASET_PATH = Path("datasets/frozen/vnext_confirm_v1/dataset.jsonl")
@@ -21,30 +26,15 @@ class Q1CostPreflightError(Exception):
     pass
 
 
-@dataclass(frozen=True)
-class ModelPrice:
-    prompt_usd_per_token: float
-    completion_usd_per_token: float
-
-
 def _load_panel(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
 
 def panel_model_prices(panel: dict[str, Any]) -> dict[str, ModelPrice]:
-    out: dict[str, ModelPrice] = {}
-    for _key, spec in (panel.get("models") or {}).items():
-        model_id = str(spec.get("model", ""))
-        if not model_id or model_id.startswith("NEEDS_DECISION"):
-            continue
-        pricing = spec.get("openrouter_pricing") or {}
-        try:
-            pin = float(pricing["prompt_usd_per_token"])
-            cout = float(pricing["completion_usd_per_token"])
-        except (KeyError, TypeError, ValueError):
-            raise Q1CostPreflightError(f"missing openrouter_pricing for panel model {model_id}")
-        out[model_id] = ModelPrice(prompt_usd_per_token=pin, completion_usd_per_token=cout)
-    return out
+    try:
+        return prices_from_panel_dict(panel)
+    except OpenRouterPricingError as exc:
+        raise Q1CostPreflightError(str(exc)) from exc
 
 
 def _token_estimate_chars(text: str) -> int:

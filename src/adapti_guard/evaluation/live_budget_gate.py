@@ -1,10 +1,13 @@
-"""Budget / request gate for live eval (fail-closed USD cap; no live calls in unit tests)."""
+"""Budget / request gate for live eval (fail-closed USD cap; panel-priced OpenRouter)."""
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from adapti_guard.evaluation.attack_success import estimate_api_cost_usd
 from adapti_guard.evaluation.target_model import GenerationRequest, GenerationResult, TargetModel
+
+if TYPE_CHECKING:
+    from adapti_guard.evaluation.openrouter_panel_pricing import OpenRouterPricingTable
 
 # Phase 7 pilot hard ceiling (configuration may set ledger.max_usd to this value).
 PILOT_HARD_CAP_USD = 1.0
@@ -15,24 +18,18 @@ def estimate_request_cost_usd(
     *,
     provider: str = "openrouter",
     default_max_tokens: int = 512,
+    pricing: OpenRouterPricingTable | None = None,
+    model_id: str | None = None,
 ) -> float | None:
-    """Conservative pre-call estimate (max completion tokens). None => UNKNOWN."""
-    prompt_text = (request.system_prompt or "") + (request.prompt or "")
-    if not prompt_text.strip():
-        return None
-    prompt_tokens = max(1, len(prompt_text) // 4)
-    completion_tokens = request.max_tokens or default_max_tokens
-    if completion_tokens <= 0:
-        return None
-    inner = getattr(request, "_budget_default_max_tokens", None)
-    if isinstance(inner, int) and inner > 0 and not request.max_tokens:
-        completion_tokens = inner
-    est = estimate_api_cost_usd(
-        prompt_tokens=prompt_tokens,
-        completion_tokens=int(completion_tokens),
-        provider=provider,
-    )
-    return float(est["estimated_usd"])
+    """Pre-call reservation. OpenRouter requires panel pricing (no generic rates)."""
+    if provider == "openrouter":
+        if pricing is None or not model_id:
+            return None
+        try:
+            return pricing.reservation_for_request(request, model_id)
+        except Exception:
+            return None
+    return None
 
 
 def cost_from_generation_result(
@@ -41,21 +38,19 @@ def cost_from_generation_result(
     *,
     provider: str,
     default_max_tokens: int = 512,
+    pricing: OpenRouterPricingTable | None = None,
+    model_id: str | None = None,
 ) -> float | None:
-    usage = result.usage or {}
-    pt = usage.get("prompt_tokens")
-    ct = usage.get("completion_tokens")
-    if pt is not None and ct is not None:
-        return float(
-            estimate_api_cost_usd(
-                prompt_tokens=int(pt),
-                completion_tokens=int(ct),
-                provider=provider,
-            )["estimated_usd"]
-        )
-    return estimate_request_cost_usd(
-        request, provider=provider, default_max_tokens=default_max_tokens
-    )
+    if provider == "openrouter":
+        if pricing is None or not model_id:
+            return None
+        from adapti_guard.evaluation.openrouter_panel_pricing import charge_usd_for_result
+
+        try:
+            return charge_usd_for_result(result, request, model_id=model_id, pricing=pricing)
+        except Exception:
+            return None
+    return None
 
 
 @dataclass
@@ -71,7 +66,7 @@ class BudgetLedger:
         if self.max_requests is not None:
             if self.requests_used + additional_requests > self.max_requests:
                 return False, "budget_failure: max_requests exceeded"
-        if self.max_usd is not None and self.estimated_cost_usd is not None:
+        if self.max_usd is not None:
             if self.spent_usd > self.max_usd:
                 return False, "budget_failure: max_usd exceeded"
         return True, "ok"
@@ -124,13 +119,16 @@ class BudgetGatedTargetModel(TargetModel):
         *,
         provider: str = "unknown",
         default_max_tokens: int = 512,
+        pricing: OpenRouterPricingTable | None = None,
     ) -> None:
         self._inner = inner
         self._ledger = ledger
         self.provider = provider
         self._default_max_tokens = default_max_tokens
+        self._pricing = pricing
 
     def generate(self, request: GenerationRequest) -> GenerationResult:
+        model_id = request.model_id or getattr(self._inner, "model_id", "")
         max_attempts = int(getattr(self._inner, "max_retries", 0)) + 1
         allowed, reason = self._ledger.check_allowed(additional_requests=max_attempts)
         if not allowed and self._ledger.hard_stop:
@@ -140,6 +138,8 @@ class BudgetGatedTargetModel(TargetModel):
             request,
             provider=self.provider,
             default_max_tokens=self._default_max_tokens,
+            pricing=self._pricing,
+            model_id=model_id,
         )
         if self._ledger.max_usd is not None:
             worst_case = None if per_attempt is None else per_attempt * max_attempts
@@ -160,13 +160,13 @@ class BudgetGatedTargetModel(TargetModel):
                     request,
                     provider=self.provider,
                     default_max_tokens=self._default_max_tokens,
+                    pricing=self._pricing,
+                    model_id=model_id,
                 )
                 if actual is None:
                     self._ledger.record_cost_unknown()
                 else:
-                    # Charge worst-case attempts for retry safety (each attempt billed at estimate).
-                    charge = per_attempt * attempts if per_attempt is not None else actual
-                    self._ledger.record_spend_usd(charge)
+                    self._ledger.record_spend_usd(actual)
 
         return result
 

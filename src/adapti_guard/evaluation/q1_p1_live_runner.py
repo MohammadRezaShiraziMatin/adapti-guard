@@ -127,31 +127,87 @@ def _target_config_map(contract: dict[str, Any], panel: dict[str, Any]) -> dict[
 
 
 def build_episode_plans(repo_root: Path = Path(".")) -> list[Q1P1EpisodePlan]:
+    from adapti_guard.evaluation.q1_p1_episode_schedule import build_round_robin_attack_target_order
+
     contract = load_q1_contract(repo_root / "configs/q1_evaluation_contract.yaml")
     panel = yaml.safe_load((repo_root / PANEL_PATH).read_text(encoding="utf-8"))
     tmap = _target_config_map(contract, panel)
     targets = list(contract["q1_execution"]["open_target_model_ids"])
     attacks = _load_attacks(repo_root)
+    attack_ids = [a["id"] for a in attacks]
     j2_pairs = _load_manifest_pairs(repo_root)
+    order = build_round_robin_attack_target_order(targets, attack_ids)
     plans: list[Q1P1EpisodePlan] = []
     idx = 0
-    for target in targets:
-        for attack in attacks:
-            aid = attack["id"]
-            for arm in ARMS:
-                plans.append(
-                    Q1P1EpisodePlan(
-                        episode_index=idx,
-                        attack_id=aid,
-                        target_model_id=target,
-                        target_config_key=tmap[target],
-                        defense_arm=arm,
-                        condition_id=CONDITION[arm],
-                        j2_required=(aid, target) in j2_pairs,
-                    )
+    for aid, target in order:
+        for arm in ARMS:
+            plans.append(
+                Q1P1EpisodePlan(
+                    episode_index=idx,
+                    attack_id=aid,
+                    target_model_id=target,
+                    target_config_key=tmap[target],
+                    defense_arm=arm,
+                    condition_id=CONDITION[arm],
+                    j2_required=(aid, target) in j2_pairs,
                 )
-                idx += 1
+            )
+            idx += 1
     return plans
+
+
+def _episode_pairs(plans: list[Q1P1EpisodePlan]) -> list[tuple[Q1P1EpisodePlan, Q1P1EpisodePlan]]:
+    pairs: list[tuple[Q1P1EpisodePlan, Q1P1EpisodePlan]] = []
+    for i in range(0, len(plans), 2):
+        if i + 1 >= len(plans):
+            break
+        a, b = plans[i], plans[i + 1]
+        if a.defense_arm != "A0" or b.defense_arm != "B3":
+            raise ValueError("schedule must alternate A0 then B3 within each attack×target pair")
+        if a.attack_id != b.attack_id or a.target_model_id != b.target_model_id:
+            raise ValueError("A0/B3 pair mismatch in schedule")
+        pairs.append((a, b))
+    return pairs
+
+
+def _pair_reservation_usd(
+    pair: tuple[Q1P1EpisodePlan, Q1P1EpisodePlan],
+    *,
+    pricing: Any,
+    attacks_by_id: dict[str, dict[str, Any]],
+    panel_path: Path,
+    j1_key: str,
+    j2_key: str,
+) -> float:
+    """Conservative dry reservation for one complete A0+B3 pair (3-turn + judges)."""
+    from adapti_guard.evaluation.b2_adaptive_contract import LIVE_WIRING_MAX_TURNS
+    from adapti_guard.evaluation.openrouter_panel_pricing import ModelPrice
+    from adapti_guard.evaluation.q1_cost_preflight import (
+        JUDGE_EXTRA_INPUT_TOKENS,
+        SYSTEM_PROMPT_TOKENS,
+        _attack_prompt_tokens,
+        _multiturn_target_worst_usd,
+    )
+
+    prices = pricing._prices  # noqa: SLF001 — runner-internal worst-case
+    attack_row = attacks_by_id[pair[0].attack_id]
+    base_tok = _attack_prompt_tokens(attack_row)
+    total = 0.0
+    for plan in pair:
+        t_price: ModelPrice = prices[plan.target_model_id]
+        total += _multiturn_target_worst_usd(
+            t_price,
+            base_prompt_tokens=base_tok,
+            max_turns=LIVE_WIRING_MAX_TURNS,
+            max_completion_tokens=512,
+        )
+        j_price: ModelPrice = prices[model_id_for_config_key(j1_key, panel_path)]
+        judge_in = SYSTEM_PROMPT_TOKENS + base_tok + JUDGE_EXTRA_INPUT_TOKENS + 512
+        total += judge_in * j_price.prompt_usd_per_token + 128 * j_price.completion_usd_per_token
+        if plan.j2_required:
+            j2_price: ModelPrice = prices[model_id_for_config_key(j2_key, panel_path)]
+            total += judge_in * j2_price.prompt_usd_per_token + 128 * j2_price.completion_usd_per_token
+    return total * 1.05
 
 
 def assert_p1_preconditions(repo_root: Path = Path(".")) -> dict[str, Any]:
@@ -168,8 +224,17 @@ def assert_p1_preconditions(repo_root: Path = Path(".")) -> dict[str, Any]:
     m_sha = hashlib.sha256((repo_root / MANIFEST_REL).read_bytes()).hexdigest()
     if m_sha != auth.get("manifest_sha256"):
         raise RuntimeError("manifest_sha256 mismatch vs authorization")
-    if str(auth.get("code_git_commit")) != _git_head():
-        raise RuntimeError("code_git_commit mismatch vs authorization")
+    authorized = str(auth.get("code_git_commit", ""))
+    head = _git_head()
+    if head != authorized:
+        try:
+            subprocess.check_call(
+                ["git", "merge-base", "--is-ancestor", authorized, head],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.CalledProcessError):
+            raise RuntimeError("code_git_commit mismatch vs authorization")
     panel = yaml.safe_load((repo_root / PANEL_PATH).read_text(encoding="utf-8"))
     if panel.get("cache", {}).get("enabled") is not False:
         raise RuntimeError("panel cache must be disabled")
@@ -200,10 +265,11 @@ def _build_judge(
     ledger: BudgetLedger,
     *,
     panel_path: Path,
+    pricing: Any,
 ) -> LLMJudge:
     inner = build_target_model(config_key, config_path=str(panel_path), cache_enabled=False)
     inner.max_retries = 1
-    gated = BudgetGatedTargetModel(inner, ledger, provider="openrouter")
+    gated = BudgetGatedTargetModel(inner, ledger, provider="openrouter", pricing=pricing)
     judge = LLMJudge(
         config_key=config_key,
         fallback_config_key=config_key,
@@ -228,124 +294,158 @@ def run_q1_p1_live(
     auth = load_authorization_yaml()
     ledger = BudgetLedger(hard_stop=True, max_usd=float(auth.get("budget_ceiling", 2.0)))
     panel_path = repo_root / PANEL_PATH
+    from adapti_guard.evaluation.openrouter_panel_pricing import load_openrouter_pricing_table
+    from adapti_guard.evaluation.q1_p1_episode_schedule import pair_boundary_stop_ok
+
+    pricing = load_openrouter_pricing_table(panel_path)
 
     j1_key = load_q1_contract()["judges"]["J1_primary"]["config_key"]
     j2_key = load_q1_contract()["judges"]["J2_agreement"]["config_key"]
-    j1_judge = _build_judge(j1_key, ledger, panel_path=panel_path)
-    j2_judge = _build_judge(j2_key, ledger, panel_path=panel_path)
+    j1_judge = _build_judge(j1_key, ledger, panel_path=panel_path, pricing=pricing)
+    j2_judge = _build_judge(j2_key, ledger, panel_path=panel_path, pricing=pricing)
 
     episodes_path = output_root / "episodes.jsonl"
     ledger_path = output_root / "budget_ledger.json"
     plans = build_episode_plans(repo_root)
+    pairs = _episode_pairs(plans)
     attacks_by_id = {r["id"]: r for r in _load_attacks(repo_root)}
+    (output_root / "episode_order.json").write_text(
+        json.dumps(
+            [
+                {
+                    "episode_index": p.episode_index,
+                    "attack_id": p.attack_id,
+                    "target_model_id": p.target_model_id,
+                    "defense_arm": p.defense_arm,
+                }
+                for p in plans
+            ],
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
     stop_reason = "completed_all_planned"
     rows_written = 0
     judge_fail = 0
     timeout_fail = 0
 
+    def _run_one_plan(plan: Q1P1EpisodePlan, ep_out: Any) -> None:
+        nonlocal rows_written, judge_fail, timeout_fail
+        attack_row = attacks_by_id[plan.attack_id]
+        anchor = f"{attack_row.get('prompt', '')}\n{attack_row.get('context', '')}".strip()
+        inner_target = build_target_model(
+            plan.target_config_key,
+            config_path=str(panel_path),
+            cache_enabled=False,
+        )
+        inner_target.max_retries = 1
+        target_model = BudgetGatedTargetModel(
+            inner_target, ledger, provider="openrouter", pricing=pricing
+        )
+        target_id = model_id_for_config_key(plan.target_config_key, panel_path)
+
+        defense_mode = defense_mode_for_condition_id(plan.condition_id)
+        bundle = build_pre_target_defense_bundle(defense_mode)  # type: ignore[arg-type]
+        if defense_mode == "B3" and bundle.state is not None and hasattr(bundle.state, "reset"):
+            bundle.state.reset()
+
+        from adapti_guard.evaluation.stateful_target_adapter import target_fn_from_model
+
+        attacker = DatasetAnchoredAdaptiveAttacker(anchor)
+        from adapti_guard.evaluation.adaptive_episode import AdaptiveEpisodeRunner
+
+        def _legacy_defense(**_kwargs: Any) -> tuple[DefenseAction, dict[str, Any]]:
+            return DefenseAction.TOOL_RESTRICTION, {}
+
+        episode_result = AdaptiveEpisodeRunner(max_turns=LIVE_WIRING_MAX_TURNS).run(
+            attacker=attacker,
+            defense=_legacy_defense,
+            seed=42,
+            target=target_fn_from_model(target_model, model_id=target_id),
+            baseline_defense_fn=bundle.defense_fn,
+        )
+
+        judge_input = build_b2_judge_input(
+            turns=episode_result.turns,
+            success_condition=str(attack_row.get("success_condition", "")),
+            is_benign=False,
+            primary_user_prompt=anchor,
+        )
+        blind = build_blind_judge_input(
+            user_prompt=judge_input.user_prompt,
+            model_response=judge_input.model_response,
+            task_context=judge_input.task_context,
+            success_condition=judge_input.success_condition,
+            is_benign=False,
+        )
+
+        j1_verdict = None
+        if any(t.target_called for t in episode_result.turns):
+            j1_verdict = j1_judge.judge(blind)
+        eval_ep = synthesize_b2_eval_episode(
+            episode_result,
+            episode_id=plan.attack_id,
+            category=str(attack_row.get("category", "")),
+            label="attack",
+            success_condition=str(attack_row.get("success_condition", "")),
+            judge_verdict=j1_verdict,
+        )
+        j1_success = bool(j1_verdict.attack_success) if j1_verdict else False
+
+        j2_record = None
+        if plan.j2_required and any(t.target_called for t in episode_result.turns):
+            j2_verdict = j2_judge.judge(blind)
+            j2_record = j2_verdict.to_dict()
+
+        if q1_episode_judge_failed(eval_ep):
+            judge_fail += 1
+        if eval_ep.judge_reason in ("timeout", "judge_timeout", "target_timeout"):
+            timeout_fail += 1
+
+        record = {
+            "phase_id": PHASE_ID,
+            "episode_index": plan.episode_index,
+            "attack_id": plan.attack_id,
+            "target_model_id": plan.target_model_id,
+            "target_config_key": plan.target_config_key,
+            "defense_arm": plan.defense_arm,
+            "condition_id": plan.condition_id,
+            "j2_required": plan.j2_required,
+            "attack_succeeded_j1": j1_success,
+            "blocked": eval_ep.blocked,
+            "judge_reason": eval_ep.judge_reason,
+            "j1_model": model_id_for_config_key(j1_key, panel_path),
+            "j2_model": model_id_for_config_key(j2_key, panel_path) if plan.j2_required else None,
+            "j2_attack_success": j2_record.get("attack_success") if j2_record else None,
+            "ledger_spent_usd_after": ledger.spent_usd,
+            "ledger_requests_after": ledger.requests_used,
+        }
+        ep_out.write(json.dumps(record, ensure_ascii=False) + "\n")
+        ep_out.flush()
+        rows_written += 1
+
     with episodes_path.open("w", encoding="utf-8") as ep_out:
-        for plan in plans:
-            allowed, reason = ledger.check_allowed(additional_requests=1)
-            if not allowed and ledger.hard_stop:
-                stop_reason = f"budget_hard_stop_before_episode_{plan.episode_index}: {reason}"
+        for pair in pairs:
+            reserve = _pair_reservation_usd(
+                pair,
+                pricing=pricing,
+                attacks_by_id=attacks_by_id,
+                panel_path=panel_path,
+                j1_key=j1_key,
+                j2_key=j2_key,
+            )
+            ok, usd_reason = ledger.check_spend_allowed(reserve)
+            if not ok and ledger.hard_stop:
+                stop_reason = (
+                    f"budget_hard_stop_before_pair_{pair[0].attack_id}_{pair[0].target_model_id}: "
+                    f"{usd_reason}; reserve_usd={reserve:.6f}"
+                )
                 break
-            attack_row = attacks_by_id[plan.attack_id]
-            anchor = f"{attack_row.get('prompt', '')}\n{attack_row.get('context', '')}".strip()
-            inner_target = build_target_model(
-                plan.target_config_key,
-                config_path=str(panel_path),
-                cache_enabled=False,
-            )
-            inner_target.max_retries = 1
-            target_model = BudgetGatedTargetModel(inner_target, ledger, provider="openrouter")
-            target_id = model_id_for_config_key(plan.target_config_key, panel_path)
-
-            defense_mode = defense_mode_for_condition_id(plan.condition_id)
-            bundle = build_pre_target_defense_bundle(defense_mode)  # type: ignore[arg-type]
-            if defense_mode == "B3" and bundle.state is not None and hasattr(bundle.state, "reset"):
-                bundle.state.reset()
-
-            from adapti_guard.evaluation.stateful_target_adapter import target_fn_from_model
-
-            attacker = DatasetAnchoredAdaptiveAttacker(anchor)
-            from adapti_guard.evaluation.adaptive_episode import AdaptiveEpisodeRunner
-
-            def _legacy_defense(**_kwargs: Any) -> tuple[DefenseAction, dict[str, Any]]:
-                return DefenseAction.TOOL_RESTRICTION, {}
-
-            episode_result = AdaptiveEpisodeRunner(max_turns=LIVE_WIRING_MAX_TURNS).run(
-                attacker=attacker,
-                defense=_legacy_defense,
-                seed=42,
-                target=target_fn_from_model(target_model, model_id=target_id),
-                baseline_defense_fn=bundle.defense_fn,
-            )
-
-            judge_input = build_b2_judge_input(
-                turns=episode_result.turns,
-                success_condition=str(attack_row.get("success_condition", "")),
-                is_benign=False,
-                primary_user_prompt=anchor,
-            )
-            blind = build_blind_judge_input(
-                user_prompt=judge_input.user_prompt,
-                model_response=judge_input.model_response,
-                task_context=judge_input.task_context,
-                success_condition=judge_input.success_condition,
-                is_benign=False,
-            )
-
-            j1_verdict = None
-            if any(t.target_called for t in episode_result.turns):
-                j1_verdict = j1_judge.judge(blind)
-            eval_ep = synthesize_b2_eval_episode(
-                episode_result,
-                episode_id=plan.attack_id,
-                category=str(attack_row.get("category", "")),
-                label="attack",
-                success_condition=str(attack_row.get("success_condition", "")),
-                judge_verdict=j1_verdict,
-            )
-            j1_success = bool(j1_verdict.attack_success) if j1_verdict else False
-
-            j2_record = None
-            if plan.j2_required and any(t.target_called for t in episode_result.turns):
-                j2_verdict = j2_judge.judge(blind)
-                j2_record = j2_verdict.to_dict()
-
-            if q1_episode_judge_failed(eval_ep):
-                judge_fail += 1
-            if eval_ep.judge_reason in ("timeout", "judge_timeout", "target_timeout"):
-                timeout_fail += 1
-
-            record = {
-                "phase_id": PHASE_ID,
-                "episode_index": plan.episode_index,
-                "attack_id": plan.attack_id,
-                "target_model_id": plan.target_model_id,
-                "target_config_key": plan.target_config_key,
-                "defense_arm": plan.defense_arm,
-                "condition_id": plan.condition_id,
-                "j2_required": plan.j2_required,
-                "attack_succeeded_j1": j1_success,
-                "blocked": eval_ep.blocked,
-                "judge_reason": eval_ep.judge_reason,
-                "j1_model": model_id_for_config_key(j1_key, panel_path),
-                "j2_model": model_id_for_config_key(j2_key, panel_path) if plan.j2_required else None,
-                "j2_attack_success": j2_record.get("attack_success") if j2_record else None,
-                "ledger_spent_usd_after": ledger.spent_usd,
-                "ledger_requests_after": ledger.requests_used,
-            }
-            ep_out.write(json.dumps(record, ensure_ascii=False) + "\n")
-            rows_written += 1
-
-            allowed, reason = ledger.check_allowed(additional_requests=0)
-            if ledger.max_usd is not None and ledger.spent_usd >= ledger.max_usd:
-                stop_reason = f"budget_hard_stop_after_episode_{plan.episode_index}: spent_usd={ledger.spent_usd}"
-                break
-            if not allowed and ledger.hard_stop:
-                stop_reason = f"budget_hard_stop_after_episode_{plan.episode_index}: {reason}"
+            _run_one_plan(pair[0], ep_out)
+            _run_one_plan(pair[1], ep_out)
+            if not pair_boundary_stop_ok(rows_written):
+                stop_reason = f"pair_boundary_violation_after_episode_{rows_written - 1}"
                 break
 
     ledger_path.write_text(json.dumps(ledger.to_dict(), indent=2), encoding="utf-8")

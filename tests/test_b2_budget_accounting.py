@@ -7,12 +7,21 @@ from adapti_guard.evaluation.b2_adaptive_contract import (
     finalize_b2_canonical_live_episode,
 )
 from adapti_guard.evaluation.live_budget_gate import BudgetGatedTargetModel, BudgetLedger
+from adapti_guard.evaluation.openrouter_panel_pricing import ModelPrice, OpenRouterPricingTable
 from adapti_guard.evaluation.llm_judge import JudgeInput, JudgeVerdict
 from adapti_guard.evaluation.target_model import GenerationRequest, GenerationResult, TargetModel
 from adapti_guard.experiments.defense_baselines import make_b1_rule_based
 
 
+def _or_pricing() -> OpenRouterPricingTable:
+    return OpenRouterPricingTable(
+        {"inner": ModelPrice(prompt_usd_per_token=0.000001, completion_usd_per_token=0.000002)}
+    )
+
+
 class _CountingInner(TargetModel):
+    model_id = "inner"
+
     def __init__(self) -> None:
         self.calls = 0
         self.max_retries = 0
@@ -57,11 +66,12 @@ def test_case_c_target_plus_judge_two_ledger_requests():
     ledger = BudgetLedger(max_requests=10, max_usd=1.0)
     inner_t = _CountingInner()
     inner_j = _CountingInner()
-    gated_t = BudgetGatedTargetModel(inner_t, ledger, provider="openrouter")
-    gated_j = BudgetGatedTargetModel(inner_j, ledger, provider="openrouter")
+    pricing = _or_pricing()
+    gated_t = BudgetGatedTargetModel(inner_t, ledger, provider="openrouter", pricing=pricing)
+    gated_j = BudgetGatedTargetModel(inner_j, ledger, provider="openrouter", pricing=pricing)
 
     def judge_fn(_inp: JudgeInput) -> JudgeVerdict:
-        gated_j.generate(GenerationRequest(prompt="judge", max_tokens=64))
+        gated_j.generate(GenerationRequest(prompt="judge", max_tokens=64, model_id="inner"))
         return JudgeVerdict(
             attack_success=False,
             refusal=True,
@@ -77,9 +87,9 @@ def test_case_c_target_plus_judge_two_ledger_requests():
         attacker=AdaptiveAttacker(),
         defense=_legacy_defense,
         baseline_defense_fn=make_b1_rule_based(threshold=0.99),
-        target=lambda _h, _m: gated_t.generate(
-            GenerationRequest(prompt="x", max_tokens=64)
-        ).text,
+            target=lambda _h, _m: gated_t.generate(
+                GenerationRequest(prompt="x", max_tokens=64, model_id="inner")
+            ).text,
     )
     fin = finalize_b2_canonical_live_episode(
         episode,
@@ -101,13 +111,14 @@ def test_case_d_worst_case_four_requests():
     ledger = BudgetLedger(max_requests=10, max_usd=1.0)
     inner_t = _CountingInner()
     inner_j = _CountingInner()
-    gated_t = BudgetGatedTargetModel(inner_t, ledger, provider="openrouter")
-    gated_j = BudgetGatedTargetModel(inner_j, ledger, provider="openrouter")
+    pricing = _or_pricing()
+    gated_t = BudgetGatedTargetModel(inner_t, ledger, provider="openrouter", pricing=pricing)
+    gated_j = BudgetGatedTargetModel(inner_j, ledger, provider="openrouter", pricing=pricing)
     def allow_all(prompt: str, _context: str | None):
         return "A0", False, prompt
 
     def target(_h, _m):
-        gated_t.generate(GenerationRequest(prompt="t", max_tokens=32))
+        gated_t.generate(GenerationRequest(prompt="t", max_tokens=32, model_id="inner"))
         return "r"
 
     episode = AdaptiveEpisodeRunner(3).run(
@@ -120,7 +131,7 @@ def test_case_d_worst_case_four_requests():
     assert sum(1 for t in episode.turns if t.target_called) == 3
 
     def judge_fn(_inp: JudgeInput) -> JudgeVerdict:
-        gated_j.generate(GenerationRequest(prompt="j", max_tokens=32))
+        gated_j.generate(GenerationRequest(prompt="j", max_tokens=32, model_id="inner"))
         return JudgeVerdict(
             attack_success=False,
             refusal=False,
@@ -148,10 +159,11 @@ def test_case_d_worst_case_four_requests():
 def test_case_e_finalize_does_not_double_count_ledger():
     ledger = BudgetLedger(max_requests=10, max_usd=1.0)
     inner = _CountingInner()
-    gated = BudgetGatedTargetModel(inner, ledger, provider="openrouter")
+    pricing = _or_pricing()
+    gated = BudgetGatedTargetModel(inner, ledger, provider="openrouter", pricing=pricing)
 
     def judge_fn(_inp: JudgeInput) -> JudgeVerdict:
-        gated.generate(GenerationRequest(prompt="once", max_tokens=32))
+        gated.generate(GenerationRequest(prompt="once", max_tokens=32, model_id="inner"))
         return JudgeVerdict(
             attack_success=False,
             refusal=True,

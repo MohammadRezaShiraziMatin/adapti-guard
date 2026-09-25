@@ -165,7 +165,12 @@ def _resolve_gated_target(
         allow_live=allow_live,
     )
     provider = str(getattr(inner, "provider", "openrouter"))
-    gated = BudgetGatedTargetModel(inner, ledger, provider=provider)
+    pricing = None
+    if provider == "openrouter":
+        from adapti_guard.evaluation.openrouter_panel_pricing import load_openrouter_pricing_table
+
+        pricing = load_openrouter_pricing_table(models_config)
+    gated = BudgetGatedTargetModel(inner, ledger, provider=provider, pricing=pricing)
     judge = LLMJudge(
         config_key=judge_config_key,
         fallback_config_key=judge_config_key,
@@ -179,7 +184,7 @@ def _resolve_gated_target(
         allow_live=allow_live,
     )
     inner_judge.max_retries = 0
-    gated_judge = BudgetGatedTargetModel(inner_judge, ledger, provider=provider)
+    gated_judge = BudgetGatedTargetModel(inner_judge, ledger, provider=provider, pricing=pricing)
     judge._primary = gated_judge
     judge._fallback = gated_judge
     return gated, judge, info
