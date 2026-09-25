@@ -24,7 +24,7 @@ panel_cache_disabled: true
 contract_sha256: "eebe84f3b13f69ca48d57f4f968e3945447766d538603ebea4b57002eb73d0c9"
 manifest_path: configs/q1/manifests/j2_preregistered_subset.jsonl
 manifest_sha256: "1ccf9fe1c632909adc131c7d776749361d13bbcb3ec8e4c0806abfbd887863b0"
-code_git_commit: "PENDING_COMMIT_BEFORE_RUN"
+code_git_commit: "3be13dd895a3a595a8d68983019e624203f63991"
 allowed_condition_ids:
   - B2-ADAPTIVE-A0
   - B2-ADAPTIVE-B3
