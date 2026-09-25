@@ -80,10 +80,13 @@ candidate_panel_reconciliation:
     note: "Do not promote to primary without Owner Decision; MT1 immutable."
   judge_candidates:
     J1:
-      model: x-ai/grok-4.7
-    J2:
       model: z-ai/glm-4.7
-      repository_verification: openrouter_models_api_metadata  # 2026-09-25; not in mt2 snapshot
+      role: primary_all_confirmatory_judge_episodes
+      repository_verification: openrouter_models_api_metadata
+    J2:
+      model: x-ai/grok-4.7
+      role: preregistered_subset_only
+      repository_verification: openrouter_models_api_metadata
   cost_control_principles:
     allowed: [episode_cap, target_call_cap, b2_max_turns_cap, j2_deterministic_subset, BudgetLedger, pre_request_cost_check]
     forbidden: [payload_truncation_for_cost, closed_model_easier_subset, unpreregistered_per_model_protocol_change]
