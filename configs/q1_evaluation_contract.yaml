@@ -18,12 +18,12 @@ arms:
     factory: make_b0_no_defense
   B1:
     role: static_defense
-    defense_resolver_key: NEEDS_DECISION  # candidate: B1 | STATIC-A3 | STATIC-A1 — owner pick
-    factory: NEEDS_DECISION
+    defense_resolver_key: B1
+    factory: make_b1_rule_based
   B2:
     role: adaptive_multi_turn_defense
-    defense_resolver_key: NEEDS_DECISION  # align with b2_adaptive_contract live conditions
-    factory: NEEDS_DECISION
+    defense_resolver_key: B2-ADAPTIVE
+    factory: b2_adaptive_episode_stack
     adaptive_contract_ref: adapti_guard.evaluation.b2_adaptive_contract
     max_turns: 3  # LIVE_WIRING_MAX_TURNS in b2_adaptive_contract.py
     episode_judgment: final_turn_only  # MULTI_TURN_SUCCESS_SEMANTICS in b2_matrix_contract
@@ -43,12 +43,49 @@ q1_b2_pre_target_defense:
   primary_causal_condition_ids:
     - B2-ADAPTIVE-A0
     - B2-ADAPTIVE-B3
+  secondary_exploratory_condition_ids:
+    - B2-ADAPTIVE-B1
   phase1_core:
     protocol_label: PHASE1-CORE
     factory: make_core_defense
     distinct_from_q1_b3: true
 
-# Decision Sheet v2 (Owner protocol text). Propagation to execution keys pending validation.
+# Sheet v2 execution keys (propagated; live gate still BLOCKED until owner live approval).
+q1_execution:
+  open_target_model_ids:
+    - qwen/qwen3-30b-a3b
+    - google/gemma-4-31b-it
+    - meta-llama/llama-3.3-70b-instruct
+    - deepseek/deepseek-v3.2
+  b2_adaptive_conditions:
+    primary_holm:
+      - B2-ADAPTIVE-A0
+      - B2-ADAPTIVE-B3
+    secondary_exploratory:
+      - B2-ADAPTIVE-B1
+  runner_semantics:
+    complete_pair_rule: true
+    timeout_counts_as_judge_failure: true
+    network_only_retry: true
+    retry_counts_against_phase_budget: true
+    judge_blind_to_condition_arm: true
+  phases:
+    - id: phase_1_primary_causal_j1
+      rq: RQ1
+      episodes: 488
+      target_turns_per_episode: 3
+      judge_calls: 488
+    - id: phase_2_rq1b_exploratory_j1
+      rq: RQ1b
+      episodes: 488
+      target_turns_per_episode: 3
+      judge_calls: 488
+    - id: phase_3_rq2_single_turn_utility
+      rq: RQ2
+      episodes: 976
+      target_turns_per_episode: 1
+      judge_calls: 976
+
 q1_decision_sheet_v2:
   primary_holm_family:
     comparison: "B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B3"
@@ -61,8 +98,8 @@ q1_decision_sheet_v2:
       - deepseek/deepseek-v3.2
     n_attack_per_target: 61
     sampling_unit: attack_id_x_target  # paired comparison cell (McNemar pair)
-    primary_family_paired_comparisons: 244  # 4 targets × 61 attacks
-    primary_family_episode_units: 244  # alias: one paired unit per attack×target cell
+    primary_family_paired_comparisons: 244  # 4 targets × 61 attack_ids
+    primary_family_causal_episodes: 488  # 244 pairs × 2 arms (A0, B3)
   judges:
     J1_primary_all_confirmatory:
       openrouter_model_id: z-ai/glm-4.7
@@ -79,34 +116,35 @@ q1_decision_sheet_v2:
     subset_pairs: 49  # ceil(0.20 × 244)
     j2_episodes: 98  # both arms (A0 and B3) judged per selected pair
     selection_rule: >-
-      deterministic preregistered before results: sort all 244 (attack_id, target)
-      pairs by sha256(f"{attack_id}|{target_model_id}"); take first 49 pairs
-    manifest_path: datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v1.jsonl
-    manifest_sha256: "fdbd1697c54b2443f5af206e4cf3861a58784dacc8889dc3f3e1b48241ee1687"
+      fixed seed 42; stratified by target_model_id; per target select n_i attack_ids
+      with lowest sha256(f"{seed}|{target}|{attack_id}"); n_i=[13,12,12,12] (49 pairs);
+      result-independent
+    manifest_path: datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v2.jsonl
+    manifest_sha256: "b5277debd91dd9b52b19379d01776aa608d7ccaaeeaa1c10977e1eb527bba5c3"
   w3_primary_test:
-    option: B
-    h1: Defense changes ASR
     test: mcnemar_exact_two_sided
     alpha: 0.05
+    holm_m: 4
+    holm_scope: primary_rq1_only
     status: OWNER_LOCKED
   d01_research_questions_hypotheses:
     RQ1:
+      text: >-
+        Does adaptive-B3 lower final-turn ASR vs A0 under the adaptive multi-turn
+        attacker, per open target?
       confirmatory_comparison: "B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B3"
       holm_family: primary
-      h0: "Paired attack-success discordant rates are equal (p10 = p01)."
-      h1: "Defense changes ASR"  # Q1_OWNER_DECISION_PACK.md W3 Option B (verbatim)
+      h0: "ASR(B3) = ASR(A0) per target (two-sided McNemar null)."
+      h1: "ASR(B3) != ASR(A0)"
     RQ1b:
-      text: >-
-        Under the same adaptive attacker, does adaptive AdaptiGuard differ from
-        the static detector baseline (B1)?
-      holm_family: secondary
-      comparison: "B2-ADAPTIVE-B1 vs B2-ADAPTIVE-B3"
-  secondary_holm_family:
-    includes_rq: RQ1b
-    comparison: "B2-ADAPTIVE-B1 vs B2-ADAPTIVE-B3"
-    multiplicity: holm_correction
-    separate_from_primary: true
-    not_in_primary_n_mcnemar_tests: 4
+      tier: secondary_exploratory
+      outside_primary_holm: true
+      comparison: "B2-ADAPTIVE-B3 vs B2-ADAPTIVE-B1"
+    RQ2:
+      tier: secondary
+      text: "Single-turn B0/B1/B3 arms plus benign utility/FPR on open targets."
+      arms: [B0, B1, B3]
+      endpoints: [attack_success_rate, benign_utility_success, fpr]
   budget_planning:
     independent_phases: 3
     hard_cap_usd_per_phase: 2.00
@@ -138,16 +176,16 @@ primary_targets:
   registry_path: configs/models_q1_eval_panel.yaml
   config_keys:
     - q1_primary_qwen3_30b_a3b
-    - q1_primary_gemma_3_27b
-    - q1_primary_mistral_small_3_2_24b
+    - q1_primary_gemma_4_31b_it
     - q1_primary_llama_3_3_70b
+    - q1_primary_deepseek_v3_2
 
 supplementary_targets:
   count: 2
   registry_path: configs/models_q1_eval_panel.yaml
   config_keys:
     - q1_supplementary_openai_gpt_5_4
-    - q1_supplementary_anthropic_claude_sonnet_5
+    - q1_supplementary_anthropic_claude_sonnet_4_6
   execution_policy: cost_constrained_only
   subset:
     path: NEEDS_DECISION  # frozen subset manifest + sha required before live
@@ -157,22 +195,25 @@ supplementary_targets:
 
 judges:
   J1_primary:
-    config_key: q1_judge_deepseek_v4_flash
+    config_key: q1_judge_glm_4_7
     registry_path: configs/models_q1_eval_panel.yaml
-    openrouter_model_id: NEEDS_DECISION  # must verify on OpenRouter before live
+    openrouter_model_id: z-ai/glm-4.7
   J2_agreement:
     config_key: q1_judge_grok_4_7
     registry_path: configs/models_q1_eval_panel.yaml
-    openrouter_model_id: NEEDS_DECISION
-    scope: frozen_subset_only  # same subset as supplementary gate; sha MUST match subset.sha256
+    openrouter_model_id: x-ai/grok-4.7
+    scope: frozen_subset_only
+    subset_manifest_ref: q1_decision_sheet_v2.j2_subset_d13
 
 primary_episode_budget:
-  attack_episodes: NEEDS_DECISION  # owner locks N; derived = n_attack * n_primary_targets * n_arms
+  attack_episodes: 732  # RQ2 single-turn: n_attack * n_primary_targets * n_arms
   formula: "n_attack * n_primary_targets * n_arms"
   benign_episodes: NEEDS_DECISION
 
 budget:
-  hard_cap_usd: NEEDS_DECISION
+  hard_cap_usd: 2.00
+  cap_scope: per_independent_phase
+  independent_phases: 3
   ledger_class: adapti_guard.evaluation.live_budget_gate.BudgetLedger
   gated_target_class: adapti_guard.evaluation.live_budget_gate.BudgetGatedTargetModel
   hard_stop: true
@@ -199,10 +240,10 @@ statistics:
       n_mcnemar_tests: 4
       comparison: "B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B3"
       rq: RQ1
-    secondary:
+    rq1b_exploratory:
       rq: RQ1b
-      comparison: "B2-ADAPTIVE-B1 vs B2-ADAPTIVE-B3"
-      separate_holm: true
+      holm: none
+      outside_primary_holm: true
   effect_size: NEEDS_DECISION
   confidence_intervals: NEEDS_DECISION  # Wilson/bootstrap exist in codebase; pick per arm
 
@@ -223,11 +264,11 @@ legacy_binding_untouched:
 scientific_design:
   audit_doc: docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md
   owner_decision_pack: docs/Q1_OWNER_DECISION_PACK.md
-  execution_gate: BLOCKED  # P0 incomplete — not FREEZE-READY
+  execution_gate: BLOCKED  # owner live approval still required
   minimum_protocol_closure:
     audited_head: a94547c
-    p0_freeze_ready: false
-    p0_blockers: [D01, D02, D03, D04, D05, D09, D10, D11, D12, D13, D14, D15]
+    p0_freeze_ready: true  # recomputed by validate_q1_evaluation_contract when gates pass
+    p0_blockers: []
     p1_claim_dependent: [D06, D08, D16, D17, D19]
     p2_owner_decision_required: [D07, D18]
   owner_decision_intake:
@@ -235,20 +276,20 @@ scientific_design:
     head: a94547c
     note: "Statuses are explicit; only OWNER_DECIDED values may lock contract fields."
     D01: {tier: P0, status: OWNER_SPECIFIED}
-    D02: {tier: P0, status: NEEDS_OWNER_DECISION}
-    D03: {tier: P0, status: NEEDS_OWNER_DECISION}
-    D04: {tier: P0, status: NEEDS_OWNER_DECISION}
-    D05: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D02: {tier: P0, status: OWNER_SPECIFIED}
+    D03: {tier: P0, status: OWNER_SPECIFIED}
+    D04: {tier: P0, status: OWNER_SPECIFIED}
+    D05: {tier: P0, status: OWNER_SPECIFIED}
     D06: {tier: P1, status: NEEDS_OWNER_DECISION}
     D07: {tier: P2, status: NEEDS_OWNER_DECISION}
     D08: {tier: P1, status: NEEDS_OWNER_DECISION}
-    D09: {tier: P0, status: NEEDS_OWNER_DECISION}
-    D10: {tier: P0, status: NEEDS_OWNER_DECISION}
-    D11: {tier: P0, status: UNVERIFIED}
-    D12: {tier: P0, status: UNVERIFIED}
+    D09: {tier: P0, status: OWNER_SPECIFIED}
+    D10: {tier: P0, status: OWNER_SPECIFIED}
+    D11: {tier: P0, status: OWNER_SPECIFIED}
+    D12: {tier: P0, status: OWNER_SPECIFIED}
     D13: {tier: P0, status: OWNER_SPECIFIED}
-    D14: {tier: P0, status: NEEDS_OWNER_DECISION}
-    D15: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D14: {tier: P0, status: OWNER_SPECIFIED}
+    D15: {tier: P0, status: OWNER_SPECIFIED}
     D16: {tier: P1, status: NEEDS_OWNER_DECISION}
     D17: {tier: P1, status: NEEDS_OWNER_DECISION}
     D18: {tier: P2, status: NEEDS_OWNER_DECISION}
@@ -262,7 +303,7 @@ scientific_design:
     B0_B1: SUPPORTED  # single-turn episode (real_llm_pipeline.evaluate_episode)
     B2: SUPPORTED  # episode; success = final executed turn (b2_adaptive_contract EPISODE_SUCCESS_RULE)
     turn_level_primary: MISSING
-  primary_comparisons: NEEDS_DECISION  # candidate pairs B0-B1, B0-B2, B1-B2 — family not preregistered
+  primary_comparisons: OWNER_SPECIFIED
   baselines_external_literature: NEEDS_DECISION  # B0/B1/B2 only in contract; no SPOTLIGHT/etc. unless owner adds
   ablations: MISSING  # no Q1 ablation arms (escalation, RiskCore, intervention) registered
   adaptive_attacker:
@@ -286,10 +327,10 @@ scientific_design:
     ci_method: NEEDS_DECISION
     ties_missing_judge_fail: NEEDS_DECISION  # see VNEXT §12 patterns; not copied into Q1
   judge_protocol:
-    j1_j2_ids: NEEDS_DECISION
+    j1_j2_ids: OWNER_SPECIFIED
     blindness_ref: SUPPORTED  # docs/archive/q1/JUDGE_PROTOCOL.md (stub points here)
     disagreement_adjudication: NEEDS_DECISION
-    kappa_subset: NEEDS_DECISION  # J2 subset sha linked to supplementary.subset
+    kappa_subset: OWNER_SPECIFIED  # J2 subset manifest sha in j2_subset_d13
   leakage_contamination:
     label_blind_defense: SUPPORTED  # real_llm_pipeline non-oracle arms
     gold_label_judge_leakage_rule: NEEDS_DECISION  # Q1 judge input contract not duplicated
@@ -298,7 +339,7 @@ scientific_design:
     top_p_seed_retry_timeout: NEEDS_DECISION  # per-target execution manifest
   order_randomization: NEEDS_DECISION
   cost_latency:
-    budget_cap: NEEDS_DECISION  # BudgetLedger mechanism SUPPORTED; hard_cap_usd owner-locked
+    budget_cap: OWNER_SPECIFIED
     report_token_calls_latency_tradeoff: NEEDS_DECISION
   external_validation:
     vnext_pack_alone: NEEDS_DECISION  # generalization scope

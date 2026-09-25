@@ -51,7 +51,8 @@
 | Open primary targets `T` | D11 | **4** |
 | Primary Holm family | `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B3` | **4** McNemar tests |
 | Sampling unit | `attack_id × target` | paired comparison (McNemar pair) |
-| Primary family paired comparisons | `4 × 61` | **244** |
+| Primary family paired comparisons | `4 × 61` | **244** (paired units) |
+| Primary causal episodes (A0+B3) | `244 × 2` | **488** |
 | Causal B2 episodes (open 4) | `61 × 4 × 2 arms` | **488** |
 | Closed + anchor (`gpt-5.4`, `claude-sonnet-4.6`, `qwen-2.5-7b`) | Phase 3 / secondary | **not** in primary Holm family |
 | J2 (Grok) subset | `ceil(0.20 × 244)` | **49 pairs** → **98 episodes** (both arms judged); manifest `datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v1.jsonl` SHA `fdbd1697…` |

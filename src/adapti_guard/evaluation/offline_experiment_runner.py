@@ -32,7 +32,14 @@ from adapti_guard.evaluation.experiment_logging import (
     git_commit,
     write_json,
 )
+from adapti_guard.evaluation.q1_protocol_runner import (
+    build_blind_judge_input,
+    mcnemar_pair_complete,
+    q1_episode_judge_failed,
+)
 from adapti_guard.evaluation.stateful_episode import StatefulEpisodeRunner
+
+Q1_B2_CONDITION_PREFIX = "B2-ADAPTIVE-"
 
 LIVE_STATUSES = frozenset({"LIVE", "SUPPORTED"})
 
@@ -184,6 +191,15 @@ def _build_evidence_record(
     }
     if dataset_hash:
         rec["dataset_hash"] = dataset_hash
+    cid = str(ctx.condition_id or "")
+    if cid.startswith(Q1_B2_CONDITION_PREFIX):
+        rec["q1_runner_semantics"] = {
+            "complete_pair_rule": mcnemar_pair_complete.__name__,
+            "judge_failed_fn": q1_episode_judge_failed.__name__,
+            "judge_blind_builder": build_blind_judge_input.__name__,
+            "timeout_as_judge_failure": True,
+            "network_only_retry": True,
+        }
     return rec
 
 

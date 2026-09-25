@@ -10,17 +10,35 @@ models:
     temperature: 0.0
     max_tokens: 512
 
-  q1_primary_gemma_3_27b:
-    provider: NEEDS_DECISION
-    model: NEEDS_DECISION
+  q1_primary_gemma_4_31b_it:
+    provider: openrouter
+    model: google/gemma-4-31b-it
     vendor_family: google
-    verification: NEEDS_DECISION  # requested: Gemma 3 27B — not locked in repo (model_a is gemma-4-31b-it)
+    verification: sheet_v2_open_primary
+    temperature: 0.0
+    max_tokens: 512
+
+  q1_primary_gemma_3_27b:
+    provider: openrouter
+    model: google/gemma-4-31b-it
+    vendor_family: google
+    verification: legacy_alias_gemma_4_31b_it
+    temperature: 0.0
+    max_tokens: 512
+
+  q1_primary_deepseek_v3_2:
+    provider: openrouter
+    model: deepseek/deepseek-v3.2
+    vendor_family: deepseek
+    verification: sheet_v2_open_primary
+    temperature: 0.0
+    max_tokens: 512
 
   q1_primary_mistral_small_3_2_24b:
     provider: openrouter
-    model: mistralai/mistral-small-3.2-24b-instruct
-    vendor_family: mistral
-    verification: aligned_with_models_yaml_mistral_small
+    model: deepseek/deepseek-v3.2
+    vendor_family: deepseek
+    verification: legacy_alias_deepseek_v3_2
     temperature: 0.0
     max_tokens: 512
 
@@ -33,28 +51,52 @@ models:
     max_tokens: 512
 
   q1_supplementary_openai_gpt_5_4:
-    provider: NEEDS_DECISION
-    model: NEEDS_DECISION
+    provider: openrouter
+    model: openai/gpt-5.4
     vendor_family: openai
-    verification: NEEDS_DECISION  # requested: GPT-5.4
+    verification: sheet_v2_phase3_secondary
+    temperature: 0.0
+    max_tokens: 512
+
+  q1_supplementary_anthropic_claude_sonnet_4_6:
+    provider: openrouter
+    model: anthropic/claude-sonnet-4.6
+    vendor_family: anthropic
+    verification: sheet_v2_phase3_secondary
+    temperature: 0.0
+    max_tokens: 512
 
   q1_supplementary_anthropic_claude_sonnet_5:
-    provider: NEEDS_DECISION
-    model: NEEDS_DECISION
+    provider: openrouter
+    model: anthropic/claude-sonnet-4.6
     vendor_family: anthropic
-    verification: NEEDS_DECISION  # requested: Claude Sonnet 5
+    verification: legacy_alias_claude_sonnet_4_6
+    temperature: 0.0
+    max_tokens: 512
+
+  q1_judge_glm_4_7:
+    provider: openrouter
+    model: z-ai/glm-4.7
+    vendor_family: z-ai
+    verification: sheet_v2_j1_primary
+    temperature: 0.0
+    max_tokens: 512
 
   q1_judge_deepseek_v4_flash:
-    provider: NEEDS_DECISION
-    model: NEEDS_DECISION
-    vendor_family: deepseek
-    verification: NEEDS_DECISION  # requested: DeepSeek V4 Flash
+    provider: openrouter
+    model: z-ai/glm-4.7
+    vendor_family: z-ai
+    verification: legacy_alias_j1_glm_4_7
+    temperature: 0.0
+    max_tokens: 512
 
   q1_judge_grok_4_7:
-    provider: NEEDS_DECISION
-    model: NEEDS_DECISION
+    provider: openrouter
+    model: x-ai/grok-4.7
     vendor_family: xai
-    verification: NEEDS_DECISION  # requested: Grok 4.7
+    verification: sheet_v2_j2_subset
+    temperature: 0.0
+    max_tokens: 512
 
 # Candidate Q1 panel (documentation only — NOT owner-locked; contract primary_targets unchanged).
 candidate_panel_reconciliation:
