@@ -169,8 +169,8 @@ def test_comparable_to_b1_false():
     assert pf.comparable_to_b1_pi is False
 
 
-@pytest.mark.skipif(not PILOT_METRICS.is_file(), reason="pilot artifact missing")
 def test_pilot_metrics_hash_unchanged():
+    assert PILOT_METRICS.is_file(), "committed B2 pilot metrics artifact missing"
     import hashlib
 
     h = hashlib.sha256(PILOT_METRICS.read_bytes()).hexdigest()

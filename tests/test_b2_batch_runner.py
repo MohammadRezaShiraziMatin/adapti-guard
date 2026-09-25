@@ -31,19 +31,8 @@ PILOT_METRICS = Path(
     "experiments/real_llm_eval/P1_MECHANISM_L1/"
     "LIVE-PRO-PI-B2-EVAL-20260924-182806-8aac6be3/derived/metrics.json"
 )
-B0_REPORT = Path(
-    "experiments/real_llm_eval/P1_MECHANISM_L1/"
-    "LIVE-PRO-PI-EVAL-20260924-51c89b19/live_pro_eval_report.json"
-)
-B1_REPORT = Path(
-    "experiments/real_llm_eval/P1_MECHANISM_L1/"
-    "LIVE-PRO-PI-B1-EVAL-20260924-180138-2cf5b948/live_pro_eval_report.json"
-)
-KNOWN_HASHES = {
-    "b2_pilot": "93a0a5e2765981e954d5846849daea476fe4802e80eeee031cb443e79f7eddc9",
-    "b0": "a2a935a5e1047d9e652a4d7a13522a7384ec60d54d3357532c194417e9ec4d4a",
-    "b1": "17d3a2232d70d66887be078949ecab994d449422c508c3158c2531461a21be18",
-}
+# B2 pilot metrics only; B0/B1 live_pro_eval_report.json are local pilot artifacts (not git-canonical).
+B2_PILOT_METRICS_SHA256 = "93a0a5e2765981e954d5846849daea476fe4802e80eeee031cb443e79f7eddc9"
 
 
 def _sha256(path: Path) -> str:
@@ -473,9 +462,8 @@ def test_synthetic_three_batches_aggregate_n5():
 
 
 def test_historical_hashes_unchanged():
-    assert _sha256(PILOT_METRICS) == KNOWN_HASHES["b2_pilot"]
-    assert _sha256(B0_REPORT) == KNOWN_HASHES["b0"]
-    assert _sha256(B1_REPORT) == KNOWN_HASHES["b1"]
+    assert PILOT_METRICS.is_file(), "committed B2 pilot metrics artifact missing"
+    assert _sha256(PILOT_METRICS) == B2_PILOT_METRICS_SHA256
 
 
 def test_real_campaign_yaml_allows_condition_but_batch_gate_blocks():

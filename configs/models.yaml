@@ -9,10 +9,10 @@ models:
 
   model_a:
     provider: openrouter
-    model: google/gemini-2.0-flash-001
+    model: google/gemma-4-31b-it
     temperature: 0.0
     max_tokens: 512
-    description: "Model A — Gemini 2.0 Flash (OpenRouter)"
+    description: "Model A — Gemma 4 31B IT (OpenRouter)"
 
   model_b:
     provider: openrouter
@@ -50,7 +50,21 @@ models:
     model: qwen/qwen-2.5-72b-instruct
     temperature: 0.0
     max_tokens: 512
-    description: "Fallback judge — Qwen2.5-72B-Instruct on OpenRouter"
+    description: "Primary MT1 judge — Qwen2.5-72B-Instruct on OpenRouter"
+
+  judge_secondary:
+    provider: openrouter
+    model: meta-llama/llama-3.3-70b-instruct
+    temperature: 0.0
+    max_tokens: 512
+    description: "Secondary MT1 judge — Llama 3.3 70B (not a target)"
+
+  mistral_small:
+    provider: openrouter
+    model: mistralai/mistral-small-3.2-24b-instruct
+    temperature: 0.0
+    max_tokens: 512
+    description: "MT1 target — Mistral Small 3.2 24B Instruct"
 
   # --- Legacy keys (backward compatibility) ---
 
@@ -70,10 +84,10 @@ models:
 
   target_3:
     provider: openrouter
-    model: google/gemini-2.0-flash-001
+    model: google/gemma-4-31b-it
     temperature: 0.0
     max_tokens: 512
-    description: "Legacy — alias for model_a (Gemini 2.0 Flash)"
+    description: "Legacy — alias for model_a (Gemma 4 31B IT)"
 
   judge:
     provider: openrouter
