@@ -71,14 +71,42 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | GPT-5.4 | `openai/gpt-5.4` | primary candidate (closed) | openai | OR API | p `2.5e-6` / c `1.5e-5` | call/token/budget gate only | **EMPTY** | VERIFIED |
 | Claude Sonnet 4.6 | `anthropic/claude-sonnet-4.6` | primary candidate (closed) | anthropic | OR API | p `3e-6` / c `1.5e-5` | call/token/budget gate only | **EMPTY** | VERIFIED |
 | Qwen 2.5 7B Instruct | `qwen/qwen-2.5-7b-instruct` | **historical / AUDIT reference** | qwen | `models.yaml` target_2, MT1 r1 | p `1e-7` / c `2e-7` | not in primary matrix unless Owner adds | **EMPTY** | VERIFIED |
-| J1 | `deepseek/deepseek-v4-flash` | judge candidate | deepseek | OR API | p `4.87e-8` / c `9.74e-8` | J2 subset + ledger | **EMPTY** | VERIFIED · **independence note:** same vendor as DeepSeek target |
-| J2 | `x-ai/grok-4.7` | judge candidate | xai | OR API | p `1.6e-6` / c `4.8e-6` | validation subset (D13) | **EMPTY** | VERIFIED |
+| J1 | `x-ai/grok-4.7` | judge candidate | xai | prior OR metadata + MT2 N/A | **UNRESOLVED** (no snapshot row; re-verify at lock) | ledger + subset | **EMPTY** | CANDIDATE |
+| J2 | `z-ai/glm-4.7` | judge candidate | z-ai | **no repository ID** | **UNRESOLVED** | validation subset (D13) | **EMPTY** | **UNVERIFIED** |
 
 **Removed from candidate primary (vs legacy contract panel):** `mistralai/mistral-small-3.2-24b-instruct` — legacy row remains in `models:` until Owner propagation.
 
-**Scientific independence (D12):** J1 DeepSeek + primary `deepseek/deepseek-v3.2` → vendor overlap — **P0 scientific review required** (not auto-blocked). J2 on deterministic subset only if κ GO (W4).
+**Judge independence audit (offline):** J1 `x-ai/grok-4.7` — **not** in primary target list → no ID overlap. J2 `z-ai/glm-4.7` — not in primary list; **ID UNVERIFIED** in repo. Primary `deepseek/deepseek-v3.2` — **no** DeepSeek judge in current candidate judges (`deepseek-v4-flash` **removed** from Q1 candidate; legacy `q1_judge_*` rows still `NEEDS_DECISION`). `openai/gpt-oss-120b` — **MT2 only** (`models_mt2.yaml`), not Q1 candidate judge. **Legacy contract execution keys:** Mistral + Gemma 3 27B placeholder — **not** in 6-target candidate table (historical panel compatibility only).
 
 **Closed-model integrity:** same attack protocol / endpoint / scoring; only `resource guard` (episode/call/turn caps, ledger) — no model-specific payload or temperature changes without preregistration (D15).
+
+---
+
+## Offline feasibility (workload · tokens · cost)
+
+| Parameter | Source | Value |
+|---|---|---|
+| `N` (attacks) | contract dataset | 61 |
+| `T` (primary candidates) | candidate panel | 6 (not locked) |
+| `R` (reference) | candidate panel | 1 (`qwen-2.5-7b` — not in episode formula unless Owner adds) |
+| `J` judges | candidate | 2 (J1 Grok, J2 GLM) |
+| Arms | contract | B0, B1, B2 |
+| B2 `max_turns` | contract / `LIVE_WIRING_MAX_TURNS` | 3 |
+| Target calls/ep (B0/B1) | `live_extension_wiring` / single-turn | 1 target (+ judge after) |
+| Target calls/ep (B2 worst) | `b2_campaign_protocol` | up to 3 target + 1 judge = 4 requests/ep |
+| Retry | live wiring | `max_retries=0` typical |
+| Blocked before target | `b2_adaptive_contract` | scorable, `attack_succeeded=false` |
+| Judge failure | `episode_judge_failed` | excluded from ASR |
+
+**Episodes (derived, not locked):** `61 × T × 3` = **1098** when `T=6`. **Worst-case requests (primary matrix):** **2928** (see table above).
+
+**Token accounting:** Repository preflight = `estimate_request_cost_usd` (`len(prompt)//4`, `max_tokens` default **512** from panel) + `estimate_api_cost_usd` (**generic** openrouter $/M rates, not per-model OR list). **No** stored per-attack prompt token manifest for Q1 pack → **exact target/judge input tokens = UNRESOLVED**. Output cap evidence: panel `max_tokens: 512`. **No 500K token assumption.**
+
+**Per-model OR pricing (snapshot `mt2_openrouter_catalog_snapshot.json`):** Qwen, Gemma-4-31b-it, Llama only. GPT-5.4, Claude 4.6, DeepSeek V3.2, Grok, GLM → **UNRESOLVED in snapshot** (feasibility cost **UNRESOLVED** per model except snapshot trio uses snapshot `pricing` fields).
+
+**Full-matrix worst-case vs `$2/phase`:** MT1 docs cite **$2.00** phase cap; `BudgetLedger` + `BudgetGatedTargetModel` enforce `max_usd` pre-call (`check_spend_allowed`, UNKNOWN cost blocks). Code constant `PILOT_HARD_CAP_USD=1.0` is pilot default — **not** Q1 owner lock. With **1098 episodes** and closed-model list pricing unverified offline here → **BUDGET FEASIBILITY = BLOCKED** for full 6-target matrix at `$2` without Owner episode/call caps. **Do not** auto-reduce `N`.
+
+**Legacy vs candidate:** `configs/q1_evaluation_contract.yaml` `primary_targets` = **4 execution keys** (Mistral, Gemma 3 27B placeholder, Qwen, Llama). `candidate_panel_reconciliation` = **6** targets — **documentation only** until Owner propagation; avoids premature lock.
 
 ---
 
@@ -199,8 +227,8 @@ Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidat
 | Field | Content |
 |---|---|
 | **Evidence** | Candidate J1/J2 verified on OpenRouter; MT2 judges remain **separate protocol** |
-| **Supported Choices (Q1)** | `deepseek/deepseek-v4-flash`, `x-ai/grok-4.7` (candidate — not locked) |
-| **Scientific Implication** | W4 κ + subset; DeepSeek J1 vs DeepSeek target vendor overlap |
+| **Supported Choices (Q1)** | J1 `x-ai/grok-4.7` (candidate); J2 `z-ai/glm-4.7` (candidate, repo UNVERIFIED) |
+| **Scientific Implication** | W4 κ + subset; no Grok/GLM in primary targets (if IDs verified at lock) |
 | **Owner Decision** | **EMPTY** |
 | **Status** | `NEEDS_OWNER_DECISION` · κ/subset **UNRESOLVED** |
 
