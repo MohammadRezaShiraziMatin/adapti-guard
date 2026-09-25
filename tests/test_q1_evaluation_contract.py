@@ -11,6 +11,7 @@ def test_q1_contract_offline_validation():
     report = validate_q1_evaluation_contract(repo_root=".")
     assert report["execution_gate"] == "BLOCKED"
     assert report["p0_freeze_ready"] is True
+    assert report["phase_cost_preflight"]["estimator"] == "model_aware_panel_pricing"
     assert report["dataset_sha256"] == VNEXT_DATASET_SHA
     assert report["models_yaml_sha256"] == VNEXT_MODELS_YAML_SHA
     assert report["derived_attack_episodes"] == 61 * 4 * 3

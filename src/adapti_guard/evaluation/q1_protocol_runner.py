@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from adapti_guard.evaluation.attack_success import EvalEpisode, episode_judge_failed
-from adapti_guard.evaluation.live_b0_report import preflight_worst_case_usd
 from adapti_guard.evaluation.llm_judge import FORBIDDEN_JUDGE_FIELDS, JudgeInput
+from adapti_guard.evaluation.q1_cost_preflight import estimate_q1_phase_preflight
 import yaml
 
 DEFAULT_CONTRACT_PATH = Path("configs/q1_evaluation_contract.yaml")
@@ -114,50 +114,10 @@ def build_blind_judge_input(
     return ji
 
 
-def _phase_request_budget(phase: dict[str, Any]) -> tuple[int, int]:
-    n_ep = int(phase.get("episodes", 0))
-    target_turns = int(phase.get("target_turns_per_episode", 1))
-    n_target = n_ep * target_turns
-    n_judge = int(phase.get("judge_calls", n_ep))
-    return n_target, n_judge
-
-
 def _load_contract_dict(path: Path | None = None) -> dict[str, Any]:
     p = path or DEFAULT_CONTRACT_PATH
     with Path(p).open("r", encoding="utf-8") as handle:
         return yaml.safe_load(handle)
-
-
-def estimate_q1_phase_preflight(
-    contract: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    """Dry-run worst-case USD per Sheet v2 phase; must be <= hard_cap_usd_per_phase."""
-    contract = contract or _load_contract_dict()
-    sheet = contract.get("q1_decision_sheet_v2") or {}
-    cap = float(sheet.get("budget_planning", {}).get("hard_cap_usd_per_phase", 2.0))
-    phases = (contract.get("q1_execution") or {}).get("phases") or []
-    rows = []
-    all_ok = True
-    for ph in phases:
-        n_target, n_judge = _phase_request_budget(ph)
-        ok, worst = preflight_worst_case_usd(
-            n_target_calls=n_target,
-            n_judge_calls=n_judge,
-            max_usd=cap,
-        )
-        all_ok = all_ok and ok
-        rows.append(
-            {
-                "phase_id": ph.get("id"),
-                "episodes": ph.get("episodes"),
-                "n_target_calls": n_target,
-                "n_judge_calls": n_judge,
-                "worst_case_usd_estimate": worst,
-                "within_cap": ok,
-                "cap_usd": cap,
-            }
-        )
-    return {"all_phases_within_cap": all_ok, "phases": rows, "cap_usd_per_phase": cap}
 
 
 def primary_causal_episode_count(contract: dict[str, Any] | None = None) -> int:

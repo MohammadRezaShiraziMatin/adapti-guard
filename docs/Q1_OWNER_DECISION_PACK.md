@@ -55,9 +55,18 @@
 | Primary causal episodes (A0+B3) | `244 × 2` | **488** |
 | Causal B2 episodes (open 4) | `61 × 4 × 2 arms` | **488** |
 | Closed + anchor (`gpt-5.4`, `claude-sonnet-4.6`, `qwen-2.5-7b`) | Phase 3 / secondary | **not** in primary Holm family |
-| J2 (Grok) subset | `ceil(0.20 × 244)` | **49 pairs** → **98 episodes** (both arms judged); manifest `datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v1.jsonl` SHA `fdbd1697…` |
+| J2 (Grok) subset | `ceil(0.20 × 244)` | **≥49 pairs** → **98 J2 episodes**; manifest `configs/q1/manifests/j2_preregistered_subset.jsonl` · SHA `1ccf9fe1c632909adc131c7d776749361d13bbcb3ec8e4c0806abfbd887863b0` (seed 42, stratified by target; **not** under VNEXT frozen tree) |
 
-**Budget (Sheet v2 · planning estimates only):** **3** independent phases, each **hard cap = $2.00** (planning label; not actual spend). Costs from recorded list prices + planning token assumptions — **ESTIMATE**, not billed. Contract top-level `hard_cap_usd` remains **`NEEDS_DECISION`** until propagation. **N = 61** unchanged.
+### Execution phases (must match `q1_execution.phases` + `budget_planning.execution_phase_ids`)
+
+| Phase ID | Scope | P0 freeze |
+|---|---|---|
+| `P1_rq1_primary_j1_j2` | RQ1 causal B2 A0/B3 · J1 all · J2 on 98 subset episodes | **required** |
+| `P2_rq1b_exploratory_j1` | RQ1b B1/B3 adaptive · J1 only | **required** |
+| `P3_rq2_single_turn_benign` | RQ2 B0/B1/B3 single-turn + benign utility/FPR | **required** |
+| `P4_sheet_v2_w6_anchor_closed` | W6 B0 replicate + qwen-2.5-7b anchor + closed models | **NEEDS_DECISION** (optional) |
+
+**Budget (model-aware dry preflight):** required phases **P1–P3** each **hard cap = $2.00** (`openrouter_pricing` pins in `models_q1_eval_panel.yaml`; missing price = fail closed). Adaptive attacker = **rule-based (0 LLM calls)**. **N = 61** unchanged.
 
 ---
 
@@ -267,9 +276,9 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 | Field | Content |
 |---|---|
 | **Evidence** | **244** paired comparisons (`4×61`); **49** pairs (`ceil(0.20×244)`); **98** J2 episodes (A0+B3 per pair); frozen manifest + SHA in contract |
-| **Supported Choices** | Unit = **`attack_id × target`**; sort by `sha256(f"{attack_id}|{target_model_id}")`; first **49** pairs; J2 judges **both arms** |
+| **Supported Choices** | Unit = **`attack_id × target`**; seed **42** stratified by target; **49** pairs; J2 judges **both arms** |
 | **Scientific Implication** | κ / agreement on preregistered subset only |
-| **Owner Decision** | **LOCKED** — `datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v1.jsonl` · SHA `fdbd1697c54b2443f5af206e4cf3861a58784dacc8889dc3f3e1b48241ee1687` |
+| **Owner Decision** | **LOCKED** — `configs/q1/manifests/j2_preregistered_subset.jsonl` · SHA `1ccf9fe1c632909adc131c7d776749361d13bbcb3ec8e4c0806abfbd887863b0` |
 | **Status** | `OWNER_SPECIFIED` |
 
 ### D14 — Leakage / contamination
@@ -319,7 +328,7 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 | Dataset | `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518` |
 | `models.yaml` (VNEXT binding) | `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3` |
 | Panel | `49ab168ef305544d3ad3bc3724aaeb015817d7db45d5b7147e46a7dfb64fddab` (`models_q1_eval_panel.yaml` @ doc sync) |
-| Subset (J2 D13) | `fdbd1697c54b2443f5af206e4cf3861a58784dacc8889dc3f3e1b48241ee1687` |
+| Subset (J2 D13) | `1ccf9fe1c632909adc131c7d776749361d13bbcb3ec8e4c0806abfbd887863b0` (`configs/q1/manifests/j2_preregistered_subset.jsonl`) |
 | Code commit | owner records at run time |
 | Raw → stats → manuscript | not produced (no live run) |
 

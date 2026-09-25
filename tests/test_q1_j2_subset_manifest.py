@@ -7,7 +7,7 @@ from pathlib import Path
 
 import yaml
 
-MANIFEST = Path("datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v2.jsonl")
+MANIFEST = Path("configs/q1/manifests/j2_preregistered_subset.jsonl")
 CONTRACT = Path("configs/q1_evaluation_contract.yaml")
 SEED = 42
 
@@ -39,11 +39,11 @@ def test_d13_manifest_exists_and_sha_matches_contract():
     assert MANIFEST.as_posix() == d13["manifest_path"]
     actual_sha = hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
     assert actual_sha == d13["manifest_sha256"]
+    assert "frozen/vnext_confirm_v1" not in d13["manifest_path"]
 
     meta, pairs = _load_manifest_rows()
     assert meta["subset_pairs"] == 49
     assert meta["j2_episodes"] == 98
-    assert meta["primary_family_causal_episodes"] == 488
     assert len(pairs) == 49
 
 
@@ -69,20 +69,3 @@ def test_d13_stratified_selection_rule():
     _, manifest_pairs = _load_manifest_rows()
     actual = [(p["attack_id"], p["target_model_id"]) for p in manifest_pairs]
     assert actual == expected
-
-
-def test_w3_d01_contract_consistency():
-    contract = yaml.safe_load(CONTRACT.read_text(encoding="utf-8"))
-    sheet = contract["q1_decision_sheet_v2"]
-    w3 = sheet["w3_primary_test"]
-    assert w3["test"] == "mcnemar_exact_two_sided"
-    assert w3["alpha"] == 0.05
-    assert w3["holm_m"] == 4
-    d01 = sheet["d01_research_questions_hypotheses"]
-    assert "adaptive-B3" in d01["RQ1"]["text"]
-    assert d01["RQ1"]["h1"] == "ASR(B3) != ASR(A0)"
-    assert d01["RQ1b"]["outside_primary_holm"] is True
-    assert "RQ2" in d01
-    stats = contract["statistics"]
-    assert stats["holm_families"]["primary"]["n_mcnemar_tests"] == 4
-    assert stats["holm_families"]["rq1b_exploratory"]["holm"] == "none"

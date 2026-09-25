@@ -63,6 +63,7 @@ q1_execution:
       - B2-ADAPTIVE-B3
     secondary_exploratory:
       - B2-ADAPTIVE-B1
+  adaptive_attacker_llm_calls: 0  # AdaptiveAttacker is rule-based; no attacker-LLM spend
   runner_semantics:
     complete_pair_rule: true
     timeout_counts_as_judge_failure: true
@@ -70,21 +71,38 @@ q1_execution:
     retry_counts_against_phase_budget: true
     judge_blind_to_condition_arm: true
   phases:
-    - id: phase_1_primary_causal_j1
+    - id: P1_rq1_primary_j1_j2
       rq: RQ1
+      mode: b2_adaptive
       episodes: 488
-      target_turns_per_episode: 3
-      judge_calls: 488
-    - id: phase_2_rq1b_exploratory_j1
+      episodes_per_open_target: 122
+      max_turns: 3
+      j1_judge_episodes: 488
+      j2_judge_episodes: 98
+      optional_for_p0_freeze: false
+    - id: P2_rq1b_exploratory_j1
       rq: RQ1b
+      mode: b2_adaptive
       episodes: 488
-      target_turns_per_episode: 3
-      judge_calls: 488
-    - id: phase_3_rq2_single_turn_utility
+      episodes_per_open_target: 122
+      max_turns: 3
+      j1_judge_episodes: 488
+      j2_judge_episodes: 0
+      optional_for_p0_freeze: false
+    - id: P3_rq2_single_turn_benign
       rq: RQ2
+      mode: single_turn_rq2
       episodes: 976
-      target_turns_per_episode: 1
-      judge_calls: 976
+      attack_episodes_per_open_target_arm: 61
+      benign_episodes_per_open_target: 61
+      j1_judge_episodes: 976
+      j2_judge_episodes: 0
+      optional_for_p0_freeze: false
+    - id: P4_sheet_v2_w6_anchor_closed
+      rq: SHEET_V2_PHASE3
+      mode: NEEDS_DECISION
+      note: "B0 replicate (W6) + qwen-2.5-7b anchor + closed GPT/Claude — not required for P0 freeze"
+      optional_for_p0_freeze: true
 
 q1_decision_sheet_v2:
   primary_holm_family:
@@ -119,8 +137,8 @@ q1_decision_sheet_v2:
       fixed seed 42; stratified by target_model_id; per target select n_i attack_ids
       with lowest sha256(f"{seed}|{target}|{attack_id}"); n_i=[13,12,12,12] (49 pairs);
       result-independent
-    manifest_path: datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v2.jsonl
-    manifest_sha256: "b5277debd91dd9b52b19379d01776aa608d7ccaaeeaa1c10977e1eb527bba5c3"
+    manifest_path: configs/q1/manifests/j2_preregistered_subset.jsonl
+    manifest_sha256: "1ccf9fe1c632909adc131c7d776749361d13bbcb3ec8e4c0806abfbd887863b0"
   w3_primary_test:
     test: mcnemar_exact_two_sided
     alpha: 0.05
@@ -146,10 +164,16 @@ q1_decision_sheet_v2:
       arms: [B0, B1, B3]
       endpoints: [attack_success_rate, benign_utility_success, fpr]
   budget_planning:
-    independent_phases: 3
+    independent_phases_required_for_p0_freeze: 3
+    execution_phase_ids:
+      - P1_rq1_primary_j1_j2
+      - P2_rq1b_exploratory_j1
+      - P3_rq2_single_turn_benign
+      - P4_sheet_v2_w6_anchor_closed
     hard_cap_usd_per_phase: 2.00
-    label: planning_estimate_not_actual_cost
+    label: planning_estimate_model_aware_not_actual_cost
     n_attack_fixed: 61
+    cost_estimator: adapti_guard.evaluation.q1_cost_preflight
   limitations:
     pre_target_b3_tool_permission_gate: >-
       AdaptiveEpisodeRunner pre-target path passes only prompt/context to B3;
@@ -267,7 +291,7 @@ scientific_design:
   execution_gate: BLOCKED  # owner live approval still required
   minimum_protocol_closure:
     audited_head: a94547c
-    p0_freeze_ready: true  # recomputed by validate_q1_evaluation_contract when gates pass
+    p0_freeze_ready: true  # mirrored from validate_q1_evaluation_contract when all gates pass
     p0_blockers: []
     p1_claim_dependent: [D06, D08, D16, D17, D19]
     p2_owner_decision_required: [D07, D18]

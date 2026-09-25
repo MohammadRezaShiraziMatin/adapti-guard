@@ -16,6 +16,7 @@ from adapti_guard.evaluation.b2_matrix_contract import (
 )
 DEFAULT_CONTRACT_PATH = Path("configs/q1_evaluation_contract.yaml")
 DEFAULT_PANEL_PATH = Path("configs/models_q1_eval_panel.yaml")
+DEFAULT_OWNER_PACK_PATH = Path("docs/Q1_OWNER_DECISION_PACK.md")
 VNEXT_DATASET_SHA = "523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518"
 VNEXT_MODELS_YAML_SHA = "37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3"
 EPISODE_BUDGET_FORMULA = "n_attack * n_primary_targets * n_arms"
@@ -110,11 +111,42 @@ def _validate_sheet_v2_propagation(
     if "RQ2" not in d01:
         raise Q1ContractError("RQ2 must be registered in D01")
 
+    budget = sheet.get("budget_planning") or {}
+    sheet_phase_ids = list(budget.get("execution_phase_ids") or [])
+    exec_phases = list((exec_block.get("phases") or []))
+    exec_ids = [str(p.get("id")) for p in exec_phases]
+    if sheet_phase_ids != exec_ids:
+        raise Q1ContractError(
+            f"execution_phase_ids mismatch sheet vs q1_execution: {sheet_phase_ids} != {exec_ids}"
+        )
+
+
+def _validate_owner_decision_pack_sync(
+    contract: dict[str, Any],
+    *,
+    pack_path: Path,
+    repo_root: Path,
+) -> None:
+    pack_text = (repo_root / pack_path).read_text(encoding="utf-8")
+    d13 = (contract.get("q1_decision_sheet_v2") or {}).get("j2_subset_d13") or {}
+    manifest_path = str(d13.get("manifest_path", ""))
+    manifest_sha = str(d13.get("manifest_sha256", ""))
+    if manifest_path not in pack_text:
+        raise Q1ContractError(f"owner pack missing manifest path: {manifest_path}")
+    if manifest_sha not in pack_text:
+        raise Q1ContractError(f"owner pack missing manifest sha256: {manifest_sha}")
+
+    budget = (contract.get("q1_decision_sheet_v2") or {}).get("budget_planning") or {}
+    for phase_id in budget.get("execution_phase_ids") or []:
+        if str(phase_id) not in pack_text:
+            raise Q1ContractError(f"owner pack missing execution phase id: {phase_id}")
+
 
 def validate_q1_evaluation_contract(
     *,
     contract_path: str | Path = DEFAULT_CONTRACT_PATH,
     panel_path: str | Path = DEFAULT_PANEL_PATH,
+    owner_pack_path: str | Path = DEFAULT_OWNER_PACK_PATH,
     repo_root: str | Path = ".",
 ) -> dict[str, Any]:
     root = Path(repo_root)
@@ -155,6 +187,7 @@ def validate_q1_evaluation_contract(
         raise Q1ContractError("arms.B2 must resolve to B2-ADAPTIVE")
 
     _validate_sheet_v2_propagation(contract, panel)
+    _validate_owner_decision_pack_sync(contract, pack_path=Path(owner_pack_path), repo_root=root)
 
     peb = contract.get("primary_episode_budget") or {}
     if str(peb.get("formula")) != EPISODE_BUDGET_FORMULA:
@@ -231,9 +264,11 @@ def validate_q1_evaluation_contract(
             raise Q1ContractError("D13 J2 subset must be 49 pairs / 98 episodes")
     needs.extend(blocked)
 
-    from adapti_guard.evaluation.q1_protocol_runner import estimate_q1_phase_preflight
+    from adapti_guard.evaluation.q1_cost_preflight import estimate_q1_phase_preflight
 
-    phase_preflight = estimate_q1_phase_preflight(contract)
+    phase_preflight = estimate_q1_phase_preflight(
+        contract, panel_path=Path(panel_path), repo_root=root
+    )
     if not phase_preflight.get("all_phases_within_cap"):
         raise Q1ContractError("phase cost preflight exceeds per-phase cap")
 
@@ -250,6 +285,7 @@ def validate_q1_evaluation_contract(
         and not needs
         and not p0_open
         and phase_preflight.get("all_phases_within_cap") is True
+        and phase_preflight.get("estimator") == "model_aware_panel_pricing"
     )
 
     return {
