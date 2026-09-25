@@ -27,19 +27,21 @@
 |---|---|---|---|
 | W1 | Causal B2 A0 vs B3 adaptive in repo | **PASS** | `Q1_PRIMARY_CAUSAL_B2_CONDITIONS`; `build_pre_target_defense("B3")` → `make_q1_pre_target_adaptive_b3` (not `PHASE1-CORE`); `max_turns=3` |
 | W2 | Episode unit; no pooled McNemar without estimand | **PASS** | Unit = episode per **attack_id × target**; primary Holm family = **4** tests (open targets only) |
-| W3 | H1 vs test sidedness | **UNRESOLVED** | `mcnemar_test` two-sided; directional H1 in proposal — **OWNER** picks Option A or B (below) |
+| W3 | H1 vs test sidedness | **PASS** | **Option B locked:** H1 = Defense changes ASR; **exact two-sided McNemar**, **α = 0.05** (`q1_decision_sheet_v2.w3_primary_test`) |
 | W4 | J2 subset + κ | **P0 BLOCKER** (conditional) | κ **optional**; **no-κ path** decision-ready; **κ path BLOCKED** until frozen deterministic subset manifest + SHA; no Q1 subset manifest in repo |
 | W5 | Blocked vs judge-fail | **PASS** (semantics) | B2 all-blocked → scorable fail (`b2_adaptive_contract`); `episode_judge_failed` excludes judge fails — sensitivity rule **OWNER** |
 | W6 | B0 repeat | **PASS** (Sheet v2) | B0 replicate **Phase 3 only**; pre-execution run-to-run variability = **limitation**, not confirmatory claim |
 | W7 | B1 result neutrality | **PASS** | No pre-coded null/significance in contract |
 | W8 | Episode vs API calls | **PASS** (derived) | See workload table; **BUDGET FEASIBILITY = UNRESOLVED** |
 
-### W3 options (OWNER must choose one — not agent)
+### W3 — **RESOLVED (Option B)**
 
-| Option | H1 | Test |
-|---|---|---|
-| **A** | Defense reduces ASR (directional) | One-sided McNemar (**not implemented** in `statistics.py` today) |
-| **B** | Defense changes ASR | Two-sided McNemar (current code) |
+| Field | Value |
+|---|---|
+| **H1** | Defense changes ASR |
+| **Test** | Exact two-sided McNemar (`mcnemar_test`) |
+| **α** | 0.05 |
+| **Contract** | `statistics.mcnemar_sidedness: two_sided`; `q1_decision_sheet_v2.w3_primary_test` |
 
 ### Workload (Sheet v2 · confirmatory primary)
 
@@ -48,10 +50,11 @@
 | Attacks | `n_attack` | **61** (fixed) |
 | Open primary targets `T` | D11 | **4** |
 | Primary Holm family | `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B3` | **4** McNemar tests |
-| Primary family episode units | `4 × 61` | **244** (attack×target cells) |
+| Sampling unit | `attack_id × target` | paired comparison (McNemar pair) |
+| Primary family paired comparisons | `4 × 61` | **244** |
 | Causal B2 episodes (open 4) | `61 × 4 × 2 arms` | **488** |
 | Closed + anchor (`gpt-5.4`, `claude-sonnet-4.6`, `qwen-2.5-7b`) | Phase 3 / secondary | **not** in primary Holm family |
-| J2 (Grok) subset minimum | `ceil(0.20 × 244)` | **≥ 49** episodes (manifest **NEEDS_DECISION**) |
+| J2 (Grok) subset | `ceil(0.20 × 244)` | **49 pairs** → **98 episodes** (both arms judged); manifest `datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v1.jsonl` SHA `fdbd1697…` |
 
 **Budget (Sheet v2 · planning estimates only):** **3** independent phases, each **hard cap = $2.00** (planning label; not actual spend). Costs from recorded list prices + planning token assumptions — **ESTIMATE**, not billed. Contract top-level `hard_cap_usd` remains **`NEEDS_DECISION`** until propagation. **N = 61** unchanged.
 
@@ -142,11 +145,11 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 
 | Field | Content |
 |---|---|
-| **Evidence** | README prompt-injection testbed; contract arms B0/B1/B2; 61 attacks; no Q1 RQ text |
-| **Supported Choices** | Owner-written RQ/H testable via judge ASR + D03 comparisons |
-| **Scientific Implication** | Bounds D03, D10, W1 causal vs contextual claims |
-| **Owner Decision** | **EMPTY** (RQ1, H0, H1) |
-| **Status** | `NEEDS_OWNER_DECISION` |
+| **Evidence** | `q1_decision_sheet_v2.d01_research_questions_hypotheses`; D03 primary comparison; W3 Option B H1 (verbatim) |
+| **Supported Choices** | **RQ1 (primary):** confirmatory comparison `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B3`; **H0:** paired discordant rates equal (p10 = p01); **H1:** Defense changes ASR (W3-B). **RQ1b (secondary):** «Under the same adaptive attacker, does adaptive AdaptiGuard differ from the static detector baseline (B1)?» — separate Holm family (not primary m=4). |
+| **Scientific Implication** | Bounds D03 primary vs secondary (B1) families; W3 sidedness aligned with two-sided test |
+| **Owner Decision** | **LOCKED** (RQ1/H + RQ1b text as above) |
+| **Status** | `OWNER_SPECIFIED` |
 
 ### D02 — Endpoint / Estimand / Unit
 
@@ -166,7 +169,7 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 | **Supported Choices** | Primary family only: **`B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B3`** on **4 open targets**; Holm on **4** tests; per-comparison power **0.80516**; family-wise rigorous **UNRESOLVED** |
 | **Scientific Implication** | Closed models excluded from Holm family (D11) |
 | **Owner Decision** | **LOCKED (Sheet v2)** |
-| **Status** | `OWNER_SPECIFIED` · W3 sidedness still **UNRESOLVED** |
+| **Status** | `OWNER_SPECIFIED` · W3 **RESOLVED** (two-sided α=0.05) · **RQ1b** → secondary Holm only |
 
 ### D04 — Defense arms (B1 static · B3 adaptive · CORE)
 
@@ -262,11 +265,11 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 
 | Field | Content |
 |---|---|
-| **Evidence** | Primary family **244** episode units (`4×61`); Sheet v2 minimum **49** episodes (`ceil(0.20×244)`) |
-| **Supported Choices** | Deterministic, preregistered selection **before** results; manifest `path` + `sha256` still **NEEDS_DECISION** |
-| **Scientific Implication** | Unit = primary-family episode (attack×target cell) |
-| **Owner Decision** | **LOCKED (Sheet v2)** on counts/rule; manifest **EMPTY** |
-| **Status** | `OWNER_SPECIFIED` · manifest **BLOCKER** until frozen |
+| **Evidence** | **244** paired comparisons (`4×61`); **49** pairs (`ceil(0.20×244)`); **98** J2 episodes (A0+B3 per pair); frozen manifest + SHA in contract |
+| **Supported Choices** | Unit = **`attack_id × target`**; sort by `sha256(f"{attack_id}|{target_model_id}")`; first **49** pairs; J2 judges **both arms** |
+| **Scientific Implication** | κ / agreement on preregistered subset only |
+| **Owner Decision** | **LOCKED** — `datasets/frozen/vnext_confirm_v1/q1_j2_preregistered_subset_v1.jsonl` · SHA `fdbd1697c54b2443f5af206e4cf3861a58784dacc8889dc3f3e1b48241ee1687` |
+| **Status** | `OWNER_SPECIFIED` |
 
 ### D14 — Leakage / contamination
 
@@ -294,7 +297,7 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 
 | # | Check | Status |
 |---|---|---|
-| 1 | Directional H1 + two-sided test | **BLOCKED** until W3 Option A/B (UNRESOLVED) |
+| 1 | Directional H1 + two-sided test | **PASS** (W3 Option B: H1 = changes ASR; two-sided McNemar α=0.05) |
 | 2 | κ GO + no J2 subset | **BLOCKED** if κ adopted (W4) |
 | 3 | Causal B2 + B0/B2-only primary | **PASS** (proposal separates causal vs contextual) |
 | 4 | Pooled targets + no estimand | **PASS** (proposal forbids) |
@@ -311,11 +314,11 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0`) as primary planni
 
 | Link | SHA / status |
 |---|---|
-| Contract | `3136590dc0bb2df245f18b675d5e46c0136fafcb8444edfdc6b815f56be9da87` (Decision Sheet v2 block) |
+| Contract | `56b4dabe38dbe2b462e369f322b4c164a91a2081e63b1251e9eea3946443df52` (D13/W3/D01 block) |
 | Dataset | `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518` |
 | `models.yaml` (VNEXT binding) | `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3` |
 | Panel | `49ab168ef305544d3ad3bc3724aaeb015817d7db45d5b7147e46a7dfb64fddab` (`models_q1_eval_panel.yaml` @ doc sync) |
-| Subset | `NEEDS_DECISION` |
+| Subset (J2 D13) | `fdbd1697c54b2443f5af206e4cf3861a58784dacc8889dc3f3e1b48241ee1687` |
 | Code commit | owner records at run time |
 | Raw → stats → manuscript | not produced (no live run) |
 

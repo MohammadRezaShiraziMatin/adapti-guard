@@ -131,8 +131,25 @@ def validate_q1_evaluation_contract(
         needs.append("primary_episode_budget.attack_episodes")
     if str(cap) == "NEEDS_DECISION":
         needs.append("budget.hard_cap_usd")
-    if str(contract.get("statistics", {}).get("multiple_comparison")) == "NEEDS_DECISION":
+    stats = contract.get("statistics") or {}
+    if str(stats.get("multiple_comparison")) == "NEEDS_DECISION":
         needs.append("statistics.multiple_comparison")
+
+    sheet = contract.get("q1_decision_sheet_v2") or {}
+    d13 = sheet.get("j2_subset_d13") or {}
+    manifest_rel = d13.get("manifest_path")
+    if manifest_rel and str(manifest_rel) != "NEEDS_DECISION":
+        manifest_path = root / str(manifest_rel)
+        if not manifest_path.is_file():
+            raise Q1ContractError(f"missing J2 subset manifest: {manifest_path}")
+        expected_manifest_sha = str(d13.get("manifest_sha256", ""))
+        actual_manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        if expected_manifest_sha and actual_manifest_sha != expected_manifest_sha:
+            raise Q1ContractError(
+                f"J2 subset manifest SHA mismatch: {actual_manifest_sha} != {expected_manifest_sha}"
+            )
+        if int(d13.get("subset_pairs", 0)) != 49 or int(d13.get("j2_episodes", 0)) != 98:
+            raise Q1ContractError("D13 J2 subset must be 49 pairs / 98 episodes")
     needs.extend(blocked)
 
     sci = contract.get("scientific_design") or {}
