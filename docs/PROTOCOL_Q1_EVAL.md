@@ -9,4 +9,4 @@ Dataset: `vnext_confirm_v1` (61+61, SHA `523c8818…`). Primary attack matrix: *
 
 Items marked `NEEDS_DECISION` in YAML require owner lock before live authorization.
 
-Scientific design audit: `docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md` and `scientific_design:` in the contract YAML.
+Scientific design audit: `docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md`. Owner decisions: `docs/Q1_OWNER_DECISION_PACK.md`.

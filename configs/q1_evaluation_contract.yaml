@@ -106,6 +106,8 @@ legacy_binding_untouched:
 # Scientific design registry (audit @ HEAD 97dd2d7). Values: SUPPORTED | MISSING | NEEDS_DECISION
 scientific_design:
   audit_doc: docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md
+  owner_decision_pack: docs/Q1_OWNER_DECISION_PACK.md
+  execution_gate: BLOCKED  # until owner_sign_off on D01-D19
   research_questions: NEEDS_DECISION  # no Q1-specific RQ/H text pre-registered in contract
   hypotheses: NEEDS_DECISION
   primary_endpoint:
