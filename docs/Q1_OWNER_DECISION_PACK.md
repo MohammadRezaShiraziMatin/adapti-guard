@@ -466,3 +466,19 @@ All must be **LOCKED** (not NEEDS_DECISION): D01–D19 fields + runner mapping +
 | D19 | NEEDS_OWNER_DECISION | — | VNEXT taxonomy ref; no Q1 failure table spec | D09,D11 | No |
 
 **Freeze rule:** all rows `Lockable?` → Yes only after `Owner Decision` filled and propagated to `q1_evaluation_contract.yaml` / verified panel rows.
+
+---
+
+## Minimum Q1 Scientific Protocol (freeze scope)
+
+Standardization serves three questions only: (1) what is claimed, (2) is comparison fair/reproducible, (3) can a reviewer rebuild without the authors. Anything else is out of scope for **Protocol Freeze**.
+
+| Tier | D IDs | Freeze before confirmatory live? | Rationale |
+|------|-------|----------------------------------|-----------|
+| **P0 — required** | D01, D02, D03, D04, D05, D09, D10, D11, D12, D14, D15 (+ missing/retry in D09/D15) | **Yes** | RQ, endpoint/unit, comparisons, B1/B2 arms, SAP+Holm, models, judges, leakage, runtime |
+| **P1 — important** | D06, D16, D17, D19, D08 | **Yes if claiming utility / cost-aware / B1 rule-based** | Benign matrix, order, cost reporting, failure tables, τ sensitivity |
+| **P2 — deferrable** | D07 (ablations), D18 (external bench) | **No for initial Q1 freeze** | Architecture ablations = separate experiment ID; `agent-injection-bench` = secondary/future unless owner elevates |
+
+**Stop rule:** Do not block Q1 on D18 or full ablation matrix (D07). Protocol Freeze minimum = **all P0** + owner-selected P1 items tied to stated claims (e.g. utility claim → D06; Cost-Aware title → D17).
+
+**Not infinite:** After P0 (+ required P1) `OWNER_DECIDED`, freeze contract and proceed to runner mapping / preflight / auth as separate gates.
