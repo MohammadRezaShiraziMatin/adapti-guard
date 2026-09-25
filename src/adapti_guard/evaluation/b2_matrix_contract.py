@@ -30,7 +30,12 @@ from adapti_guard.evaluation.b2_campaign_protocol import (
     canonical_campaign_id,
     load_b2_batch_authorization_yaml,
 )
-from adapti_guard.experiments.defense_baselines import DefenseFn, make_b0_no_defense, make_b1_rule_based
+from adapti_guard.experiments.defense_baselines import (
+    DefenseFn,
+    make_b0_no_defense,
+    make_b1_rule_based,
+    make_core_defense,
+)
 
 B2_MATRIX_ID = "B2-ATTACK-MODE-DEFENSE-2X2"
 MATRIX_CAMPAIGN_SLUG = "20260924-MATRIX"
@@ -50,9 +55,34 @@ B2_MATRIX_CONDITION_IDS: tuple[str, ...] = (
     B2_CONDITION_ADAPTIVE_B1,
 )
 
-DefenseModeId = Literal["A0", "B1"]
+DefenseModeId = Literal["A0", "B1", "B3"]
 
 B1_RULE_THRESHOLD = 0.25
+
+# Scientific role → factory (D04). STATIC-A3 = ``make_l3_fixed_block`` in defense_baselines only.
+PRE_TARGET_DEFENSE_IMPLEMENTATION: dict[str, str] = {
+    "A0": "make_b0_no_defense",
+    "B1": "make_b1_rule_based",
+    "B3": "make_core_defense",
+}
+
+
+class PreTargetB3EpisodeState:
+    """Reset handle for ``CoreDefensePipeline`` at episode boundaries."""
+
+    def __init__(self, pipeline: object) -> None:
+        self.pipeline = pipeline
+        self._initial_defense_level = int(getattr(pipeline, "defense_level", 0))
+
+    def reset(self) -> None:
+        self.pipeline.defense_level = self._initial_defense_level
+
+
+@dataclass(frozen=True)
+class PreTargetDefenseBundle:
+    defense_fn: DefenseFn
+    state: object | None
+    implementation_key: str
 
 MATRIX_DESIGN_RATIONALE = (
     "Prior exploratory attack-mode pilot (B2-FIXED vs B2-ADAPTIVE under B1, seed=42, n=1/mode) "
@@ -111,12 +141,26 @@ def resolve_defense_mode(condition_id: str, explicit: DefenseModeId | None = Non
     return mode
 
 
-def build_pre_target_defense(defense_mode: DefenseModeId) -> DefenseFn:
+def build_pre_target_defense_bundle(defense_mode: DefenseModeId) -> PreTargetDefenseBundle:
+    impl = PRE_TARGET_DEFENSE_IMPLEMENTATION.get(defense_mode)
+    if impl is None:
+        raise ValueError(f"unknown defense_mode: {defense_mode}")
     if defense_mode == "A0":
-        return make_b0_no_defense()
+        return PreTargetDefenseBundle(make_b0_no_defense(), None, impl)
     if defense_mode == "B1":
-        return make_b1_rule_based(threshold=B1_RULE_THRESHOLD)
+        return PreTargetDefenseBundle(
+            make_b1_rule_based(threshold=B1_RULE_THRESHOLD),
+            None,
+            impl,
+        )
+    if defense_mode == "B3":
+        fn, pipeline = make_core_defense()
+        return PreTargetDefenseBundle(fn, PreTargetB3EpisodeState(pipeline), impl)
     raise ValueError(f"unknown defense_mode: {defense_mode}")
+
+
+def build_pre_target_defense(defense_mode: DefenseModeId) -> DefenseFn:
+    return build_pre_target_defense_bundle(defense_mode).defense_fn
 
 
 def build_matrix_cell(

@@ -290,17 +290,19 @@ def _run_b2_multi_turn_episode(
     from adapti_guard.evaluation.adaptive_episode import AdaptiveEpisodeRunner
     from adapti_guard.evaluation.b2_adaptive_contract import LIVE_WIRING_MAX_TURNS
     from adapti_guard.evaluation.b2_attack_mode_contract import build_attacker_for_mode
-    from adapti_guard.evaluation.b2_matrix_contract import build_pre_target_defense
+    from adapti_guard.evaluation.b2_matrix_contract import build_pre_target_defense_bundle
     from adapti_guard.evaluation.stateful_target_adapter import target_fn_from_model
 
     def _legacy_defense(**_kwargs: Any) -> tuple[DefenseAction, dict[str, Any]]:
         return DefenseAction.TOOL_RESTRICTION, {}
 
-    pre_target_defense = (
-        baseline_defense_fn
-        if baseline_defense_fn is not None
-        else build_pre_target_defense(defense_mode)  # type: ignore[arg-type]
-    )
+    if baseline_defense_fn is not None:
+        pre_target_defense = baseline_defense_fn
+    else:
+        bundle = build_pre_target_defense_bundle(defense_mode)  # type: ignore[arg-type]
+        if bundle.state is not None and hasattr(bundle.state, "reset"):
+            bundle.state.reset()
+        pre_target_defense = bundle.defense_fn
     target_fn = target_fn_from_model(target_model, model_id=model_id)
     attacker = build_attacker_for_mode(attack_mode, max_turns=LIVE_WIRING_MAX_TURNS)
     return AdaptiveEpisodeRunner(max_turns=LIVE_WIRING_MAX_TURNS).run(
