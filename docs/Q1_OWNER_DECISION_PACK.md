@@ -1,6 +1,6 @@
 # Q1 Owner Decision Pack — Decision-Ready Matrix
 
-**HEAD:** `e38c538` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
+**HEAD:** `91c07b4` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
 **Owner Decision:** all P0 fields **EMPTY** · Proposal ≠ Owner Decision · Agent must not lock decisions.
 
 ## Freeze readiness (gate)
@@ -41,21 +41,44 @@
 | **A** | Defense reduces ASR (directional) | One-sided McNemar (**not implemented** in `statistics.py` today) |
 | **B** | Defense changes ASR | Two-sided McNemar (current code) |
 
-### Workload (derived, `T` = locked primary targets)
+### Workload (derived; **Candidate** `T=6` primary — not owner-locked)
 
-| Quantity | Formula | T=3 | T=4 |
-|---|---|---|---|
-| Attacks | `n_attack` | 61 | 61 |
-| Primary episodes | `61 × T × 3 arms` | 549 | 732 |
-| B0/B1 worst calls/ep | 1 target + 1 judge | 2 | 2 |
-| B2 worst calls/ep | `LIVE_WIRING_MAX_TURNS + 1` (=4) | 4 | 4 |
-| J2 calls | D13 subset | unresolved | unresolved |
+| Quantity | Formula | Candidate (T=6) |
+|---|---|---|
+| Attacks | `n_attack` | 61 |
+| Primary **episodes** | `61 × T × 3 arms` | **1098** |
+| Per-arm episodes | `61 × T` | 366 |
+| B0/B1 **target+judge** calls/ep (worst) | 2 | 732 calls/arm → **1464** total |
+| B2 **target+judge** calls/ep (worst) | `max_turns+1` (=4) | **1464** total |
+| **Worst-case API calls** (primary matrix) | `2×(B0+B1)+4×B2` per target slice | **2928** |
+| Historical reference `qwen-2.5-7b` | Not in episode formula unless Owner adds | **0** (default) |
+| J2 validation calls | D13 subset only | **UNRESOLVED** |
 
-**Budget:** phase rule ≤ **$2** (MT1 protocol reference); Q1 `hard_cap_usd: NEEDS_DECISION`. Pricing: `mt2_openrouter_catalog_snapshot.json` (versioned evidence only). No sufficiency proof.
+**Budget:** phase rule ≤ **$2** (MT1 reference). `hard_cap_usd` / `attack_episodes`: **EMPTY**. OpenRouter list prices (metadata, 2026-09-25): verified IDs below. **BUDGET FEASIBILITY = BLOCKED** for full 6×61×3 matrix at worst-case calls with closed models (GPT-5.4 / Claude 4.6 pricing >> open models); feasible only with Owner-chosen caps/subset — not agent-selected.
 
-### Coverage
+---
 
-`61 × T × each selected arm` schedulable if conditions map to `BASELINE_FACTORIES` / matrix cells. **Gap:** contract lists `q1_primary_gemma_3_27b` without exact ID — **UNRESOLVED** until D11 LOCK/REJECT.
+## Q1 Candidate Panel (NOT Owner-Locked)
+
+Source: owner candidate list + `configs/models_q1_eval_panel.yaml` → `candidate_panel_reconciliation`. **Contract `primary_targets` still legacy 4-key panel until Owner propagation.**
+
+| Model | Exact ID | Role | Family | Evidence | Pricing (OR metadata) | Cost control | Owner Decision | Status |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3 30B A3B | `qwen/qwen3-30b-a3b` | primary candidate | qwen | panel + MT2 snapshot + OR API | p `1.2e-7` / c `5e-7` per token | BudgetLedger / caps | **EMPTY** | VERIFIED |
+| Gemma 4 31B IT | `google/gemma-4-31b-it` | primary candidate | google | `models.yaml` model_a, MT1/MT2 — **not Gemma 3 27B** | p `9e-8` / c `3.4e-7` | same matrix | **EMPTY** | VERIFIED |
+| Llama 3.3 70B | `meta-llama/llama-3.3-70b-instruct` | primary candidate | meta | panel + snapshot + OR | p `1e-7` / c `3.2e-7` | same matrix | **EMPTY** | VERIFIED |
+| DeepSeek V3.2 | `deepseek/deepseek-v3.2` | primary candidate (replaces Mistral in candidate list) | deepseek | OR API (not in MT2 snapshot) | p `2.69e-7` / c `4e-7` | same matrix | **EMPTY** | VERIFIED |
+| GPT-5.4 | `openai/gpt-5.4` | primary candidate (closed) | openai | OR API | p `2.5e-6` / c `1.5e-5` | call/token/budget gate only | **EMPTY** | VERIFIED |
+| Claude Sonnet 4.6 | `anthropic/claude-sonnet-4.6` | primary candidate (closed) | anthropic | OR API | p `3e-6` / c `1.5e-5` | call/token/budget gate only | **EMPTY** | VERIFIED |
+| Qwen 2.5 7B Instruct | `qwen/qwen-2.5-7b-instruct` | **historical / AUDIT reference** | qwen | `models.yaml` target_2, MT1 r1 | p `1e-7` / c `2e-7` | not in primary matrix unless Owner adds | **EMPTY** | VERIFIED |
+| J1 | `deepseek/deepseek-v4-flash` | judge candidate | deepseek | OR API | p `4.87e-8` / c `9.74e-8` | J2 subset + ledger | **EMPTY** | VERIFIED · **independence note:** same vendor as DeepSeek target |
+| J2 | `x-ai/grok-4.7` | judge candidate | xai | OR API | p `1.6e-6` / c `4.8e-6` | validation subset (D13) | **EMPTY** | VERIFIED |
+
+**Removed from candidate primary (vs legacy contract panel):** `mistralai/mistral-small-3.2-24b-instruct` — legacy row remains in `models:` until Owner propagation.
+
+**Scientific independence (D12):** J1 DeepSeek + primary `deepseek/deepseek-v3.2` → vendor overlap — **P0 scientific review required** (not auto-blocked). J2 on deterministic subset only if κ GO (W4).
+
+**Closed-model integrity:** same attack protocol / endpoint / scoring; only `resource guard` (episode/call/turn caps, ledger) — no model-specific payload or temperature changes without preregistration (D15).
 
 ---
 
@@ -165,21 +188,21 @@
 
 | Field | Content |
 |---|---|
-| **Evidence** | Panel + `mt2_openrouter_catalog_snapshot.json` |
-| **Supported Choices** | `qwen/qwen3-30b-a3b`, `mistralai/mistral-small-3.2-24b-instruct`, `meta-llama/llama-3.3-70b-instruct` |
-| **Scientific Implication** | Gemma: **UNRESOLVED** — no exact Gemma 3 27B ID; REJECT changes `T` and workload |
+| **Evidence** | Candidate table above; legacy contract keys (4) incl. Mistral + Gemma 3 27B placeholder |
+| **Supported Choices** | Six **verified** primary candidates + `qwen-2.5-7b` reference only; `google/gemma-4-31b-it` per MT1/MT2 (not Gemma 3 27B) |
+| **Scientific Implication** | `T=6` → 1098 episodes derived; budget **BLOCKED** at $2/phase unless Owner caps |
 | **Owner Decision** | **EMPTY** |
-| **Status** | `NEEDS_OWNER_DECISION` · Gemma **UNRESOLVED** |
+| **Status** | `NEEDS_OWNER_DECISION` · candidate IDs **VERIFIED** (OR metadata) |
 
 ### D12 — Judges
 
 | Field | Content |
 |---|---|
-| **Evidence** | Q1 judges NEEDS_DECISION; MT2 `openai/gpt-oss-120b`, `deepseek/deepseek-chat-v3-0324` (**MT2 protocol only**) |
-| **Supported Choices (Q1)** | **None** for J1/J2 product labels without owner-supplied exact IDs |
-| **Scientific Implication** | W4: κ criterion + subset; blindness per archive `JUDGE_PROTOCOL.md` |
+| **Evidence** | Candidate J1/J2 verified on OpenRouter; MT2 judges remain **separate protocol** |
+| **Supported Choices (Q1)** | `deepseek/deepseek-v4-flash`, `x-ai/grok-4.7` (candidate — not locked) |
+| **Scientific Implication** | W4 κ + subset; DeepSeek J1 vs DeepSeek target vendor overlap |
 | **Owner Decision** | **EMPTY** |
-| **Status** | `P0 BLOCKER` until J1/J2 IDs + subset policy if κ adopted |
+| **Status** | `NEEDS_OWNER_DECISION` · κ/subset **UNRESOLVED** |
 
 ### D13 — Subsets
 

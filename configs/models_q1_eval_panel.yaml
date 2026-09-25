@@ -56,6 +56,40 @@ models:
     vendor_family: xai
     verification: NEEDS_DECISION  # requested: Grok 4.7
 
+# Candidate Q1 panel (documentation only — NOT owner-locked; contract primary_targets unchanged).
+candidate_panel_reconciliation:
+  status: CANDIDATE_NOT_OWNER_LOCKED
+  reconciled_at_head: "91c07b4"
+  primary_target_candidates:
+    - config_key: q1_candidate_qwen3_30b_a3b
+      model: qwen/qwen3-30b-a3b
+    - config_key: q1_candidate_gemma_4_31b_it
+      model: google/gemma-4-31b-it
+    - config_key: q1_candidate_llama_3_3_70b
+      model: meta-llama/llama-3.3-70b-instruct
+    - config_key: q1_candidate_deepseek_v3_2
+      model: deepseek/deepseek-v3.2
+    - config_key: q1_candidate_openai_gpt_5_4
+      model: openai/gpt-5.4
+    - config_key: q1_candidate_anthropic_claude_sonnet_4_6
+      model: anthropic/claude-sonnet-4.6
+  historical_reference:
+    config_key: q1_reference_qwen_2_5_7b_instruct
+    model: qwen/qwen-2.5-7b-instruct
+    role: MT1_AUDIT_VALID_REFERENCE
+    note: "Do not promote to primary without Owner Decision; MT1 immutable."
+  judge_candidates:
+    J1:
+      model: deepseek/deepseek-v4-flash
+    J2:
+      model: x-ai/grok-4.7
+  cost_control_principles:
+    allowed: [episode_cap, target_call_cap, b2_max_turns_cap, j2_deterministic_subset, BudgetLedger, pre_request_cost_check]
+    forbidden: [payload_truncation_for_cost, closed_model_easier_subset, unpreregistered_per_model_protocol_change]
+  catalog_evidence:
+    openrouter_models_api: "2026-09-25 metadata lookup (no inference)"
+    mt2_snapshot: configs/mt2_openrouter_catalog_snapshot.json
+
 cache:
   enabled: false
   directory: ".llm_cache"
