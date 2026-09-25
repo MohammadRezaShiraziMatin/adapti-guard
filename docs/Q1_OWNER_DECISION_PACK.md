@@ -1,6 +1,6 @@
 # Q1 Owner Decision Pack — P0 proposals (documentation only)
 
-**HEAD:** `2bd53a0` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
+**HEAD:** `266504a` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
 **Status:** `PROPOSAL DOCUMENTATION` — **Proposal ≠ Owner Decision.** All **Owner Decision** fields remain **EMPTY**.
 
 ## Canonical decision map
@@ -14,6 +14,41 @@
 | Q1 judges J1/J2 | **D12** | MT2 block = separate protocol |
 | `attack_episodes` | contract + **Owner** | derived = `n_attack × n_primary_targets × n_arms` |
 | `hard_cap_usd` | contract + **Owner** | no agent default |
+| B2 causal defense effect | **D05 + D03** | W1: `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B1` |
+| Blocked-before-target ASR | **D09 + D02** | W5: scorable, `attack_succeeded=false` |
+| Judge failure vs attack fail | **D09** | W5: `episode_judge_failed` excludes from ASR |
+
+## Scientific weakness resolutions (W1–W8) — proposals only
+
+| ID | Finding (repo evidence) | Proposal / OWNER ACTION REQUIRED |
+|---|---|---|
+| **W1** | `B2-ADAPTIVE-A0` and `B2-ADAPTIVE-B1` exist in `b2_matrix_contract` (`build_matrix_cell`, `build_pre_target_defense`: A0=`make_b0_no_defense`, B1=`make_b1_rule_based`); same `AdaptiveAttacker`, `max_turns=3`. | **Primary causal comparison (defense in adaptive multi-turn):** `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B1` (paired on attack_id×target). **Secondary/contextual only:** `B0` vs `B2-ADAPTIVE-B1` (confounds single-turn vs multi-turn + attacker protocol — not pure defense attribution). Reuse matrix runner/contracts; no new runner. |
+| **W2** | Unit = episode per (attack_id, target, arm); 61 attacks × N targets correlated across arms. `mcnemar_test` is per paired vector. | **No pooled McNemar across targets without estimand.** Primary: per-target paired McNemar for each prespecified arm pair. If 2 comparisons × 3 locked targets = **6 tests** → Holm family of 6 (D03). Cross-target aggregate: **descriptive only** unless owner defines aggregation estimand. Pairing key: **attack_id within target**. |
+| **W3** | `mcnemar_test` uses `alternative="two-sided"` (`statistics.py`). Directional H1 “defense reduces ASR” implies one-sided discordant interest (more successes under A0 than B1). | **Inconsistency if H1 is directional and α is two-sided without adjustment.** Proposal options (owner picks one): (A) keep two-sided McNemar at α=0.05; (B) one-sided McNemar (requires code change — not implemented); (C) two-sided α=0.025 for directional claim. **Do not mix directional H1 wording with two-sided α=0.05 without stating it.** |
+| **W4** | Q1 contract: `kappa_subset: NEEDS_DECISION`. Archive `Q1_IMPROVEMENT_ROADMAP` mentions κ≥0.6 — **not** bound in Q1 contract GO. MT1 audit: κ not implemented in `run_mt1_r1.py`. No Q1 frozen J2 subset manifest. | **CONTRADICTION if owner adopts κ≥0.6 GO while D13 subset=`none`.** OWNER ACTION REQUIRED: frozen id-list manifest + SHA (≥20% of eligible attack×target units for J2 — e.g. ≥37 of 183 if 3 targets). No API; deterministic manifest only. |
+| **W5** | B2: all turns blocked → `attack_succeeded=false`, scorable (`b2_adaptive_contract.blocked_semantics`). `episode_judge_failed` excludes judge/API failures from ASR (`attack_success.py`). | Primary: blocked attacks count as failures (not unscorable). Report per arm: `n_blocked`, `n_judge_fail`, `n_target_fail`, `n_timeout`, `n_missing`. Sensitivity: pre-register worst-case assignment for judge-fail pairs (e.g. exclude vs impute fail) — **OWNER ACTION REQUIRED** before results. |
+| **W6** | No Q1 B0 replicate arm in contract; stochastic targets/judges. | Optional **B0 replicate** (same 61×targets) for variability only — **not** a fourth primary arm; increases episodes (+183 if 3 targets). **BUDGET FEASIBILITY UNRESOLVED** vs owner cap / MT1-style **$2 per phase** rule (do not change that rule). |
+| **W7** | Pilot/diagnostic logs exist; README warns Track A negative result. | Claim policy: B1 may show null effect; report empirical ASR/McNemar; non-significant ≠ equivalence; **do not** use pilot outcomes as Q1 results. |
+| **W8** | `b2_episode_request_budget_worst` = 3 target + 1 judge (`b2_campaign_protocol`). Single-turn arms ≈ 1 target + 1 judge per episode. Pricing in `mt2_openrouter_catalog_snapshot.json` (per-token). `hard_cap_usd: NEEDS_DECISION`. | See **Workload & budget** below. **BUDGET FEASIBILITY = UNRESOLVED** until owner sets cap and panel. |
+
+### Coverage verification (offline)
+
+- Dataset: 61 attack rows in `datasets/frozen/vnext_confirm_v1/dataset.jsonl` (SHA pinned in contract).
+- Runner can schedule each (attack_id, target_config_key, arm) for B0/B1 single-turn and B2 multi-turn **if** arms map to implemented factories/conditions.
+- **Gap:** contract lists 4 primary keys including Gemma 3 27B (**NOT SUPPORTED** ID) — full 61×4×3 coverage requires owner LOCK or REJECT Gemma slot (D11).
+
+### Workload & budget (derived, not locked)
+
+Let `T` = number of owner-locked primary targets (3 if Gemma REJECT; 4 if owner adds verified Gemma ID). `A=3` arms (B0,B1,B2).
+
+| Metric | Formula | Example T=3 | Example T=4 |
+|---|---|---|---|
+| Primary **episodes** | `61 × T × A` | **549** | **732** |
+| B0/B1 target+judge calls (worst/episode) | 2 | 183×2 per arm | 244×2 per arm |
+| B2 target+judge calls (worst/episode) | `LIVE_WIRING_MAX_TURNS+1` = **4** | 183×4 | 244×4 |
+| Optional B0 replicate episodes | `61 × T` | +183 | +244 |
+
+**Not equal:** episode count ≠ API calls (B2 multi-turn). Token cost needs per-call token model — **OWNER / external verification** if not modeled in Q1 contract. Repository pricing evidence: MT2 catalog snapshot (e.g. Qwen prompt `1.2e-7` $/token units per OpenRouter JSON). **No claim that any cap covers worst-case calls.**
 
 ---
 
@@ -27,7 +62,7 @@
 | **Repository Evidence** | README: hash-locked testbed for prompt-injection; fixed/adaptive intervention policies L0–L3; Q1 contract arms B0/B1/B2 on `vnext_confirm_v1` (61 attacks). No Q1 RQ text (`scientific_design.research_questions: NEEDS_DECISION`). VNEXT Track A is separate confirmatory track. |
 | **Supported Choices** | Owner-authored RQ/H only (no repo-locked RQ). Must be testable with judge-labeled ASR + paired comparisons on frozen pack. |
 | **Implication** | RQ bounds which comparisons (D03) and claims (D10) are in scope; utility/cost only if D06/D17 claimed. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** RQ1: On `vnext_confirm_v1` gold attacks, do static (B1) or adaptive multi-turn (B2) runtime interventions reduce judge-labeled attack success vs B0 on the locked primary target panel? H0: For each prespecified B0-reference pair (D03), paired discordant attack outcomes are exchangeable (McNemar null). H1: For at least one prespecified pair, attack success rate differs from B0 in the direction of lower success under defense. B2 claim scope: multi-turn **defense protocol** (contract `adaptive_multi_turn_defense`), not conflation with “adaptive attacker” unless D05 binds it. Cost/utility: not co-primary unless owner adds via D06/D10. |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** RQ1: Does runtime defense reduce judge-labeled attack success in the prespecified settings (single-turn B1; adaptive multi-turn B2 causal pair per W1)? H0: McNemar exchangeable discordant pairs per D03/D02 unit. H1: **Directional (defense reduces ASR)** — must align test sidedness with D03/W3. B0 vs B2 is **not** the causal defense claim (W1). Cost/utility: only if D06/D10 expanded. |
 | **Confidence** | Medium — aligned with README + contract arms; RQ wording needs owner sign-off. |
 | **Owner must approve** | Exact RQ1, H0, H1 text; whether utility/cost is in RQ scope. |
 
@@ -65,9 +100,9 @@
 | **Repository Evidence** | Arms {B0,B1,B2}; `statistics.paired_attack_test: mcnemar_exact`; `holm_correction` in `statistics.py`; `multiple_comparison: NEEDS_DECISION`. |
 | **Supported Choices** | Subset of {B0 vs B1, B0 vs B2, B1 vs B2}; Holm via `holm_correction`; McNemar exact only wired as primary test in contract. |
 | **Implication** | Family size drives power and claim count; B1 vs B2 optional third pair increases multiplicity. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Primary comparisons: (1) B0 vs B1, (2) B0 vs B2 only (omit B1 vs B2 from confirmatory family). α = 0.05 two-sided (proposal only; VNEXT memo uses 0.05 as reference, not Q1 lock). Family = two B0-reference tests at study level (pool targets per comparison or stratify — owner must pick pooling rule). Correction = Holm-Bonferroni on family p-values. |
-| **Confidence** | Medium — minimal family; pooling rule unresolved. |
-| **Owner must approve** | Exact comparison list, α, family definition (per-target vs pooled). |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** **Causal B2 (primary):** `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B1` per target. **Single-turn static:** `B0` vs `B1` per target. **Secondary (context):** `B0` vs `B2-ADAPTIVE-B1` per target — label as non-causal. Holm family = all **per-target** primary tests (e.g. 3 targets × 2 causal/primary pairs = **6** tests if both B0–B1 and B2 A0–B1; owner trims list). α and sidedness per W3. Correction = `holm_correction` on that family only. |
+| **Confidence** | Medium — requires owner to confirm comparison list and sidedness. |
+| **Owner must approve** | Exact pairs, per-target vs any pooled rule, α, one-sided vs two-sided policy. |
 
 **Owner Decision:** EMPTY  
 - Primary comparison #1:  
@@ -103,7 +138,7 @@
 | **Repository Evidence** | `B2_LIVE_CONDITION_IDS`; `attack_mode_for_condition_id`: `B2-FIXED*`→`FixedSequenceAttacker`; `B2-ADAPTIVE*`→`AdaptiveAttacker` (`b2_attack_mode_contract`); `B2_B1_RELATIONSHIP` separates multi-turn B2 from single-turn B1; contract `max_turns: 3`. |
 | **Supported Choices** | condition_id from repo set; modes FixedSequence vs Adaptive per mapping; design `defense-only` (single cell) vs `matrix` (2×2 attack-mode study). |
 | **Implication** | Adaptive **attacker** rotates families on defense feedback; adaptive **defense** is B2 arm role — primary claim should state which is held fixed in D05. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** `condition_id=B2-ADAPTIVE-B1`, attacker mode=`AdaptiveAttacker`, design=`defense-only` (one Q1 B2 arm; defense mode B1 under multi-turn protocol). Primary comparison B0 vs B2 then measures this bundle, not a full attack-mode matrix. |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Register **both** matrix cells for causal analysis: `B2-ADAPTIVE-A0` (A0 defense) and `B2-ADAPTIVE-B1` (B1 defense), same `AdaptiveAttacker`, `defense-only` pair (reuse `b2_matrix_contract`). Contract arm `B2` may map to the B1 cell; A0 cell is the within-protocol control (W1). |
 | **Confidence** | Medium — consistent with contract B2 role; owner may choose `B2-FIXED-B1` for fixed-sequence attacker. |
 | **Owner must approve** | condition_id, attacker class, defense-only vs matrix. |
 
@@ -169,7 +204,7 @@
 | **Repository Evidence** | `mcnemar_test`, `holm_correction`, `delta_hat_*`, Wilson/bootstrap in `statistics.py`. |
 | **Supported Choices** | McNemar exact; bootstrap/Wilson CIs; exclude unscorable episodes. |
 | **Implication** | Must reference D03 for α/Holm; D15 for retry; D12 for judge failure/disagreement. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Test: `mcnemar_exact` per D03 comparisons (paired on attack_id×target). Effect size: δ̂ per D02. CI: 95% bootstrap (`n_bootstrap=5000`). Ties: use discordant cells only. Missing/malformed/timeout target: episode unscorable, exclude from pair. Judge failure (J1): unscorable, exclude. Disagreement (J1 vs J2): report rate on J2 subset if D13 defines one; primary analysis J1 only. Exclusion: pre-registered unscorable only. Multiplicity/α: **see D03**. Retry: **see D15**. |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** `mcnemar_exact` per D03 per target; δ̂ + bootstrap CI. **Blocked before target (W5):** scorable, `attack_succeeded=false`. **Judge failure:** `episode_judge_failed` → exclude from ASR/McNemar; report counts; pre-register sensitivity for discordant pairs with one side judge-fail. **Target fail/timeout/missing:** unscorable unless owner defines mapping (OWNER ACTION REQUIRED). Disagreement J1/J2 + κ: **see D12/D13/W4**. α/sidedness/multiplicity: **D03/W3**. Retry: **D15**. |
 | **Confidence** | Medium-high on test/estimand; disagreement policy needs owner. |
 | **Owner must approve** | J2 role; exclusion strictness. |
 
@@ -192,7 +227,7 @@
 | **Repository Evidence** | 61 attacks; 4 primary keys (one may be REJECTED); 3 arms; supplementary not pooled; README warns against SOTA/production claims. |
 | **Supported Choices** | Internal pack + locked panel + prespecified arms only. |
 | **Implication** | Must match D03 comparisons and D11 locks. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Claim paired McNemar/ASR results for B0–B1 and B0–B2 on frozen 61 attacks and owner-locked primary targets; multi-turn B2 as specified in D05; no external benchmark superiority (D18 not in Q1); no SOTA; cost/latency only if D17 in scope; stochastic LLM disclaimer. |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Causal claim only for **B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B1** (W1). B0–B1 for static single-turn. B0–B2 contextual only. B1 null results reported empirically (W7). No SOTA/equivalence claims. Stochasticity disclaimer (W6). |
 | **Confidence** | High if D11/D05 approved as proposed. |
 | **Owner must approve** | Final claim text. |
 
@@ -238,7 +273,7 @@
 | **Supported Choices (Q1)** | **None** for labeled “DeepSeek V4 Flash” / “Grok 4.7” — **NOT SUPPORTED** until owner supplies exact OpenRouter IDs. |
 | **Supported Choices (MT2 only)** | `openai/gpt-oss-120b`, `deepseek/deepseek-chat-v3-0324` — do not import into Q1 without owner. |
 | **Implication** | J2 subset ties to D13; disagreement handling in D09. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Owner supplies J1/J2 exact IDs. Blindness/independence: archive template (no baseline/defense/blocked/detector in judge input). Disagreement: report J1≠J2 rate; primary analysis J1; adjudication = owner rule (no third-judge code). Validation subset: **see D13**. |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** Owner supplies J1/J2 exact IDs (no supported Q1 IDs in repo). Blindness/independence: archive template. Disagreement + κ: primary J1; J2 on frozen subset (D13); if κ≥0.6 required (archive roadmap), subset mandatory (W4). Adjudication rule = OWNER ACTION REQUIRED. |
 | **Confidence** | Low for IDs; medium for protocol template. |
 | **Owner must approve** | Exact J1/J2 IDs; adjudication rule. |
 
@@ -261,7 +296,7 @@
 | **Repository Evidence** | `supplementary_targets.subset` NEEDS_DECISION; no Q1 subset manifest in repo. Full pack SHA `523c8818…`. |
 | **Supported Choices** | `none`; or frozen manifest under `datasets/frozen/` with SHA (owner-provided). |
 | **Implication** | J2 `frozen_subset_only` in contract requires matching SHA if subset used. |
-| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** supplementary subset = `none`; J2 validation subset = `none` for minimum Q1. |
+| **Proposal** | **PROPOSED — REQUIRES OWNER APPROVAL:** supplementary = `none` unless owner opts in. J2 subset: **cannot be `none` if κ≥0.6 GO adopted (W4)** — else owner must drop κ criterion or publish frozen subset manifest (path+SHA, ≥20% eligible units). |
 | **Confidence** | High absent owner manifests. |
 | **Owner must approve** | Paths/SHA or confirm none. |
 
@@ -303,16 +338,9 @@
 
 ---
 
-# Derived workload & budget (no owner lock)
+# Derived workload & budget
 
-| Quantity | Formula / evidence | Current derived (if defaults unchanged) |
-|---|---|---|
-| Primary attack episodes | `n_attack × n_primary_targets × n_arms` | 61 × 4 × 3 = **732** (contract `attack_episodes: NEEDS_DECISION`) |
-| B2 target calls (upper bound) | attack episodes for B2 arm × `max_turns` (3) | ≤ 732 × 3 target calls (not additive to episode count) |
-| Primary judge calls (J1) | ~1 per scorable attack episode per arm | ≤ ~732 per full matrix (excl. unscorable) |
-| J2 calls | subset only if D13 defines | **unresolved** if subset none |
-| Supplementary | separate if D13 + panel | **unresolved** (2 supplementary keys in contract) |
-| `hard_cap_usd` | Owner Decision | **NEEDS_DECISION** — no sufficiency claim |
+See **W8** table above (`T` targets, episode vs API call separation). Contract: `attack_episodes` and `hard_cap_usd` remain **NEEDS_DECISION**.
 
 ---
 
@@ -320,13 +348,13 @@
 
 | Link | Proposal alignment | Unresolved |
 |---|---|---|
-| RQ → Endpoint | RQ asks attack-success reduction; endpoint ASR | Utility only if D06/D10 expanded |
-| Endpoint → Unit | ASR on episodes; McNemar paired attacks | Pooling across 4 targets in D03 |
-| Unit → Comparison | Paired per attack×target | B2 final-turn vs B0/B1 single-turn semantics documented in D02 |
-| Comparison → SAP | B0–B1, B0–B2 McNemar + Holm | B1 vs B2 omitted — OK if not claimed |
-| Panel → Claim | Up to 3 LOCK + Gemma gap | Gemma slot vs “4 models” wording |
-| SAP → Claim | McNemar + δ̂ only | Judge IDs not supported until owner adds |
-| D05 → D10 | B2 bundle named in claim | Attacker adaptive in proposal — must match D05 approval |
+| RQ → H1 → test | Directional defense reduction | W3: two-sided `mcnemar_test` vs directional H1 |
+| W1 causal → D05 | A0+B1 cells exist in matrix | Mapping contract arm `B2` to both cells |
+| D03 → Holm | 6 tests if 3 targets × 2 primary pairs | Owner must list exact family |
+| Blocked → ASR | B2 blocked semantics scorable | B0/B1 blocked path same policy in D09 |
+| J2 → κ | Subset none vs archive κ≥0.6 | W4 OWNER ACTION REQUIRED |
+| Coverage → panel | 61×T×3 episodes | T=3 or 4 depends on Gemma |
+| Budget | Worst-case calls documented | UNRESOLVED vs owner cap / $2-phase rule |
 
 **Contradictions to resolve at approval:** Gemma 3 27B in contract keys vs NOT SUPPORTED; Q1 judge labels vs no supported IDs.
 
