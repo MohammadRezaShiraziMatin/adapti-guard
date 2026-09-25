@@ -107,30 +107,36 @@ legacy_binding_untouched:
 scientific_design:
   audit_doc: docs/Q1_SCIENTIFIC_COMPLETENESS_AUDIT.md
   owner_decision_pack: docs/Q1_OWNER_DECISION_PACK.md
-  execution_gate: BLOCKED  # PROTOCOL NOT FROZEN until all D01-D19 OWNER_DECIDED
+  execution_gate: BLOCKED  # P0 incomplete — not FREEZE-READY
+  minimum_protocol_closure:
+    audited_head: a94547c
+    p0_freeze_ready: false
+    p0_blockers: [D01, D02, D03, D04, D05, D09, D10, D11, D12, D13, D14, D15]
+    p1_claim_dependent: [D06, D08, D16, D17, D19]
+    p2_deferred_non_blocking: [D07, D18]
   owner_decision_intake:
-    recorded_at_utc: "2026-09-25T12:06:00Z"
-    head: a10fb0e
-    note: "No owner sign-off payload in agent intake; statuses below are explicit, not locks."
-    D01: NEEDS_OWNER_DECISION
-    D02: NEEDS_OWNER_DECISION
-    D03: NEEDS_OWNER_DECISION
-    D04: NEEDS_OWNER_DECISION
-    D05: NEEDS_OWNER_DECISION
-    D06: NEEDS_OWNER_DECISION
-    D07: NEEDS_OWNER_DECISION
-    D08: NEEDS_OWNER_DECISION
-    D09: NEEDS_OWNER_DECISION
-    D10: NEEDS_OWNER_DECISION
-    D11: UNVERIFIED
-    D12: UNVERIFIED
-    D13: NEEDS_OWNER_DECISION
-    D14: NEEDS_OWNER_DECISION
-    D15: NEEDS_OWNER_DECISION
-    D16: NEEDS_OWNER_DECISION
-    D17: NEEDS_OWNER_DECISION
-    D18: NEEDS_OWNER_DECISION
-    D19: NEEDS_OWNER_DECISION
+    recorded_at_utc: "2026-09-25T12:23:00Z"
+    head: a94547c
+    note: "Statuses are explicit; only OWNER_DECIDED values may lock contract fields."
+    D01: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D02: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D03: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D04: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D05: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D06: {tier: P1, status: NEEDS_OWNER_DECISION}
+    D07: {tier: P2, status: DEFERRED}
+    D08: {tier: P1, status: NEEDS_OWNER_DECISION}
+    D09: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D10: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D11: {tier: P0, status: UNVERIFIED}
+    D12: {tier: P0, status: UNVERIFIED}
+    D13: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D14: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D15: {tier: P0, status: NEEDS_OWNER_DECISION}
+    D16: {tier: P1, status: NEEDS_OWNER_DECISION}
+    D17: {tier: P1, status: NEEDS_OWNER_DECISION}
+    D18: {tier: P2, status: DEFERRED}
+    D19: {tier: P1, status: NEEDS_OWNER_DECISION}
   research_questions: NEEDS_DECISION  # no Q1-specific RQ/H text pre-registered in contract
   hypotheses: NEEDS_DECISION
   primary_endpoint:

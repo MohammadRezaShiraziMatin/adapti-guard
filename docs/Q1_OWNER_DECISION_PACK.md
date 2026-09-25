@@ -451,7 +451,7 @@ All must be **LOCKED** (not NEEDS_DECISION): D01–D19 fields + runner mapping +
 | D04 | NEEDS_OWNER_DECISION | — | `B1`/`STATIC-A3`/`STATIC-A1` (`defense_baselines.py`); DIAG used `B1` | D03 | No |
 | D05 | NEEDS_OWNER_DECISION | — | `LIVE_WIRING_MAX_TURNS=3`; condition IDs in `b2_adaptive_contract` / `b2_matrix_contract`; `AdaptiveAttacker` vs `FixedSequenceAttacker` | D03,D04 | No |
 | D06 | NEEDS_OWNER_DECISION | — | 61 benign in pack; attack budget 732 only; options A/B/C not chosen | D02 | No |
-| D07 | NEEDS_OWNER_DECISION | — | No Q1 ablation arms; escalation/RiskCore in code only | D05 | No |
+| D07 | DEFERRED (P2) | — | No Q1 ablation arms; separate experiment ID | D05 | No (non-blocking) |
 | D08 | NEEDS_OWNER_DECISION | — | τ=0.25 in `make_b1_rule_based` / `B1_RULE_THRESHOLD` (if D04=`B1`) | D04 | No |
 | D09 | NEEDS_OWNER_DECISION | — | `mcnemar_test`, `holm_correction`, `delta_hat_*`, Wilson/bootstrap helpers | D02,D03 | No |
 | D10 | NEEDS_OWNER_DECISION | — | 61+61 pack; 4 primary slots; hosted nondeterminism | D06,D12,D18 | No |
@@ -462,7 +462,7 @@ All must be **LOCKED** (not NEEDS_DECISION): D01–D19 fields + runner mapping +
 | D15 | NEEDS_OWNER_DECISION | — | Panel temp=0.0 where set; MT1 `max_retries=0` pattern | D12 | No |
 | D16 | NEEDS_OWNER_DECISION | — | Pack order seed 61; runner order not Q1-locked | D05 | No |
 | D17 | NEEDS_OWNER_DECISION | — | `BudgetLedger`; hard_cap $3 in contract; reporting fields not locked | D06 | No |
-| D18 | NEEDS_OWNER_DECISION | — | `agent-injection-bench` absent from repo | D10 | No |
+| D18 | DEFERRED (P2) | — | `agent-injection-bench` absent; future/secondary only | D10 | No (non-blocking) |
 | D19 | NEEDS_OWNER_DECISION | — | VNEXT taxonomy ref; no Q1 failure table spec | D09,D11 | No |
 
 **Freeze rule:** all rows `Lockable?` → Yes only after `Owner Decision` filled and propagated to `q1_evaluation_contract.yaml` / verified panel rows.
