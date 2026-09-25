@@ -1,6 +1,6 @@
 # Q1 Owner Decision Pack
 
-**HEAD:** `8ac16ae` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
+**HEAD:** `b358009` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`  
 Proposals below are `PROPOSED — REQUIRES OWNER APPROVAL` unless marked otherwise. **Proposal ≠ Owner Decision.**
 
 ## Canonical decision map (single source per topic)
