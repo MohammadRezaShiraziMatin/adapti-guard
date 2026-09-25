@@ -31,10 +31,11 @@ from adapti_guard.evaluation.b2_campaign_protocol import (
     load_b2_batch_authorization_yaml,
 )
 from adapti_guard.experiments.defense_baselines import (
+    AdaptiveDefenseState,
     DefenseFn,
     make_b0_no_defense,
     make_b1_rule_based,
-    make_core_defense,
+    make_q1_pre_target_adaptive_b3,
 )
 
 B2_MATRIX_ID = "B2-ATTACK-MODE-DEFENSE-2X2"
@@ -47,6 +48,13 @@ B2_CONDITION_FIXED_A0 = "B2-FIXED-A0"
 B2_CONDITION_FIXED_B1 = "B2-FIXED-B1"
 B2_CONDITION_ADAPTIVE_A0 = "B2-ADAPTIVE-A0"
 B2_CONDITION_ADAPTIVE_B1 = "B2-ADAPTIVE-B1"
+B2_CONDITION_ADAPTIVE_B3 = "B2-ADAPTIVE-B3"
+
+# Q1 primary causal pair (B2 arm); distinct from frozen 4-cell attack-mode pilot matrix.
+Q1_PRIMARY_CAUSAL_B2_CONDITIONS: tuple[str, ...] = (
+    B2_CONDITION_ADAPTIVE_A0,
+    B2_CONDITION_ADAPTIVE_B3,
+)
 
 B2_MATRIX_CONDITION_IDS: tuple[str, ...] = (
     B2_CONDITION_FIXED_A0,
@@ -63,19 +71,20 @@ B1_RULE_THRESHOLD = 0.25
 PRE_TARGET_DEFENSE_IMPLEMENTATION: dict[str, str] = {
     "A0": "make_b0_no_defense",
     "B1": "make_b1_rule_based",
-    "B3": "make_core_defense",
+    "B3": "make_q1_pre_target_adaptive_b3",
 }
 
+# PHASE1-CORE uses ``make_core_defense`` / ``get_defense_fn("PHASE1-CORE")`` — never B3.
 
-class PreTargetB3EpisodeState:
-    """Reset handle for ``CoreDefensePipeline`` at episode boundaries."""
 
-    def __init__(self, pipeline: object) -> None:
-        self.pipeline = pipeline
-        self._initial_defense_level = int(getattr(pipeline, "defense_level", 0))
+class PreTargetAdaptiveB3EpisodeState:
+    """Episode-boundary reset for Q1 adaptive pre-target defense."""
+
+    def __init__(self, adaptive_state: AdaptiveDefenseState) -> None:
+        self.adaptive_state = adaptive_state
 
     def reset(self) -> None:
-        self.pipeline.defense_level = self._initial_defense_level
+        self.adaptive_state.reset()
 
 
 @dataclass(frozen=True)
@@ -122,6 +131,8 @@ def defense_mode_for_condition_id(condition_id: str) -> DefenseModeId | None:
         return "A0"
     if condition_id.endswith("-B1"):
         return "B1"
+    if condition_id.endswith("-B3"):
+        return "B3"
     if condition_id in (
         "B2-FIXED",
         "B2-ADAPTIVE",
@@ -154,8 +165,10 @@ def build_pre_target_defense_bundle(defense_mode: DefenseModeId) -> PreTargetDef
             impl,
         )
     if defense_mode == "B3":
-        fn, pipeline = make_core_defense()
-        return PreTargetDefenseBundle(fn, PreTargetB3EpisodeState(pipeline), impl)
+        fn, adaptive_state = make_q1_pre_target_adaptive_b3()
+        return PreTargetDefenseBundle(
+            fn, PreTargetAdaptiveB3EpisodeState(adaptive_state), impl
+        )
     raise ValueError(f"unknown defense_mode: {defense_mode}")
 
 

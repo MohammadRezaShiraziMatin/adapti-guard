@@ -28,6 +28,26 @@ arms:
     max_turns: 3  # LIVE_WIRING_MAX_TURNS in b2_adaptive_contract.py
     episode_judgment: final_turn_only  # MULTI_TURN_SUCCESS_SEMANTICS in b2_matrix_contract
 
+# B2 pre-target defense modes (Q1 matrix). Not the same as baseline registry key "B3".
+q1_b2_pre_target_defense:
+  A0:
+    factory: make_b0_no_defense
+    module: adapti_guard.experiments.defense_baselines
+  B1:
+    factory: make_b1_rule_based
+    module: adapti_guard.experiments.defense_baselines
+  B3:
+    factory: make_q1_pre_target_adaptive_b3
+    module: adapti_guard.experiments.defense_baselines
+    note: "Q1 adaptive AdaptiGuard; NOT get_defense_fn(B3); NOT PHASE1-CORE"
+  primary_causal_condition_ids:
+    - B2-ADAPTIVE-A0
+    - B2-ADAPTIVE-B3
+  phase1_core:
+    protocol_label: PHASE1-CORE
+    factory: make_core_defense
+    distinct_from_q1_b3: true
+
 primary_targets:
   count: 4
   registry_path: configs/models_q1_eval_panel.yaml

@@ -1,6 +1,6 @@
 # Q1 Owner Decision Pack — Decision-Ready Matrix
 
-**HEAD:** `a368e7f` · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`
+**HEAD:** `4db9bc0+` (post-adaptive-B3 fix) · **execution_gate:** `BLOCKED` · **p0_freeze_ready:** `false`
 **Owner Decision:** all P0 fields **EMPTY** · Proposal ≠ Owner Decision · Agent must not lock decisions.
 
 ## Freeze readiness (gate)
@@ -18,19 +18,19 @@
 | α, Holm family | **D03** | D09 references only |
 | Retry | **D15** | D09 references only |
 | Order / randomization | **D15** | D16 references only |
-| Causal B2 pair | **D03 + D05** | W1: `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B1` |
+| Causal B2 pair | **D03 + D05** | W1: `B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B3` (Q1 primary adaptive) |
 | `attack_episodes`, `hard_cap_usd` | Owner + contract | Derived formula only; not locked |
 
 ## W1–W8 readiness (scientific — not owner-locked)
 
 | ID | Check | Result | Evidence |
 |---|---|---|---|
-| W1 | Causal B2 A0 vs B1 in repo | **PASS** | `b2_matrix_contract`: `B2-ADAPTIVE-A0` / `B2-ADAPTIVE-B1`, `build_pre_target_defense`, `AdaptiveAttacker`, `max_turns=3`; `B0 vs B2` = contextual only in proposals |
+| W1 | Causal B2 A0 vs B3 adaptive in repo | **PASS** | `Q1_PRIMARY_CAUSAL_B2_CONDITIONS`; `build_pre_target_defense("B3")` → `make_q1_pre_target_adaptive_b3` (not `PHASE1-CORE`); `max_turns=3` |
 | W2 | Episode unit; no pooled McNemar without estimand | **PASS** (proposal) | Unit = episode per attack×target×arm; 6-test Holm example = 2 comparisons × 3 targets — **OWNER** must lock family |
 | W3 | H1 vs test sidedness | **UNRESOLVED** | `mcnemar_test` two-sided; directional H1 in proposal — **OWNER** picks Option A or B (below) |
 | W4 | J2 subset + κ | **P0 BLOCKER** (conditional) | κ **optional**; **no-κ path** decision-ready; **κ path BLOCKED** until frozen deterministic subset manifest + SHA; no Q1 subset manifest in repo |
 | W5 | Blocked vs judge-fail | **PASS** (semantics) | B2 all-blocked → scorable fail (`b2_adaptive_contract`); `episode_judge_failed` excludes judge fails — sensitivity rule **OWNER** |
-| W6 | B0 repeat in Q1 contract | **PASS** (absent) | No replicate arm registered — optional trade-off only |
+| W6 | B0 repeat in Q1 contract | **UNRESOLVED** | No B0 replicate arm in contract — absence is not Owner approval; trade-off **EMPTY** |
 | W7 | B1 result neutrality | **PASS** | No pre-coded null/significance in contract |
 | W8 | Episode vs API calls | **PASS** (derived) | See workload table; **BUDGET FEASIBILITY = UNRESOLVED** |
 
@@ -51,7 +51,7 @@
 | B0/B1 **target+judge** calls/ep (worst) | 2 | 732 calls/arm → **1464** total |
 | B2 **target+judge** calls/ep (worst) | `max_turns+1` (=4) | **1464** total |
 | **Worst-case API calls** (primary matrix) | `2×(B0+B1)+4×B2` per target slice | **2928** |
-| **Causal B2** (`B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B1`) | `61 × T × 2 arms` | **732** episodes (candidate; not owner-locked) |
+| **Causal B2** (`B2-ADAPTIVE-A0` vs `B2-ADAPTIVE-B3`) | `61 × T × 2 arms` | **732** episodes (candidate; not owner-locked) |
 | Historical reference `qwen-2.5-7b` | Not in episode formula unless Owner adds | **0** (default) |
 | J2 validation calls | D13 subset only | **UNRESOLVED** (no manifest) |
 
@@ -170,30 +170,30 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0` binomial scaffold)
 | Field | Content |
 |---|---|
 | **Evidence** | `mcnemar_exact`, `holm_correction`; matrix conditions A0/B1; offline power § above (`per_comparison_power = 0.80516`; family-wise **UNRESOLVED**) |
-| **Supported Choices** | Per-target pairs; proposal: B0–B1, **B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B1** (causal), B0–B2 contextual; Holm on declared family (e.g. 6 tests) — **family estimand Owner must lock** |
+| **Supported Choices** | Per-target pairs; proposal: B0–B1, **B2-ADAPTIVE-A0 vs B2-ADAPTIVE-B3** (causal adaptive), B0–B2 contextual; Holm on declared family (e.g. 6 tests) — **family estimand Owner must lock** |
 | **Scientific Implication** | W1/W2; no pooled targets without estimand; `n=61` supports **single-comparison** 80% planning only |
 | **Owner Decision** | **EMPTY** |
 | **Status** | `NEEDS_OWNER_DECISION` · W3 **UNRESOLVED** until sidedness chosen |
 
-### D04 — B1 static arm
+### D04 — Defense arms (B1 static · B3 adaptive · CORE)
 
 | Field | Content |
 |---|---|
-| **Evidence** | `B1`, `STATIC-A3`, `STATIC-A1` in `defense_baselines.py` |
-| **Supported Choices** | One resolver key only |
-| **Scientific Implication** | Ties to B2-ADAPTIVE-B1 defense mode if rule-based B1 |
-| **Owner Decision** | **EMPTY** |
-| **Status** | `NEEDS_OWNER_DECISION` |
+| **Evidence** | `B1`/`STATIC-A3`/`STATIC-A1` in `defense_baselines.py`; Q1 B2 pre-target **`B3`** → `make_q1_pre_target_adaptive_b3` (`configs/q1_evaluation_contract.yaml` `q1_b2_pre_target_defense`); **`PHASE1-CORE`** → `make_core_defense` only — **never labeled B3**; historical `get_defense_fn("B3")` unchanged |
+| **Supported Choices** | B1 arm resolver (Owner); B2 causal **A0 vs B3**; CORE for Track B protocol only |
+| **Scientific Implication** | Q1 primary adaptive treatment = feedback `AdaptiveDefenseState`; CORE is non-adaptive Phase-1 stack |
+| **Owner Decision** | **EMPTY** (B1 resolver on B1 arm) |
+| **Status** | `NEEDS_OWNER_DECISION` · B3 Q1 wiring **SUPPORTED** (implementation) |
 
 ### D05 — B2 condition / attacker
 
 | Field | Content |
 |---|---|
-| **Evidence** | `B2-ADAPTIVE-A0`, `B2-ADAPTIVE-B1`; `AdaptiveAttacker`; `AdaptiveEpisodeRunner` via `live_extension_wiring` |
-| **Supported Choices** | Matrix cells; same attacker/protocol/turns; defense A0 vs B1 |
-| **Scientific Implication** | W1 causal comparator implementation **supported** (no new runner required) |
+| **Evidence** | `B2-ADAPTIVE-A0`, `B2-ADAPTIVE-B3`, `Q1_PRIMARY_CAUSAL_B2_CONDITIONS`; `AdaptiveAttacker`; `AdaptiveEpisodeRunner`; episode-boundary `PreTargetAdaptiveB3EpisodeState.reset()` |
+| **Supported Choices** | Same attacker/protocol/turns; defense A0 vs **adaptive B3** |
+| **Scientific Implication** | W1 causal comparator **supported** in repo |
 | **Owner Decision** | **EMPTY** |
-| **Status** | `NEEDS_OWNER_DECISION` |
+| **Status** | `NEEDS_OWNER_DECISION` · B3 pre-target **SUPPORTED** |
 
 ### D06 — Utility / benign (P1)
 
@@ -318,7 +318,7 @@ Do **not** use `track_a_mcnemar_power_sensitivity` (`b01 = 0` binomial scaffold)
 
 | Link | SHA / status |
 |---|---|
-| Contract | `c48697979654265cc25304b8afd102c2aa2f88e76b3a14bcf3281b5b67e29cc1` |
+| Contract | `52a1134cf13e9ceb9e3cea90e085e9ccf7c597969f70ceeb33719ca175b45548` (post `q1_b2_pre_target_defense`) |
 | Dataset | `523c881820710783b5290c76ea5fe5fc01a6341fb427defcba1119fc3e721518` |
 | `models.yaml` (VNEXT binding) | `37174858710a087b3fe58c40e65c796418d1791ff4280bca08d96486b35d7ec3` |
 | Panel | `49ab168ef305544d3ad3bc3724aaeb015817d7db45d5b7147e46a7dfb64fddab` (`models_q1_eval_panel.yaml` @ doc sync) |

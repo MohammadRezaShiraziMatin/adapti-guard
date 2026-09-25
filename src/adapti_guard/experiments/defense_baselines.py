@@ -214,6 +214,16 @@ class AdaptiveDefenseState:
 _LEAKED_GOLD_KWARGS = frozenset({"is_attack", "label", "gold_label", "category"})
 
 
+def make_q1_pre_target_adaptive_b3() -> tuple[DefenseFn, AdaptiveDefenseState]:
+    """Q1 B2 pre-target adaptive AdaptiGuard (label-blind ``AdaptiveDefenseState``).
+
+    Uses the same factory body as ``make_b3_adaptive`` but is **not** registered on
+    ``get_defense_fn("B3")`` so historical Layer A / MT1 baseline keys stay frozen.
+    **Not** ``PHASE1-CORE`` / ``make_core_defense``.
+    """
+    return make_b3_adaptive()
+
+
 def make_b3_adaptive() -> tuple[DefenseFn, AdaptiveDefenseState]:
     state = AdaptiveDefenseState()
 
