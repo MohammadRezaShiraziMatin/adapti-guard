@@ -83,7 +83,7 @@ candidate_panel_reconciliation:
       model: x-ai/grok-4.7
     J2:
       model: z-ai/glm-4.7
-      repository_verification: UNVERIFIED  # not in mt2_openrouter_catalog_snapshot.json
+      repository_verification: openrouter_models_api_metadata  # 2026-09-25; not in mt2 snapshot
   cost_control_principles:
     allowed: [episode_cap, target_call_cap, b2_max_turns_cap, j2_deterministic_subset, BudgetLedger, pre_request_cost_check]
     forbidden: [payload_truncation_for_cost, closed_model_easier_subset, unpreregistered_per_model_protocol_change]
